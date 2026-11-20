@@ -8,7 +8,8 @@ in due pannelli affiancati (indice dei lavori).
 Lavori: solo Rain Ink Tattoo (01, ~/Desktop/inkubo) e Olimp (02, ~/Desktop/olimp), con schermate dei siti online (le didascalie aprono i siti). Dalla 1.7 dopo il film non c'è più niente (tolto anche il blocco contatti): la pagina finisce con i due pannelli dei lavori; le sezioni dopo il film sono da ripensare. Il bottone «Scrivimi» apre l'email.
 
 ## Dove sta online
-Per ora solo in locale (nessun hosting, nessun repository git).
+Repository GitHub pubblico: https://github.com/nemesiMark/nemesiWeb (ramo `main`). Nessun hosting ancora (GitHub Pages non attivo).
+Fuori dal repository (in `.git/info/exclude`): `chat-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`.
 
 ## Come si prova in locale
 ```bash
@@ -39,7 +40,7 @@ la classe `html.intro`, messa da uno script nel `<head>`, nasconde la hero finch
 ## Regole di lavoro
 - Testi in italiano; il copy non deve mai descrivere lo scorrimento o il meccanismo (copy-gate).
 - Ogni modifica → nuova versione in `LEGGIMI.md`.
-- Commit solo su richiesta; «g» = commit e push (oggi la cartella non è un repository: va prima creato).
+- Commit solo su richiesta; «g» = commit e push su `origin main`.
 - Rispettare `prefers-reduced-motion` (già gestito: niente film, copertina 01 statica).
 
 ## In sospeso (dati inventati da sostituire prima di pubblicare)
