@@ -11,7 +11,7 @@
   d.classList.add('intro'); setTimeout(function(){ d.classList.remove('intro'); }, 5000); })();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600;1,700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111110'/%3E%3Cpath fill='%23EEEBE4' d='M8 7h3.2v18H8zM20.8 7H24v18h-3.2zM9.2 7.6l2.9-1.2 10.7 19.1-2.9 1.2z'/%3E%3C/svg%3E">
 <style>
 :root{
@@ -20,9 +20,9 @@
   --on-night:rgba(238,235,228,.62); --line-night:rgba(238,235,228,.14);
   --m:48px; --g:24px; --hdr:72px; --rul:40px;
   --ease:cubic-bezier(.2,.7,.1,1);
-  --serif:"Bodoni Moda", "Didot", serif;
-  --sans:"Geist", ui-sans-serif, sans-serif;
-  --mono:"Geist Mono", ui-monospace, monospace;
+  --serif:"Inter Tight", Inter, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --sans:Inter, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, monospace;
 }
 @media (max-width:700px){ :root{ --m:16px; --g:12px; --hdr:60px; --rul:36px; } }
 
@@ -78,8 +78,8 @@ em{ font-style:italic; }
 
 .hero-copy{ position:absolute; left:calc(var(--m) + 26px); right:calc(var(--m) + 26px); bottom:calc(var(--rul) + 6vh); display:flex;
   justify-content:space-between; align-items:flex-end; gap:var(--g); }
-.hero-copy h1{ font-family:var(--serif); font-weight:400; font-size:clamp(34px, 4.6vw, 74px); line-height:.96;
-  letter-spacing:-.02em; color:var(--paper); }
+.hero-copy h1{ font-family:var(--serif); font-weight:700; font-size:clamp(34px, 4.4vw, 70px); line-height:.98;
+  letter-spacing:-.03em; color:var(--paper); }
 .hero-copy h1 em{ color:var(--amber); }
 .hero-copy h1 .ln{ display:block; overflow:hidden; padding-bottom:.12em; margin-bottom:-.12em; }
 .hero-copy h1 .ln > span, .hero-copy h1 .ln > em{ display:block; }
@@ -93,7 +93,7 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .hero-side
 }
 
 .beat{ position:absolute; left:var(--m); bottom:calc(var(--rul) + 7vh); max-width:15ch; visibility:hidden; color:var(--paper);
-  font-family:var(--serif); font-size:clamp(34px, 4.6vw, 72px); line-height:1; letter-spacing:-.015em; }
+  font-family:var(--serif); font-weight:700; font-size:clamp(32px, 4.2vw, 66px); line-height:1; letter-spacing:-.03em; }
 .beat em{ color:var(--accent); }
 
 .measures{ position:absolute; inset:0; pointer-events:none; visibility:hidden; color:var(--on-night); }
@@ -101,8 +101,8 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .hero-side
 
 .setline{ position:absolute; left:var(--m); right:var(--m); visibility:hidden; }
 .setline .mono{ display:block; color:var(--on-night); margin-bottom:18px; }
-.setline h2{ font-family:var(--serif); font-weight:400; font-size:clamp(38px, 6vw, 96px); line-height:.98;
-  letter-spacing:-.02em; max-width:16ch; color:var(--paper); }
+.setline h2{ font-family:var(--serif); font-weight:700; font-size:clamp(36px, 5.6vw, 90px); line-height:.98;
+  letter-spacing:-.03em; max-width:16ch; color:var(--paper); }
 .setline h2 em{ color:var(--amber); }
 .setline .w{ display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.08em; margin-bottom:-.08em; }
 .setline .w i{ display:inline-block; font-style:inherit; will-change:transform; }
@@ -110,8 +110,8 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .hero-side
 .tile{ position:absolute; inset:0; clip-path:inset(50% 50% 50% 50%); pointer-events:none; }
 .tile .cv{ position:absolute; transform-origin:50% 50%; will-change:transform; }
 .cap{ position:absolute; display:flex; align-items:baseline; gap:18px; visibility:hidden; color:var(--paper); }
-.cap .n{ font-family:var(--serif); font-style:italic; font-size:clamp(22px, 3vw, 44px); line-height:1; color:var(--accent); }
-.cap b{ font-family:var(--serif); font-weight:400; font-size:clamp(18px, 2.2vw, 32px); line-height:1.1; letter-spacing:-.01em; }
+.cap .n{ font-family:var(--serif); font-style:italic; font-weight:600; font-size:clamp(22px, 3vw, 44px); line-height:1; letter-spacing:-.03em; color:var(--accent); }
+.cap b{ font-family:var(--serif); font-weight:600; font-size:clamp(18px, 2.2vw, 32px); line-height:1.1; letter-spacing:-.03em; }
 .cap .mono{ color:var(--on-night); margin-left:auto; }
 .cap .go{ font-size:18px; transition:transform .5s var(--ease); }
 @media (hover:hover) and (pointer:fine){ .cap:hover .go{ transform:translateX(6px); } }

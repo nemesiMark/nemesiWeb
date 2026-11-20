@@ -7,7 +7,7 @@ Vettore unico: **tutto diventa solo più ordinato/definito** (dal nome alla pagi
 - Cap. 1 Linea (hero): wordmark NEMESI enorme, costruito SOLO con aste rettangolari (21 barre).
 - Cap. 2 Griglia: le aste verticali (9 + 3 diagonali raddrizzate) diventano le 12 linee di una
   griglia a 6 colonne con canali; i 9 bracci orizzontali diventano le linee di riga. Etichette mono di misura.
-- Cap. 3 Testo: titolo in Bodoni si posa sulla griglia parola per parola.
+- Cap. 3 Testo: titolo si posa sulla griglia parola per parola.
 - Cap. 4 Forma: 2 riquadri-progetto (Rain Ink, Olimp) riempiono le celle (schermate vere in images/lavori/).
 - Cap. 5 Pagina: i due riquadri diventano due pannelli 16:10 affiancati (sul telefono impilati) sotto il titolo,
   con didascalie cliccabili (aprono i siti): il film si chiude sull'indice dei lavori; sotto, per ora, solo il piè di pagina con i contatti. Il logo piccolo nell'header è lo stesso wordmark.
@@ -18,7 +18,7 @@ Tavolozza «Notte e vermiglio»: notte #0E0C0B, notte-2 #17130F, vermiglio #E843
 
 ## Direzione artistica
 - Carta #EEEBE4 · Inchiostro #111110 · Grigio #5E5C56 · Linee rgba(17,17,16,.14) · Accento vermiglio #E0401A (solo segnali).
-- Display: Bodoni Moda (corsivo per gli accenti) · Testo: Geist · Misure: Geist Mono.
+- Display: Inter Tight 700 (corsivo per gli accenti) · Testo: Inter · Misure: JetBrains Mono — gli stessi caratteri di Rain Ink (dalla 1.9; 1.8 Instrument Serif/Sans; prima Bodoni Moda, Geist, Geist Mono).
 - Motto: «Niente di troppo» (Nemesi punisce l'eccesso: legame col «senza fronzoli»).
 
 ## Divieti
