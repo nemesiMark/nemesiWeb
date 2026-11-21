@@ -71,7 +71,7 @@ em{ font-style:italic; }
 .hud > i:nth-child(3){ left:0; bottom:0; border-left-width:1px; border-bottom-width:1px; }
 .hud > i:nth-child(4){ right:0; bottom:0; border-right-width:1px; border-bottom-width:1px; }
 .hud .mono{ position:absolute; top:4px; color:var(--on-night); display:flex; align-items:center; gap:8px; }
-.hud .tl{ left:26px; } .hud .tr{ right:26px; color:var(--paper); }
+.hud .tl{ left:26px; }
 .bars{ position:absolute; inset:0; pointer-events:none; }
 .bar{ position:absolute; left:-50px; top:-50px; width:100px; height:100px; background:var(--paper); will-change:transform; }
 .bars{ visibility:hidden; }
@@ -83,9 +83,7 @@ em{ font-style:italic; }
 .hero-copy h1 em{ color:var(--amber); }
 .hero-copy h1 .ln{ display:block; overflow:hidden; padding-bottom:.12em; margin-bottom:-.12em; }
 .hero-copy h1 .ln > span, .hero-copy h1 .ln > em{ display:block; }
-html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .hero-side, html.intro .ruler, html.intro .nav{ opacity:0; }
-.hero-side{ max-width:32ch; padding-bottom:6px; }
-.hero-side p{ font-size:15px; color:var(--on-night); }
+html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, html.intro .nav{ opacity:0; }
 .dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); display:inline-block; }
 @media (max-width:700px){
   .hero-copy{ flex-direction:column; align-items:flex-start; left:var(--m); right:var(--m); bottom:calc(var(--rul) + 4vh); gap:16px; }
@@ -155,14 +153,10 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .hero-side
 
       <div class="hud" id="hud" aria-hidden="true"><i></i><i></i><i></i><i></i>
         <span class="mono tl">Nemesi — studio di web design</span>
-        <span class="mono tr"><i class="dot"></i>Disponibile da gennaio 2027</span>
       </div>
 
       <div class="hero-copy" id="hero-copy">
         <h1><span class="ln"><span>Web design su misura.</span></span><span class="ln"><em>Niente di troppo.</em></span></h1>
-        <div class="hero-side">
-          <p>Siti, identità per il web e negozi online per chi preferisce farsi capire piuttosto che farsi notare.</p>
-        </div>
       </div>
 
       <p class="beat" id="beat">Ogni elemento deve <em>guadagnarsi</em> il posto.</p>
@@ -496,7 +490,6 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .hero-side
     var root = document.documentElement;
     var ruler = stage.querySelector('.ruler');
     var lines = document.querySelectorAll('#hero-copy h1 .ln > *');
-    var side = document.querySelector('#hero-copy .hero-side');
     var navItems = document.querySelectorAll('.nav a');
     var iv = { v:0 };
     intro = gsap.timeline({ defaults:{ ease:'power4.out' }, onComplete:endIntro });
@@ -504,7 +497,6 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .hero-side
     // stati iniziali scritti inline, poi via la classe: niente lampi
     gsap.set(ruler, { clipPath:'inset(0% 100% 0% 0%)' });
     gsap.set(lines, { yPercent:110 });
-    gsap.set(side, { autoAlpha:0, y:14 });
     gsap.set(navItems, { autoAlpha:0, y:-10 });
     gsap.set(['#gl', '#hud'], { autoAlpha:0 });
     root.classList.remove('intro');
@@ -513,7 +505,6 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .hero-side
     intro.fromTo(iv, { v:0 }, { v:1, duration:2.4, ease:'power3.out', onUpdate:function(){ if (scene3d) scene3d.setIntro(iv.v); } }, 0);
     intro.to(ruler, { clipPath:'inset(0% 0% 0% 0%)', duration:1 }, .2);
     intro.to(lines, { yPercent:0, duration:1, stagger:.12 }, .6);
-    intro.to(side, { autoAlpha:1, y:0, duration:.8 }, .95);
     intro.to('#hud', { autoAlpha:1, duration:.8, ease:'power2.out' }, .9);
     intro.to(navItems, { autoAlpha:1, y:0, duration:.7, stagger:.06 }, .8);
     // chi scorre o tocca un tasto non aspetta

@@ -50,3 +50,6 @@
 ### 1.9 — 20/11/2026
 - Caratteri presi da Rain Ink Tattoo: Inter Tight (titoli in grassetto 700, corsivo per gli accenti in ambra e vermiglio; nomi dei lavori 600) e Inter per i testi. Restano JetBrains Mono per etichette e misure.
 - Titoli riproporzionati per il carattere più pesante: hero clamp(34px, 4.4vw, 70px), frase sulla griglia clamp(32px, 4.2vw, 66px), titolo dei lavori clamp(36px, 5.6vw, 90px); spaziatura -0,03em.
+
+### 1.10 — 21/11/2026
+- Hero più essenziale: tolte la scritta «Disponibile da gennaio 2027» in alto a destra e la frase sotto il titolo («Siti, identità per il web e negozi online…»), con il loro CSS e la loro animazione d'apertura.
