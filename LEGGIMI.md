@@ -82,3 +82,6 @@
 
 ### 1.17 — 21/11/2026
 - Filo di avanzamento: i numeri dei capitoli (01–06) ora stanno a destra del filo invece che a sinistra, così «01» non si sovrappone più all'angolo in alto a destra della hero.
+
+### 1.18 — 21/11/2026
+- Titolo dei lavori: «Siti chiari, intuitivi, costruiti per durare.» (prima «veloci»).
