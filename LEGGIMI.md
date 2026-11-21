@@ -85,3 +85,9 @@
 
 ### 1.18 — 21/11/2026
 - Titolo dei lavori: «Siti chiari, intuitivi, costruiti per durare.» (prima «veloci»).
+
+### 1.19 — 21/11/2026
+- Nuova sezione dopo il film, «App e giochi»: quattro riquadri 16:10 in fila (due per fila sul telefono) con numero, nome e genere sotto: 03 Parola (testi), 04 Foglio (calcolo), 05 Metal Gear (gioco d'azione), 06 Radente (gioco di volo). Schermate in images/lavori (parola-d, foglio-d, metalgear-d, radente-d, 2000×1125).
+- Ogni riquadro apre l'app o il gioco online (GitHub Pages) in una nuova scheda; al passaggio del mouse la stessa cornice al neon ambra dei pannelli del film. Entrano in fila con una leggera salita.
+- Header: dopo il film prende un fondo notte semitrasparente sfocato con un filo sotto, così il contenuto che scorre non si sovrappone a logo e menu; resta sempre chiaro.
+- Filo di avanzamento: le tacche dei capitoli si ricalcolano sulla fine del film (la pagina ora è più lunga).
