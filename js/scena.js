@@ -1,5 +1,5 @@
 /* Scena 3D dell'apertura (Three.js r147, script classico: funziona anche aprendo il file dal disco).
-   Le 21 aste di NEMESI sospese nel buio, con luce vermiglia e ambra, braci e foschia.
+   Le aste di NEMESI WEB sospese nel buio, con luce vermiglia e ambra, braci e foschia.
    setProgress(k): 0 = aste sparse, 1 = aste allineate esattamente sulla scritta HTML (stessi pixel). */
 (function(){
   'use strict';
@@ -7,6 +7,7 @@
   function lin(hex){ return new THREE.Color(hex).convertSRGBToLinear(); }
   function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
   function inOut3(t){ return t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2; }
+  function inOutSine(t){ return .5 - .5*Math.cos(Math.PI*t); }   // accelera e frena dolce: velocità massima metà della cubica
   function inOut2(t){ return t < .5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2)/2; }
   function rng(seed){ return function(){ seed = (seed*16807) % 2147483647; return (seed - 1)/2147483646; }; }
 
@@ -23,7 +24,7 @@
     var mobile = !!opts.mobile;
     var NIGHT = '#0E0C0B';
     var renderer = new THREE.WebGLRenderer({ canvas:canvas, antialias:!mobile, powerPreference:'high-performance' });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.35));
     renderer.setClearColor(lin(NIGHT), 1);
 
     var scene = new THREE.Scene();
@@ -47,11 +48,11 @@
     var DARK = lin('#2B231F'), LIGHT = lin('#E4DED3');
     var mat = new THREE.MeshPhysicalMaterial({ color:DARK.clone(), roughness:.26, metalness:.55,
       clearcoat:.9, clearcoatRoughness:.15, envMapIntensity:.18 });
-    var beams = [], N = 21, R = rng(7);
+    var beams = [], N = getGeo().A.length, R = rng(7);
     for (var i = 0; i < N; i++){
       var m = new THREE.Mesh(new THREE.BufferGeometry(), mat); scene.add(m);
       beams.push({ mesh:m, sx:R(), sy:R(), sz:R(), ex:(R()-.5)*Math.PI*2, ey:(R()-.5)*Math.PI*2, ez:(R()-.5)*Math.PI*2,
-        spin:(R()-.5)*.5, bob:R()*Math.PI*2, delay:(i/(N-1))*.16 + R()*.06 });
+        spin:(R()-.5)*.5, bob:R()*Math.PI*2, delay:(i/(N-1))*.12 + R()*.04 });
     }
 
     // foschia: grandi macchie morbide che derivano lente
@@ -90,7 +91,7 @@
     composer.addPass(bloom);
     composer.addPass(new THREE.ShaderPass(THREE.GammaCorrectionShader));
 
-    var W = 1, H = 1, D = 1, k = 0, introV = 1, active = false, raf = 0, last = 0, clock = 0;
+    var W = 1, H = 1, D = 1, k = 0, ks = 0, introV = 1, active = false, raf = 0, last = 0, clock = 0;
     var mx = 0, my = 0, tmx = 0, tmy = 0;
     var qA = new THREE.Quaternion(), qB = new THREE.Quaternion(), eul = new THREE.Euler();
 
@@ -118,13 +119,15 @@
       return { x:a.x - W/2, y:H/2 - a.y, z:-depth/2, rz:-a.r*Math.PI/180, len:a.sx*100, th:a.sy*100, depth:depth };
     }
 
+    // ks = progresso ammorbidito (insegue k con una costante di ~120 ms): niente scatti tra un passo di rotella e l'altro.
+    // Le aste arrivano entro k = .82 e la ripresa entro .9: al passaggio alle aste HTML (k ≥ .94) è tutto fermo.
     function draw(){
-      var t = clock;
-      var camK = inOut3(clamp((k - .08)/.84, 0, 1));
+      var t = clock, k = ks;
+      var camK = inOutSine(clamp((k - .04)/.86, 0, 1));
       // aste: dallo sparso alla scritta, ognuna con il suo ritardo
       for (var i = 0; i < N; i++){
         var b = beams[i], f = finalPose(i);
-        var e = inOut3(clamp((k - b.delay)/.7, 0, 1)), free = 1 - e;
+        var e = inOutSine(clamp((k - b.delay)/.66, 0, 1)), free = 1 - e;
         var sx = (b.sx - .5)*W*1.15, sy = (b.sy - .5)*H*1.05 + Math.sin(t*.6 + b.bob)*22*free, sz = -H*.25 - b.sz*H*1.6;
         b.mesh.position.set(sx + (f.x - sx)*e, sy + (f.y - sy)*e, sz + (f.z - sz)*e);
         eul.set(b.ex + t*b.spin*free, b.ey + t*b.spin*.7*free, b.ez); qA.setFromEuler(eul);
@@ -173,6 +176,7 @@
       var dt = last ? Math.min(.05, (now - last)/1000) : 0; last = now;
       clock += dt;
       mx += (tmx - mx)*.05; my += (tmy - my)*.05;
+      ks += (k - ks)*(1 - Math.exp(-dt/.12)); if (Math.abs(k - ks) < 1e-4) ks = k;
       draw();
       if (active) raf = requestAnimationFrame(loop);
     }
@@ -184,14 +188,15 @@
     resize();
     return {
       resize:resize,
-      setProgress:function(v){ k = clamp(v, 0, 1); if (!active) draw(); },
+      setProgress:function(v){ k = clamp(v, 0, 1); if (!active){ ks = k; draw(); } },
       setIntro:function(v){ introV = v; if (!active) draw(); },
       setActive:function(on){
         if (on === active) return; active = on;
+        if (!on){ ks = k; draw(); }   // fermandosi si allinea esattamente
         if (on && !raf){ last = 0; raf = requestAnimationFrame(loop); }
       },
       render:draw,
-      state:function(){ return { k:k, active:active, intro:introV }; }
+      state:function(){ return { k:k, ks:ks, active:active, intro:introV }; }
     };
   }
 

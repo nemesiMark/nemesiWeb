@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nemesi — Web design su misura</title>
+<title>Nemesi Web — Web design su misura</title>
 <meta name="description" content="Nemesi è uno studio di web design: siti su misura, identità per il web e negozi online. Niente di troppo.">
 <meta name="theme-color" content="#0E0C0B">
 <script>(function(){ var d=document.documentElement;
@@ -107,13 +107,19 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
 
 .tile{ position:absolute; inset:0; clip-path:inset(50% 50% 50% 50%); pointer-events:none; }
 .tile .cv{ position:absolute; transform-origin:50% 50%; will-change:transform; }
-.cap{ position:absolute; display:flex; align-items:baseline; gap:18px; visibility:hidden; color:var(--paper); }
-.cap .n{ font-family:var(--serif); font-style:italic; font-weight:600; font-size:clamp(22px, 3vw, 44px); line-height:1; letter-spacing:-.03em; color:var(--accent); }
-.cap b{ font-family:var(--serif); font-weight:600; font-size:clamp(18px, 2.2vw, 32px); line-height:1.1; letter-spacing:-.03em; }
-.cap .mono{ color:var(--on-night); margin-left:auto; }
-.cap .go{ font-size:18px; transition:transform .5s var(--ease); }
-@media (hover:hover) and (pointer:fine){ .cap:hover .go{ transform:translateX(6px); } }
-@media (max-width:700px){ .cap .mono{ display:none; } .cap .go{ margin-left:auto; } }
+.cap{ position:absolute; display:block; visibility:hidden; cursor:pointer; }
+.cap::after{ content:""; position:absolute; inset:-6px; border:1.5px solid #FFE3A6; border-radius:2px; pointer-events:none;
+  box-shadow:0 0 2px #FFD27A, 0 0 8px rgba(242,169,59,.9), 0 0 20px rgba(242,169,59,.55), 0 0 44px rgba(232,120,28,.35),
+    inset 0 0 6px rgba(242,169,59,.7), inset 0 0 18px rgba(242,169,59,.3);
+  opacity:0; transform:scale(.985); transition:opacity .45s var(--ease), transform .45s var(--ease); }
+.cap:focus-visible{ outline:none; }
+.cap:focus-visible::after{ opacity:1; transform:none; }
+@media (hover:hover) and (pointer:fine){ .cap:hover::after{ opacity:1; transform:none; } }
+.tile .cv img{ transition:transform 1.1s var(--ease); }
+@media (hover:hover) and (pointer:fine){
+  .stage:has(.cap[data-i="0"]:hover) .tile[data-i="0"] .cv img,
+  .stage:has(.cap[data-i="1"]:hover) .tile[data-i="1"] .cv img{ transform:scale(1.03); }
+}
 
 .ruler{ position:absolute; left:0; right:0; bottom:0; height:var(--rul); padding:0 var(--m); display:flex;
   align-items:center; justify-content:space-between; color:var(--paper); transition:color .5s var(--ease); }
@@ -127,6 +133,34 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
 .stage.dark .ruler{ color:var(--paper); }
 .ruler .ch b{ font-weight:500; }
 
+/* ───── filo di avanzamento a destra (al posto della barra del browser) ───── */
+html{ scrollbar-width:none; }
+html::-webkit-scrollbar{ display:none; }
+.rail{ position:fixed; z-index:40; right:10px; top:calc(var(--hdr) + 10px); bottom:calc(var(--rul) + 10px); width:28px;
+  color:var(--paper); cursor:pointer; touch-action:none; transition:opacity .8s var(--ease); --rp:0; }
+html.intro .rail{ opacity:0; }
+.rail i{ font-style:normal; }
+.rail::before{ content:""; position:absolute; right:13px; top:0; bottom:0; width:1px; background:currentColor; opacity:.18; }
+.rail::after{ content:""; position:absolute; right:13px; top:0; height:100%; width:5px; opacity:.28;
+  background:linear-gradient(currentColor 1px, transparent 1px) 0 0 / 5px 2.5% repeat-y; }
+.rail .fill{ position:absolute; right:13px; top:0; width:1px; height:100%; background:var(--accent);
+  transform-origin:50% 0; transform:scaleY(var(--rp)); }
+.rail .knob{ position:absolute; right:9px; top:0; width:13px; height:1px; background:var(--accent);
+  transform:translateY(calc(var(--rp) * var(--rh, 0px))); }
+.rail .knob::after{ content:""; position:absolute; right:3px; top:-3px; width:7px; height:7px; border-radius:50%;
+  background:var(--accent); transform:scale(.0); transition:transform .4s var(--ease); }
+.rail:hover .knob::after, .rail.drag .knob::after{ transform:scale(1); }
+.rail .ck{ position:absolute; right:13px; width:9px; height:1px; background:currentColor; opacity:.45;
+  transition:opacity .4s var(--ease), background .4s var(--ease); }
+.rail .ck span{ position:absolute; left:calc(100% + 5px); top:-6px; font-family:var(--mono); font-size:9px; letter-spacing:.06em;
+  color:var(--paper); opacity:0; transform:translateX(-4px); transition:opacity .4s var(--ease), transform .4s var(--ease); }
+.rail .ck.on{ opacity:1; background:var(--accent); }
+.rail .ck.on span{ opacity:.8; transform:none; }
+.rail:hover .ck span{ opacity:.55; transform:none; }
+.rail:hover .ck.on span{ opacity:1; }
+@media (max-width:700px){ .rail{ right:0; width:20px; } .rail::before, .rail::after, .rail .fill, .rail .ck{ right:7px; }
+  .rail .knob{ right:4px; width:9px; } .rail .ck span{ display:none; } }
+
 /* ───── copertine dei lavori: schermate dei siti veri ───── */
 .cv{ position:relative; overflow:hidden; background:#0b0b0d; }
 .cv img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 50%; display:block; }
@@ -135,8 +169,9 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
 </head>
 <body>
 
+<div class="rail" id="rail" aria-hidden="true"><i class="fill"></i><i class="knob"></i></div>
 <header class="hdr" id="hdr">
-  <a class="logo" href="#top" aria-label="Nemesi, torna all'inizio"><svg id="logo-svg" aria-hidden="true"></svg></a>
+  <a class="logo" href="#top" aria-label="Nemesi Web, torna all'inizio"><svg id="logo-svg" aria-hidden="true"></svg></a>
   <nav class="nav" aria-label="Principale">
     <a href="#lavori">Lavori</a>
     <a class="btn" href="mailto:ciao@nemesi.studio"><span>Scrivimi</span></a>
@@ -152,7 +187,7 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
       <div class="measures" id="measures" aria-hidden="true"></div>
 
       <div class="hud" id="hud" aria-hidden="true"><i></i><i></i><i></i><i></i>
-        <span class="mono tl">Nemesi — studio di web design</span>
+        <span class="mono tl">Nemesi Web — studio di web design</span>
       </div>
 
       <!--
@@ -164,14 +199,14 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
       <p class="beat" id="beat">Ogni elemento deve <em>guadagnarsi</em> il posto.</p>
 
       <div class="setline" id="setline">
-        <span class="mono">Nemesi — studio di web design</span>
+        <span class="mono">Nemesi Web — studio di web design</span>
         <h2 id="setline-h">Siti chiari, veloci, <em>costruiti per durare.</em></h2>
       </div>
 
       <div class="tile" data-i="0"><div class="cv"><img src="images/lavori/rainink-d.jpg" alt="" decoding="async"></div></div>
       <div class="tile" data-i="1"><div class="cv"><img src="images/lavori/olimp-d.jpg" alt="" decoding="async"></div></div>
-      <a class="cap" data-i="0" href="https://nemesimark.github.io/inkubo/" target="_blank" rel="noopener"><span class="n">01</span><b>Rain Ink Tattoo</b><span class="mono">Tatuaggi · Montelupone</span><span class="go" aria-hidden="true">↗</span></a>
-      <a class="cap" data-i="1" href="https://nemesimark.github.io/trama/" target="_blank" rel="noopener"><span class="n">02</span><b>Olimp</b><span class="mono">Album per fotografi</span><span class="go" aria-hidden="true">↗</span></a>
+      <a class="cap" data-i="0" href="https://nemesimark.github.io/inkubo/" target="_blank" rel="noopener" aria-label="Rain Ink Tattoo, tatuaggi a Montelupone: apri il sito"></a>
+      <a class="cap" data-i="1" href="https://nemesimark.github.io/trama/" target="_blank" rel="noopener" aria-label="Olimp, album per fotografi: apri il sito"></a>
 
       <div class="ruler" aria-hidden="true">
         <i class="mark"></i>
@@ -214,9 +249,9 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
   var covers = tiles.map(function(t){ return t.querySelector('.cv'); });
   var capsEl = Array.prototype.slice.call(document.querySelectorAll('.cap'));
 
-  /* ── il wordmark: sei lettere fatte solo di aste ──
+  /* ── il wordmark: NEMESI WEB, lettere fatte solo di aste ──
      ogni asta: centro (cx,cy), lunghezza, spessore, rotazione (gradi); unità = altezza H */
-  var LW = { N:.80, E:.60, M:.98, S:.62, I:.15 }, GAP = .16, T = .15;
+  var LW = { N:.80, E:.60, M:.98, S:.62, I:.15, W:.98, B:.64, ' ':.22 }, GAP = .16, T = .15;
   function letter(ch, H){
     var t = T*H, w = LW[ch]*H, b = [];
     function seg(x1,y1,x2,y2,th){ var dx=x2-x1, dy=y2-y1;
@@ -231,9 +266,16 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
       var last=b[b.length-1]; last.rot = last.rot + 180; }   // tiene la rotazione tra 90 e 180
     if (ch==='S'){ arm(0,w,t/2); stem(t/2,0,H/2+t/2); arm(0,w,H/2); stem(w-t/2,H/2-t/2,H); arm(0,w,H-t/2); }
     if (ch==='I'){ stem(t/2,0,H); }
+    if (ch==='W'){ stem(t/2,0,H); stem(w-t/2,0,H);   // la M capovolta
+      var wy=H*.3, wv=t*.32; seg(t*.6, H-t*.45, w/2+wv*.5, wy-wv*.85, t*1.02); seg(w/2-wv*.5, wy-wv*.85, w-t*.6, H-t*.45, t*1.02); }
+    if (ch==='B'){ var bu=w*.86; stem(t/2,0,H); arm(0,bu,t/2); arm(0,w,H/2); arm(0,w,H-t/2);
+      stem(bu-t/2,0,H/2+t/2); stem(w-t/2,H/2-t/2,H); }
     return { w:w, bars:b };
   }
-  var WORD = ['N','E','M','E','S','I'];
+  var WORD = ['N','E','M','E','S','I',' ','W','E','B'];
+  // tutte le aste vanno sulla griglia: quelle di NEMESI (le prime 21) restano, quelle di WEB si posano sulle stesse linee e si spengono
+  var NB = 0, NALL = 0;
+  WORD.forEach(function(ch, i){ var n = letter(ch, 1).bars.length; NALL += n; if (i < 6) NB += n; });
 
   /* geometria: wordmark (A) e griglia (B) per la finestra attuale */
   var geo = {};
@@ -242,7 +284,7 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
     var mobile = vw < 700;
     var m = mobile ? 16 : 48, g = mobile ? 12 : 24, hdrH = mobile ? 60 : 72, rul = mobile ? 36 : 40;
     // wordmark
-    var rows = mobile ? [[0,1,2],[3,4,5]] : [[0,1,2,3,4,5]];
+    var rows = mobile ? [[0,1,2,3,4,5],[7,8,9]] : [[0,1,2,3,4,5,6,7,8,9]];
     var units = Math.max.apply(null, rows.map(function(r){
       return r.reduce(function(s,i){ return s + LW[WORD[i]]; }, 0) + GAP*(r.length-1); }));
     var H = Math.min((vw - 2*m)/units, vh*(mobile ? .2 : .34));
@@ -266,9 +308,14 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
     for (var i=0;i<6;i++){ var L0 = m + i*(c+g); cols.push(L0, L0+c); }
     var R = (vh - hdrH - rul)/8, ys = [];
     for (var k=0;k<=8;k++) ys.push(hdrH + k*R);
-    var B = [], vi = 0, hi = 0;
+    // le aste di WEB vanno anche loro sulle linee (verticali da col. 3 in poi, orizzontali sulle righe 1-3 e 5-7)
+    var B = [], vi = 0, hi = 0, wv = 4, wh = 0, WH = [1,2,3,5,6,7];
     A.forEach(function(a){
-      if (a.kind==='v'){ B.push({ x:Math.round(cols[vi++])+.5, y:vh/2, sx:vh/100, sy:.01, r:90 }); }
+      if (a.li >= 6){
+        if (a.kind==='v') B.push({ x:Math.round(cols[Math.min(wv++, 11)])+.5, y:vh/2, sx:vh/100, sy:.01, r:90 });
+        else B.push({ x:vw/2, y:Math.round(ys[WH[Math.min(wh++, 5)]])+.5, sx:vw/100, sy:.01, r:0 });
+      }
+      else if (a.kind==='v'){ B.push({ x:Math.round(cols[vi++])+.5, y:vh/2, sx:vh/100, sy:.01, r:90 }); }
       else { B.push({ x:vw/2, y:Math.round(ys[hi++])+.5, sx:vw/100, sy:.01, r:0 }); }
     });
     // celle dei riquadri (righe 5-8)
@@ -278,30 +325,28 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
       { l:colL(0), r:colR(3), t:ys[4], b:ys[8] - half },
       { l:colL(4), r:colR(5), t:ys[4], b:ys[8] - half }
     ];
-    // l'indice finale: due pannelli uguali con la didascalia sotto
-    // il titolo resta in alto: i pannelli (16:10 al massimo) stanno sotto
+    // l'indice finale: due pannelli uguali, cliccabili (il link .cap li copre), sotto il titolo
     var sl0 = document.getElementById('setline');
     sl0.style.top = (ys[0] + R*.45) + 'px';
     var below = sl0.offsetTop + sl0.offsetHeight + (mobile ? 22 : 40);
-    var panels, caps, CAP = mobile ? 34 : 66, w, h;
+    // alla fine il righello se ne va: i pannelli scendono fino al margine
+    var panels, w, h;
     if (mobile){
       w = vw - 2*m;
-      h = Math.min(w/1.6, (vh - rul - 12 - below - 2*CAP - 10)/2);
-      var t1 = below, t2 = t1 + h + CAP + 10;
+      h = Math.min(w/1.6, (vh - m - below - g)/2);
+      var t1 = below, t2 = t1 + h + g;
       panels = [ { l:m, r:vw-m, t:t1, b:t1+h }, { l:m, r:vw-m, t:t2, b:t2+h } ];
-      caps = [ t1+h+8, t2+h+8 ];
     } else {
       w = colR(2) - colL(0);
-      var bot = vh - rul - CAP - 8;
+      var bot = vh - m;
       h = Math.min(w/1.6, bot - below);
       panels = [ { l:colL(0), r:colR(2), t:bot-h, b:bot }, { l:colL(3), r:colR(5), t:bot-h, b:bot } ];
-      caps = [ bot+16, bot+16 ];
     }
     geo = { vw:vw, vh:vh, m:m, g:g, c:c, H:H, A:A, B:B, cols:cols, ys:ys, R:R, cells:cells, panels:panels, mobile:mobile, hdrH:hdrH };
     covers.forEach(function(cv, i){ var P = panels[i];
       cv.style.left = P.l + 'px'; cv.style.top = P.t + 'px'; cv.style.width = (P.r-P.l) + 'px'; cv.style.height = (P.b-P.t) + 'px'; });
     capsEl.forEach(function(el, i){ var P = panels[i];
-      el.style.left = P.l + 'px'; el.style.width = (P.r-P.l) + 'px'; el.style.top = caps[i] + 'px'; });
+      el.style.left = P.l + 'px'; el.style.width = (P.r-P.l) + 'px'; el.style.top = P.t + 'px'; el.style.height = (P.b-P.t) + 'px'; });
     if (typeof drawTiles === 'function') drawTiles();
     placeMeasures();
   }
@@ -333,7 +378,7 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
 
   /* barre */
   var bars = [];
-  for (var bi=0; bi<21; bi++){ var d = document.createElement('i'); d.className='bar'; barsEl.appendChild(d); bars.push(d); }
+  for (var bi=0; bi<NALL; bi++){ var d = document.createElement('i'); d.className='bar'; barsEl.appendChild(d); bars.push(d); }
 
   /* logo piccolo: stesso wordmark in SVG */
   (function(){
@@ -379,6 +424,35 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
   var T3 = .34;   // parte del pin dedicata alla scena 3D
   var CHS = [['Materia',0],['Nome',.2],['Griglia',.37],['Testo',.6],['Forma',.69],['Pagina',.84]];
   var scene3d = null, glEl = document.getElementById('gl');
+
+  /* filo di avanzamento: tacche dei capitoli, tratto percorso in vermiglio, si clicca e si trascina */
+  (function(){
+    var rail = document.getElementById('rail'), cks = [], raf = 0, drag = false;
+    CHS.forEach(function(c, i){
+      var k = document.createElement('i'); k.className = 'ck'; k.style.top = (c[1]*100) + '%';
+      k.innerHTML = '<span>0' + (i+1) + '</span>'; rail.appendChild(k); cks.push(k);
+    });
+    function max(){ return Math.max(1, document.documentElement.scrollHeight - innerHeight); }
+    function paint(){
+      raf = 0;
+      var p = Math.min(1, Math.max(0, scrollY/max()));
+      rail.style.setProperty('--rp', p.toFixed(4));
+      rail.style.setProperty('--rh', rail.clientHeight + 'px');
+      var c = 0; for (var i = 0; i < CHS.length; i++) if (p >= CHS[i][1] - .001) c = i;
+      cks.forEach(function(k, i){ k.classList.toggle('on', i === c); });
+    }
+    function ask(){ if (!raf) raf = requestAnimationFrame(paint); }
+    function go(ev, smooth){
+      var r = rail.getBoundingClientRect(), y = Math.min(1, Math.max(0, (ev.clientY - r.top)/r.height))*max();
+      if (lenis) lenis.scrollTo(y, smooth ? { duration:1.2 } : { immediate:true }); else window.scrollTo(0, y);
+    }
+    rail.addEventListener('pointerdown', function(ev){ drag = true; rail.classList.add('drag'); rail.setPointerCapture(ev.pointerId); go(ev, true); });
+    rail.addEventListener('pointermove', function(ev){ if (drag) go(ev, false); });
+    ['pointerup','pointercancel'].forEach(function(t){ rail.addEventListener(t, function(){ drag = false; rail.classList.remove('drag'); }); });
+    window.addEventListener('scroll', ask, { passive:true });
+    window.addEventListener('resize', ask);
+    paint(); setTimeout(paint, 500);
+  })();
   // passaggio di mano: la scritta 3D allineata lascia il posto alle aste HTML
   function swap3d(){
     if (!scene3d) return;
@@ -441,8 +515,10 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
       scaleX:function(i){ return geo.A[i].sx; }, scaleY:function(i){ return geo.A[i].sy; } },
     { x:function(i){ return geo.B[i].x; }, y:function(i){ return geo.B[i].y; }, rotation:function(i){ return geo.B[i].r; },
       scaleX:function(i){ return geo.B[i].sx; }, scaleY:function(i){ return geo.B[i].sy; },
-      duration:.2, ease:'power3.inOut', stagger:{ each:.005, from:'start' } }, .08);
-  tl.fromTo(bars, { opacity:1 }, { opacity:.15, duration:.08, ease:'power1.inOut' }, .33);
+      duration:.2, ease:'power3.inOut', stagger:{ each:.003, from:'start' } }, .08);
+  var barsN = bars.slice(0, NB), barsW = bars.slice(NB);
+  tl.fromTo(barsN, { opacity:1 }, { opacity:.15, duration:.08, ease:'power1.inOut' }, .33);
+  tl.fromTo(barsW, { opacity:1 }, { opacity:0, duration:.08, ease:'power1.inOut' }, .33);   // sopra linee già presenti: spariscono per non raddoppiarle
   tl.fromTo('#measures', { autoAlpha:0 }, { autoAlpha:1, duration:.05 }, .37);
   tl.fromTo('#beat', { autoAlpha:0, y:30 }, { autoAlpha:1, y:0, duration:.05, ease:'power2.out' }, .39);
   tl.to('#beat', { autoAlpha:0, y:-30, duration:.05, ease:'power2.in' }, .5);
@@ -455,8 +531,9 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
   // l'indice: i due lavori si allargano fianco a fianco, con il nome sotto
   tl.to('#measures', { autoAlpha:0, duration:.05 }, .79);
   tl.fromTo(grow, { k:0 }, { k:1, duration:.15, ease:'power3.inOut', onUpdate:drawTiles }, .8);
-  tl.to(bars, { opacity:.06, duration:.08 }, .82);
-  tl.fromTo(capsEl, { autoAlpha:0, y:14 }, { autoAlpha:1, y:0, duration:.06, ease:'power3.out', stagger:.02 }, .9);
+  tl.to(barsN, { opacity:.06, duration:.08 }, .82);
+  tl.fromTo('.ruler', { autoAlpha:1 }, { autoAlpha:0, duration:.06, immediateRender:false }, .8);
+  tl.fromTo(capsEl, { autoAlpha:0 }, { autoAlpha:1, duration:.02 }, .93);   // i pannelli diventano link quando sono al loro posto
   tl.set({}, {}, 1);
 
   // timeline madre: prima la materia (3D), poi il nome e la pagina

@@ -56,3 +56,29 @@
 
 ### 1.11 — 21/11/2026
 - Hero: nascosto il titolo «Web design su misura. Niente di troppo.» (commentato nel codice, CSS e animazione restano per poterlo rimettere).
+
+### 1.12 — 21/11/2026
+- La scritta ad aste ora è «NEMESI WEB» (nuove lettere W, come una M capovolta, e B squadrata): su computer una riga sola (lettere più basse per starci), su telefono NEMESI sopra e WEB sotto. Anche la scena 3D ha le aste in più (35 invece di 21) e anche il logo in alto è NEMESI WEB.
+- Nel passaggio alla griglia si muove tutta la scritta: le 21 aste di NEMESI diventano le linee come prima, le 14 di WEB volano anche loro sulle linee (verticali dalla 3ª colonna in poi, orizzontali sulle righe 1–3 e 5–7) e lì si spengono per non raddoppiarle. Aste più ravvicinate nella partenza (0,003 invece di 0,005) perché il movimento finisca in tempo.
+- Titolo della scheda ed etichette: «Nemesi Web».
+
+### 1.13 — 21/11/2026
+- Barra di avanzamento ridisegnata: tolta la barra di scorrimento del browser; al suo posto, a destra, un filo sottile con tacche fitte (come il righello in basso). Il tratto percorso si riempie di vermiglio, con una tacca vermiglia che scende; sei tacche più lunghe segnano i capitoli del film (01–06), la corrente in vermiglio con il numero accanto. Al passaggio del mouse compaiono tutti i numeri e un punto sulla tacca.
+- Si clicca (scorrimento morbido fino a quel punto) e si trascina come una barra normale; sul telefono più sottile e senza numeri. Compare con l'apertura.
+
+### 1.14 — 21/11/2026
+- Fine del film: tolte le didascalie sotto i pannelli (numero, nome, settore, freccia) e il righello in basso, che svanisce quando i lavori si allargano. I due pannelli scendono fino al margine e sono più grandi.
+- I due pannelli sono cliccabili: aprono Rain Ink Tattoo e Olimp in una nuova scheda (il nome resta per i lettori di schermo). Al passaggio del mouse la schermata si ingrandisce appena.
+
+### 1.15 — 21/11/2026
+- Passaggio dai blocchetti 3D alla scritta NEMESI WEB molto più fluido:
+  - il progresso della scena ora è ammorbidito (insegue lo scorrimento con un ritardo di circa 0,12 s), così i passi della rotella non danno più scatti;
+  - curva più dolce (sinusoidale invece che cubica: velocità massima dimezzata), aste più ravvicinate tra loro (ritardi 0,12 + 0,04 invece di 0,16 + 0,06) e movimento di ciascuna più lungo;
+  - le aste arrivano tutte entro l'82% della scena e la ripresa entro il 90%: al passaggio alle aste HTML è tutto fermo, niente salti; quando la scena si ferma si allinea esattamente.
+- Risoluzione della scena 3D sul computer un po' più bassa (1,35 invece di 1,5 pixel per punto) per avere più fotogrammi al secondo sugli schermi Retina.
+
+### 1.16 — 21/11/2026
+- Pannelli dei lavori: al passaggio del mouse una cornice al neon ambra evidenzia il pannello scelto (filo chiaro #FFE3A6 di 1,5 px, staccato 6 px dal bordo, con alone ambra fuori e dentro), entrando con una leggera dissolvenza; la stessa cornice compare navigando con la tastiera (Tab).
+
+### 1.17 — 21/11/2026
+- Filo di avanzamento: i numeri dei capitoli (01–06) ora stanno a destra del filo invece che a sinistra, così «01» non si sovrappone più all'angolo in alto a destra della hero.
