@@ -91,3 +91,50 @@
 - Ogni riquadro apre l'app o il gioco online (GitHub Pages) in una nuova scheda; al passaggio del mouse la stessa cornice al neon ambra dei pannelli del film. Entrano in fila con una leggera salita.
 - Header: dopo il film prende un fondo notte semitrasparente sfocato con un filo sotto, così il contenuto che scorre non si sovrappone a logo e menu; resta sempre chiaro.
 - Filo di avanzamento: le tacche dei capitoli si ricalcolano sulla fine del film (la pagina ora è più lunga).
+
+### 1.20 — 21/11/2026
+- Sito chiaro («Tavolo luminoso»): tutto su fondo carta fredda #F6F6F3 invece che notte. Restano uguali film, movimento, impianto e caratteri.
+- Colori: testo e aste in grafite #1E1F22, testo secondario #6A6B6F, linee al 14% di grafite, fondo secondario #ECECE7; un solo accento vermiglio più scuro #C9370F (contrasto leggibile su fondo chiaro). Tolta l'ambra: i corsivi dei titoli ora sono vermigli.
+- Scena 3D: fondo e foschia color carta, travi in grafite satinata, luci da studio chiaro con una luce vermiglia di taglio; tolti braci, macchie di foschia, bagliore dietro la scultura e bagliore in post (UnrealBloom, con i suoi due script). Alla fine le travi diventano color inchiostro, identiche alle aste HTML.
+- Header, filo di avanzamento e righello in grafite; dopo il film l'header ha un fondo carta semitrasparente sfocato. Bottone «Scrivimi» grafite con testo chiaro.
+- Pannelli dei lavori e riquadri di App e giochi: al passaggio del mouse una cornice vermiglia sottile al posto del neon ambra; i riquadri hanno un filo grigio intorno.
+- Verifiche: copy-gate pulito, fluidità max 24,8 ms, schermate computer 1440×900 e telefono 390×844.
+
+### 1.21 — 21/11/2026
+- Nuovo logo «nemesi web»: simbolo ridisegnato in vettoriale (images/logo/nemesi-mark.svg, dall'originale images/logo/nemesi-web-originale.png) con nastro grafite e due pezzi viola sfumati, filo viola, scritta in Outfit 500 («nemesi» grafite, «web» viola sfumato). Anche icona della scheda. Il logo è sempre visibile (prima compariva solo dopo la scritta ad aste).
+- Accento del sito dal vermiglio al viola del logo: #6D2FE8 (lilla #B66BFA per le sfumature, viola scuro #4A16B8 per i rilievi). Anche la luce di taglio della scena 3D è viola (#7B3FF2).
+- Navbar come quella di Rain Ink, ma chiara: lastra sospesa con angoli arrotondati, bordo sottile e ombra morbida, luce viola che corre avanti e indietro sul bordo (9 s; ferma con «movimento ridotto»), più bassa scorrendo. Voci Siti, App, Giochi: al passaggio del mouse si sollevano e si ingrandiscono; la voce della sezione in cui sei è in rilievo con un trattino viola. «Scrivimi» è un bottone viola in rilievo con la busta, si abbassa al clic.
+- Telefono: logo, panino (tre linee che diventano una X) e quadratino viola con la busta; il menu scende piegato in avanti con le voci in fila (30 ms l'una); si chiude toccando fuori, una voce o con Esc.
+- Sezioni separate: «App» (03 Parola, 04 Foglio) e «Giochi» (05 Metal Gear, 06 Radente), due riquadri grandi per riga, ognuna con la sua intestazione. «Siti» porta alla fine del film (Rain Ink e Olimp).
+- Verifiche: copy-gate pulito, fluidità max 19,8 ms, schermate computer e telefono, menu del telefono aperto senza errori.
+
+### 1.22 — 21/11/2026
+- Navbar più stretta: al massimo 720 px, centrata (prima larga quanto la pagina). Sul telefono resta come prima.
+- Sfondo «grigio perla» #E4E4E8 al posto della carta quasi bianca (#F6F6F3), anche nella scena 3D; pannelli #EDEDF0; testo secondario un po' più scuro (#5C5D62) per restare leggibile sul grigio.
+- Bastoncini più fluidi:
+  - il film insegue lo scorrimento con dolcezza (scrub 0,6 s invece che agganciato al millimetro);
+  - il volo delle aste dalla scritta alla griglia è più lungo (0,27 invece di 0,2 della timeline), con curva sinusoidale al posto di quella cubica (niente scatto a metà corsa) e partenze più ravvicinate (0,002);
+  - nella scena 3D il progresso ammorbidito insegue lo scorrimento con una costante di ~280 ms (prima 120 ms).
+- Tolta la frase «Ogni elemento deve guadagnarsi il posto.» con il suo CSS e la sua animazione; il titolo «Siti chiari, intuitivi, costruiti per durare.» arriva prima (0,46 invece di 0,53 della timeline).
+- Verifiche: copy-gate pulito, fluidità max 19,4 ms, schermate computer e telefono.
+
+### 1.23 — 21/11/2026
+- Navbar a larghezza intermedia: al massimo 960 px (nella 1.22 erano 720).
+- Fondo della navbar avorio caldo (#FDFAF5 → #F8F1E6, bordo e ombre calde); voce attiva e passaggio del mouse da bianco ad avorio #F4ECDF; anche il menu del telefono è avorio.
+- Logo e accento in arancio al posto del viola: simbolo con pezzi arancio sfumati (#FFC27A → #F5892A → #C94A06), filo e «web» arancio. Accento #F07A1A per luci, filo a destra, trattino della voce attiva e luce di taglio della scena 3D; #C2540A per i corsivi dei titoli e #A34604 per i numeri piccoli (contrasto leggibile sul grigio); bottone «Scrivimi» arancio scuro (#E8731A → #BD4F08) con testo bianco.
+- Riquadri dei lavori (Rain Ink, Olimp) e di App e Giochi: al passaggio del mouse (e con Tab) contorno al neon arancio, con filo chiaro #FFD2A1 e alone arancio fuori e dentro.
+- Verifiche: copy-gate pulito, fluidità, schermate con il mouse sopra i riquadri.
+
+### 1.24 — 21/11/2026
+- Logo arancio identico all'originale viola: ricavato dall'immagine originale cambiando solo il viola in arancio (stesse forme, sfumature e bagliore), con il nero reso trasparente. File: images/logo/nemesi-web-arancio.png (completo, con «Web design • Digital solutions»), images/logo/nemesi-web-nav.png (per la navbar, senza motto), images/logo/favicon.png (icona della scheda). Tolto il simbolo vettoriale nemesi-mark.svg e il carattere Outfit.
+- Navbar scura come Rain Ink: lastra grafite (#24252A → #121316) con rilievo e ombra profonda, voci grigio chiaro, voce attiva su grafite più chiaro con trattino arancio, luce arancio sul bordo, panino scuro; menu del telefono scuro.
+- App e Giochi in stile film: ognuna è una scena fissata (2,4 altezze di schermo, scrub 0,6 s). Le linee della griglia a 6 colonne si tracciano, sale il titolo grande («App», «Giochi»); in App i riquadri si aprono dall'alto dentro una cella e poi si allargano affiancati, in Giochi entrano di lato come una pellicola (inclinati, poi si posano); alla fine compaiono numero, nome e genere. «App» e «Giochi» nel menu portano alla fine della loro scena.
+- Titolo «Siti chiari, intuitivi, costruiti per durare.»: la maschera delle parole tagliava il corsivo a destra (tra «costruiti» e «per» sembrava mancare lo spazio); ora ha un margine per la sporgenza.
+- Aste 3D più definite: si disegnano direttamente sul canvas (tolta la post-produzione EffectComposer, che spegneva l'antialias), antialias anche sul telefono, risoluzione fino a 2× sugli schermi Retina (prima 1,35×). Tolti i sei script della post-produzione.
+- Corretto: nella 1.22 un commento aveva inghiottito `invalidateOnRefresh:true` del film.
+- Verifiche: copy-gate pulito, fluidità max 19,9 ms, schermate delle scene su computer e telefono, nessun errore in console.
+
+### 1.25 — 21/11/2026
+- Bastoncini più scuri: travi 3D in grafite #232428 (prima #3A3B40) con luci un po' più basse; alla fine e nelle aste HTML colore #141518 (prima #1E1F22).
+- Ancora più fluidi: il film e le scene di App e Giochi inseguono lo scorrimento in 1 s (prima 0,6 s), lo scorrimento morbido è più dolce (lerp di Lenis 0,07 invece di 0,09) e nella scena 3D il progresso ammorbidito ha una costante di ~400 ms (prima 280 ms).
+- Verifiche: copy-gate pulito, fluidità max ~20 ms (tre misure).

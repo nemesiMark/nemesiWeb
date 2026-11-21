@@ -14,7 +14,7 @@ Vettore unico: **tutto diventa solo più ordinato/definito** (dal nome alla pagi
 
 ## Apertura 3D (dalla 1.4)
 Prima del capitolo «Nome»: le 21 aste come travi 3D scure e lucide nel buio (luce vermiglia/ambra, braci), che si ricompongono nella scritta e diventano color carta, combaciando al pixel con le aste HTML.
-Tavolozza «Notte e vermiglio»: notte #0E0C0B, notte-2 #17130F, vermiglio #E8431C, ambra #F2A93B (nella 1.6 provata una versione più chiara, tolta nella 1.7), carta #EEEBE4.
+Tavolozza «Notte e vermiglio»: notte #0E0C0B, notte-2 #17130F, vermiglio #E8431C, ambra #F2A93B (nella 1.6 provata una versione più chiara, tolta nella 1.7), carta #EEEBE4. Dalla 1.20 tavolozza «Tavolo luminoso»: carta #F6F6F3, carta-2 #ECECE7, grafite #1E1F22, grafite-2 #6A6B6F, vermiglio #C9370F; niente ambra. Dalla 1.21 accento viola #6D2FE8; dalla 1.23 arancio #F07A1A (titoli #C2540A, testi piccoli #A34604), fondo grigio perla #E4E4E8, navbar avorio.
 
 ## Direzione artistica
 - Carta #EEEBE4 · Inchiostro #111110 · Grigio #5E5C56 · Linee rgba(17,17,16,.14) · Accento vermiglio #E0401A (solo segnali).

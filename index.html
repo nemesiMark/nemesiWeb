@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nemesi Web — Web design su misura</title>
 <meta name="description" content="Nemesi è uno studio di web design: siti su misura, identità per il web e negozi online. Niente di troppo.">
-<meta name="theme-color" content="#0E0C0B">
+<meta name="theme-color" content="#E4E4E8">
 <script>(function(){ var d=document.documentElement;
   if (location.search.indexOf('jump=')>-1 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   d.classList.add('intro'); setTimeout(function(){ d.classList.remove('intro'); }, 5000); })();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600;1,700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111110'/%3E%3Cpath fill='%23EEEBE4' d='M8 7h3.2v18H8zM20.8 7H24v18h-3.2zM9.2 7.6l2.9-1.2 10.7 19.1-2.9 1.2z'/%3E%3C/svg%3E">
+<link rel="icon" href="images/logo/favicon.png" type="image/png">
 <style>
 :root{
-  --paper:#EEEBE4; --paper-2:#E5E1D8; --ink:#111110; --ink-2:#5E5C56; --line:rgba(17,17,16,.14);
-  --accent:#E8431C; --amber:#F2A93B; --night:#0E0C0B; --night-2:#17130F;
-  --on-night:rgba(238,235,228,.62); --line-night:rgba(238,235,228,.14);
+  /* «Grigio perla»: fondo grigio freddo, aste in grafite, un solo accento: l'arancio del logo (vivo per segni e luci, più cupo per i testi) */
+  --paper:#E4E4E8; --paper-2:#EDEDF0; --ink:#1E1F22; --ink-2:#5C5D62; --line:rgba(30,31,34,.14);
+  --accent:#F07A1A; --accent-2:#FFB066; --accent-deep:#9A4206; --accent-big:#C2540A; --accent-text:#A34604;
   --m:48px; --g:24px; --hdr:72px; --rul:40px;
   --ease:cubic-bezier(.2,.7,.1,1);
   --serif:"Inter Tight", Inter, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -38,100 +38,155 @@ em{ font-style:italic; }
 .mono{ font-family:var(--mono); font-size:11px; letter-spacing:.04em; text-transform:uppercase; }
 .serif{ font-family:var(--serif); font-weight:400; }
 
-/* ───── header ───── */
-.hdr{ position:fixed; inset:0 0 auto 0; height:var(--hdr); z-index:50; display:flex; align-items:center;
-  justify-content:space-between; padding:0 var(--m); color:var(--ink); transition:color .5s var(--ease); }
-.hdr.on-dark{ color:var(--paper); }
-.hdr{ transition:color .5s var(--ease), background-color .5s var(--ease), box-shadow .5s var(--ease); }
-.hdr.solid{ background-color:rgba(14,12,11,.88); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); box-shadow:0 1px 0 var(--line-night); }
-.logo{ display:flex; align-items:center; height:100%; }
-.logo svg{ height:16px; width:auto; display:block; fill:currentColor; opacity:0; transform:translateY(6px);
-  transition:opacity .5s var(--ease), transform .5s var(--ease); }
-.hdr.show-logo .logo svg{ opacity:1; transform:none; }
-.nav{ display:flex; align-items:center; gap:34px; }
-.nav a{ font-size:14px; position:relative; }
-.nav a:not(.btn)::after{ content:""; position:absolute; left:0; right:0; bottom:-3px; height:1px; background:currentColor;
-  transform:scaleX(0); transform-origin:right; transition:transform .45s var(--ease); }
-.nav a:not(.btn):hover::after{ transform:scaleX(1); transform-origin:left; }
-.btn{ display:inline-flex; align-items:center; gap:10px; height:38px; padding:0 18px; border-radius:999px;
-  background:currentColor; font-size:14px; }
-.btn span{ color:var(--paper); }
-.hdr.on-dark .btn span{ color:var(--ink); }
-@media (max-width:700px){ .nav a:not(.btn){ display:none; } .btn{ height:34px; padding:0 14px; font-size:13px; } }
+/* ───── navbar: lastra sospesa scura (come Rain Ink), luce arancio che corre sul bordo ───── */
+.hdr{ position:fixed; top:12px; left:0; right:0; z-index:50; perspective:1200px; pointer-events:none; }
+.slab{ pointer-events:auto; position:relative; width:min(960px, calc(100% - 2 * var(--m) + 24px)); margin-inline:auto;
+  display:flex; align-items:center; gap:18px; padding:6px 7px 6px 14px; border-radius:16px;
+  background:linear-gradient(180deg, rgba(36,37,42,.97), rgba(18,19,22,.97));
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.07);
+  box-shadow:0 1px 0 rgba(255,255,255,.08) inset, 0 -1px 0 rgba(0,0,0,.6) inset, 0 4px 0 #0A0A0C, 0 22px 44px -14px rgba(10,10,12,.55);
+  transform-style:preserve-3d; transition:padding .25s var(--ease); }
+.hdr.small .slab{ padding-block:3px; }
+.nav-giro{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); overflow:visible; pointer-events:none; }
+.nav-giro rect{ fill:none; stroke-linecap:round; stroke-dasharray:90 910; animation:nav-giro 9s ease-in-out infinite alternate; }
+.nav-giro .luce{ stroke:#FFA24A; stroke-width:1.6; }
+.nav-giro .alone{ stroke:rgba(255,120,30,.55); stroke-width:7; filter:blur(5px); }
+@keyframes nav-giro{ from{ stroke-dashoffset:0; } to{ stroke-dashoffset:-1000; } }
+.logo{ display:flex; align-items:center; flex:none; transform:translateZ(20px); }
+.logo img{ height:44px; width:auto; display:block; margin:0 0 -8px -6px; }   /* l'immagine ha un margine di bagliore intorno */
+.links{ display:flex; gap:4px; list-style:none; margin-left:auto; transform-style:preserve-3d; }
+.links a{ position:relative; display:block; padding:10px 14px; font-size:14px; font-weight:500; color:#A9AAB0; white-space:nowrap;
+  border-radius:11px; transform:translateZ(8px);
+  transition:transform 220ms var(--ease), color 150ms ease, background-color 200ms ease, box-shadow 220ms var(--ease); }
+.links a[aria-current], .links a:focus-visible{ outline:none; color:#F4F4F6; background:linear-gradient(180deg, #34353C, #212227);
+  transform:translateZ(18px) translateY(-2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 4px 0 #0A0A0C, 0 12px 22px -8px rgba(0,0,0,.8); }
+.links a[aria-current]::before{ content:""; position:absolute; left:14px; right:14px; bottom:5px; height:2px; border-radius:2px; background:var(--accent); }
+@media (hover:hover) and (pointer:fine){
+  .links a:hover{ color:#F4F4F6; background:linear-gradient(180deg, #3A3B42, #24252A);
+    transform:translateZ(18px) translateY(-3px) scale(1.08); box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 5px 0 #0A0A0C, 0 16px 26px -8px rgba(0,0,0,.85); }
+}
+.cta{ flex:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; height:40px; padding:0 16px; border-radius:11px;
+  color:#fff; font-size:14px; font-weight:500; background:linear-gradient(180deg, #E8731A, #BD4F08);
+  box-shadow:0 1px 0 rgba(255,255,255,.3) inset, 0 3px 0 #6E2E04; transform:translateZ(8px);
+  transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+.cta svg{ width:16px; height:16px; }
+.cta:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.3) inset, 0 1px 0 #6E2E04; }
+.cta:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+@media (hover:hover) and (pointer:fine){ .cta:hover{ transform:translateZ(8px) translateY(-3px) scale(1.06);
+  box-shadow:0 1px 0 rgba(255,255,255,.35) inset, 0 5px 0 #6E2E04, 0 14px 24px -8px rgba(240,110,20,.6); } }
+.burger{ display:none; margin-left:auto; width:40px; height:40px; border-radius:11px; border:0; cursor:pointer;
+  background:linear-gradient(180deg, #34353C, #1C1D21); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 3px 0 #0A0A0C; transform:translateZ(8px); }
+.burger span{ display:block; width:18px; height:2px; margin:4px auto; background:#F4F4F6; border-radius:2px;
+  transition:transform 300ms var(--ease), opacity 150ms ease; }
+.hdr.open .burger span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+.hdr.open .burger span:nth-child(2){ opacity:0; }
+.hdr.open .burger span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+.burger:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+@media (max-width:700px){
+  .hdr{ top:8px; }
+  .slab{ width:calc(100% - 16px); gap:8px; padding:4px 5px 4px 10px; }
+  .hdr.small .slab{ padding-block:4px; }
+  .logo img{ height:38px; margin:0 0 -6px -4px; }
+  .burger{ display:block; }
+  .cta{ width:40px; padding:0; } .cta span{ display:none; }
+  .links{ position:absolute; top:calc(100% + 10px); left:0; right:0; flex-direction:column; gap:6px; padding:10px;
+    border-radius:16px; background:rgba(20,21,24,.97); border:1px solid rgba(255,255,255,.07); box-shadow:0 30px 60px -10px rgba(0,0,0,.7);
+    visibility:hidden; opacity:0; transform:rotateX(-12deg) scale(.97); transform-origin:top right;
+    transition:opacity 180ms ease-in, transform 180ms ease-in, visibility 0s 180ms; }
+  .hdr.open .links{ visibility:visible; opacity:1; transform:none; transition:opacity 220ms var(--ease), transform 250ms var(--ease); }
+  .links li{ transform:rotateX(-40deg); transform-origin:top; opacity:0; transition:transform 220ms var(--ease), opacity 200ms var(--ease); }
+  .hdr.open .links li{ transform:none; opacity:1; }
+  .hdr.open .links li:nth-child(2){ transition-delay:30ms; }
+  .hdr.open .links li:nth-child(3){ transition-delay:60ms; }
+  .links a, .links a[aria-current], .links a:hover{ padding:14px 16px; font-size:17px; background:#1E1F24; color:#F4F4F6; transform:none; box-shadow:none; }
+  .links a[aria-current]::before{ left:0; right:auto; top:12px; bottom:12px; width:3px; height:auto; }
+}
+@media (prefers-reduced-motion:reduce){ .nav-giro rect{ animation:none; } .nav-giro{ display:none; } }
 
 /* ───── film ───── */
 .film{ position:relative; }
-.stage{ position:relative; height:100svh; overflow:hidden; background:var(--night); color:var(--paper); }
+.stage{ position:relative; height:100svh; overflow:hidden; background:var(--paper); color:var(--ink); }
 .gl{ position:absolute; inset:0; width:100%; height:100%; display:block; }
 .hero-scrim{ position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(to top, rgba(14,12,11,.88), rgba(14,12,11,.35) 38%, rgba(14,12,11,0) 60%),
-             linear-gradient(to bottom, rgba(14,12,11,.6), rgba(14,12,11,0) 22%); }
+  background:linear-gradient(to bottom, rgba(228,228,232,.75), rgba(228,228,232,0) 20%); }
 .hud{ position:absolute; inset:calc(var(--hdr) + 10px) var(--m) calc(var(--rul) + 10px); pointer-events:none; }
-.hud > i{ position:absolute; width:14px; height:14px; border:0 solid rgba(238,235,228,.4); }
+.hud > i{ position:absolute; width:14px; height:14px; border:0 solid rgba(30,31,34,.35); }
 .hud > i:nth-child(1){ left:0; top:0; border-left-width:1px; border-top-width:1px; }
 .hud > i:nth-child(2){ right:0; top:0; border-right-width:1px; border-top-width:1px; }
 .hud > i:nth-child(3){ left:0; bottom:0; border-left-width:1px; border-bottom-width:1px; }
 .hud > i:nth-child(4){ right:0; bottom:0; border-right-width:1px; border-bottom-width:1px; }
-.hud .mono{ position:absolute; top:4px; color:var(--on-night); display:flex; align-items:center; gap:8px; }
+.hud .mono{ position:absolute; top:4px; color:var(--ink-2); display:flex; align-items:center; gap:8px; }
 .hud .tl{ left:26px; }
 .bars{ position:absolute; inset:0; pointer-events:none; }
-.bar{ position:absolute; left:-50px; top:-50px; width:100px; height:100px; background:var(--paper); will-change:transform; }
+.bar{ position:absolute; left:-50px; top:-50px; width:100px; height:100px; background:#141518; will-change:transform; }
 .bars{ visibility:hidden; }
 
 .hero-copy{ position:absolute; left:calc(var(--m) + 26px); right:calc(var(--m) + 26px); bottom:calc(var(--rul) + 6vh); display:flex;
   justify-content:space-between; align-items:flex-end; gap:var(--g); }
 .hero-copy h1{ font-family:var(--serif); font-weight:700; font-size:clamp(34px, 4.4vw, 70px); line-height:.98;
-  letter-spacing:-.03em; color:var(--paper); }
-.hero-copy h1 em{ color:var(--amber); }
+  letter-spacing:-.03em; color:var(--ink); }
+.hero-copy h1 em{ color:var(--accent-big); }
 .hero-copy h1 .ln{ display:block; overflow:hidden; padding-bottom:.12em; margin-bottom:-.12em; }
 .hero-copy h1 .ln > span, .hero-copy h1 .ln > em{ display:block; }
-html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, html.intro .nav{ opacity:0; }
+html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, html.intro .slab{ opacity:0; }
 .dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); display:inline-block; }
 @media (max-width:700px){
   .hero-copy{ flex-direction:column; align-items:flex-start; left:var(--m); right:var(--m); bottom:calc(var(--rul) + 4vh); gap:16px; }
   .hud .mono.tl{ display:none; }
 }
 
-.beat{ position:absolute; left:var(--m); bottom:calc(var(--rul) + 7vh); max-width:15ch; visibility:hidden; color:var(--paper);
-  font-family:var(--serif); font-weight:700; font-size:clamp(32px, 4.2vw, 66px); line-height:1; letter-spacing:-.03em; }
-.beat em{ color:var(--accent); }
 
-.measures{ position:absolute; inset:0; pointer-events:none; visibility:hidden; color:var(--on-night); }
+.measures{ position:absolute; inset:0; pointer-events:none; visibility:hidden; color:var(--ink-2); }
 .measures span{ position:absolute; font-family:var(--mono); font-size:10px; letter-spacing:.06em; }
 
 .setline{ position:absolute; left:var(--m); right:var(--m); visibility:hidden; }
-.setline .mono{ display:block; color:var(--on-night); margin-bottom:18px; }
+.setline .mono{ display:block; color:var(--ink-2); margin-bottom:18px; }
 .setline h2{ font-family:var(--serif); font-weight:700; font-size:clamp(36px, 5.6vw, 90px); line-height:.98;
-  letter-spacing:-.03em; max-width:16ch; color:var(--paper); }
-.setline h2 em{ color:var(--amber); }
-.setline .w{ display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.08em; margin-bottom:-.08em; }
-.setline .w i{ display:inline-block; font-style:inherit; will-change:transform; }
+  letter-spacing:-.03em; max-width:16ch; color:var(--ink); }
+.setline h2 em{ color:var(--accent-big); }
+.setline .w, .reel-t .w{ display:inline-block; overflow:hidden; vertical-align:top; padding:0 .12em .08em 0; margin:0 -.12em -.08em 0; }   /* spazio a destra: il corsivo sporge e la maschera lo tagliava */
+.setline .w i, .reel-t .w i{ display:inline-block; font-style:inherit; will-change:transform; }
 
 .tile{ position:absolute; inset:0; clip-path:inset(50% 50% 50% 50%); pointer-events:none; }
 .tile .cv{ position:absolute; transform-origin:50% 50%; will-change:transform; }
 .cap{ position:absolute; display:block; visibility:hidden; cursor:pointer; }
-.cap::after, .work-cv::after{ content:""; position:absolute; inset:-6px; border:1.5px solid #FFE3A6; border-radius:2px; pointer-events:none;
-  box-shadow:0 0 2px #FFD27A, 0 0 8px rgba(242,169,59,.9), 0 0 20px rgba(242,169,59,.55), 0 0 44px rgba(232,120,28,.35),
-    inset 0 0 6px rgba(242,169,59,.7), inset 0 0 18px rgba(242,169,59,.3);
+/* contorno al neon arancio al passaggio del mouse (e con Tab): filo chiaro, alone arancio fuori e dentro */
+.cap::after, .work-cv::after{ content:""; position:absolute; inset:-6px; border:1.5px solid #FFD2A1; border-radius:3px; pointer-events:none;
+  box-shadow:0 0 2px #FFB866, 0 0 8px rgba(240,122,26,.95), 0 0 20px rgba(240,122,26,.6), 0 0 42px rgba(224,90,10,.4),
+    inset 0 0 6px rgba(240,122,26,.75), inset 0 0 16px rgba(240,122,26,.3);
   opacity:0; transform:scale(.985); transition:opacity .45s var(--ease), transform .45s var(--ease); }
 .cap:focus-visible, .work:focus-visible{ outline:none; }
 .cap:focus-visible::after, .work:focus-visible .work-cv::after{ opacity:1; transform:none; }
 @media (hover:hover) and (pointer:fine){ .cap:hover::after, .work:hover .work-cv::after{ opacity:1; transform:none; } }
 
 /* ───── app e giochi, dopo il film ───── */
-.more{ background:var(--night); color:var(--paper); padding:clamp(40px, 8vh, 80px) var(--m) clamp(64px, 12vh, 120px); }
-.more-head{ display:flex; justify-content:space-between; color:var(--on-night); padding-bottom:14px; margin-bottom:28px;
-  border-bottom:1px solid var(--line-night); }
-.more-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:var(--g); }
+/* ───── App e Giochi: due scene fissate come il film ───── */
+.reel{ position:relative; }
+.reel-stage{ position:relative; height:100svh; overflow:hidden; background:var(--paper); color:var(--ink);
+  display:flex; flex-direction:column; padding:calc(var(--hdr) + clamp(20px, 5vh, 56px)) var(--m) clamp(28px, 6vh, 64px); }
+.reel-lines{ position:absolute; inset:0; pointer-events:none; }
+.reel-lines i{ position:absolute; background:var(--ink); opacity:.09; }
+.reel-head{ position:relative; margin-bottom:clamp(20px, 4vh, 44px); }
+.reel-head .mono{ display:block; color:var(--ink-2); margin-bottom:14px; }
+.reel-t{ font-family:var(--serif); font-weight:700; font-size:clamp(44px, 7vw, 112px); line-height:.95; letter-spacing:-.03em; }
+.reel-t em{ color:var(--accent-big); }
+.reel-grid{ position:relative; display:grid; grid-template-columns:repeat(2, 1fr); gap:var(--g); align-items:start;
+  width:min(100%, calc((100svh - var(--hdr) - 330px) * 1.6 * 2 + var(--g))); }
+.reel .work-cv{ background:none; box-shadow:none; }   /* nelle scene i riquadri compaiono solo con la loro immagine */
+@media (max-width:700px){
+  .reel-grid{ grid-template-columns:1fr; row-gap:18px; width:min(100%, calc((100svh - var(--hdr) - 260px) / 2 * 1.6)); }
+  .reel-t{ font-size:clamp(40px, 12vw, 64px); }
+}
 .work{ display:block; }
-.work-cv{ position:relative; display:block; aspect-ratio:16/10; background:#0b0b0d; }
+.work-cv{ position:relative; display:block; aspect-ratio:16/10; background:var(--paper-2); box-shadow:0 0 0 1px var(--line); }
 .work-cv img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:transform 1.1s var(--ease); }
 .work-im{ position:absolute; inset:0; overflow:hidden; }
+.work-zoom{ position:absolute; inset:0; display:block; }
 @media (hover:hover) and (pointer:fine){ .work:hover .work-cv img{ transform:scale(1.03); } }
-.work-cap{ display:flex; justify-content:space-between; gap:12px; padding-top:12px; color:var(--on-night); }
-.work-cap b{ font-weight:500; color:var(--accent); margin-right:6px; }
-.work-cap span:first-child{ color:var(--paper); }
-@media (max-width:700px){ .more-grid{ grid-template-columns:repeat(2, 1fr); row-gap:28px; } .work-cap span:last-child{ display:none; } }
+.work-cap{ display:flex; justify-content:space-between; gap:12px; padding-top:12px; color:var(--ink-2); }
+.work-cap b{ font-weight:500; color:var(--accent-text); margin-right:6px; }
+.work-cap span:first-child{ color:var(--ink); }
+
 .tile .cv img{ transition:transform 1.1s var(--ease); }
 @media (hover:hover) and (pointer:fine){
   .stage:has(.cap[data-i="0"]:hover) .tile[data-i="0"] .cv img,
@@ -139,7 +194,7 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
 }
 
 .ruler{ position:absolute; left:0; right:0; bottom:0; height:var(--rul); padding:0 var(--m); display:flex;
-  align-items:center; justify-content:space-between; color:var(--paper); transition:color .5s var(--ease); }
+  align-items:center; justify-content:space-between; color:var(--ink); transition:color .5s var(--ease); }
 .ruler::before{ content:""; position:absolute; left:var(--m); right:var(--m); top:0; height:7px;
   background:repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 8px); opacity:.35; }
 .ruler::after{ content:""; position:absolute; left:var(--m); right:var(--m); top:0; height:12px;
@@ -147,14 +202,13 @@ html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, ht
 .ruler .mark{ position:absolute; top:0; left:var(--m); width:1px; height:16px; background:var(--accent);
   transform:translateX(calc(var(--p, 0) * (100vw - 2 * var(--m)))); }
 .ruler .mono{ position:relative; padding-top:8px; }
-.stage.dark .ruler{ color:var(--paper); }
 .ruler .ch b{ font-weight:500; }
 
 /* ───── filo di avanzamento a destra (al posto della barra del browser) ───── */
 html{ scrollbar-width:none; }
 html::-webkit-scrollbar{ display:none; }
 .rail{ position:fixed; z-index:40; right:10px; top:calc(var(--hdr) + 10px); bottom:calc(var(--rul) + 10px); width:28px;
-  color:var(--paper); cursor:pointer; touch-action:none; transition:opacity .8s var(--ease); --rp:0; }
+  color:var(--ink); cursor:pointer; touch-action:none; transition:opacity .8s var(--ease); --rp:0; }
 html.intro .rail{ opacity:0; }
 .rail i{ font-style:normal; }
 .rail::before{ content:""; position:absolute; right:13px; top:0; bottom:0; width:1px; background:currentColor; opacity:.18; }
@@ -170,7 +224,7 @@ html.intro .rail{ opacity:0; }
 .rail .ck{ position:absolute; right:13px; width:9px; height:1px; background:currentColor; opacity:.45;
   transition:opacity .4s var(--ease), background .4s var(--ease); }
 .rail .ck span{ position:absolute; left:calc(100% + 5px); top:-6px; font-family:var(--mono); font-size:9px; letter-spacing:.06em;
-  color:var(--paper); opacity:0; transform:translateX(-4px); transition:opacity .4s var(--ease), transform .4s var(--ease); }
+  color:var(--ink); opacity:0; transform:translateX(-4px); transition:opacity .4s var(--ease), transform .4s var(--ease); }
 .rail .ck.on{ opacity:1; background:var(--accent); }
 .rail .ck.on span{ opacity:.8; transform:none; }
 .rail:hover .ck span{ opacity:.55; transform:none; }
@@ -179,7 +233,7 @@ html.intro .rail{ opacity:0; }
   .rail .knob{ right:4px; width:9px; } .rail .ck span{ display:none; } }
 
 /* ───── copertine dei lavori: schermate dei siti veri ───── */
-.cv{ position:relative; overflow:hidden; background:#0b0b0d; }
+.cv{ position:relative; overflow:hidden; background:var(--paper-2); }
 .cv img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 50%; display:block; }
 
 </style>
@@ -188,15 +242,20 @@ html.intro .rail{ opacity:0; }
 
 <div class="rail" id="rail" aria-hidden="true"><i class="fill"></i><i class="knob"></i></div>
 <header class="hdr" id="hdr">
-  <a class="logo" href="#top" aria-label="Nemesi Web, torna all'inizio"><svg id="logo-svg" aria-hidden="true"></svg></a>
-  <nav class="nav" aria-label="Principale">
-    <a href="#lavori">Lavori</a>
-    <a class="btn" href="mailto:ciao@nemesi.studio"><span>Scrivimi</span></a>
+  <nav class="slab" aria-label="Principale">
+    <a class="logo" href="#top" aria-label="Nemesi Web, torna all'inizio"><img src="images/logo/nemesi-web-nav.png" alt="Nemesi Web" width="447" height="114"></a>
+    <ul class="links" id="links">
+      <li><a href="#siti" data-s="siti">Siti</a></li>
+      <li><a href="#app" data-s="app">App</a></li>
+      <li><a href="#giochi" data-s="giochi">Giochi</a></li>
+    </ul>
+    <button class="burger" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
+    <a class="cta" href="mailto:ciao@nemesi.studio" aria-label="Scrivimi"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 7.5l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Scrivimi</span></a>
   </nav>
 </header>
 
 <main id="top">
-  <section class="film" id="film" aria-label="Nemesi, studio di web design">
+  <section class="film" id="film" aria-label="Nemesi Web, studio di web design: i siti">
     <div class="stage" id="stage">
       <canvas class="gl" id="gl" aria-hidden="true"></canvas>
       <div class="hero-scrim" id="hero-scrim" aria-hidden="true"></div>
@@ -212,8 +271,6 @@ html.intro .rail{ opacity:0; }
         <h1><span class="ln"><span>Web design su misura.</span></span><span class="ln"><em>Niente di troppo.</em></span></h1>
       </div>
       -->
-
-      <p class="beat" id="beat">Ogni elemento deve <em>guadagnarsi</em> il posto.</p>
 
       <div class="setline" id="setline">
         <span class="mono">Nemesi Web — studio di web design</span>
@@ -233,21 +290,33 @@ html.intro .rail{ opacity:0; }
     </div>
   </section>
 
-  <section class="more" id="altri" aria-label="App e giochi">
-    <div class="more-head mono"><span>App e giochi</span></div>
-    <div class="more-grid">
-      <a class="work" href="https://nemesimark.github.io/parola/" target="_blank" rel="noopener" aria-label="Parola, editor di testi: apri l'app">
-        <span class="work-cv"><span class="work-im"><img src="images/lavori/parola-d.jpg" alt="" loading="lazy" decoding="async"></span></span>
-        <span class="work-cap mono"><span><b>03</b> Parola</span><span>Testi</span></span></a>
-      <a class="work" href="https://nemesimark.github.io/foglio/" target="_blank" rel="noopener" aria-label="Foglio, foglio di calcolo: apri l'app">
-        <span class="work-cv"><span class="work-im"><img src="images/lavori/foglio-d.jpg" alt="" loading="lazy" decoding="async"></span></span>
-        <span class="work-cap mono"><span><b>04</b> Foglio</span><span>Calcolo</span></span></a>
-      <a class="work" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" aria-label="Metal Gear, gioco d'azione: gioca">
-        <span class="work-cv"><span class="work-im"><img src="images/lavori/metalgear-d.jpg" alt="" loading="lazy" decoding="async"></span></span>
-        <span class="work-cap mono"><span><b>05</b> Metal Gear</span><span>Gioco d'azione</span></span></a>
-      <a class="work" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" aria-label="Radente, gioco di volo: gioca">
-        <span class="work-cv"><span class="work-im"><img src="images/lavori/radente-d.jpg" alt="" loading="lazy" decoding="async"></span></span>
-        <span class="work-cap mono"><span><b>06</b> Radente</span><span>Gioco di volo</span></span></a>
+  <section class="reel" id="app" data-mode="apri" aria-labelledby="app-t">
+    <div class="reel-stage">
+      <div class="reel-lines" aria-hidden="true"></div>
+      <div class="reel-head"><span class="mono">Nemesi Web — app</span><h2 class="reel-t" id="app-t">App</h2></div>
+      <div class="reel-grid">
+        <a class="work" href="https://nemesimark.github.io/parola/" target="_blank" rel="noopener" aria-label="Parola, editor di testi: apri l'app">
+          <span class="work-cv"><span class="work-im"><span class="work-zoom"><img src="images/lavori/parola-d.jpg" alt="" loading="lazy" decoding="async"></span></span></span>
+          <span class="work-cap mono"><span><b>03</b> Parola</span><span>Testi</span></span></a>
+        <a class="work" href="https://nemesimark.github.io/foglio/" target="_blank" rel="noopener" aria-label="Foglio, foglio di calcolo: apri l'app">
+          <span class="work-cv"><span class="work-im"><span class="work-zoom"><img src="images/lavori/foglio-d.jpg" alt="" loading="lazy" decoding="async"></span></span></span>
+          <span class="work-cap mono"><span><b>04</b> Foglio</span><span>Calcolo</span></span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="reel" id="giochi" data-mode="pellicola" aria-labelledby="giochi-t">
+    <div class="reel-stage">
+      <div class="reel-lines" aria-hidden="true"></div>
+      <div class="reel-head"><span class="mono">Nemesi Web — giochi</span><h2 class="reel-t" id="giochi-t">Giochi</h2></div>
+      <div class="reel-grid">
+        <a class="work" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" aria-label="Metal Gear, gioco d'azione: gioca">
+          <span class="work-cv"><span class="work-im"><span class="work-zoom"><img src="images/lavori/metalgear-d.jpg" alt="" loading="lazy" decoding="async"></span></span></span>
+          <span class="work-cap mono"><span><b>05</b> Metal Gear</span><span>Gioco d'azione</span></span></a>
+        <a class="work" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" aria-label="Radente, gioco di volo: gioca">
+          <span class="work-cv"><span class="work-im"><span class="work-zoom"><img src="images/lavori/radente-d.jpg" alt="" loading="lazy" decoding="async"></span></span></span>
+          <span class="work-cap mono"><span><b>06</b> Radente</span><span>Gioco di volo</span></span></a>
+      </div>
     </div>
   </section>
 
@@ -260,14 +329,6 @@ html.intro .rail{ opacity:0; }
 <script src="vendor/three/three.min.js"></script>
 <script src="vendor/three/RoomEnvironment.js"></script>
 <script src="vendor/three/RoundedBoxGeometry.js"></script>
-<script src="vendor/three/CopyShader.js"></script>
-<script src="vendor/three/LuminosityHighPassShader.js"></script>
-<script src="vendor/three/GammaCorrectionShader.js"></script>
-<script src="vendor/three/EffectComposer.js"></script>
-<script src="vendor/three/MaskPass.js"></script>
-<script src="vendor/three/RenderPass.js"></script>
-<script src="vendor/three/ShaderPass.js"></script>
-<script src="vendor/three/UnrealBloomPass.js"></script>
 <script src="js/scena.js"></script>
 <script>
 (function(){
@@ -415,23 +476,6 @@ html.intro .rail{ opacity:0; }
   var bars = [];
   for (var bi=0; bi<NALL; bi++){ var d = document.createElement('i'); d.className='bar'; barsEl.appendChild(d); bars.push(d); }
 
-  /* logo piccolo: stesso wordmark in SVG */
-  (function(){
-    var H = 100, x = 0, out = '';
-    WORD.forEach(function(ch){
-      var L = letter(ch, H);
-      L.bars.forEach(function(b){
-        out += '<rect x="' + (-b.len/2).toFixed(2) + '" y="' + (-b.th/2).toFixed(2) + '" width="' + b.len.toFixed(2) + '" height="' + b.th.toFixed(2) +
-          '" transform="translate(' + (x+b.cx).toFixed(2) + ' ' + b.cy.toFixed(2) + ') rotate(' + b.rot.toFixed(2) + ')"/>';
-      });
-      x += L.w + GAP*H;
-    });
-    x -= GAP*H;
-    var svg = document.getElementById('logo-svg');
-    svg.setAttribute('viewBox', '0 0 ' + x.toFixed(1) + ' ' + H);
-    svg.innerHTML = out;
-  })();
-
   /* parole del titolo */
   (function(){
     var h = document.getElementById('setline-h');
@@ -450,6 +494,7 @@ html.intro .rail{ opacity:0; }
       });
     }
     wrap(h);
+    document.querySelectorAll('.reel-t').forEach(wrap);
   })();
 
   computeGeo();
@@ -506,21 +551,48 @@ html.intro .rail{ opacity:0; }
   window.__scene = scene3d;   // per le verifiche
   if (!scene3d){ barsEl.style.visibility = 'visible'; document.getElementById('gl').style.display = 'none'; }
   var chEl = document.getElementById('ch'), roEl = document.getElementById('readout');
-  var filmP = 0, filmST = null;
+  var filmP = 0, filmST = null, reelST = {};
+  /* navbar (come Rain Ink): panino su telefono, più bassa scorrendo, luce che corre sul bordo, voce della sezione in rilievo */
+  var navLinks = Array.prototype.slice.call(hdr.querySelectorAll('.links a'));
+  var appEl = document.getElementById('app'), gioEl = document.getElementById('giochi');
+  (function(){
+    var slab = hdr.querySelector('.slab'), burger = hdr.querySelector('.burger');
+    function setOpen(o){
+      hdr.classList.toggle('open', o);
+      burger.setAttribute('aria-expanded', String(o));
+      burger.setAttribute('aria-label', o ? 'Chiudi il menu' : 'Apri il menu');
+    }
+    burger.addEventListener('click', function(){ setOpen(!hdr.classList.contains('open')); });
+    navLinks.forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && hdr.classList.contains('open')){ setOpen(false); burger.focus(); } });
+    document.addEventListener('click', function(e){ if (!hdr.contains(e.target)) setOpen(false); });
+    var NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'nav-giro'); svg.setAttribute('aria-hidden', 'true');
+    ['alone', 'luce'].forEach(function(c){
+      var r = document.createElementNS(NS, 'rect');
+      r.setAttribute('class', c); r.setAttribute('x', '0'); r.setAttribute('y', '0');
+      r.setAttribute('width', '100%'); r.setAttribute('height', '100%');
+      r.setAttribute('rx', '16'); r.setAttribute('pathLength', '1000');
+      svg.appendChild(r);
+    });
+    slab.insertBefore(svg, slab.firstChild);
+  })();
   function headerTheme(){
-    var inFilm = !filmST || scrollY < filmST.end + innerHeight - 40;
-    var dark = true;   // anche dopo il film il fondo è notte
-    hdr.classList.toggle('on-dark', dark);
-    hdr.classList.toggle('show-logo', filmP > T3 - .02 || !inFilm);
-    hdr.classList.toggle('solid', !!filmST && scrollY > filmST.end + 8);   // dopo il film il contenuto scorre sotto l'header
+    hdr.classList.toggle('small', scrollY > 40);
+    var vh = innerHeight, cur = null;
+    if (filmST && scrollY >= filmST.end - vh*.5) cur = 'siti';
+    if (appEl.getBoundingClientRect().top < vh*.45) cur = 'app';
+    if (gioEl.getBoundingClientRect().top < vh*.45 || scrollY >= document.documentElement.scrollHeight - vh - 4) cur = 'giochi';
+    navLinks.forEach(function(a){ if (a.getAttribute('data-s') === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
   }
+  window.addEventListener('scroll', headerTheme, { passive:true });
 
   /* ── reduced motion: niente film, solo la prima inquadratura ── */
   if (RM){
     setA();
     if (scene3d){ scene3d.setProgress(.12); window.addEventListener('resize', function(){ scene3d.resize(); }); }
     window.addEventListener('resize', function(){ computeGeo(); setA(); });
-    hdr.classList.add('show-logo');
+    headerTheme();
     window.__ready = true;
     return;
   }
@@ -528,7 +600,7 @@ html.intro .rail{ opacity:0; }
   /* ── smooth scroll ── */
   var lenis = null;
   if (JUMP === null){
-    lenis = new Lenis({ lerp:.09, smoothWheel:true });
+    lenis = new Lenis({ lerp:.07, smoothWheel:true });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function(t){ lenis.raf(t*1000); });
     gsap.ticker.lagSmoothing(0);
@@ -536,10 +608,11 @@ html.intro .rail{ opacity:0; }
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
     a.addEventListener('click', function(e){
       var id = a.getAttribute('href');
-      var target = id === '#top' ? 0 : id === '#lavori' ? (filmST ? filmST.end : null) : document.querySelector(id);
+      var target = id === '#top' ? 0 : id === '#siti' ? (filmST ? filmST.end : null) : reelST[id] ? reelST[id].end : document.querySelector(id);   // App e Giochi: alla fine della loro scena
       if (target === null) return;
       e.preventDefault();
-      if (lenis) lenis.scrollTo(target, { duration:1.6 }); else window.scrollTo(0, typeof target === 'number' ? target : target.getBoundingClientRect().top + scrollY);
+      var y = typeof target === 'number' ? target : target.getBoundingClientRect().top + scrollY - 40;   // le sezioni partono appena sotto la navbar
+      if (lenis) lenis.scrollTo(y, { duration:1.6 }); else window.scrollTo(0, y);
     });
   });
 
@@ -553,16 +626,14 @@ html.intro .rail{ opacity:0; }
       scaleX:function(i){ return geo.A[i].sx; }, scaleY:function(i){ return geo.A[i].sy; } },
     { x:function(i){ return geo.B[i].x; }, y:function(i){ return geo.B[i].y; }, rotation:function(i){ return geo.B[i].r; },
       scaleX:function(i){ return geo.B[i].sx; }, scaleY:function(i){ return geo.B[i].sy; },
-      duration:.2, ease:'power3.inOut', stagger:{ each:.003, from:'start' } }, .08);
+      duration:.27, ease:'sine.inOut', stagger:{ each:.002, from:'start' } }, .06);   // curva dolce e lunga: niente scatti a metà corsa
   var barsN = bars.slice(0, NB), barsW = bars.slice(NB);
-  tl.fromTo(barsN, { opacity:1 }, { opacity:.15, duration:.08, ease:'power1.inOut' }, .33);
-  tl.fromTo(barsW, { opacity:1 }, { opacity:0, duration:.08, ease:'power1.inOut' }, .33);   // sopra linee già presenti: spariscono per non raddoppiarle
-  tl.fromTo('#measures', { autoAlpha:0 }, { autoAlpha:1, duration:.05 }, .37);
-  tl.fromTo('#beat', { autoAlpha:0, y:30 }, { autoAlpha:1, y:0, duration:.05, ease:'power2.out' }, .39);
-  tl.to('#beat', { autoAlpha:0, y:-30, duration:.05, ease:'power2.in' }, .5);
-  tl.set('#setline', { autoAlpha:1 }, .53);
-  tl.fromTo('#setline .mono', { autoAlpha:0 }, { autoAlpha:1, duration:.04 }, .53);
-  tl.fromTo('#setline .w i', { yPercent:115 }, { yPercent:0, duration:.06, ease:'power3.out', stagger:.01 }, .54);
+  tl.fromTo(barsN, { opacity:1 }, { opacity:.15, duration:.08, ease:'power1.inOut' }, .39);
+  tl.fromTo(barsW, { opacity:1 }, { opacity:0, duration:.08, ease:'power1.inOut' }, .39);   // sopra linee già presenti: spariscono per non raddoppiarle
+  tl.fromTo('#measures', { autoAlpha:0 }, { autoAlpha:1, duration:.05 }, .41);
+  tl.set('#setline', { autoAlpha:1 }, .46);
+  tl.fromTo('#setline .mono', { autoAlpha:0 }, { autoAlpha:1, duration:.04 }, .46);
+  tl.fromTo('#setline .w i', { yPercent:115 }, { yPercent:0, duration:.07, ease:'power3.out', stagger:.012 }, .47);
   tileState.forEach(function(st, i){
     tl.fromTo(st, { r:0, z:1.25 }, { r:1, z:1, duration:.1, ease:'power3.out', onUpdate:drawTiles }, .64 + i*.025);
   });
@@ -583,7 +654,7 @@ html.intro .rail{ opacity:0; }
 
   filmST = ScrollTrigger.create({
     trigger:'#film', start:'top top', end:function(){ return '+=' + Math.round(innerHeight*6.8); },
-    pin:'#stage', pinSpacing:true, scrub:true, animation:master, invalidateOnRefresh:true,
+    pin:'#stage', pinSpacing:true, scrub:1, animation:master, invalidateOnRefresh:true,   // scrub 1: l'animazione insegue lo scorrimento con dolcezza
     onRefresh: function(self){ setA(); drawTiles(); if (scene3d){ scene3d.resize(); filmP = self.progress; swap3d(); } },
     onUpdate:function(self){
       filmP = self.progress;
@@ -597,9 +668,47 @@ html.intro .rail{ opacity:0; }
     }
   });
 
-  /* ── 2. app e giochi: entrano in fila ── */
-  gsap.fromTo('.work', { autoAlpha:0, y:28 }, { autoAlpha:1, y:0, duration:.9, ease:'power3.out', stagger:.08,
-    scrollTrigger:{ trigger:'.more-grid', start:'top 88%' } });
+  /* ── 2. App e Giochi: due scene fissate, stessa grammatica del film ──
+     le linee della griglia si tracciano, sale il titolo, i due riquadri arrivano e si posano affiancati.
+     «apri»: si aprono dall'alto dentro una cella e poi si allargano; «pellicola»: entrano di lato come una pellicola. */
+  document.querySelectorAll('.reel').forEach(function(reel){
+    var st = reel.querySelector('.reel-stage'), box = reel.querySelector('.reel-lines');
+    var vl = [], hl = [], k;
+    for (k = 0; k < 12; k++){ var v = document.createElement('i'); v.style.width = '1px'; v.style.transformOrigin = '50% 0'; box.appendChild(v); vl.push(v); }
+    for (k = 0; k < 9; k++){ var h = document.createElement('i'); h.style.height = '1px'; h.style.transformOrigin = '0 50%'; box.appendChild(h); hl.push(h); }
+    function place(){   // stessa griglia a 6 colonne del film
+      var w = st.clientWidth, H = st.clientHeight, mob = w < 700, m = mob ? 16 : 48, g = mob ? 12 : 24, hd = mob ? 60 : 72;
+      var c = (w - 2*m - 5*g)/6;
+      for (var i = 0; i < 6; i++){ var L = m + i*(c+g);
+        [L, L + c].forEach(function(x, j){ var e = vl[i*2 + j]; e.style.left = Math.round(x) + 'px'; e.style.top = '0'; e.style.height = H + 'px'; }); }
+      hl.forEach(function(e, r){ e.style.left = '0'; e.style.width = w + 'px'; e.style.top = Math.round(hd + r*(H - hd)/8) + 'px'; });
+    }
+    place(); ScrollTrigger.addEventListener('refreshInit', place);
+    var cvs = reel.querySelectorAll('.work-cv'), ims = reel.querySelectorAll('.work-im'), zooms = reel.querySelectorAll('.work-zoom');
+    var t = gsap.timeline({ defaults:{ ease:'none' } });
+    t.fromTo(vl, { scaleY:0 }, { scaleY:1, duration:.24, ease:'sine.inOut', stagger:.012 }, 0);
+    t.fromTo(hl, { scaleX:0 }, { scaleX:1, duration:.24, ease:'sine.inOut', stagger:.012 }, .04);
+    t.fromTo(reel.querySelector('.reel-head .mono'), { autoAlpha:0 }, { autoAlpha:1, duration:.05 }, .16);
+    t.fromTo(reel.querySelectorAll('.reel-t .w i'), { yPercent:115 }, { yPercent:0, duration:.12, ease:'power3.out', stagger:.02 }, .18);
+    Array.prototype.forEach.call(cvs, function(cv, i){
+      if (reel.getAttribute('data-mode') === 'pellicola'){
+        var dir = i ? 1 : -1, at = .32 + i*.06;
+        t.fromTo(cv, { x:function(){ return dir*innerWidth*.75; }, rotation:dir*5, scale:.82 }, { x:0, rotation:0, scale:1, duration:.45, ease:'power3.out' }, at);
+        t.fromTo(zooms[i], { scale:1.18, xPercent:dir*6 }, { scale:1, xPercent:0, duration:.5, ease:'sine.out' }, at);
+      } else {
+        var at2 = .34 + i*.05;
+        t.fromTo(ims[i], { clipPath:'inset(100% 0% 0% 0%)' }, { clipPath:'inset(0% 0% 0% 0%)', duration:.2, ease:'power3.out' }, at2);
+        t.fromTo(zooms[i], { scale:1.3 }, { scale:1, duration:.5, ease:'sine.out' }, at2);
+        t.fromTo(cv, { scale:.66, xPercent:function(){ return innerWidth < 700 ? 0 : (i ? -14 : 14); } }, { scale:1, xPercent:0, duration:.28, ease:'power2.inOut' }, .6);
+      }
+    });
+    t.fromTo(reel.querySelectorAll('.work-cap'), { autoAlpha:0, y:12 }, { autoAlpha:1, y:0, duration:.08, stagger:.03 }, .84);
+    t.set({}, {}, 1);
+    reelST['#' + reel.id] = ScrollTrigger.create({
+      trigger:reel, start:'top top', end:function(){ return '+=' + Math.round(innerHeight*2.4); },
+      pin:st, pinSpacing:true, scrub:1, animation:t, invalidateOnRefresh:true
+    });
+  });
 
   /* ── 3. ambientali (dopo il pin) ── */
   ScrollTrigger.create({ start:0, end:'max', onUpdate:headerTheme });
@@ -611,7 +720,7 @@ html.intro .rail{ opacity:0; }
     var root = document.documentElement;
     var ruler = stage.querySelector('.ruler');
     var lines = document.querySelectorAll('#hero-copy h1 .ln > *');
-    var navItems = document.querySelectorAll('.nav a');
+    var navItems = document.querySelector('#hdr .slab');
     var iv = { v:0 };
     intro = gsap.timeline({ defaults:{ ease:'power4.out' }, onComplete:endIntro });
     window.__intro = intro;   // per le verifiche
@@ -627,7 +736,7 @@ html.intro .rail{ opacity:0; }
     intro.to(ruler, { clipPath:'inset(0% 0% 0% 0%)', duration:1 }, .2);
     intro.to(lines, { yPercent:0, duration:1, stagger:.12 }, .6);
     intro.to('#hud', { autoAlpha:1, duration:.8, ease:'power2.out' }, .9);
-    intro.to(navItems, { autoAlpha:1, y:0, duration:.7, stagger:.06 }, .8);
+    intro.to(navItems, { autoAlpha:1, y:0, duration:.7 }, .8);
     // chi scorre o tocca un tasto non aspetta
     ['wheel','touchstart','keydown','pointerdown'].forEach(function(t){ window.addEventListener(t, skipIntro, { passive:true, once:true }); });
   }
