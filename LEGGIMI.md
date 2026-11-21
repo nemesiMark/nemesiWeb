@@ -138,3 +138,58 @@
 - Bastoncini più scuri: travi 3D in grafite #232428 (prima #3A3B40) con luci un po' più basse; alla fine e nelle aste HTML colore #141518 (prima #1E1F22).
 - Ancora più fluidi: il film e le scene di App e Giochi inseguono lo scorrimento in 1 s (prima 0,6 s), lo scorrimento morbido è più dolce (lerp di Lenis 0,07 invece di 0,09) e nella scena 3D il progresso ammorbidito ha una costante di ~400 ms (prima 280 ms).
 - Verifiche: copy-gate pulito, fluidità max ~20 ms (tre misure).
+
+### 2.0 — 21/11/2026 · «Dritto e rovescio», sito rifatto da zero
+- Rifatto tutto da capo con la skill sito-film (Corsia A, solo codice). Il concept è stato scelto dopo lo sparring con un sub-agent: «Dritto e rovescio». Nemesi è l'opposto, e i lavori sono coppie di opposti: Siti «Pelle e carta», App «Lettere e numeri», Giochi «Piano e profondità». Appunti di produzione in BRIEF.md.
+- Un solo oggetto per tutto il film, la «lastra»: nera laccata, a due strati, con il bordo arancio acceso come le facce laterali del logo e una luce che le corre intorno. La camera va solo avanti.
+  - Apertura: il logo grande (PNG originale, mai modificato) sopra una riga di luce arancio, cioè la lastra vista di taglio. Il logo vola nella navbar e si posa esattamente sul logo della barra.
+  - Siti: la lastra si alza e si accende su Rain Ink (01); mezzo giro e sul rovescio c'è Olimp (02).
+  - App: mezzo giro su Parola (03), poi la lastra si sdoppia nello spessore e sulla faccia interna c'è Foglio (04).
+  - Giochi: gli strati si richiudono e mezzo giro porta Metal Gear (05). La camera la attraversa mentre la faccia si sbriciola in pixel che bruciano d'arancio, poi vola tra anelli di luce fino allo schermo di Radente (06).
+  - Scrivimi: la lastra torna da dietro la camera, gira e mostra una faccia vuota con «Manca solo il tuo progetto.», il bottone Scrivimi e l'email.
+- Colori presi dal logo nero e arancio:
+  - nero #08080A, grafite #17171B / #212126, bianco #F4F3F1, fumo #8E8E99;
+  - arancio #F56F27 (luce #FFA54D, ombra #EA4006, brace #C92C02, oro #F9D377).
+  - I titoli hanno una parte bianca e un corsivo arancio chiaro, come «nemesi» e «web».
+- Caratteri: Bodoni Moda per i titoli (tondo e corsivo), Geist per i testi, Geist Mono per le etichette. Sono copie locali in fonts/, senza richieste a Google.
+- Testi:
+  - Siti: «Siti chiari, intuitivi, costruiti per durare.» (resta quello approvato).
+  - App: «Scrivere e calcolare, dal browser al Mac.»
+  - Giochi: «Mondi interi, dentro una pagina web.»
+  - Finale: «Manca solo il tuo progetto.»
+  - Didascalie dei sei lavori: numero, nome, una riga e l'azione (Visita il sito, Apri l'app, Gioca).
+- Navbar scura come prima: lastra grafite con la luce arancio che corre, Siti / App / Giochi e Scrivimi; sul telefono panino e busta. Le voci portano ai capitoli del film. A destra c'è il filo di avanzamento con le tacche dei capitoli.
+- Al passaggio del mouse (e con Tab) la lastra si accende di un alone al neon arancio. Il lavoro si apre con un clic, perché i link veri stanno sopra le facce 3D, deformati con la stessa prospettiva.
+- Apertura al caricamento (circa 2 s): barra di caricamento, poi si accende la riga di luce, compare il logo e scende la navbar.
+- Con «riduci movimento» o senza WebGL c'è una pagina statica completa: logo, riga di luce in CSS, i sei lavori con le immagini e Scrivimi.
+- Aperto dal disco (doppio clic): immagini e caratteri arrivano incorporati da js/lavori-dati.js e js/caratteri-dati.js, caricati solo in quel caso.
+- File:
+  - nuovo js/lastra.js (scena 3D);
+  - immagini dei lavori a 1600 px (images/lavori/<nome>.jpg);
+  - tolti js/scena.js (la 1.25 è in archivio/1.25 e nella storia di git) e gli script di Three.js non più usati (post-produzione, RoomEnvironment, RoundedBoxGeometry).
+- Verifiche:
+  - copy-gate pulito;
+  - fluidità max 19,7 ms (p95 18,5) su tutto il film;
+  - schermate su computer 1440×900 e telefono 390×844;
+  - pagina statica e apertura dal disco.
+
+### 2.1 — 21/11/2026
+- Apertura rifatta: niente più logo grande al centro. Il logo resta nella barra, visibile da subito, e nella pagina statica.
+- Al suo posto ci sono le aste 3D, cioè i pezzi della lastra: 12 file di bastoncini neri laccati con i fianchi arancio.
+  - Stanno in una vista esplosa, una fila sopra l'altra.
+  - Si muovono di continuo con un'onda di torsione e una di rollio, e una luce scorre lungo ogni asta.
+  - Scorrendo, una fila alla volta (dal fondo verso chi guarda) smette di girare, i pezzi si chiudono e la fila scende al suo posto sulla lastra distesa, con un lampo arancio all'arrivo.
+  - Poi una riga di luce passa sulla lastra e la salda.
+- Da lì in poi tutto resta come nella 2.0: la lastra si alza e lo schermo si apre dal basso verso l'alto con Rain Ink.
+- All'inizio la camera guarda la lastra dall'alto e scende mentre la lastra si alza.
+- Apertura al caricamento: le aste si accendono una dopo l'altra, poi scende la barra.
+- Menu più fluido (Siti, App, Giochi, logo e filo a destra):
+  - prima il film correva a tutta velocità fino alla tappa e i giri sembravano a scatti;
+  - ora un salto lungo passa per un attimo di nero (0,34 s), riparte poco prima della tappa e ci arriva scorrendo piano (1,4 s);
+  - i salti brevi restano uno scorrimento morbido.
+- Il copione si allunga di 1,1 schermi, quelli dell'apertura: ora il film finisce a 12,1 schermi.
+- Verifiche:
+  - copy-gate pulito;
+  - fluidità max 18,2 ms su tutto il film;
+  - salto dal menu: la pagina salta quando il nero è pieno, e poi avanza per fotogramma 9 volte più piano di prima;
+  - schermate su computer e telefono, apertura al caricamento, pagina statica.

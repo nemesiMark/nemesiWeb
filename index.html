@@ -2,95 +2,114 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nemesi Web — Web design su misura</title>
-<meta name="description" content="Nemesi è uno studio di web design: siti su misura, identità per il web e negozi online. Niente di troppo.">
-<meta name="theme-color" content="#E4E4E8">
-<script>(function(){ var d=document.documentElement;
-  if (location.search.indexOf('jump=')>-1 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  d.classList.add('intro'); setTimeout(function(){ d.classList.remove('intro'); }, 5000); })();</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600;1,700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nemesi Web · Web design</title>
+<meta name="description" content="Nemesi Web progetta e costruisce siti, app e giochi per il web: Rain Ink Tattoo, Olimp, Parola, Foglio, Metal Gear, Radente.">
+<meta name="theme-color" content="#08080A">
 <link rel="icon" href="images/logo/favicon.png" type="image/png">
+<link rel="preload" href="fonts/bodoni-moda.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/bodoni-moda-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+/* Prima del disegno: con WebGL e senza «riduci movimento» la pagina diventa il film (classe film). */
+(function(){ var d=document.documentElement, ok=false; d.classList.add('js');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try { var c=document.createElement('canvas'); ok=!!(c.getContext('webgl2')||c.getContext('webgl')); } catch(e){}
+  if (ok){ d.classList.add('film');
+    if (location.search.indexOf('jump=')<0) d.classList.add('avvio'); } })();
+</script>
 <style>
+/* ═════════ caratteri (copie locali, nessuna richiesta a terzi) ═════════ */
+@font-face{ font-family:"Bodoni Moda"; src:url(fonts/bodoni-moda.woff2) format("woff2"); font-weight:400 900; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Bodoni Moda"; src:url(fonts/bodoni-moda-italic.woff2) format("woff2"); font-weight:400 900; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Geist"; src:url(fonts/geist.woff2) format("woff2"); font-weight:100 900; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Geist Mono"; src:url(fonts/geist-mono.woff2) format("woff2"); font-weight:100 900; font-style:normal; font-display:swap; }
+
+/* ═════════ colori presi dal logo (misurati sui pixel del PNG su nero) ═════════ */
 :root{
-  /* «Grigio perla»: fondo grigio freddo, aste in grafite, un solo accento: l'arancio del logo (vivo per segni e luci, più cupo per i testi) */
-  --paper:#E4E4E8; --paper-2:#EDEDF0; --ink:#1E1F22; --ink-2:#5C5D62; --line:rgba(30,31,34,.14);
-  --accent:#F07A1A; --accent-2:#FFB066; --accent-deep:#9A4206; --accent-big:#C2540A; --accent-text:#A34604;
-  --m:48px; --g:24px; --hdr:72px; --rul:40px;
+  --nero:#08080A; --nero-2:#0E0E11; --grafite:#17171B; --grafite-2:#212126;
+  --bianco:#F4F3F1;            /* «nemesi» */
+  --fumo:#8E8E99;              /* faccia del nastro, schiarita per il testo */
+  --fumo-2:#5D5D67;
+  --linea:rgba(255,255,255,.09);
+  --arancio:#F56F27;           /* «web», tono centrale */
+  --arancio-chiaro:#FFA54D;    /* «web», luce */
+  --oro:#F9D377;               /* riflesso sul marchio */
+  --arancio-scuro:#EA4006;     /* «web», ombra */
+  --brace:#C92C02;             /* fondo del marchio */
+  --serif:"Bodoni Moda", "Bodoni 72", Didot, Georgia, serif;
+  --sans:"Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono:"Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --m:clamp(20px, 5.2vw, 76px);
   --ease:cubic-bezier(.2,.7,.1,1);
-  --serif:"Inter Tight", Inter, -apple-system, "Helvetica Neue", Arial, sans-serif;
-  --sans:Inter, -apple-system, "Helvetica Neue", Arial, sans-serif;
-  --mono:"JetBrains Mono", ui-monospace, monospace;
+  --ease-io:cubic-bezier(.65,0,.35,1);
 }
-@media (max-width:700px){ :root{ --m:16px; --g:12px; --hdr:60px; --rul:36px; } }
 
 *{ box-sizing:border-box; margin:0; padding:0; }
-html{ -webkit-text-size-adjust:100%; }
-html.lenis, html.lenis body{ height:auto; }
-.lenis.lenis-smooth{ scroll-behavior:auto !important; }
-body{ background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:16px; line-height:1.55;
-  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overflow-x:hidden; }
+html{ -webkit-text-size-adjust:100%; background:var(--nero); }
+body{ background:var(--nero); color:var(--bianco); font-family:var(--sans); font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility; }
+img{ display:block; max-width:100%; height:auto; }
 a{ color:inherit; text-decoration:none; }
-em{ font-style:italic; }
-::selection{ background:var(--ink); color:var(--paper); }
-.mono{ font-family:var(--mono); font-size:11px; letter-spacing:.04em; text-transform:uppercase; }
-.serif{ font-family:var(--serif); font-weight:400; }
+ul{ list-style:none; }
+::selection{ background:var(--arancio); color:#140802; }
+.mono{ font-family:var(--mono); font-size:11.5px; font-weight:450; letter-spacing:.14em; text-transform:uppercase; }
+.vh{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+:focus-visible{ outline:2px solid var(--arancio-chiaro); outline-offset:3px; border-radius:4px; }
 
-/* ───── navbar: lastra sospesa scura (come Rain Ink), luce arancio che corre sul bordo ───── */
-.hdr{ position:fixed; top:12px; left:0; right:0; z-index:50; perspective:1200px; pointer-events:none; }
+/* ═════════ barra di navigazione: lastra scura sospesa (come Rain Ink), luce arancio che corre sul bordo ═════════ */
+.hdr{ position:fixed; top:14px; left:0; right:0; z-index:60; perspective:1200px; pointer-events:none; }
 .slab{ pointer-events:auto; position:relative; width:min(960px, calc(100% - 2 * var(--m) + 24px)); margin-inline:auto;
   display:flex; align-items:center; gap:18px; padding:6px 7px 6px 14px; border-radius:16px;
-  background:linear-gradient(180deg, rgba(36,37,42,.97), rgba(18,19,22,.97));
-  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.07);
-  box-shadow:0 1px 0 rgba(255,255,255,.08) inset, 0 -1px 0 rgba(0,0,0,.6) inset, 0 4px 0 #0A0A0C, 0 22px 44px -14px rgba(10,10,12,.55);
-  transform-style:preserve-3d; transition:padding .25s var(--ease); }
-.hdr.small .slab{ padding-block:3px; }
+  background:linear-gradient(180deg, rgba(34,34,39,.9), rgba(17,17,20,.9));
+  -webkit-backdrop-filter:blur(14px) saturate(1.3); backdrop-filter:blur(14px) saturate(1.3);
+  border:1px solid rgba(255,255,255,.075);
+  box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 -1px 0 rgba(0,0,0,.6) inset, 0 4px 0 #040405, 0 24px 48px -16px rgba(0,0,0,.8);
+  transform-style:preserve-3d; }
 .nav-giro{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); overflow:visible; pointer-events:none; }
-.nav-giro rect{ fill:none; stroke-linecap:round; stroke-dasharray:90 910; animation:nav-giro 9s ease-in-out infinite alternate; }
-.nav-giro .luce{ stroke:#FFA24A; stroke-width:1.6; }
-.nav-giro .alone{ stroke:rgba(255,120,30,.55); stroke-width:7; filter:blur(5px); }
+.nav-giro rect{ fill:none; stroke-linecap:round; stroke-dasharray:90 910; animation:nav-giro 11s ease-in-out infinite alternate; }
+.nav-giro .luce{ stroke:#FFB062; stroke-width:1.4; }
+.nav-giro .alone{ stroke:rgba(245,111,39,.5); stroke-width:7; filter:blur(5px); }
 @keyframes nav-giro{ from{ stroke-dashoffset:0; } to{ stroke-dashoffset:-1000; } }
-.logo{ display:flex; align-items:center; flex:none; transform:translateZ(20px); }
-.logo img{ height:44px; width:auto; display:block; margin:0 0 -8px -6px; }   /* l'immagine ha un margine di bagliore intorno */
-.links{ display:flex; gap:4px; list-style:none; margin-left:auto; transform-style:preserve-3d; }
-.links a{ position:relative; display:block; padding:10px 14px; font-size:14px; font-weight:500; color:#A9AAB0; white-space:nowrap;
+.logo{ position:relative; display:block; flex:none; width:173px; height:34px; transform:translateZ(20px); }
+/* il PNG ha aria trasparente sotto la scritta: lo si allinea sul disegno, non sul riquadro */
+.logo img{ position:absolute; left:-6px; top:-4px; height:47px; width:auto; max-width:none; }
+.links{ display:flex; gap:4px; margin-left:auto; transform-style:preserve-3d; }
+.links a{ position:relative; display:block; padding:10px 14px; font-size:14px; font-weight:500; color:#A6A6AF; white-space:nowrap;
   border-radius:11px; transform:translateZ(8px);
-  transition:transform 220ms var(--ease), color 150ms ease, background-color 200ms ease, box-shadow 220ms var(--ease); }
-.links a[aria-current], .links a:focus-visible{ outline:none; color:#F4F4F6; background:linear-gradient(180deg, #34353C, #212227);
-  transform:translateZ(18px) translateY(-2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 4px 0 #0A0A0C, 0 12px 22px -8px rgba(0,0,0,.8); }
-.links a[aria-current]::before{ content:""; position:absolute; left:14px; right:14px; bottom:5px; height:2px; border-radius:2px; background:var(--accent); }
+  transition:transform 220ms var(--ease), color 150ms ease, box-shadow 220ms var(--ease); }
+.links a[aria-current], .links a:focus-visible{ outline:none; color:#F4F3F1; background:linear-gradient(180deg, #303036, #1D1D22);
+  transform:translateZ(18px) translateY(-2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 4px 0 #050506, 0 12px 22px -8px rgba(0,0,0,.85); }
+.links a[aria-current]::before{ content:""; position:absolute; left:14px; right:14px; bottom:5px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg, var(--arancio-chiaro), var(--arancio-scuro)); }
 @media (hover:hover) and (pointer:fine){
-  .links a:hover{ color:#F4F4F6; background:linear-gradient(180deg, #3A3B42, #24252A);
-    transform:translateZ(18px) translateY(-3px) scale(1.08); box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 5px 0 #0A0A0C, 0 16px 26px -8px rgba(0,0,0,.85); }
+  .links a:hover{ color:#F4F3F1; background:linear-gradient(180deg, #36363D, #222227);
+    transform:translateZ(18px) translateY(-3px) scale(1.07); box-shadow:0 1px 0 rgba(255,255,255,.13) inset, 0 5px 0 #050506, 0 16px 26px -8px rgba(0,0,0,.9); }
 }
-.cta{ flex:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; height:40px; padding:0 16px; border-radius:11px;
-  color:#fff; font-size:14px; font-weight:500; background:linear-gradient(180deg, #E8731A, #BD4F08);
-  box-shadow:0 1px 0 rgba(255,255,255,.3) inset, 0 3px 0 #6E2E04; transform:translateZ(8px);
-  transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
-.cta svg{ width:16px; height:16px; }
-.cta:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.3) inset, 0 1px 0 #6E2E04; }
-.cta:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
-@media (hover:hover) and (pointer:fine){ .cta:hover{ transform:translateZ(8px) translateY(-3px) scale(1.06);
-  box-shadow:0 1px 0 rgba(255,255,255,.35) inset, 0 5px 0 #6E2E04, 0 14px 24px -8px rgba(240,110,20,.6); } }
+.cta{ flex:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; height:40px; padding:0 17px; border-radius:11px;
+  color:#180903; font-size:14px; font-weight:600; letter-spacing:.005em;
+  background:linear-gradient(180deg, #FFAA55 0%, #F57A2C 48%, #EA4E0C 100%);
+  box-shadow:0 1px 0 rgba(255,236,200,.55) inset, 0 3px 0 #8A2803, 0 10px 22px -10px rgba(245,111,39,.7);
+  transform:translateZ(8px); transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+.cta svg{ width:16px; height:16px; flex:none; }
+.cta:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,236,200,.5) inset, 0 1px 0 #8A2803; }
+@media (hover:hover) and (pointer:fine){ .cta:hover{ transform:translateZ(8px) translateY(-3px) scale(1.05);
+  box-shadow:0 1px 0 rgba(255,236,200,.6) inset, 0 5px 0 #8A2803, 0 16px 30px -8px rgba(245,111,39,.75); } }
 .burger{ display:none; margin-left:auto; width:40px; height:40px; border-radius:11px; border:0; cursor:pointer;
-  background:linear-gradient(180deg, #34353C, #1C1D21); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 3px 0 #0A0A0C; transform:translateZ(8px); }
-.burger span{ display:block; width:18px; height:2px; margin:4px auto; background:#F4F4F6; border-radius:2px;
-  transition:transform 300ms var(--ease), opacity 150ms ease; }
+  background:linear-gradient(180deg, #303036, #1A1A1E); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 3px 0 #050506; transform:translateZ(8px); }
+.burger span{ display:block; width:18px; height:2px; margin:4px auto; background:#F4F3F1; border-radius:2px; transition:transform 300ms var(--ease), opacity 150ms ease; }
 .hdr.open .burger span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
 .hdr.open .burger span:nth-child(2){ opacity:0; }
 .hdr.open .burger span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
-.burger:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-@media (max-width:700px){
-  .hdr{ top:8px; }
+@media (max-width:760px){
+  .hdr{ top:max(8px, env(safe-area-inset-top)); }
   .slab{ width:calc(100% - 16px); gap:8px; padding:4px 5px 4px 10px; }
-  .hdr.small .slab{ padding-block:4px; }
-  .logo img{ height:38px; margin:0 0 -6px -4px; }
+  .logo{ width:150px; height:32px; }
+  .logo img{ height:41px; left:-5px; top:-3px; }
   .burger{ display:block; }
   .cta{ width:40px; padding:0; } .cta span{ display:none; }
   .links{ position:absolute; top:calc(100% + 10px); left:0; right:0; flex-direction:column; gap:6px; padding:10px;
-    border-radius:16px; background:rgba(20,21,24,.97); border:1px solid rgba(255,255,255,.07); box-shadow:0 30px 60px -10px rgba(0,0,0,.7);
+    border-radius:16px; background:rgba(18,18,21,.97); border:1px solid rgba(255,255,255,.07); box-shadow:0 30px 60px -10px rgba(0,0,0,.8);
     visibility:hidden; opacity:0; transform:rotateX(-12deg) scale(.97); transform-origin:top right;
     transition:opacity 180ms ease-in, transform 180ms ease-in, visibility 0s 180ms; }
   .hdr.open .links{ visibility:visible; opacity:1; transform:none; transition:opacity 220ms var(--ease), transform 250ms var(--ease); }
@@ -98,677 +117,483 @@ em{ font-style:italic; }
   .hdr.open .links li{ transform:none; opacity:1; }
   .hdr.open .links li:nth-child(2){ transition-delay:30ms; }
   .hdr.open .links li:nth-child(3){ transition-delay:60ms; }
-  .links a, .links a[aria-current], .links a:hover{ padding:14px 16px; font-size:17px; background:#1E1F24; color:#F4F4F6; transform:none; box-shadow:none; }
-  .links a[aria-current]::before{ left:0; right:auto; top:12px; bottom:12px; width:3px; height:auto; }
-}
-@media (prefers-reduced-motion:reduce){ .nav-giro rect{ animation:none; } .nav-giro{ display:none; } }
-
-/* ───── film ───── */
-.film{ position:relative; }
-.stage{ position:relative; height:100svh; overflow:hidden; background:var(--paper); color:var(--ink); }
-.gl{ position:absolute; inset:0; width:100%; height:100%; display:block; }
-.hero-scrim{ position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(to bottom, rgba(228,228,232,.75), rgba(228,228,232,0) 20%); }
-.hud{ position:absolute; inset:calc(var(--hdr) + 10px) var(--m) calc(var(--rul) + 10px); pointer-events:none; }
-.hud > i{ position:absolute; width:14px; height:14px; border:0 solid rgba(30,31,34,.35); }
-.hud > i:nth-child(1){ left:0; top:0; border-left-width:1px; border-top-width:1px; }
-.hud > i:nth-child(2){ right:0; top:0; border-right-width:1px; border-top-width:1px; }
-.hud > i:nth-child(3){ left:0; bottom:0; border-left-width:1px; border-bottom-width:1px; }
-.hud > i:nth-child(4){ right:0; bottom:0; border-right-width:1px; border-bottom-width:1px; }
-.hud .mono{ position:absolute; top:4px; color:var(--ink-2); display:flex; align-items:center; gap:8px; }
-.hud .tl{ left:26px; }
-.bars{ position:absolute; inset:0; pointer-events:none; }
-.bar{ position:absolute; left:-50px; top:-50px; width:100px; height:100px; background:#141518; will-change:transform; }
-.bars{ visibility:hidden; }
-
-.hero-copy{ position:absolute; left:calc(var(--m) + 26px); right:calc(var(--m) + 26px); bottom:calc(var(--rul) + 6vh); display:flex;
-  justify-content:space-between; align-items:flex-end; gap:var(--g); }
-.hero-copy h1{ font-family:var(--serif); font-weight:700; font-size:clamp(34px, 4.4vw, 70px); line-height:.98;
-  letter-spacing:-.03em; color:var(--ink); }
-.hero-copy h1 em{ color:var(--accent-big); }
-.hero-copy h1 .ln{ display:block; overflow:hidden; padding-bottom:.12em; margin-bottom:-.12em; }
-.hero-copy h1 .ln > span, .hero-copy h1 .ln > em{ display:block; }
-html.intro .gl, html.intro .hud, html.intro .hero-copy h1, html.intro .ruler, html.intro .slab{ opacity:0; }
-.dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); display:inline-block; }
-@media (max-width:700px){
-  .hero-copy{ flex-direction:column; align-items:flex-start; left:var(--m); right:var(--m); bottom:calc(var(--rul) + 4vh); gap:16px; }
-  .hud .mono.tl{ display:none; }
+  .links a{ padding:13px 14px; font-size:16px; }
 }
 
+/* ═════════ pagina statica (senza WebGL o con «riduci movimento»): tutto il contenuto, in ordine ═════════ */
+.apertura{ position:relative; min-height:100vh; min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:120px var(--m) 110px; overflow:hidden; }
+.apertura::before{ content:""; position:absolute; left:50%; top:52%; width:min(1100px, 140vw); height:min(640px, 90vw); transform:translate(-50%, -50%);
+  background:radial-gradient(closest-side, rgba(245,111,39,.13), rgba(245,111,39,0)); pointer-events:none; }
+.marchio{ position:relative; width:min(760px, 86vw); }
+.marchio img{ width:100%; height:auto; }
+.riga{ display:block; position:relative; width:min(42vw, 640px); height:3px; margin-top:12vh; border-radius:3px;
+  background:linear-gradient(90deg, rgba(201,44,2,0), #EA4006 10%, #FFA54D 38%, #F9D377 50%, #FFA54D 62%, #EA4006 90%, rgba(201,44,2,0));
+  box-shadow:0 0 14px rgba(245,111,39,.75), 0 0 46px rgba(245,111,39,.4), 0 0 120px rgba(245,111,39,.22); }
+.angolo{ position:absolute; bottom:28px; color:var(--fumo); }
+.angolo.sx{ left:var(--m); } .angolo.dx{ right:var(--m); }
 
-.measures{ position:absolute; inset:0; pointer-events:none; visibility:hidden; color:var(--ink-2); }
-.measures span{ position:absolute; font-family:var(--mono); font-size:10px; letter-spacing:.06em; }
-
-.setline{ position:absolute; left:var(--m); right:var(--m); visibility:hidden; }
-.setline .mono{ display:block; color:var(--ink-2); margin-bottom:18px; }
-.setline h2{ font-family:var(--serif); font-weight:700; font-size:clamp(36px, 5.6vw, 90px); line-height:.98;
-  letter-spacing:-.03em; max-width:16ch; color:var(--ink); }
-.setline h2 em{ color:var(--accent-big); }
-.setline .w, .reel-t .w{ display:inline-block; overflow:hidden; vertical-align:top; padding:0 .12em .08em 0; margin:0 -.12em -.08em 0; }   /* spazio a destra: il corsivo sporge e la maschera lo tagliava */
-.setline .w i, .reel-t .w i{ display:inline-block; font-style:inherit; will-change:transform; }
-
-.tile{ position:absolute; inset:0; clip-path:inset(50% 50% 50% 50%); pointer-events:none; }
-.tile .cv{ position:absolute; transform-origin:50% 50%; will-change:transform; }
-.cap{ position:absolute; display:block; visibility:hidden; cursor:pointer; }
-/* contorno al neon arancio al passaggio del mouse (e con Tab): filo chiaro, alone arancio fuori e dentro */
-.cap::after, .work-cv::after{ content:""; position:absolute; inset:-6px; border:1.5px solid #FFD2A1; border-radius:3px; pointer-events:none;
-  box-shadow:0 0 2px #FFB866, 0 0 8px rgba(240,122,26,.95), 0 0 20px rgba(240,122,26,.6), 0 0 42px rgba(224,90,10,.4),
-    inset 0 0 6px rgba(240,122,26,.75), inset 0 0 16px rgba(240,122,26,.3);
+.capitolo{ position:relative; max-width:1320px; margin:0 auto; padding:16vh var(--m) 6vh; }
+.kicker{ display:flex; align-items:center; gap:12px; color:var(--fumo); }
+.kicker::before{ content:""; width:30px; height:1px; background:linear-gradient(90deg, var(--arancio-scuro), var(--arancio-chiaro)); }
+.kicker b{ color:var(--arancio-chiaro); font-weight:500; }
+.titolo{ margin-top:18px; max-width:17ch; font-family:var(--serif); font-weight:400; font-size:clamp(38px, 4.6vw, 74px); line-height:1.02;
+  letter-spacing:-.012em; font-optical-sizing:auto; text-wrap:balance; }
+.titolo em{ font-style:italic; color:var(--arancio-chiaro); }
+.lavori{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(22px, 3vw, 46px); margin-top:7vh; }
+.schermo{ position:relative; display:block; border-radius:10px; }
+.schermo img{ width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:10px; border:1px solid var(--linea); background:var(--grafite); }
+/* contorno arancio al neon al passaggio del mouse (richiesto da Mark nella 1.23) */
+.schermo::after{ content:""; position:absolute; inset:-6px; border:1.5px solid #FFD2A1; border-radius:14px; pointer-events:none;
+  box-shadow:0 0 2px #FFB866, 0 0 8px rgba(245,111,39,.95), 0 0 20px rgba(245,111,39,.6), 0 0 42px rgba(234,64,6,.4),
+    inset 0 0 6px rgba(245,111,39,.75), inset 0 0 16px rgba(245,111,39,.3);
   opacity:0; transform:scale(.985); transition:opacity .45s var(--ease), transform .45s var(--ease); }
-.cap:focus-visible, .work:focus-visible{ outline:none; }
-.cap:focus-visible::after, .work:focus-visible .work-cv::after{ opacity:1; transform:none; }
-@media (hover:hover) and (pointer:fine){ .cap:hover::after, .work:hover .work-cv::after{ opacity:1; transform:none; } }
+.schermo:hover::after, .schermo:focus-visible::after{ opacity:1; transform:none; }
+.schermo:focus-visible{ outline:none; }
+.didascalia{ display:flex; flex-wrap:wrap; align-items:baseline; column-gap:14px; row-gap:2px; margin-top:16px; line-height:1.3; }
+.d-in{ display:contents; }
+.num{ color:var(--arancio-chiaro); font-family:var(--mono); font-size:12px; letter-spacing:.08em; }
+.nome{ font-size:17px; font-weight:550; letter-spacing:-.005em; }
+.desc{ color:var(--fumo); font-size:14.5px; }
+.azione{ margin-left:auto; color:var(--arancio-chiaro); font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; }
 
-/* ───── app e giochi, dopo il film ───── */
-/* ───── App e Giochi: due scene fissate come il film ───── */
-.reel{ position:relative; }
-.reel-stage{ position:relative; height:100svh; overflow:hidden; background:var(--paper); color:var(--ink);
-  display:flex; flex-direction:column; padding:calc(var(--hdr) + clamp(20px, 5vh, 56px)) var(--m) clamp(28px, 6vh, 64px); }
-.reel-lines{ position:absolute; inset:0; pointer-events:none; }
-.reel-lines i{ position:absolute; background:var(--ink); opacity:.09; }
-.reel-head{ position:relative; margin-bottom:clamp(20px, 4vh, 44px); }
-.reel-head .mono{ display:block; color:var(--ink-2); margin-bottom:14px; }
-.reel-t{ font-family:var(--serif); font-weight:700; font-size:clamp(44px, 7vw, 112px); line-height:.95; letter-spacing:-.03em; }
-.reel-t em{ color:var(--accent-big); }
-.reel-grid{ position:relative; display:grid; grid-template-columns:repeat(2, 1fr); gap:var(--g); align-items:start;
-  width:min(100%, calc((100svh - var(--hdr) - 330px) * 1.6 * 2 + var(--g))); }
-.reel .work-cv{ background:none; box-shadow:none; }   /* nelle scene i riquadri compaiono solo con la loro immagine */
-@media (max-width:700px){
-  .reel-grid{ grid-template-columns:1fr; row-gap:18px; width:min(100%, calc((100svh - var(--hdr) - 260px) / 2 * 1.6)); }
-  .reel-t{ font-size:clamp(40px, 12vw, 64px); }
-}
-.work{ display:block; }
-.work-cv{ position:relative; display:block; aspect-ratio:16/10; background:var(--paper-2); box-shadow:0 0 0 1px var(--line); }
-.work-cv img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:transform 1.1s var(--ease); }
-.work-im{ position:absolute; inset:0; overflow:hidden; }
-.work-zoom{ position:absolute; inset:0; display:block; }
-@media (hover:hover) and (pointer:fine){ .work:hover .work-cv img{ transform:scale(1.03); } }
-.work-cap{ display:flex; justify-content:space-between; gap:12px; padding-top:12px; color:var(--ink-2); }
-.work-cap b{ font-weight:500; color:var(--accent-text); margin-right:6px; }
-.work-cap span:first-child{ color:var(--ink); }
+.fine{ display:flex; align-items:center; justify-content:center; min-height:86vh; padding:12vh var(--m); text-align:center; }
+.fine-in{ display:flex; flex-direction:column; align-items:center; }
+.fine .titolo{ max-width:13ch; margin-top:0; }
+.scrivimi{ display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 26px; margin-top:34px; border-radius:13px;
+  color:#180903; font-size:16px; font-weight:600; background:linear-gradient(180deg, #FFAA55 0%, #F57A2C 48%, #EA4E0C 100%);
+  box-shadow:0 1px 0 rgba(255,236,200,.55) inset, 0 4px 0 #8A2803, 0 18px 40px -14px rgba(245,111,39,.8);
+  transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+.scrivimi svg{ width:18px; height:18px; }
+@media (hover:hover) and (pointer:fine){ .scrivimi:hover{ transform:translateY(-3px) scale(1.04);
+  box-shadow:0 1px 0 rgba(255,236,200,.6) inset, 0 6px 0 #8A2803, 0 22px 46px -12px rgba(245,111,39,.85); } }
+.scrivimi:active{ transform:translateY(2px); box-shadow:0 1px 0 rgba(255,236,200,.5) inset, 0 1px 0 #8A2803; }
+.email{ margin-top:18px; color:var(--fumo); font-family:var(--mono); font-size:13px; letter-spacing:.04em; }
+.email:hover{ color:var(--bianco); }
+.piede{ display:block; padding:0 var(--m) 28px; color:var(--fumo-2); text-align:center; }
+.rail, .pre, .gl, .velo, .taglio, .film-spazio{ display:none; }
 
-.tile .cv img{ transition:transform 1.1s var(--ease); }
-@media (hover:hover) and (pointer:fine){
-  .stage:has(.cap[data-i="0"]:hover) .tile[data-i="0"] .cv img,
-  .stage:has(.cap[data-i="1"]:hover) .tile[data-i="1"] .cv img{ transform:scale(1.03); }
+@media (max-width:760px){
+  .lavori{ grid-template-columns:1fr; }
+  .angolo{ bottom:20px; font-size:10px; }
+  .riga{ width:76vw; }
 }
 
-.ruler{ position:absolute; left:0; right:0; bottom:0; height:var(--rul); padding:0 var(--m); display:flex;
-  align-items:center; justify-content:space-between; color:var(--ink); transition:color .5s var(--ease); }
-.ruler::before{ content:""; position:absolute; left:var(--m); right:var(--m); top:0; height:7px;
-  background:repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 8px); opacity:.35; }
-.ruler::after{ content:""; position:absolute; left:var(--m); right:var(--m); top:0; height:12px;
-  background:repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 80px); opacity:.5; }
-.ruler .mark{ position:absolute; top:0; left:var(--m); width:1px; height:16px; background:var(--accent);
-  transform:translateX(calc(var(--p, 0) * (100vw - 2 * var(--m)))); }
-.ruler .mono{ position:relative; padding-top:8px; }
-.ruler .ch b{ font-weight:500; }
-
-/* ───── filo di avanzamento a destra (al posto della barra del browser) ───── */
-html{ scrollbar-width:none; }
-html::-webkit-scrollbar{ display:none; }
-.rail{ position:fixed; z-index:40; right:10px; top:calc(var(--hdr) + 10px); bottom:calc(var(--rul) + 10px); width:28px;
-  color:var(--ink); cursor:pointer; touch-action:none; transition:opacity .8s var(--ease); --rp:0; }
-html.intro .rail{ opacity:0; }
-.rail i{ font-style:normal; }
-.rail::before{ content:""; position:absolute; right:13px; top:0; bottom:0; width:1px; background:currentColor; opacity:.18; }
-.rail::after{ content:""; position:absolute; right:13px; top:0; height:100%; width:5px; opacity:.28;
-  background:linear-gradient(currentColor 1px, transparent 1px) 0 0 / 5px 2.5% repeat-y; }
-.rail .fill{ position:absolute; right:13px; top:0; width:1px; height:100%; background:var(--accent);
-  transform-origin:50% 0; transform:scaleY(var(--rp)); }
-.rail .knob{ position:absolute; right:9px; top:0; width:13px; height:1px; background:var(--accent);
-  transform:translateY(calc(var(--rp) * var(--rh, 0px))); }
-.rail .knob::after{ content:""; position:absolute; right:3px; top:-3px; width:7px; height:7px; border-radius:50%;
-  background:var(--accent); transform:scale(.0); transition:transform .4s var(--ease); }
-.rail:hover .knob::after, .rail.drag .knob::after{ transform:scale(1); }
-.rail .ck{ position:absolute; right:13px; width:9px; height:1px; background:currentColor; opacity:.45;
-  transition:opacity .4s var(--ease), background .4s var(--ease); }
-.rail .ck span{ position:absolute; left:calc(100% + 5px); top:-6px; font-family:var(--mono); font-size:9px; letter-spacing:.06em;
-  color:var(--ink); opacity:0; transform:translateX(-4px); transition:opacity .4s var(--ease), transform .4s var(--ease); }
-.rail .ck.on{ opacity:1; background:var(--accent); }
-.rail .ck.on span{ opacity:.8; transform:none; }
-.rail:hover .ck span{ opacity:.55; transform:none; }
-.rail:hover .ck.on span{ opacity:1; }
-@media (max-width:700px){ .rail{ right:0; width:20px; } .rail::before, .rail::after, .rail .fill, .rail .ck{ right:7px; }
-  .rail .knob{ right:4px; width:9px; } .rail .ck span{ display:none; } }
-
-/* ───── copertine dei lavori: schermate dei siti veri ───── */
-.cv{ position:relative; overflow:hidden; background:var(--paper-2); }
-.cv img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 50%; display:block; }
-
+/* ═════════ film: una scena fissata, la pagina scorre su uno spazio vuoto ═════════ */
+html.film{ scrollbar-width:none; }
+html.film::-webkit-scrollbar{ display:none; }
+.film .gl{ display:block; position:fixed; left:0; top:0; width:100%; height:100vh; z-index:0; }
+.film .velo{ display:block; position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:radial-gradient(ellipse 120% 90% at 50% 46%, rgba(8,8,10,0) 58%, rgba(4,4,5,.62) 100%); }
+.film .velo::after{ content:""; position:absolute; inset:0; opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.film .film-spazio{ display:block; }
+/* salti lunghi dal menu: un attimo di nero, poi si arriva alla tappa scorrendo piano */
+.film .taglio{ display:block; position:fixed; inset:0; z-index:15; background:var(--nero); opacity:0; pointer-events:none; }
+.film main{ position:fixed; inset:0; z-index:10; pointer-events:none; opacity:0; }
+.film.pronto main{ opacity:1; }
+.film main > section{ position:absolute; inset:0; padding:0; margin:0; max-width:none; min-height:0; }
+.film .apertura{ display:block; overflow:visible; }
+.film .apertura::before, .film .riga{ display:none; }
+/* nel film l'apertura è fatta dalle aste 3D: il logo grande resta solo per chi usa la sintesi vocale */
+.film .marchio{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.film .angolo{ bottom:30px; }
+.film .testa{ position:absolute; left:var(--m); top:clamp(98px, 13vh, 150px); width:min(64vw, 940px); }
+.film .titolo{ max-width:none; font-size:clamp(36px, 3.7vw, 60px); }
+.film .kicker{ opacity:0; }
+.film .titolo .w{ display:inline-block; overflow:hidden; vertical-align:top; padding:0 .12em .1em 0; margin:0 -.12em -.1em 0; }
+.film .titolo .wi{ display:inline-block; will-change:transform; }
+.film .lavori{ display:block; margin:0; }
+/* il collegamento è un velo trasparente deformato esattamente sulla faccia della lastra */
+.film .schermo{ position:fixed; left:0; top:0; width:800px; height:450px; transform-origin:0 0; border-radius:0; pointer-events:none; }
+.film .schermo.on{ pointer-events:auto; }
+.film .schermo:not(.on):focus-visible{ outline:none; }
+.film .schermo img, .film .schermo::after{ display:none; }
+.film .schermo:focus-visible{ outline:2px solid rgba(255,165,77,.9); outline-offset:4px; }
+.film .didascalia{ position:fixed; left:0; top:0; margin:0; flex-wrap:nowrap; will-change:transform; pointer-events:none; }
+.film .d-in{ display:flex; align-items:baseline; column-gap:14px; opacity:0; width:100%; }
+.film .azione{ pointer-events:auto; }
+.film .fine{ display:block; min-height:0; padding:0; }
+.film .fine-in{ position:fixed; left:0; top:0; width:min(560px, 80vw); opacity:0; pointer-events:none; will-change:transform, opacity; }
+.film .fine-in.on{ pointer-events:auto; }
+.film .fine .titolo{ font-size:clamp(34px, 3.6vw, 58px); }
+.fine .titolo em{ display:block; }
+.film .piede{ position:fixed; left:0; right:0; bottom:0; z-index:10; opacity:0; padding-bottom:22px; }
+.film .rail{ display:block; position:fixed; right:22px; top:50%; z-index:20; width:12px; height:30vh; transform:translateY(-50%); pointer-events:auto; }
+.film .rail::before{ content:""; position:absolute; left:5.5px; top:0; bottom:0; width:1px; background:rgba(255,255,255,.12); }
+.film .rail .fill{ position:absolute; left:5px; top:0; width:2px; height:100%; transform-origin:top; transform:scaleY(0);
+  background:linear-gradient(180deg, var(--arancio-chiaro), var(--arancio-scuro)); border-radius:2px; }
+.film .rail button{ position:absolute; left:0; width:12px; height:12px; margin-top:-6px; border:0; background:none; cursor:pointer; }
+.film .rail button::before{ content:""; position:absolute; left:3.5px; top:3.5px; width:5px; height:5px; border-radius:50%; background:#3A3A42; transition:background .3s, box-shadow .3s; }
+.film .rail button.on::before{ background:var(--arancio-chiaro); box-shadow:0 0 8px rgba(245,111,39,.9); }
+.film .rail button span{ position:absolute; right:20px; top:-3px; color:var(--fumo); white-space:nowrap; opacity:0; transform:translateX(6px);
+  transition:opacity .25s, transform .25s var(--ease); pointer-events:none; }
+.film .rail button:hover span, .film .rail button:focus-visible span{ opacity:1; transform:none; }
+.film .pre{ display:none; }
+.film.avvio .pre{ display:block; position:fixed; inset:0; z-index:40; pointer-events:none; }
+.film.avvio .hdr, .film.avvio .angolo{ opacity:0; }
+.pre i{ position:absolute; left:50%; top:66.5%; width:min(42vw, 640px); height:2px; margin-left:calc(min(42vw, 640px) / -2); border-radius:2px;
+  background:linear-gradient(90deg, #EA4006, #FFA54D 50%, #EA4006); transform-origin:center; transform:scaleX(0);
+  box-shadow:0 0 12px rgba(245,111,39,.7); }
+.pre span{ position:absolute; left:50%; top:calc(66.5% + 22px); transform:translateX(-50%); color:var(--fumo-2); }
+@media (max-width:900px){ .film .rail{ display:none; } }
+@media (max-width:760px){
+  .film .testa{ top:86px; width:auto; right:var(--m); }
+  .film .titolo{ font-size:clamp(30px, 8.4vw, 40px); line-height:1.04; }
+  .film .didascalia{ font-size:13px; }
+  .film .nome{ font-size:15px; } .film .desc{ font-size:13px; }
+  .film .d-in{ flex-wrap:wrap; row-gap:2px; column-gap:10px; }
+  .film .azione{ display:none; }
+  .film .fine-in{ width:min(300px, 76vw); }
+  .film .fine .titolo{ font-size:30px; }
+  .film .scrivimi{ height:48px; padding:0 22px; margin-top:24px; }
+  .pre i{ width:76vw; margin-left:-38vw; top:62%; } .pre span{ top:calc(62% + 22px); }
+}
 </style>
+<script>/* aperta dal disco: i caratteri arrivano incorporati (il browser non legge i .woff2 locali) */
+if (location.protocol === 'file:') document.write('<script src="js/caratteri-dati.js"><\/script>');</script>
 </head>
 <body>
-
-<div class="rail" id="rail" aria-hidden="true"><i class="fill"></i><i class="knob"></i></div>
 <header class="hdr" id="hdr">
   <nav class="slab" aria-label="Principale">
-    <a class="logo" href="#top" aria-label="Nemesi Web, torna all'inizio"><img src="images/logo/nemesi-web-nav.png" alt="Nemesi Web" width="447" height="114"></a>
+    <svg class="nav-giro" aria-hidden="true"><rect class="alone" x="0" y="0" width="100%" height="100%" rx="16" pathLength="1000"/><rect class="luce" x="0" y="0" width="100%" height="100%" rx="16" pathLength="1000"/></svg>
+    <a class="logo" href="#top" aria-label="Nemesi Web, torna all'inizio"><img id="logo-nav" src="images/logo/nemesi-web-nav.png" alt="" width="447" height="114"></a>
     <ul class="links" id="links">
       <li><a href="#siti" data-s="siti">Siti</a></li>
       <li><a href="#app" data-s="app">App</a></li>
       <li><a href="#giochi" data-s="giochi">Giochi</a></li>
     </ul>
     <button class="burger" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
-    <a class="cta" href="mailto:ciao@nemesi.studio" aria-label="Scrivimi"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 7.5l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Scrivimi</span></a>
+    <a class="cta" href="mailto:ciao@nemesi.studio" aria-label="Scrivimi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.5 8.2 6.2 8.2-6.2"/></svg><span>Scrivimi</span></a>
   </nav>
 </header>
 
-<main id="top">
-  <section class="film" id="film" aria-label="Nemesi Web, studio di web design: i siti">
-    <div class="stage" id="stage">
-      <canvas class="gl" id="gl" aria-hidden="true"></canvas>
-      <div class="hero-scrim" id="hero-scrim" aria-hidden="true"></div>
-      <div class="bars" id="bars" aria-hidden="true"></div>
-      <div class="measures" id="measures" aria-hidden="true"></div>
+<canvas class="gl" id="gl" aria-hidden="true"></canvas>
+<div class="velo" aria-hidden="true"></div>
+<div class="taglio" id="taglio" aria-hidden="true"></div>
+<div class="pre" id="pre" aria-hidden="true"><i></i><span class="mono">Nemesi Web</span></div>
 
-      <div class="hud" id="hud" aria-hidden="true"><i></i><i></i><i></i><i></i>
-        <span class="mono tl">Nemesi Web — studio di web design</span>
-      </div>
-
-      <!--
-      <div class="hero-copy" id="hero-copy">
-        <h1><span class="ln"><span>Web design su misura.</span></span><span class="ln"><em>Niente di troppo.</em></span></h1>
-      </div>
-      -->
-
-      <div class="setline" id="setline">
-        <span class="mono">Nemesi Web — studio di web design</span>
-        <h2 id="setline-h">Siti chiari, intuitivi, <em>costruiti per durare.</em></h2>
-      </div>
-
-      <div class="tile" data-i="0"><div class="cv"><img src="images/lavori/rainink-d.jpg" alt="" decoding="async"></div></div>
-      <div class="tile" data-i="1"><div class="cv"><img src="images/lavori/olimp-d.jpg" alt="" decoding="async"></div></div>
-      <a class="cap" data-i="0" href="https://nemesimark.github.io/inkubo/" target="_blank" rel="noopener" aria-label="Rain Ink Tattoo, tatuaggi a Montelupone: apri il sito"></a>
-      <a class="cap" data-i="1" href="https://nemesimark.github.io/trama/" target="_blank" rel="noopener" aria-label="Olimp, album per fotografi: apri il sito"></a>
-
-      <div class="ruler" aria-hidden="true">
-        <i class="mark"></i>
-        <span class="mono ch" id="ch"><b>01</b> — Materia</span>
-        <span class="mono" id="readout">0000</span>
-      </div>
-    </div>
+<main>
+  <section class="apertura" id="top" aria-label="Nemesi Web">
+    <h1 class="marchio" id="marchio"><img src="images/logo/nemesi-web-arancio.png" alt="Nemesi Web, web design e soluzioni digitali" width="2051" height="618" fetchpriority="high"></h1>
+    <span class="riga" aria-hidden="true"></span>
+    <div class="angoli"><p class="angolo sx mono">Design e sviluppo</p><p class="angolo dx mono">Portfolio 2026</p></div>
   </section>
 
-  <section class="reel" id="app" data-mode="apri" aria-labelledby="app-t">
-    <div class="reel-stage">
-      <div class="reel-lines" aria-hidden="true"></div>
-      <div class="reel-head"><span class="mono">Nemesi Web — app</span><h2 class="reel-t" id="app-t">App</h2></div>
-      <div class="reel-grid">
-        <a class="work" href="https://nemesimark.github.io/parola/" target="_blank" rel="noopener" aria-label="Parola, editor di testi: apri l'app">
-          <span class="work-cv"><span class="work-im"><span class="work-zoom"><img src="images/lavori/parola-d.jpg" alt="" loading="lazy" decoding="async"></span></span></span>
-          <span class="work-cap mono"><span><b>03</b> Parola</span><span>Testi</span></span></a>
-        <a class="work" href="https://nemesimark.github.io/foglio/" target="_blank" rel="noopener" aria-label="Foglio, foglio di calcolo: apri l'app">
-          <span class="work-cv"><span class="work-im"><span class="work-zoom"><img src="images/lavori/foglio-d.jpg" alt="" loading="lazy" decoding="async"></span></span></span>
-          <span class="work-cap mono"><span><b>04</b> Foglio</span><span>Calcolo</span></span></a>
-      </div>
+  <section class="capitolo" id="siti" aria-labelledby="siti-t">
+    <div class="testa">
+      <p class="kicker mono"><b>Siti</b> Pelle e carta</p>
+      <h2 class="titolo" id="siti-t">Siti chiari, intuitivi, <em>costruiti per durare.</em></h2>
     </div>
+    <ul class="lavori">
+      <li class="lavoro">
+        <a class="schermo" data-i="0" href="https://nemesimark.github.io/inkubo/" target="_blank" rel="noopener" aria-label="Rain Ink Tattoo, studio di tatuaggi a Montelupone: visita il sito"><img src="images/lavori/rainink.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="0"><span class="d-in"><span class="num">01</span><span class="nome">Rain Ink Tattoo</span><span class="desc">Studio di tatuaggi a Montelupone</span><a class="azione" href="https://nemesimark.github.io/inkubo/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Visita il sito ↗</a></span></p>
+      </li>
+      <li class="lavoro">
+        <a class="schermo" data-i="1" href="https://nemesimark.github.io/trama/" target="_blank" rel="noopener" aria-label="Olimp, album e fotolibri per fotografi: visita il sito"><img src="images/lavori/olimp.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="1"><span class="d-in"><span class="num">02</span><span class="nome">Olimp</span><span class="desc">Album e fotolibri per fotografi</span><a class="azione" href="https://nemesimark.github.io/trama/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Visita il sito ↗</a></span></p>
+      </li>
+    </ul>
   </section>
 
-  <section class="reel" id="giochi" data-mode="pellicola" aria-labelledby="giochi-t">
-    <div class="reel-stage">
-      <div class="reel-lines" aria-hidden="true"></div>
-      <div class="reel-head"><span class="mono">Nemesi Web — giochi</span><h2 class="reel-t" id="giochi-t">Giochi</h2></div>
-      <div class="reel-grid">
-        <a class="work" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" aria-label="Metal Gear, gioco d'azione: gioca">
-          <span class="work-cv"><span class="work-im"><span class="work-zoom"><img src="images/lavori/metalgear-d.jpg" alt="" loading="lazy" decoding="async"></span></span></span>
-          <span class="work-cap mono"><span><b>05</b> Metal Gear</span><span>Gioco d'azione</span></span></a>
-        <a class="work" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" aria-label="Radente, gioco di volo: gioca">
-          <span class="work-cv"><span class="work-im"><span class="work-zoom"><img src="images/lavori/radente-d.jpg" alt="" loading="lazy" decoding="async"></span></span></span>
-          <span class="work-cap mono"><span><b>06</b> Radente</span><span>Gioco di volo</span></span></a>
-      </div>
+  <section class="capitolo" id="app" aria-labelledby="app-t">
+    <div class="testa">
+      <p class="kicker mono"><b>App</b> Lettere e numeri</p>
+      <h2 class="titolo" id="app-t">Scrivere e calcolare, <em>dal browser al Mac.</em></h2>
     </div>
+    <ul class="lavori">
+      <li class="lavoro">
+        <a class="schermo" data-i="2" href="https://nemesimark.github.io/parola/" target="_blank" rel="noopener" aria-label="Parola, editor di testi: apri l'app"><img src="images/lavori/parola.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="2"><span class="d-in"><span class="num">03</span><span class="nome">Parola</span><span class="desc">Editor di testi, salva in .docx</span><a class="azione" href="https://nemesimark.github.io/parola/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
+      </li>
+      <li class="lavoro">
+        <a class="schermo" data-i="3" href="https://nemesimark.github.io/foglio/" target="_blank" rel="noopener" aria-label="Foglio, foglio di calcolo: apri l'app"><img src="images/lavori/foglio.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="3"><span class="d-in"><span class="num">04</span><span class="nome">Foglio</span><span class="desc">Formule in italiano, file .xlsx</span><a class="azione" href="https://nemesimark.github.io/foglio/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
+      </li>
+    </ul>
   </section>
 
+  <section class="capitolo" id="giochi" aria-labelledby="giochi-t">
+    <div class="testa">
+      <p class="kicker mono"><b>Giochi</b> Piano e profondità</p>
+      <h2 class="titolo" id="giochi-t">Mondi interi, <em>dentro una pagina web.</em></h2>
+    </div>
+    <ul class="lavori">
+      <li class="lavoro">
+        <a class="schermo" data-i="4" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" aria-label="Metal Gear, Operazione Omega, gioco d'azione: gioca"><img src="images/lavori/metalgear.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="4"><span class="d-in"><span class="num">05</span><span class="nome">Metal Gear</span><span class="desc">Operazione Omega, azione in sei livelli</span><a class="azione" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
+      </li>
+      <li class="lavoro">
+        <a class="schermo" data-i="5" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" aria-label="Radente, gioco di volo in 3D: gioca"><img src="images/lavori/radente.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="5"><span class="d-in"><span class="num">06</span><span class="nome">Radente</span><span class="desc">Volo 3D in cinque mondi</span><a class="azione" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="fine" id="scrivimi" aria-labelledby="fine-t">
+    <div class="fine-in" id="fine-in">
+      <h2 class="titolo" id="fine-t">Manca solo <em>il tuo progetto.</em></h2>
+      <a class="scrivimi" href="mailto:ciao@nemesi.studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.5 8.2 6.2 8.2-6.2"/></svg>Scrivimi</a>
+      <a class="email" href="mailto:ciao@nemesi.studio">ciao@nemesi.studio</a>
+    </div>
+  </section>
 </main>
+<p class="piede mono" id="piede">© 2026 Nemesi Web</p>
 
+<div class="rail" id="rail" aria-hidden="true"><i class="fill"></i></div>
+<div class="film-spazio" id="film" aria-hidden="true"></div>
 
 <script src="vendor/gsap.min.js"></script>
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 <script src="vendor/three/three.min.js"></script>
-<script src="vendor/three/RoomEnvironment.js"></script>
-<script src="vendor/three/RoundedBoxGeometry.js"></script>
-<script src="js/scena.js"></script>
+<script src="js/lastra.js"></script>
 <script>
 (function(){
   'use strict';
-  gsap.registerPlugin(ScrollTrigger);
-  var JUMP = new URLSearchParams(location.search).get('jump');
-  var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (JUMP !== null || RM) history.scrollRestoration = 'manual';
+  var d = document.documentElement, hdr = document.getElementById('hdr');
+  var FILM = d.classList.contains('film');
+  var Q = new URLSearchParams(location.search), JUMP = Q.get('jump');
 
-  var stage = document.getElementById('stage');
-  var hdr = document.getElementById('hdr');
-  var barsEl = document.getElementById('bars');
-  var tiles = Array.prototype.slice.call(document.querySelectorAll('.tile'));
-  var covers = tiles.map(function(t){ return t.querySelector('.cv'); });
-  var capsEl = Array.prototype.slice.call(document.querySelectorAll('.cap'));
-
-  /* ── il wordmark: NEMESI WEB, lettere fatte solo di aste ──
-     ogni asta: centro (cx,cy), lunghezza, spessore, rotazione (gradi); unità = altezza H */
-  var LW = { N:.80, E:.60, M:.98, S:.62, I:.15, W:.98, B:.64, ' ':.22 }, GAP = .16, T = .15;
-  function letter(ch, H){
-    var t = T*H, w = LW[ch]*H, b = [];
-    function seg(x1,y1,x2,y2,th){ var dx=x2-x1, dy=y2-y1;
-      b.push({ cx:(x1+x2)/2, cy:(y1+y2)/2, len:Math.hypot(dx,dy), th:th||t, rot:Math.atan2(dy,dx)*180/Math.PI }); }
-    function stem(x, y1, y2){ b.push({ cx:x, cy:(y1+y2)/2, len:y2-y1, th:t, rot:90 }); }
-    function arm(x1, x2, y){ b.push({ cx:(x1+x2)/2, cy:y, len:x2-x1, th:t, rot:0 }); }
-    if (ch==='N'){ stem(t/2,0,H); stem(w-t/2,0,H);
-      var k=t*.5; seg(t*.55, k*.9, w-t*.55, H-k*.9, t*1.02); }
-    if (ch==='E'){ stem(t/2,0,H); arm(0,w,t/2); arm(0,w*.88,H/2); arm(0,w,H-t/2); }
-    if (ch==='M'){ stem(t/2,0,H); stem(w-t/2,0,H);
-      var vy=H*.7, ov=t*.32; seg(t*.6, t*.45, w/2+ov*.5, vy+ov*.85, t*1.02); seg(w/2-ov*.5, vy+ov*.85, w-t*.6, t*.45, t*1.02);
-      var last=b[b.length-1]; last.rot = last.rot + 180; }   // tiene la rotazione tra 90 e 180
-    if (ch==='S'){ arm(0,w,t/2); stem(t/2,0,H/2+t/2); arm(0,w,H/2); stem(w-t/2,H/2-t/2,H); arm(0,w,H-t/2); }
-    if (ch==='I'){ stem(t/2,0,H); }
-    if (ch==='W'){ stem(t/2,0,H); stem(w-t/2,0,H);   // la M capovolta
-      var wy=H*.3, wv=t*.32; seg(t*.6, H-t*.45, w/2+wv*.5, wy-wv*.85, t*1.02); seg(w/2-wv*.5, wy-wv*.85, w-t*.6, H-t*.45, t*1.02); }
-    if (ch==='B'){ var bu=w*.86; stem(t/2,0,H); arm(0,bu,t/2); arm(0,w,H/2); arm(0,w,H-t/2);
-      stem(bu-t/2,0,H/2+t/2); stem(w-t/2,H/2-t/2,H); }
-    return { w:w, bars:b };
-  }
-  var WORD = ['N','E','M','E','S','I',' ','W','E','B'];
-  // tutte le aste vanno sulla griglia: quelle di NEMESI (le prime 21) restano, quelle di WEB si posano sulle stesse linee e si spengono
-  var NB = 0, NALL = 0;
-  WORD.forEach(function(ch, i){ var n = letter(ch, 1).bars.length; NALL += n; if (i < 6) NB += n; });
-
-  /* geometria: wordmark (A) e griglia (B) per la finestra attuale */
-  var geo = {};
-  function computeGeo(){
-    var vw = stage.clientWidth, vh = stage.clientHeight;
-    var mobile = vw < 700;
-    var m = mobile ? 16 : 48, g = mobile ? 12 : 24, hdrH = mobile ? 60 : 72, rul = mobile ? 36 : 40;
-    // wordmark
-    var rows = mobile ? [[0,1,2,3,4,5],[7,8,9]] : [[0,1,2,3,4,5,6,7,8,9]];
-    var units = Math.max.apply(null, rows.map(function(r){
-      return r.reduce(function(s,i){ return s + LW[WORD[i]]; }, 0) + GAP*(r.length-1); }));
-    var H = Math.min((vw - 2*m)/units, vh*(mobile ? .2 : .34));
-    var rowGap = H*.22;
-    var bottom = vh - rul - (mobile ? 28 : 44);
-    var top0 = bottom - rows.length*H - (rows.length-1)*rowGap;
-    var A = [], kinds = [];
-    rows.forEach(function(r, ri){
-      var x = m, y = top0 + ri*(H+rowGap);
-      r.forEach(function(li){
-        var L = letter(WORD[li], H);
-        L.bars.forEach(function(bb){
-          var kind = bb.rot===0 ? 'h' : 'v';
-          A.push({ x:x+bb.cx, y:y+bb.cy, sx:bb.len/100, sy:bb.th/100, r:bb.rot, kind:kind, li:li });
-        });
-        x += L.w + GAP*H;
-      });
-    });
-    // griglia a 6 colonne con canali
-    var c = (vw - 2*m - 5*g)/6, cols = [];
-    for (var i=0;i<6;i++){ var L0 = m + i*(c+g); cols.push(L0, L0+c); }
-    var R = (vh - hdrH - rul)/8, ys = [];
-    for (var k=0;k<=8;k++) ys.push(hdrH + k*R);
-    // le aste di WEB vanno anche loro sulle linee (verticali da col. 3 in poi, orizzontali sulle righe 1-3 e 5-7)
-    var B = [], vi = 0, hi = 0, wv = 4, wh = 0, WH = [1,2,3,5,6,7];
-    A.forEach(function(a){
-      if (a.li >= 6){
-        if (a.kind==='v') B.push({ x:Math.round(cols[Math.min(wv++, 11)])+.5, y:vh/2, sx:vh/100, sy:.01, r:90 });
-        else B.push({ x:vw/2, y:Math.round(ys[WH[Math.min(wh++, 5)]])+.5, sx:vw/100, sy:.01, r:0 });
-      }
-      else if (a.kind==='v'){ B.push({ x:Math.round(cols[vi++])+.5, y:vh/2, sx:vh/100, sy:.01, r:90 }); }
-      else { B.push({ x:vw/2, y:Math.round(ys[hi++])+.5, sx:vw/100, sy:.01, r:0 }); }
-    });
-    // celle dei riquadri (righe 5-8)
-    function colL(i){ return m + i*(c+g); } function colR(i){ return colL(i)+c; }
-    var half = g/2;
-    var cells = [
-      { l:colL(0), r:colR(3), t:ys[4], b:ys[8] - half },
-      { l:colL(4), r:colR(5), t:ys[4], b:ys[8] - half }
-    ];
-    // l'indice finale: due pannelli uguali, cliccabili (il link .cap li copre), sotto il titolo
-    var sl0 = document.getElementById('setline');
-    sl0.style.top = (ys[0] + R*.45) + 'px';
-    var below = sl0.offsetTop + sl0.offsetHeight + (mobile ? 22 : 40);
-    // alla fine il righello se ne va: i pannelli scendono fino al margine
-    var panels, w, h;
-    if (mobile){
-      w = vw - 2*m;
-      h = Math.min(w/1.6, (vh - m - below - g)/2);
-      var t1 = below, t2 = t1 + h + g;
-      panels = [ { l:m, r:vw-m, t:t1, b:t1+h }, { l:m, r:vw-m, t:t2, b:t2+h } ];
-    } else {
-      w = colR(2) - colL(0);
-      var bot = vh - m;
-      h = Math.min(w/1.6, bot - below);
-      panels = [ { l:colL(0), r:colR(2), t:bot-h, b:bot }, { l:colL(3), r:colR(5), t:bot-h, b:bot } ];
-    }
-    geo = { vw:vw, vh:vh, m:m, g:g, c:c, H:H, A:A, B:B, cols:cols, ys:ys, R:R, cells:cells, panels:panels, mobile:mobile, hdrH:hdrH };
-    covers.forEach(function(cv, i){ var P = panels[i];
-      cv.style.left = P.l + 'px'; cv.style.top = P.t + 'px'; cv.style.width = (P.r-P.l) + 'px'; cv.style.height = (P.b-P.t) + 'px'; });
-    capsEl.forEach(function(el, i){ var P = panels[i];
-      el.style.left = P.l + 'px'; el.style.width = (P.r-P.l) + 'px'; el.style.top = P.t + 'px'; el.style.height = (P.b-P.t) + 'px'; });
-    if (typeof drawTiles === 'function') drawTiles();
-    placeMeasures();
-  }
-
-  /* riquadri: cella della griglia → pannello finale; la copertina vive nel pannello */
-  var tileState = [ { r:0, z:1.25 }, { r:0, z:1.25 } ], grow = { k:0 };
-  function drawTiles(){
-    if (!geo.panels) return;
-    tiles.forEach(function(t, i){
-      var st = tileState[i], C = geo.cells[i], P = geo.panels[i], k = grow.k;
-      var l = C.l + (P.l-C.l)*k, r = C.r + (P.r-C.r)*k, tp = C.t + (P.t-C.t)*k, bt = C.b + (P.b-C.b)*k;
-      var shown = tp + (bt-tp)*st.r;
-      t.style.clipPath = 'inset(' + tp.toFixed(1) + 'px ' + (geo.vw-r).toFixed(1) + 'px ' + (geo.vh-shown).toFixed(1) + 'px ' + l.toFixed(1) + 'px)';
-      var s = Math.max((r-l)/(P.r-P.l), (bt-tp)/(P.b-P.t)) * st.z;
-      covers[i].style.transform = 'translate(' + ((l+r)/2 - (P.l+P.r)/2).toFixed(1) + 'px,' + ((tp+bt)/2 - (P.t+P.b)/2).toFixed(1) + 'px) scale(' + s.toFixed(4) + ')';
-    });
-  }
-
-  function placeMeasures(){
-    var box = document.getElementById('measures'), h = '';
-    for (var i=0;i<6;i++){
-      h += '<span style="left:' + (geo.cols[i*2]+6) + 'px;top:' + (geo.ys[0]+8) + 'px">' + ('0'+(i+1)) + '</span>';
-    }
-    h += '<span style="left:' + (geo.cols[1]+4) + 'px;top:' + (geo.ys[3]+geo.R*.5-6) + 'px">← ' + geo.g + ' →</span>';
-    if (!geo.mobile) h += '<span style="right:' + geo.m + 'px;top:' + (geo.ys[0]+8) + 'px;text-align:right">c ' + Math.round(geo.c) + ' · g ' + geo.g + ' · m ' + geo.m + '</span>';
-    for (var k=1;k<8;k++) h += '<span style="left:' + (geo.mobile ? 2 : 14) + 'px;top:' + (geo.ys[k]+4) + 'px">' + Math.round(geo.ys[k]) + '</span>';
-    box.innerHTML = h;
-  }
-
-  /* barre */
-  var bars = [];
-  for (var bi=0; bi<NALL; bi++){ var d = document.createElement('i'); d.className='bar'; barsEl.appendChild(d); bars.push(d); }
-
-  /* parole del titolo */
+  /* ── menu del telefono ── */
   (function(){
-    var h = document.getElementById('setline-h');
-    function wrap(node){
-      Array.prototype.slice.call(node.childNodes).forEach(function(n){
-        if (n.nodeType === 3){
-          var frag = document.createDocumentFragment();
-          n.textContent.split(/(\s+)/).forEach(function(p){
-            if (!p) return;
-            if (/^\s+$/.test(p)){ frag.appendChild(document.createTextNode(' ')); return; }
-            var w = document.createElement('span'); w.className = 'w';
-            var i = document.createElement('i'); i.textContent = p; w.appendChild(i); frag.appendChild(w);
-          });
-          node.replaceChild(frag, n);
-        } else if (n.nodeType === 1) wrap(n);
-      });
-    }
-    wrap(h);
-    document.querySelectorAll('.reel-t').forEach(wrap);
-  })();
-
-  computeGeo();
-  function setA(){ bars.forEach(function(el,i){ var a = geo.A[i];
-    gsap.set(el, { x:a.x, y:a.y, rotation:a.r, scaleX:a.sx, scaleY:a.sy, opacity:1 }); }); }
-
-  var T3 = .34;   // parte del pin dedicata alla scena 3D
-  var CHS = [['Materia',0],['Nome',.2],['Griglia',.37],['Testo',.6],['Forma',.69],['Pagina',.84]];
-  var scene3d = null, glEl = document.getElementById('gl');
-
-  /* filo di avanzamento: tacche dei capitoli, tratto percorso in vermiglio, si clicca e si trascina */
-  (function(){
-    var rail = document.getElementById('rail'), cks = [], raf = 0, drag = false;
-    CHS.forEach(function(c, i){
-      var k = document.createElement('i'); k.className = 'ck'; k.style.top = (c[1]*100) + '%';
-      k.innerHTML = '<span>0' + (i+1) + '</span>'; rail.appendChild(k); cks.push(k);
-    });
-    function max(){ return Math.max(1, document.documentElement.scrollHeight - innerHeight); }
-    function paint(){
-      raf = 0;
-      var M = max(), p = Math.min(1, Math.max(0, scrollY/M));
-      rail.style.setProperty('--rp', p.toFixed(4));
-      rail.style.setProperty('--rh', rail.clientHeight + 'px');
-      // i capitoli sono del film: la loro posizione sul filo dipende da dove finisce il film
-      var fe = filmST ? filmST.end : M, fp = scrollY/Math.max(1, fe);
-      var c = 0; for (var i = 0; i < CHS.length; i++) if (fp >= CHS[i][1] - .001) c = i;
-      cks.forEach(function(k, i){ k.classList.toggle('on', i === c); k.style.top = (CHS[i][1]*Math.min(1, fe/M)*100) + '%'; });
-    }
-    function ask(){ if (!raf) raf = requestAnimationFrame(paint); }
-    function go(ev, smooth){
-      var r = rail.getBoundingClientRect(), y = Math.min(1, Math.max(0, (ev.clientY - r.top)/r.height))*max();
-      if (lenis) lenis.scrollTo(y, smooth ? { duration:1.2 } : { immediate:true }); else window.scrollTo(0, y);
-    }
-    rail.addEventListener('pointerdown', function(ev){ drag = true; rail.classList.add('drag'); rail.setPointerCapture(ev.pointerId); go(ev, true); });
-    rail.addEventListener('pointermove', function(ev){ if (drag) go(ev, false); });
-    ['pointerup','pointercancel'].forEach(function(t){ rail.addEventListener(t, function(){ drag = false; rail.classList.remove('drag'); }); });
-    window.addEventListener('scroll', ask, { passive:true });
-    window.addEventListener('resize', ask);
-    paint(); setTimeout(paint, 500);
-  })();
-  // passaggio di mano: la scritta 3D allineata lascia il posto alle aste HTML
-  function swap3d(){
-    if (!scene3d) return;
-    var b = gsap.utils.clamp(0, 1, (filmP - (T3 - .02))/.02), g = 1 - gsap.utils.clamp(0, 1, (filmP - (T3 - .005))/.025);
-    barsEl.style.opacity = b; barsEl.style.visibility = b > 0 ? 'visible' : 'hidden';
-    glEl.style.visibility = g > 0 ? 'visible' : 'hidden'; glEl.style.opacity = g;
-    scene3d.setProgress(gsap.utils.clamp(0, 1, filmP/T3));   // dalla posizione, non da una callback: niente stati vecchi
-    scene3d.setActive(filmP < T3 && !document.hidden && !RM);
-  }
-  try {
-    if (window.THREE && window.NemesiScene)
-      scene3d = NemesiScene.create(document.getElementById('gl'), function(){ return geo; }, { mobile: innerWidth < 700 });
-  } catch (err){ console.warn('scena 3D non disponibile', err); }
-  window.__scene = scene3d;   // per le verifiche
-  if (!scene3d){ barsEl.style.visibility = 'visible'; document.getElementById('gl').style.display = 'none'; }
-  var chEl = document.getElementById('ch'), roEl = document.getElementById('readout');
-  var filmP = 0, filmST = null, reelST = {};
-  /* navbar (come Rain Ink): panino su telefono, più bassa scorrendo, luce che corre sul bordo, voce della sezione in rilievo */
-  var navLinks = Array.prototype.slice.call(hdr.querySelectorAll('.links a'));
-  var appEl = document.getElementById('app'), gioEl = document.getElementById('giochi');
-  (function(){
-    var slab = hdr.querySelector('.slab'), burger = hdr.querySelector('.burger');
-    function setOpen(o){
-      hdr.classList.toggle('open', o);
-      burger.setAttribute('aria-expanded', String(o));
-      burger.setAttribute('aria-label', o ? 'Chiudi il menu' : 'Apri il menu');
-    }
+    var burger = hdr.querySelector('.burger');
+    function setOpen(o){ hdr.classList.toggle('open', o); burger.setAttribute('aria-expanded', String(o)); burger.setAttribute('aria-label', o ? 'Chiudi il menu' : 'Apri il menu'); }
     burger.addEventListener('click', function(){ setOpen(!hdr.classList.contains('open')); });
-    navLinks.forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
+    hdr.querySelectorAll('.links a').forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
     document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && hdr.classList.contains('open')){ setOpen(false); burger.focus(); } });
-    document.addEventListener('click', function(e){ if (!hdr.contains(e.target)) setOpen(false); });
-    var NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('class', 'nav-giro'); svg.setAttribute('aria-hidden', 'true');
-    ['alone', 'luce'].forEach(function(c){
-      var r = document.createElementNS(NS, 'rect');
-      r.setAttribute('class', c); r.setAttribute('x', '0'); r.setAttribute('y', '0');
-      r.setAttribute('width', '100%'); r.setAttribute('height', '100%');
-      r.setAttribute('rx', '16'); r.setAttribute('pathLength', '1000');
-      svg.appendChild(r);
-    });
-    slab.insertBefore(svg, slab.firstChild);
+    document.addEventListener('click', function(e){ if (hdr.classList.contains('open') && !hdr.contains(e.target)) setOpen(false); });
   })();
-  function headerTheme(){
-    hdr.classList.toggle('small', scrollY > 40);
-    var vh = innerHeight, cur = null;
-    if (filmST && scrollY >= filmST.end - vh*.5) cur = 'siti';
-    if (appEl.getBoundingClientRect().top < vh*.45) cur = 'app';
-    if (gioEl.getBoundingClientRect().top < vh*.45 || scrollY >= document.documentElement.scrollHeight - vh - 4) cur = 'giochi';
-    navLinks.forEach(function(a){ if (a.getAttribute('data-s') === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
-  }
-  window.addEventListener('scroll', headerTheme, { passive:true });
 
-  /* ── reduced motion: niente film, solo la prima inquadratura ── */
-  if (RM){
-    setA();
-    if (scene3d){ scene3d.setProgress(.12); window.addEventListener('resize', function(){ scene3d.resize(); }); }
-    window.addEventListener('resize', function(){ computeGeo(); setA(); });
-    headerTheme();
-    window.__ready = true;
-    return;
+  function fontsReady(){ return document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve(); }
+  function statica(){ d.classList.remove('film', 'avvio', 'pronto'); fontsReady().then(function(){ window.__ready = true; }); }
+  if (!FILM || !window.Lastra || !window.gsap){ statica(); return; }
+
+  var S;
+  try { S = Lastra.create(document.getElementById('gl')); }
+  catch (err){ statica(); return; }
+  var K = S.K;
+
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize: true });
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  var spacer = document.getElementById('film'), VH = innerHeight;
+  function setSpacer(){ VH = innerHeight; spacer.style.height = Math.round(K.end * VH + VH) + 'px'; }
+  setSpacer();
+
+  /* ── titoli: parole in maschere, con il testo intero lasciato a chi legge con la sintesi vocale ── */
+  document.querySelectorAll('.titolo').forEach(function(h){
+    var full = h.textContent.replace(/\s+/g, ' ').trim(), vis = document.createElement('span');
+    vis.setAttribute('aria-hidden', 'true');
+    Array.prototype.slice.call(h.childNodes).forEach(function(n){
+      var host = vis;
+      if (n.nodeType === 1){ host = document.createElement(n.nodeName.toLowerCase()); vis.appendChild(host); }
+      n.textContent.split(/(\s+)/).forEach(function(w){
+        if (!w) return;
+        if (/^\s+$/.test(w)){ host.appendChild(document.createTextNode(' ')); return; }
+        var o = document.createElement('span'), i = document.createElement('span');
+        o.className = 'w'; i.className = 'wi'; i.textContent = w; o.appendChild(i); host.appendChild(o);
+      });
+    });
+    var sr = document.createElement('span'); sr.className = 'vh'; sr.textContent = full;
+    h.textContent = ''; h.appendChild(sr); h.appendChild(vis);
+  });
+
+  /* ── scorrimento morbido ── */
+  var lenis = new Lenis({ lerp: .07, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(function(t){ lenis.raf(t * 1000); });
+  gsap.ticker.lagSmoothing(0);
+
+  /* ── timeline madre: la sua durata è il film in «vh» (1 = un'altezza di finestra di scorrimento).
+     Le aste dell'apertura occupano i primi O vh: tutti i tempi dopo sono «O + tempo del film» ── */
+  var O = K.o;
+  var F = { p: 0 };
+  var master = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
+  master.to(F, { p: K.end, duration: K.end }, 0);
+  master.fromTo('.angoli', { opacity: 1 }, { opacity: 0, duration: .3 }, .45);
+
+  function capitolo(sel, tin, tout){
+    var words = document.querySelectorAll(sel + ' .wi'), kick = document.querySelector(sel + ' .kicker');
+    master.fromTo(kick, { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: .22, ease: 'power2.out' }, tin);
+    master.fromTo(words, { yPercent: 112 }, { yPercent: 0, duration: .3, stagger: .022, ease: 'power3.out' }, tin + .04);
+    if (tout != null){
+      master.to(kick, { opacity: 0, x: -8, duration: .16, ease: 'power2.in' }, tout);
+      master.to(words, { yPercent: -112, duration: .2, stagger: .012, ease: 'power2.in' }, tout);
+    }
+  }
+  capitolo('#siti', O + .82, O + 3.28);
+  capitolo('#app', O + 3.92, O + 5.38);
+  capitolo('#giochi', O + 5.98, O + 9.32);
+
+  function didascalia(i, tin, tout){
+    var el = document.querySelector('.didascalia[data-i="' + i + '"] .d-in');
+    master.fromTo(el, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .18, ease: 'power2.out' }, tin);
+    master.to(el, { opacity: 0, y: -10, duration: .12, ease: 'power2.in' }, tout);
+  }
+  didascalia(0, O + 1.16, O + 1.9); didascalia(1, O + 2.62, O + 3.24);
+  didascalia(2, O + 4.4, O + 5.34); didascalia(3, O + 4.5, O + 5.36);
+  didascalia(4, O + 6.42, O + 7.06); didascalia(5, O + 8.62, O + 9.36);
+
+  var fineIn = document.getElementById('fine-in');
+  master.fromTo(fineIn, { opacity: 0 }, { opacity: 1, duration: .3, ease: 'power2.out' }, O + 10.12);
+  master.fromTo(fineIn.querySelectorAll('.wi'), { yPercent: 112 }, { yPercent: 0, duration: .3, stagger: .025, ease: 'power3.out' }, O + 10.12);
+  master.fromTo(fineIn.querySelectorAll('.scrivimi, .email'), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .22, stagger: .06, ease: 'power2.out' }, O + 10.3);
+  master.fromTo('#piede', { opacity: 0 }, { opacity: 1, duration: .2 }, O + 10.4);
+
+  var st = ScrollTrigger.create({ trigger: spacer, start: 'top top', end: 'bottom bottom', scrub: 1, animation: master, invalidateOnRefresh: true });
+  /* dopo ogni ricalcolo la timeline perde gli stati iniziali dei fromTo che non sono ancora partiti: la si fa passare dalla fine e la si riporta dov'era */
+  function ridisegna(){ var pr = master.progress(); master.progress(1).progress(pr); }
+  ridisegna();
+  ScrollTrigger.addEventListener('refresh', ridisegna);
+
+  /* ── collegamenti cliccabili deformati sulle facce, didascalie sotto le facce ── */
+  var anchors = [], caps = [], capW = [];
+  document.querySelectorAll('.schermo').forEach(function(a){ anchors[+a.dataset.i] = a; });
+  document.querySelectorAll('.didascalia').forEach(function(c){ caps[+c.dataset.i] = c; });
+  function sq2quad(q){
+    var x0 = q[0], y0 = q[1], x1 = q[2], y1 = q[3], x2 = q[4], y2 = q[5], x3 = q[6], y3 = q[7];
+    var dx1 = x1 - x2, dx2 = x3 - x2, dx3 = x0 - x1 + x2 - x3, dy1 = y1 - y2, dy2 = y3 - y2, dy3 = y0 - y1 + y2 - y3;
+    var det = dx1 * dy2 - dx2 * dy1; if (Math.abs(det) < 1e-6) return null;
+    var g = (dx3 * dy2 - dx2 * dy3) / det, h = (dx1 * dy3 - dx3 * dy1) / det;
+    var a = x1 - x0 + g * x1, b = x3 - x0 + h * x3, c = x0, dd = y1 - y0 + g * y1, e = y3 - y0 + h * y3, f = y0, BW = 800, BH = 450;
+    return 'matrix3d(' + [a / BW, dd / BW, 0, g / BW, b / BH, e / BH, 0, h / BH, 0, 0, 1, 0, c, f, 0, 1].map(function(v){ return +v.toFixed(6); }).join(',') + ')';
+  }
+  var fineQ = null, fineSize = [0, 0];
+  function place(){
+    var hs = S.hits(), seen = {};
+    for (var k = 0; k < hs.length; k++){
+      var h = hs[k], a = anchors[h.i], m = sq2quad(h.q); if (!m) continue;
+      seen[h.i] = 1; a.style.transform = m; if (!a.classList.contains('on')) a.classList.add('on');
+      var c = caps[h.i], w = Math.round(Math.hypot(h.q[4] - h.q[6], h.q[5] - h.q[7]));
+      c.style.transform = 'translate3d(' + Math.round(h.q[6]) + 'px,' + Math.round(h.q[7] + 16) + 'px,0)';
+      if (capW[h.i] !== w){ capW[h.i] = w; c.style.width = w + 'px'; }
+    }
+    for (var i = 0; i < anchors.length; i++) if (!seen[i] && anchors[i].classList.contains('on')){ anchors[i].classList.remove('on'); S.hover(i, false); }
+    var q = S.emptyFace();
+    if (q){
+      if (!fineSize[0]){ fineSize = [fineIn.offsetWidth, fineIn.offsetHeight]; }
+      var cx = (q[0] + q[2] + q[4] + q[6]) / 4, cy = (q[1] + q[3] + q[5] + q[7]) / 4;
+      fineIn.style.transform = 'translate3d(' + Math.round(cx - fineSize[0] / 2) + 'px,' + Math.round(cy - fineSize[1] / 2) + 'px,0)';
+      fineIn.classList.add('on');
+    } else fineIn.classList.remove('on');
+  }
+  anchors.forEach(function(a, i){
+    a.addEventListener('mouseenter', function(){ S.hover(i, true); });
+    a.addEventListener('mouseleave', function(){ S.hover(i, false); });
+    a.addEventListener('focus', function(){ S.hover(i, true); if (!a.classList.contains('on')) vai(LAVORO[i]); });
+    a.addEventListener('blur', function(){ S.hover(i, false); });
+  });
+  caps.forEach(function(c, i){ var az = c.querySelector('.azione');
+    az.addEventListener('mouseenter', function(){ S.hover(i, true); }); az.addEventListener('mouseleave', function(){ S.hover(i, false); }); });
+  if (matchMedia('(hover:hover) and (pointer:fine)').matches){
+    addEventListener('pointermove', function(e){ S.pointer(e.clientX / innerWidth * 2 - 1, e.clientY / innerHeight * 2 - 1); }, { passive: true });
   }
 
-  /* ── smooth scroll ── */
-  var lenis = null;
-  if (JUMP === null){
-    lenis = new Lenis({ lerp:.07, smoothWheel:true });
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add(function(t){ lenis.raf(t*1000); });
-    gsap.ticker.lagSmoothing(0);
+  /* ── navigazione: ogni voce porta al momento giusto del film ──
+     Un salto lungo non fa correre il film (giri e aste a tutta velocità sembrano a scatti):
+     un attimo di nero, si riparte poco prima della tappa e ci si arriva scorrendo piano. */
+  var LAVORO = [1.55, 2.95, 4.85, 4.85, 6.7, 9.05].map(function(v){ return O + v; });
+  var TAPPE = { top: 0, siti: O + 1.55, app: O + 4.85, giochi: O + 6.7, scrivimi: K.end };
+  var taglio = document.getElementById('taglio'), viaggio = null, GLIDE = .55;
+  function easeIO(t){ return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function easeOut(t){ return 1 - Math.pow(1 - t, 3); }
+  function vai(p){
+    var y = p * VH, dist = Math.abs(y - lenis.scroll) / VH;
+    if (viaggio){ viaggio.p = p; return; }                        // durante il nero vale l'ultima voce scelta
+    if (dist < 1.4){ lenis.scrollTo(y, { duration: 1 + dist * .5, easing: easeIO, force: true }); return; }
+    viaggio = { p: p };
+    gsap.to(taglio, { opacity: 1, duration: .34, ease: 'power2.in', overwrite: true, onComplete: function(){
+      var dest = viaggio.p, from = Math.max(0, dest - GLIDE); viaggio = null;
+      salta(from * VH);
+      if (dest > from) lenis.scrollTo(dest * VH, { duration: 1.4, easing: easeOut, force: true });
+      gsap.to(taglio, { opacity: 0, duration: .8, ease: 'power2.out', delay: .05, overwrite: true });
+    } });
   }
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
-    a.addEventListener('click', function(e){
-      var id = a.getAttribute('href');
-      var target = id === '#top' ? 0 : id === '#siti' ? (filmST ? filmST.end : null) : reelST[id] ? reelST[id].end : document.querySelector(id);   // App e Giochi: alla fine della loro scena
-      if (target === null) return;
-      e.preventDefault();
-      var y = typeof target === 'number' ? target : target.getBoundingClientRect().top + scrollY - 40;   // le sezioni partono appena sotto la navbar
-      if (lenis) lenis.scrollTo(y, { duration:1.6 }); else window.scrollTo(0, y);
-    });
+    var id = a.getAttribute('href').slice(1);
+    if (!(id in TAPPE)) return;
+    a.addEventListener('click', function(e){ e.preventDefault(); vai(TAPPE[id]); });
   });
-
-  ScrollTrigger.addEventListener('refreshInit', computeGeo);
-
-  /* ── 1. il film (scena fissata) ── */
-  var tl = gsap.timeline({ defaults:{ ease:'none' } });
-  // tutta la timeline dura 1 = progresso del pin
-  tl.fromTo(bars,
-    { x:function(i){ return geo.A[i].x; }, y:function(i){ return geo.A[i].y; }, rotation:function(i){ return geo.A[i].r; },
-      scaleX:function(i){ return geo.A[i].sx; }, scaleY:function(i){ return geo.A[i].sy; } },
-    { x:function(i){ return geo.B[i].x; }, y:function(i){ return geo.B[i].y; }, rotation:function(i){ return geo.B[i].r; },
-      scaleX:function(i){ return geo.B[i].sx; }, scaleY:function(i){ return geo.B[i].sy; },
-      duration:.27, ease:'sine.inOut', stagger:{ each:.002, from:'start' } }, .06);   // curva dolce e lunga: niente scatti a metà corsa
-  var barsN = bars.slice(0, NB), barsW = bars.slice(NB);
-  tl.fromTo(barsN, { opacity:1 }, { opacity:.15, duration:.08, ease:'power1.inOut' }, .39);
-  tl.fromTo(barsW, { opacity:1 }, { opacity:0, duration:.08, ease:'power1.inOut' }, .39);   // sopra linee già presenti: spariscono per non raddoppiarle
-  tl.fromTo('#measures', { autoAlpha:0 }, { autoAlpha:1, duration:.05 }, .41);
-  tl.set('#setline', { autoAlpha:1 }, .46);
-  tl.fromTo('#setline .mono', { autoAlpha:0 }, { autoAlpha:1, duration:.04 }, .46);
-  tl.fromTo('#setline .w i', { yPercent:115 }, { yPercent:0, duration:.07, ease:'power3.out', stagger:.012 }, .47);
-  tileState.forEach(function(st, i){
-    tl.fromTo(st, { r:0, z:1.25 }, { r:1, z:1, duration:.1, ease:'power3.out', onUpdate:drawTiles }, .64 + i*.025);
-  });
-  // l'indice: i due lavori si allargano fianco a fianco, con il nome sotto
-  tl.to('#measures', { autoAlpha:0, duration:.05 }, .79);
-  tl.fromTo(grow, { k:0 }, { k:1, duration:.15, ease:'power3.inOut', onUpdate:drawTiles }, .8);
-  tl.to(barsN, { opacity:.06, duration:.08 }, .82);
-  tl.fromTo('.ruler', { autoAlpha:1 }, { autoAlpha:0, duration:.06, immediateRender:false }, .8);
-  tl.fromTo(capsEl, { autoAlpha:0 }, { autoAlpha:1, duration:.02 }, .93);   // i pannelli diventano link quando sono al loro posto
-  tl.set({}, {}, 1);
-
-  // timeline madre: prima la materia (3D), poi il nome e la pagina
-  var master = gsap.timeline({ defaults:{ ease:'none' } });
-  master.fromTo(['#hero-copy', '#hud'], { autoAlpha:1, y:0 }, { autoAlpha:0, y:-30, duration:.05, ease:'power2.in', immediateRender:false }, .03);
-  master.fromTo('#hero-scrim', { autoAlpha:1 }, { autoAlpha:0, duration:.1, immediateRender:false }, .05);
-  master.add(tl.duration(1 - T3), T3);
-  master.set({}, {}, 1);
-
-  filmST = ScrollTrigger.create({
-    trigger:'#film', start:'top top', end:function(){ return '+=' + Math.round(innerHeight*6.8); },
-    pin:'#stage', pinSpacing:true, scrub:1, animation:master, invalidateOnRefresh:true,   // scrub 1: l'animazione insegue lo scorrimento con dolcezza
-    onRefresh: function(self){ setA(); drawTiles(); if (scene3d){ scene3d.resize(); filmP = self.progress; swap3d(); } },
-    onUpdate:function(self){
-      filmP = self.progress;
-      swap3d();
-      stage.style.setProperty('--p', filmP.toFixed(4));
-      var c = 0; for (var ci = 0; ci < CHS.length; ci++) if (filmP >= CHS[ci][1]) c = ci;
-      var txt = '<b>0' + (c+1) + '</b> — ' + CHS[c][0];
-      if (chEl._t !== txt){ chEl.innerHTML = txt; chEl._t = txt; }
-      roEl.textContent = ('0000' + Math.round(scrollY)).slice(-4);
-      headerTheme();
-    }
-  });
-
-  /* ── 2. App e Giochi: due scene fissate, stessa grammatica del film ──
-     le linee della griglia si tracciano, sale il titolo, i due riquadri arrivano e si posano affiancati.
-     «apri»: si aprono dall'alto dentro una cella e poi si allargano; «pellicola»: entrano di lato come una pellicola. */
-  document.querySelectorAll('.reel').forEach(function(reel){
-    var st = reel.querySelector('.reel-stage'), box = reel.querySelector('.reel-lines');
-    var vl = [], hl = [], k;
-    for (k = 0; k < 12; k++){ var v = document.createElement('i'); v.style.width = '1px'; v.style.transformOrigin = '50% 0'; box.appendChild(v); vl.push(v); }
-    for (k = 0; k < 9; k++){ var h = document.createElement('i'); h.style.height = '1px'; h.style.transformOrigin = '0 50%'; box.appendChild(h); hl.push(h); }
-    function place(){   // stessa griglia a 6 colonne del film
-      var w = st.clientWidth, H = st.clientHeight, mob = w < 700, m = mob ? 16 : 48, g = mob ? 12 : 24, hd = mob ? 60 : 72;
-      var c = (w - 2*m - 5*g)/6;
-      for (var i = 0; i < 6; i++){ var L = m + i*(c+g);
-        [L, L + c].forEach(function(x, j){ var e = vl[i*2 + j]; e.style.left = Math.round(x) + 'px'; e.style.top = '0'; e.style.height = H + 'px'; }); }
-      hl.forEach(function(e, r){ e.style.left = '0'; e.style.width = w + 'px'; e.style.top = Math.round(hd + r*(H - hd)/8) + 'px'; });
-    }
-    place(); ScrollTrigger.addEventListener('refreshInit', place);
-    var cvs = reel.querySelectorAll('.work-cv'), ims = reel.querySelectorAll('.work-im'), zooms = reel.querySelectorAll('.work-zoom');
-    var t = gsap.timeline({ defaults:{ ease:'none' } });
-    t.fromTo(vl, { scaleY:0 }, { scaleY:1, duration:.24, ease:'sine.inOut', stagger:.012 }, 0);
-    t.fromTo(hl, { scaleX:0 }, { scaleX:1, duration:.24, ease:'sine.inOut', stagger:.012 }, .04);
-    t.fromTo(reel.querySelector('.reel-head .mono'), { autoAlpha:0 }, { autoAlpha:1, duration:.05 }, .16);
-    t.fromTo(reel.querySelectorAll('.reel-t .w i'), { yPercent:115 }, { yPercent:0, duration:.12, ease:'power3.out', stagger:.02 }, .18);
-    Array.prototype.forEach.call(cvs, function(cv, i){
-      if (reel.getAttribute('data-mode') === 'pellicola'){
-        var dir = i ? 1 : -1, at = .32 + i*.06;
-        t.fromTo(cv, { x:function(){ return dir*innerWidth*.75; }, rotation:dir*5, scale:.82 }, { x:0, rotation:0, scale:1, duration:.45, ease:'power3.out' }, at);
-        t.fromTo(zooms[i], { scale:1.18, xPercent:dir*6 }, { scale:1, xPercent:0, duration:.5, ease:'sine.out' }, at);
-      } else {
-        var at2 = .34 + i*.05;
-        t.fromTo(ims[i], { clipPath:'inset(100% 0% 0% 0%)' }, { clipPath:'inset(0% 0% 0% 0%)', duration:.2, ease:'power3.out' }, at2);
-        t.fromTo(zooms[i], { scale:1.3 }, { scale:1, duration:.5, ease:'sine.out' }, at2);
-        t.fromTo(cv, { scale:.66, xPercent:function(){ return innerWidth < 700 ? 0 : (i ? -14 : 14); } }, { scale:1, xPercent:0, duration:.28, ease:'power2.inOut' }, .6);
-      }
-    });
-    t.fromTo(reel.querySelectorAll('.work-cap'), { autoAlpha:0, y:12 }, { autoAlpha:1, y:0, duration:.08, stagger:.03 }, .84);
-    t.set({}, {}, 1);
-    reelST['#' + reel.id] = ScrollTrigger.create({
-      trigger:reel, start:'top top', end:function(){ return '+=' + Math.round(innerHeight*2.4); },
-      pin:st, pinSpacing:true, scrub:1, animation:t, invalidateOnRefresh:true
-    });
-  });
-
-  /* ── 3. ambientali (dopo il pin) ── */
-  ScrollTrigger.create({ start:0, end:'max', onUpdate:headerTheme });
-
-
-  /* ── apertura: prima la misura, poi il nome tracciato asta per asta ── */
-  var intro = null;
-  function playIntro(){
-    var root = document.documentElement;
-    var ruler = stage.querySelector('.ruler');
-    var lines = document.querySelectorAll('#hero-copy h1 .ln > *');
-    var navItems = document.querySelector('#hdr .slab');
-    var iv = { v:0 };
-    intro = gsap.timeline({ defaults:{ ease:'power4.out' }, onComplete:endIntro });
-    window.__intro = intro;   // per le verifiche
-    // stati iniziali scritti inline, poi via la classe: niente lampi
-    gsap.set(ruler, { clipPath:'inset(0% 100% 0% 0%)' });
-    gsap.set(lines, { yPercent:110 });
-    gsap.set(navItems, { autoAlpha:0, y:-10 });
-    gsap.set(['#gl', '#hud'], { autoAlpha:0 });
-    root.classList.remove('intro');
-
-    intro.to('#gl', { autoAlpha:1, duration:1.6, ease:'power2.out' }, 0);
-    intro.fromTo(iv, { v:0 }, { v:1, duration:2.4, ease:'power3.out', onUpdate:function(){ if (scene3d) scene3d.setIntro(iv.v); } }, 0);
-    intro.to(ruler, { clipPath:'inset(0% 0% 0% 0%)', duration:1 }, .2);
-    intro.to(lines, { yPercent:0, duration:1, stagger:.12 }, .6);
-    intro.to('#hud', { autoAlpha:1, duration:.8, ease:'power2.out' }, .9);
-    intro.to(navItems, { autoAlpha:1, y:0, duration:.7 }, .8);
-    // chi scorre o tocca un tasto non aspetta
-    ['wheel','touchstart','keydown','pointerdown'].forEach(function(t){ window.addEventListener(t, skipIntro, { passive:true, once:true }); });
+  var navLinks = hdr.querySelectorAll('.links a');
+  var CAP = [['siti', O + .9, O + 3.5], ['app', O + 3.5, O + 5.65], ['giochi', O + 5.65, O + 9.5]], current = '';
+  function navState(p){
+    var cur = '';
+    for (var i = 0; i < CAP.length; i++) if (p >= CAP[i][1] && p < CAP[i][2]) cur = CAP[i][0];
+    if (cur === current) return; current = cur;
+    navLinks.forEach(function(a){ if (a.dataset.s === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
   }
-  function skipIntro(){ if (intro && intro.isActive()) intro.progress(1); }
-  function endIntro(){
-    ['wheel','touchstart','keydown','pointerdown'].forEach(function(t){ window.removeEventListener(t, skipIntro); });
-    gsap.set('.ruler', { clearProps:'clipPath' });
-    intro = null;
-  }
-  ScrollTrigger.addEventListener('refreshInit', function(){ if (intro) intro.progress(1); });
 
-  /* ── contratto dev ── */
-  var imgs = Array.prototype.slice.call(document.querySelectorAll('.tile img'));
-  Promise.all([document.fonts.ready].concat(imgs.map(function(im){ return im.decode ? im.decode().catch(function(){}) : 0; }))).then(function(){
+  /* ── filo di avanzamento a destra ── */
+  var rail = document.getElementById('rail'), fill = rail.querySelector('.fill'), ticks = [];
+  [['Siti', TAPPE.siti], ['App', TAPPE.app], ['Giochi', TAPPE.giochi], ['Scrivimi', K.end]].forEach(function(t){
+    var b = document.createElement('button'); b.type = 'button'; b.tabIndex = -1; b.style.top = (t[1] / K.end * 100) + '%';
+    b.innerHTML = '<span class="mono">' + t[0] + '</span>'; b.addEventListener('click', function(){ vai(t[1]); });
+    rail.appendChild(b); ticks.push([b, t[1]]);
+  });
+
+  /* ── ogni fotogramma: scena, collegamenti, barra ── */
+  var renderOn = true;
+  gsap.ticker.add(function(){
+    if (!renderOn) return;
+    S.set(F.p);
+    S.frame(gsap.ticker.time);
+    place();
+    navState(F.p);
+    fill.style.transform = 'scaleY(' + (F.p / K.end).toFixed(4) + ')';
+    for (var i = 0; i < ticks.length; i++) ticks[i][0].classList.toggle('on', F.p >= ticks[i][1] - .35);
+  });
+  document.addEventListener('visibilitychange', function(){ renderOn = !document.hidden; });
+
+  var rz;
+  addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(function(){
+    setSpacer(); S.resize(); fineSize = [0, 0]; capW = []; ScrollTrigger.refresh();
+  }, 160); });
+
+  /* ── atterraggio diretto (?jump=y, o un indirizzo con #capitolo) e contratto di verifica ── */
+  function salta(y){
+    lenis.scrollTo(y, { immediate: true, force: true });
+    ScrollTrigger.update();
+    var tw = st.getTween && st.getTween(); if (tw) tw.progress(1);
+    master.progress(st.progress);
+  }
+  window.__S = S; window.__go = function(y){ salta(y); return new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); }); };
+
+  /* immagini: da file locale (doppio clic) le texture vengono dai dati incorporati, altrimenti dai JPG */
+  var NOMI = ['rainink', 'olimp', 'parola', 'foglio', 'metalgear', 'radente'];
+  function urls(){
+    if (location.protocol === 'file:' && window.LAVORI_DATI) return NOMI.map(function(n){ return window.LAVORI_DATI[n]; });
+    return NOMI.map(function(n){ return 'images/lavori/' + n + '.jpg'; });
+  }
+  function datiLocali(){
+    return new Promise(function(res){
+      if (location.protocol !== 'file:') return res();
+      var s = document.createElement('script'); s.src = 'js/lavori-dati.js'; s.onload = s.onerror = function(){ res(); }; document.head.appendChild(s);
+    });
+  }
+  var pre = document.getElementById('pre'), bar = pre.querySelector('i');
+  var avvio = d.classList.contains('avvio') && !location.hash;
+  if (avvio){ S.ignite(0); lenis.stop(); }
+  datiLocali().then(function(){
+    return Promise.all([S.load(urls(), function(v){ if (avvio) gsap.to(bar, { scaleX: v * .92, duration: .35, ease: 'power2.out' }); }), fontsReady()]);
+  }).then(function(){
     ScrollTrigger.refresh();
-    if (JUMP !== null){
-      window.scrollTo(0, +JUMP || 0);
-      ScrollTrigger.update();
-      master.progress(filmST.progress); filmP = filmST.progress; swap3d();
-      }
-    headerTheme();
-    filmP = filmST.progress; swap3d();
-    document.addEventListener('visibilitychange', function(){ if (scene3d) scene3d.setActive(!document.hidden && filmP < T3); });
-    if (JUMP === null && scrollY < 10) playIntro();
-    else document.documentElement.classList.remove('intro');
-    requestAnimationFrame(function(){ requestAnimationFrame(function(){ window.__ready = true; }); });
+    d.classList.add('pronto');
+    if (JUMP !== null){ salta(+JUMP || 0); }
+    else if (location.hash && (location.hash.slice(1) in TAPPE)){ salta(TAPPE[location.hash.slice(1)] * VH); }
+    if (!avvio){ requestAnimationFrame(function(){ requestAnimationFrame(function(){ window.__ready = true; }); }); return; }
+    var IGN = { v: 0 }; gsap.killTweensOf(bar);
+    var intro = gsap.timeline({ onComplete: function(){ d.classList.remove('avvio'); lenis.start(); window.__ready = true; } });
+    /* le aste si accendono una dopo l'altra, poi scende la barra con il logo */
+    intro.to(bar, { scaleX: 1, duration: .3, ease: 'power2.out' })
+      .to(pre, { opacity: 0, duration: .45, ease: 'power1.out' }, '+=.05')
+      .to(IGN, { v: 1, duration: 1.8, ease: 'power1.inOut', onUpdate: function(){ S.ignite(IGN.v); } }, '<.1')
+      .fromTo(hdr, { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', clearProps: 'transform' }, '<.8')
+      .fromTo('.angolo', { opacity: 0 }, { opacity: 1, duration: .8, ease: 'power1.out' }, '<.2');
+    window.__intro = intro;
   });
-
-  /* misuratore di scatti: window.__jank() in console */
-  window.__jank = function(){ var last = performance.now(), max = 0, n = 0;
-    (function f(){ var t = performance.now(); max = Math.max(max, t-last); last = t;
-      if (++n % 120 === 0){ console.log('max frame', max.toFixed(1) + 'ms'); max = 0; } requestAnimationFrame(f); })(); };
 })();
 </script>
 </body>

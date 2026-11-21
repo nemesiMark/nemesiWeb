@@ -1,31 +1,72 @@
-# BRIEF — sito Nemesi (scroll-film, Corsia A puro codice)
+# BRIEF — Nemesi Web 2.0 «Dritto e rovescio»
 
-Appunti di produzione: NON è copy per il sito.
+Appunti di produzione (NON testo per il sito). Rifatto da zero il 21/11/2026 con la skill sito-film, Corsia A (solo codice).
 
-## Concept scelto: «Il nome diventa la pagina» (La Misura + jolly dello sparring)
-Vettore unico: **tutto diventa solo più ordinato/definito** (dal nome alla pagina finita).
-- Cap. 1 Linea (hero): wordmark NEMESI enorme, costruito SOLO con aste rettangolari (21 barre).
-- Cap. 2 Griglia: le aste verticali (9 + 3 diagonali raddrizzate) diventano le 12 linee di una
-  griglia a 6 colonne con canali; i 9 bracci orizzontali diventano le linee di riga. Etichette mono di misura.
-- Cap. 3 Testo: titolo si posa sulla griglia parola per parola.
-- Cap. 4 Forma: 2 riquadri-progetto (Rain Ink, Olimp) riempiono le celle (schermate vere in images/lavori/).
-- Cap. 5 Pagina: i due riquadri diventano due pannelli 16:10 affiancati (sul telefono impilati) sotto il titolo,
-  con didascalie cliccabili (aprono i siti): il film si chiude sull'indice dei lavori; sotto, per ora, solo il piè di pagina con i contatti. Il logo piccolo nell'header è lo stesso wordmark.
+## Concept scelto: «Dritto e rovescio»
+Una nemesi è il tuo opposto, e i lavori sono già coppie di opposti:
+- Siti: Rain Ink (inchiostro sulla **pelle**) e Olimp (fotografia su **carta**)
+- App: Parola (**lettere**) e Foglio (**numeri**)
+- Giochi: Metal Gear (il **piano**, 2D) e Radente (la **profondità**, 3D)
 
-## Apertura 3D (dalla 1.4)
-Prima del capitolo «Nome»: le 21 aste come travi 3D scure e lucide nel buio (luce vermiglia/ambra, braci), che si ricompongono nella scritta e diventano color carta, combaciando al pixel con le aste HTML.
-Tavolozza «Notte e vermiglio»: notte #0E0C0B, notte-2 #17130F, vermiglio #E8431C, ambra #F2A93B (nella 1.6 provata una versione più chiara, tolta nella 1.7), carta #EEEBE4. Dalla 1.20 tavolozza «Tavolo luminoso»: carta #F6F6F3, carta-2 #ECECE7, grafite #1E1F22, grafite-2 #6A6B6F, vermiglio #C9370F; niente ambra. Dalla 1.21 accento viola #6D2FE8; dalla 1.23 arancio #F07A1A (titoli #C2540A, testi piccoli #A34604), fondo grigio perla #E4E4E8, navbar avorio.
+Un solo oggetto per tutto il film: **la lastra**. È sottile e nera, laccata, con il bordo arancio acceso come le facce laterali del marchio. Ha due strati incollati.
+1. **Apertura** (dalla 2.1): nel nero ci sono le aste, cioè la lastra in vista esplosa.
+   - Sono 12 file di pezzi una sopra l'altra, che girano e rollano di continuo.
+   - Scorrendo, una fila alla volta si ferma e scende al suo posto: si compone la lastra distesa.
+   - Una riga di luce la attraversa e la salda.
+   - Il logo resta solo nella barra: Mark non vuole il logo grande al centro.
+2. La lastra si alza verso la camera e lo schermo si apre dal basso verso l'alto: Rain Ink (01). A Mark piace molto questo passaggio: va tenuto così.
+3. La lastra gira su se stessa e sul rovescio c'è Olimp (02).
+4. **App**: un altro mezzo giro, poi la lastra si sdoppia nello spessore: i due strati si separano come pagine, Parola (03) davanti e Foglio (04) sulla faccia interna.
+5. **Giochi**: gli strati si richiudono e mezzo giro porta Metal Gear (05) sulla faccia. La camera la attraversa: la faccia si sbriciola in pixel. Di là c'è la profondità, con anelli di luce (i cerchi di Radente) fino allo schermo di Radente (06).
+6. **Scrivimi**: la lastra torna da dietro la camera, la supera, gira un'ultima volta e mostra una faccia vuota. Lì sopra c'è la frase finale con il pulsante: la metà che manca è il progetto del visitatore.
 
-## Direzione artistica
-- Carta #EEEBE4 · Inchiostro #111110 · Grigio #5E5C56 · Linee rgba(17,17,16,.14) · Accento vermiglio #E0401A (solo segnali).
-- Display: Inter Tight 700 (corsivo per gli accenti) · Testo: Inter · Misure: JetBrains Mono — gli stessi caratteri di Rain Ink (dalla 1.9; 1.8 Instrument Serif/Sans; prima Bodoni Moda, Geist, Geist Mono).
-- Motto: «Niente di troppo» (Nemesi punisce l'eccesso: legame col «senza fronzoli»).
+**Vettore unico**: la camera va solo avanti. La lastra fa i suoi movimenti fisici: alzarsi, girare, sdoppiarsi, farsi attraversare, tornare.
+
+**Sparring** (sub-agent fresco). Ha bocciato i miei tre concept:
+- «Il Nastro»: un cavo decorativo tra tre fermate identiche;
+- «Le Pieghe»: tre trucchi diversi travestiti da un oggetto;
+- «Sala di proiezione»: generica.
+
+Ha proposto il jolly, adottato. Del Nastro tengo la camera che va sempre avanti e i lavori fermi e frontali. Rischio segnalato: la lastra non deve sembrare una carta da gioco. Per questo ha:
+- spessore vero con il bordo acceso;
+- lacca con riflessi che si muovono;
+- vetro sulla faccia;
+- movimenti con inerzia.
+
+## Logo
+- Mai toccare i PNG: `images/logo/nemesi-web-arancio.png` (con il motto) nell'apertura della pagina statica, `images/logo/nemesi-web-nav.png` nella barra.
+- Nella 2.0 il logo grande dell'apertura volava nella barra (regola `nav_px = 0,21833 × arancio_px + (0,52 ; −6,1)`). Dalla 2.1 il logo sta solo nella barra; quello grande rimane soltanto nella pagina statica.
+- Il marchio non si rifà in 3D: la lastra ne riprende solo la materia, cioè faccia scura e bordo arancio.
+
+## Colori (misurati sul PNG composto su nero)
+- Nero pagina `#08080A`, grafite `#17171B` / `#212126`
+- Bianco «nemesi» `#F4F3F1`; fumo (testo secondario, preso dalla faccia del nastro `#767783` e schiarito) `#8E8E99`
+- Arancio «web»:
+  - luce `#FFA54D`
+  - centro `#F56F27`
+  - ombra `#EA4006`
+  - brace `#C92C02`
+  - oro dei riflessi `#F9D377`
+- Regola dei titoli, come il logo («nemesi» bianco + «web» arancio): prima parte bianca, parte in corsivo arancio chiaro.
+
+## Caratteri (copie locali in `fonts/`, nessuna richiesta a Google)
+- Titoli: **Bodoni Moda** (variabile, dimensione ottica automatica), tondo e corsivo. È il Bodoni, carattere italiano, per un registro editoriale.
+- Testo e interfaccia: **Geist**. Etichette e numeri: **Geist Mono** (maiuscolo spaziato).
+
+## Movimento
+- Lenis (lerp .07) + ScrollTrigger con scrub 1 su un'unica timeline madre in unità «vh»; la scena 3D legge la stessa timeline.
+- Rotazioni power3.inOut con un filo di assestamento; parole dei titoli che salgono da maschere; didascalie che entrano dal basso.
+- La lastra non si ferma mai del tutto: deriva lentissima e riflessi che respirano.
+
+## Testi (copy)
+- Apertura: logo (H1; nel film è nascosto alla vista e resta per i lettori di schermo), angoli «Design e sviluppo» · «Portfolio 2026».
+- Siti, coppia «Pelle e carta»: «Siti chiari, intuitivi, *costruiti per durare.*» (approvato da Mark nella 1.18)
+- App, coppia «Lettere e numeri»: «Scrivere e calcolare, *dal browser al Mac.*»
+- Giochi, coppia «Piano e profondità»: «Mondi interi, *dentro una pagina web.*»
+- Finale: «Manca solo *il tuo progetto.*» + pulsante Scrivimi + email.
+- Vietato: descrivere lo scorrimento o il meccanismo; «non X, ma Y»; elenchi di negazioni; lineette nei testi brevi; promesse non dimostrabili.
 
 ## Divieti
-- Il copy non descrive mai lo scroll o il meccanismo. `copy-gate.js` deve uscire 0.
-- Niente glow, gradienti decorativi, emoji, badge. Solo transform/opacity/clip-path.
-- Ordine ScrollTrigger: pin film → poi effetti ambientali.
-- Contratto dev: `?jump=<y>` + `window.__ready`.
-
-## Dati da sostituire (inventati)
-Email ciao@nemesi.studio, link social, bio.
+- Nessuna sezione nuova: solo Siti, App, Giochi, Scrivimi.
+- Niente copia del marchio in 3D, niente testo che spiega il film.
+- Con «riduci movimento» o senza WebGL: pagina statica completa (logo, riga di luce in CSS, lavori con immagini, Scrivimi).

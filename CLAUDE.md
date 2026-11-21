@@ -1,52 +1,99 @@
 # Nemesi — sito personale di Mark (web designer)
 
 ## Cos'è
-Sito vetrina/portfolio di Nemesi, studio di web design di Mark. Pagina unica «scroll-film» in puro codice
-(skill `sito-film`, Corsia A): l'apertura è una scena fissata in cui il wordmark NEMESI WEB, fatto solo di aste (tutte e 35 volano sulla griglia; le 14 di WEB si posano su linee già presenti e si spengono),
-si smonta e diventa la griglia della pagina, poi il titolo, poi i riquadri dei lavori, che si chiudono
-in due pannelli affiancati (indice dei lavori).
-Lavori: Rain Ink Tattoo (01, ~/Desktop/Sites/inkubo) e Olimp (02, ~/Desktop/Sites/olimp) nel film; sotto il film le sezioni «App» (Parola 03, Foglio 04) e «Giochi» (Metal Gear 05, Radente 06), separate dalla 1.21 (cartelle in ~/Desktop/Apps, online su nemesimark.github.io/<repo>/). Rain Ink e Olimp con schermate dei siti online (dalla 1.14 niente didascalie: i pannelli stessi aprono i siti; alla fine il righello svanisce). Dopo il film ci sono le sezioni App e Giochi, ognuna una scena fissata in stile film (dalla 1.24); contatti e altre sezioni da ripensare. Il bottone «Scrivimi» apre l'email.
+Sito vetrina/portfolio di Nemesi Web, lo studio di web design di Mark. Dalla 2.0 (21/11/2026) è rifatto da zero: una pagina unica «scroll-film» in puro codice (skill `sito-film`, Corsia A), con il concept «Dritto e rovescio» (dettagli in `BRIEF.md`).
+Un solo oggetto 3D porta tutti i lavori: la «lastra», nera laccata, a due strati, con il bordo arancio come le facce del logo. La camera va solo avanti.
+
+Capitoli:
+1. Apertura: le aste 3D (i pezzi della lastra in vista esplosa, sempre in movimento). Scorrendo compongono la lastra distesa, una riga di luce la salda e la lastra si alza. Il logo sta solo nella barra.
+2. Siti: Rain Ink 01, Olimp 02.
+3. App: Parola 03, Foglio 04, con la lastra sdoppiata.
+4. Giochi: Metal Gear 05, attraversamento in pixel, anelli, Radente 06.
+5. Scrivimi: faccia vuota con «Manca solo il tuo progetto.», bottone Scrivimi ed email.
+
+Per ora c'è solo questo (Siti, App, Giochi, Scrivimi): niente sezioni nuove senza richiesta.
+
+Dove sono i lavori:
+- Rain Ink: `~/Desktop/Sites/inkubo`
+- Olimp: `~/Desktop/Sites/olimp`, online come `/trama/`
+- App e giochi: `~/Desktop/Apps`
+- Tutti online su `nemesimark.github.io/<repo>/`
 
 ## Dove sta online
-Repository GitHub pubblico: https://github.com/nemesiMark/nemesiWeb (ramo `main`). Online con GitHub Pages: https://nemesimark.github.io/nemesiWeb/ (si aggiorna a ogni push su main).
-Fuori dal repository (in `.git/info/exclude`): `chat-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`.
+- Repository GitHub pubblico: https://github.com/nemesiMark/nemesiWeb (ramo `main`).
+- Online con GitHub Pages: https://nemesimark.github.io/nemesiWeb/ (si aggiorna a ogni push su main).
+- Fuori dal repository (in `.git/info/exclude`): `chat-*.txt`, `riepilogo-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`.
 
 ## Come si prova in locale
 ```bash
-cd ~/Desktop/site-nemesi && python3 -m http.server 8765   # poi http://localhost:8765
+cd ~/Desktop/Sites/site-nemesi && python3 -m http.server 8765   # poi http://localhost:8765
 ```
-Funziona anche aprendo `index.html` con doppio clic.
+Funziona anche con doppio clic su `index.html`. Da `file://` il browser non legge immagini (in WebGL) e caratteri locali, quindi arrivano incorporati da `js/lavori-dati.js` e `js/caratteri-dati.js`, caricati solo in quel caso.
+
 Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
-- `node copy-gate.js ~/Desktop/site-nemesi/index.html` → deve uscire 0
-- `node verify.js shot "http://localhost:8765/?jump=<y>" out.png 1440 900` (e 390 844 per il telefono)
-- `node verify.js jank http://localhost:8765/` → max < 50 ms
-Server di prova sempre in background, poi chiuderlo.
+- `node copy-gate.js ~/Desktop/Sites/site-nemesi/index.html`: deve uscire 0.
+- `node verify.js shot "http://localhost:8765/?jump=<y>" out.png 1440 900` (e `390 844` per il telefono).
+  - La fine del film è a `K.end` (12,1) × altezza dello schermo: 10890 a 1440×900.
+  - `?jump=99999` porta al fondo.
+- `node verify.js jank http://localhost:8765/`: il massimo deve stare sotto i 50 ms (nella 2.1: 18,2 ms).
+- Il server di prova va sempre in background, poi si chiude.
 
 ## Struttura
-- `index.html` — tutto: CSS, markup e JS (GSAP + ScrollTrigger + Lenis)
-- `images/lavori/` — schermate dei siti: `-d.jpg` 2000×1125 (catturate a 1440×810: Rain Ink con la barra di navigazione, Olimp con la 3ª foto della hero) usate nel film; `-m.jpg` 900 px (oggi non usate)
-- `js/scena.js` — scena 3D dell'apertura (dalla 1.24 senza post-produzione: antialias e risoluzione fino a 2×) (fondo grigio perla #E4E4E8 dalla 1.22, aste grafite #1E1F22, accento arancio #F07A1A del logo dalla 1.23) (Three.js r147 classico, file in `vendor/three/`: niente moduli, così funziona anche aprendo il file dal disco)
-- `vendor/` — gsap 3.12.5, ScrollTrigger 3.12.5, lenis 1.1.13 (copie locali)
-- `BRIEF.md` — appunti di produzione (concept, palette, divieti); NON è testo per il sito
-- `LEGGIMI.md` — versioni e cronologia delle modifiche
+- `index.html`: CSS, markup e JS del film.
+  - Il markup è anche la versione statica completa, usata con «riduci movimento» o senza WebGL.
+  - Il JS contiene la timeline madre, il collegamento tra DOM e 3D, la navbar e il filo di avanzamento.
+- `js/lastra.js`: scena 3D in Three.js r147 classico, senza moduli. Contiene le aste dell'apertura, la lastra, materiali e shader, camera, anelli e pulviscolo.
+- `js/lavori-dati.js`, `js/caratteri-dati.js`: copie base64 di `images/lavori/*.jpg` e `fonts/*.woff2`, usate solo da `file://`.
+  - Vanno rigenerate se cambiano immagini o caratteri.
+  - Basta un breve script Python: base64 dei file → oggetto `window.LAVORI_DATI` oppure regole `@font-face`.
+- `images/lavori/<nome>.jpg`: texture 1600×900 q70, ricavate da `<nome>-d.jpg` (master 2000×1125) con `sips -s format jpeg -s formatOptions 70 -Z 1600`. Le `-m.jpg` non sono usate.
+- `images/logo/`:
+  - `nemesi-web-arancio.png`: con il motto, nell'apertura della pagina statica (nel film resta solo per i lettori di schermo);
+  - `nemesi-web-nav.png`: navbar;
+  - `favicon.png`;
+  - `nemesi-web-originale.png`: l'originale viola.
+  - **Mai modificare i PNG del logo.**
+- `fonts/`: Bodoni Moda (tondo e corsivo), Geist, Geist Mono, in woff2 latin.
+- `vendor/`: gsap 3.12.5, ScrollTrigger 3.12.5, lenis 1.1.13, `three/three.min.js` r147.
+- `BRIEF.md`: appunti di produzione (concept, logo, colori, caratteri, copy, divieti). NON è testo per il sito.
+- `LEGGIMI.md`: versioni e cronologia delle modifiche.
+- `archivio/` (fuori da git): `1.25/` è il sito prima del rifacimento, `index-1.4.html` una versione vecchia con le sezioni dopo il film.
 
-Punti chiave nel JS: `letter()` disegna le lettere con le aste; `computeGeo()` calcola wordmark (A),
-griglia (B), celle dei riquadri e pannelli finali (`panels`, disegnati da `drawTiles()`); la timeline `tl` dura 1 = progresso del pin.
-Barra del browser nascosta: l'avanzamento lo mostra il filo `#rail` a destra (tacche dei capitoli da `CHS`, clic e trascinamento con Lenis).
-Contratto di verifica: `?jump=<scrollY>` e `window.__ready` (fine del film a 1440×900 = 6120; `?jump=99999` = fondo pagina, sezione Giochi).
-Timeline madre `master`: 0→`T3` (.34) scena 3D (il progresso della scena viene da `swap3d()`, calcolato dalla posizione), poi la vecchia `tl` compressa in T3→1. `window.__scene.state()` per le verifiche.
-Apertura: `playIntro()` (timeline in `window.__intro`, per catturare i fotogrammi con `__intro.pause(); __intro.time(t)`);
-la classe `html.intro`, messa da uno script nel `<head>`, nasconde la hero finché l'apertura non parte.
+## Punti chiave nel JS
+- **Copione** in `js/lastra.js`, in unità «altezze di schermo»:
+  - `KH` è l'apertura: `c0`–`c1` le aste scendono, `s0`–`s1` la riga di luce salda la lastra.
+  - `K` è il resto del film, spostato in avanti di `HO` (1,1). Dentro `pose()` si lavora con `p = P - HO`.
+  - Alla pagina arriva `KX` (tempi assoluti, più `o` = HO): in `index.html` i tempi sono scritti come `O + tempo del film`.
+  - Tappe di `K`:
+    - `rise`: la lastra si alza;
+    - `flip1`, `flip2`, `flip3`: i mezzi giri;
+    - `split`/`join`: sdoppiamento e chiusura;
+    - `cross0`/`cross1`: attraversamento;
+    - `rad`: Radente;
+    - `fin0`/`fin1`: finale;
+    - `end`: 11 (in `KX` diventa 12,1).
+- **Timeline `master`** in `index.html` (dove `K` è già `KX`): dura `K.end` (12,1) ed è legata con scrub 1 allo spazio vuoto `#film` (alto `K.end`·vh + vh). La scena 3D legge lo stesso progresso.
+- **`ridisegna()`**: dopo ogni refresh di ScrollTrigger esegue `master.progress(1).progress(pr)`. Senza, i `fromTo` perdono gli stati iniziali.
+- **Collegamento tra DOM e 3D**:
+  - `S.hits()` restituisce i quattro angoli in pixel delle facce visibili.
+  - `place()` deforma i link `.schermo` (800×450) con un'omografia (`matrix3d`) e mette le didascalie sotto la faccia.
+  - `S.emptyFace()` serve per il finale.
+- **Aste dell'apertura**: `sticks` e `poseSticks()` in `js/lastra.js`. La lastra vera compare dietro la riga di luce grazie a `uCut` nei materiali; le aste spariscono con `uCutN`/`uCutD`.
+- **Menu**: `vai(p)` in `index.html`. Un salto lungo passa per il velo `#taglio` (nero), poi `salta()` e uno scorrimento lento di `GLIDE` schermi; i salti brevi usano solo Lenis.
+- **Contratto di verifica**: `?jump=<scrollY>`, `window.__ready`, `window.__go(y)` (salto immediato), `window.__S.state()`, `window.__intro`.
+- **Classi su `<html>`**:
+  - `js`;
+  - `film`: c'è WebGL e non è attivo «riduci movimento»;
+  - `avvio`: apertura in corso; non c'è con `?jump`.
 
 ## Regole di lavoro
-- Testi in italiano; il copy non deve mai descrivere lo scorrimento o il meccanismo (copy-gate).
+- Testi in italiano. Il copy non deve mai descrivere lo scorrimento o il meccanismo (copy-gate).
+- Nel copy niente «non X, ma Y» e niente lineette nei testi brevi.
 - Ogni modifica → nuova versione in `LEGGIMI.md`.
 - Commit solo su richiesta; «g» = commit e push su `origin main`.
-- Rispettare `prefers-reduced-motion` (già gestito: niente film, copertina 01 statica).
+- Rispettare `prefers-reduced-motion`: è già gestito con la pagina statica completa.
 
-## In sospeso (dati inventati da sostituire prima di pubblicare)
-- Email `ciao@nemesi.studio` (dominio non verificato), link social generici, bio, «Disponibile da gennaio 2027».
-- Partita IVA (obbligatoria per un professionista in Italia): oggi non c'è più un piè di pagina dove metterla.
-- Navbar (dalla 1.24 scura come Rain Ink, larga al massimo 960 px): Siti (fine del film, gestito nel JS dei link), App, Giochi, bottone Scrivimi; su telefono panino + busta. Logo in `images/logo/` (dalla 1.24 PNG arancio ricavato dall'originale viola `nemesi-web-originale.png`).
-- Ripensare le sezioni dopo il film (tolte nella 1.5, contatti tolti nella 1.7; la pagina 1.4 completa, con testi e codice delle sezioni, è in `archivio/index-1.4.html`, da non pubblicare).
-- Scegliere l'hosting (Netlify/Vercel) e il dominio.
+## In sospeso
+- Email `ciao@nemesi.studio`: dominio non verificato, da sostituire con quella vera.
+- Partita IVA (obbligatoria per un professionista in Italia): oggi c'è solo «© 2026 Nemesi Web» nel finale. Va aggiunta lì.
+- Scegliere l'hosting (oggi GitHub Pages; Netlify o Vercel?) e il dominio.
