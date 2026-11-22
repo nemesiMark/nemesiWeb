@@ -23,8 +23,8 @@ var KH = { c0:.06, c1:.95, s0:.9, s1:1.12 };
 var K = {
   cam0:.08, rise0:.14, rise1:1.25,           // la lastra distesa si alza: Rain Ink
   flip1a:1.95, flip1b:2.6,                   // rovescio: Olimp
-  flip2a:3.3, flip2b:3.95,                   // mezzo giro: Parola
-  split0:3.8, split1:4.55,                   // sdoppiamento: Foglio
+  flip2a:3.3, flip2b:3.95,                   // mezzo giro: Word
+  split0:3.8, split1:4.55,                   // sdoppiamento: Excel
   join0:5.4, join1:5.85,
   flip3a:5.75, flip3b:6.4,                   // Metal Gear
   cross0:7.1, cross1:7.82, rad:8.75,         // attraversamento, anelli, Radente

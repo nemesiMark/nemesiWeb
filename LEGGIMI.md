@@ -252,3 +252,7 @@
 ### 3.1 — 22/11/2026
 - Le parole d'accento dei titoli («costruiti per durare.», «dentro una pagina web.», «i tuoi progetti.» nell'area riservata) ora sono nel verde lime `#CDFD67` del bottone (prima verde scuro `#2F5600`). Un'ombra blu notte leggera le stacca dal grigio cemento.
 - Le scritte piccole d'accento (numeri dei lavori, «Gioca», la parola evidenziata sopra i titoli) restano verde scuro, perché in lime a quella misura sul cemento non si leggerebbero.
+
+### 3.2 — 22/11/2026
+- App: Parola ora si chiama **Word** (03) e Foglio **Excel** (04), nelle didascalie, nelle etichette per i lettori di schermo e nella descrizione della pagina. Gli indirizzi restano `nemesimark.github.io/parola/` e `/foglio/`.
+- Nuove anteprime `parola-d.jpg`/`parola.jpg` (Word, dal sito online) e `foglio-d.jpg`/`foglio.jpg` (Excel, dal sito online), aggiornate anche in `js/lavori-dati.js`.

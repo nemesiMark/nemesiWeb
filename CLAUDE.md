@@ -8,7 +8,7 @@ Dalla 3.0 il colore d'accento è il verde lime `#CDFD67` (prima era arancio): ne
 Capitoli:
 1. Apertura: prima il logo in 3D (`js/logo3d.js`), che si compone a strisce come in un segnale disturbato e poi piove via; poi le aste 3D (i pezzi della lastra in vista esplosa, sempre in movimento). Scorrendo compongono la lastra distesa, una riga di luce la salda e la lastra si alza. Il logo sta solo nella barra.
 2. Siti: Rain Ink 01, Olimp 02.
-3. App: Parola 03, Foglio 04, con la lastra sdoppiata.
+3. App: Word 03, Excel 04 (ex Parola e Foglio; repository e immagini si chiamano ancora `parola` e `foglio`), con la lastra sdoppiata.
 4. Giochi: Metal Gear 05, attraversamento in pixel, anelli, Radente 06.
 5. Scrivimi: faccia vuota con «Manca solo il tuo progetto.», bottone Scrivimi ed email.
 
