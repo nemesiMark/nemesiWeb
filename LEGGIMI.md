@@ -226,3 +226,6 @@
 - Barra: «Scrivimi» diventa «Contattaci» (anche nel filo a destra); il tasto dell'area riservata è solo il lucchetto, senza scritta.
 - Alone al passaggio del mouse uguale su tutti i lavori: su Metal Gear (che sta sul retro della lastra, dopo i mezzi giri) l'alone esterno non si vedeva, perché il piano dell'alone era visibile solo da davanti. Ora si vede da entrambi i lati.
 - Metal Gear: nuova anteprima presa dal gioco online dopo l'aggiornamento grafico (`metalgear-d.jpg` 2000×1125 e `metalgear.jpg` 1600×900), aggiornata anche in `js/lavori-dati.js`.
+
+### 2.7 — 22/11/2026
+- Radente: nuova anteprima presa dal gioco online dopo l'aggiornamento grafico (Radente 2.0, con il jet): `radente-d.jpg` 2000×1125 e `radente.jpg` 1600×900, aggiornata anche in `js/lavori-dati.js`.
