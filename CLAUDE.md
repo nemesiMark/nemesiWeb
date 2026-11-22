@@ -23,7 +23,7 @@ Dove sono i lavori:
 ## Dove sta online
 - Repository GitHub pubblico: https://github.com/nemesiMark/nemesiWeb (ramo `main`).
 - Online con GitHub Pages: https://nemesimark.github.io/nemesiWeb/ (si aggiorna a ogni push su main).
-- Fuori dal repository (in `.git/info/exclude`): `chat-*.txt`, `riepilogo-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`, il video di riferimento `58d1f4b27220bfbdf84fdabf0155c8cd.mp4`.
+- Fuori dal repository (in `.git/info/exclude`): `chat-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`, i video `58d1f4b27220bfbdf84fdabf0155c8cd.mp4` (riferimento dell'apertura) e `pixel-effects.mp4`.
 
 ## Come si prova in locale
 ```bash

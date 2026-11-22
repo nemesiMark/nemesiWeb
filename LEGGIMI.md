@@ -274,3 +274,6 @@
 
 ### 3.5 — 22/11/2026
 - Repository dei lavori rinominati come le cartelle: i link portano ai nuovi indirizzi `rainInk/` (prima `inkubo/`), `olimp/` (prima `trama/`), `word/` (prima `parola/`) ed `excel/` (prima `foglio/`). La cartella del sito ora si chiama `nemesiWeb`.
+
+### 3.6 — 22/11/2026
+- Tolti i file di riepilogo della chat (`riepilogo-*.txt`, mai finiti online): ora il passaggio tra chat lo fa la mod di handoff. Aggiornato `CLAUDE.md`.
