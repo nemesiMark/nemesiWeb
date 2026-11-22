@@ -6,9 +6,10 @@
 <title>Nemesi Web · Web design</title>
 <meta name="description" content="Nemesi Web progetta e costruisce siti, app e giochi per il web: Rain Ink Tattoo, Olimp, Word, Excel, Metal Gear, Radente.">
 <meta name="theme-color" content="#9AA0A8">
-<link rel="icon" href="images/logo/favicon-verde-32.png?v=3.0" type="image/png" sizes="32x32">
-<link rel="icon" href="images/logo/favicon-verde-16.png?v=3.0" type="image/png" sizes="16x16">
-<link rel="apple-touch-icon" href="images/logo/favicon-verde-180.png?v=3.0">
+<link rel="icon" href="images/logo/icona.svg?v=3.4" type="image/svg+xml">
+<link rel="icon" href="images/logo/icona-32.png?v=3.4" type="image/png" sizes="32x32">
+<link rel="icon" href="images/logo/icona-16.png?v=3.4" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="images/logo/icona-180.png?v=3.4">
 <link rel="preload" href="fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
 <script>
@@ -17,7 +18,8 @@
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   try { var c=document.createElement('canvas'); ok=!!(c.getContext('webgl2')||c.getContext('webgl')); } catch(e){}
   if (ok){ d.classList.add('film');
-    if (location.search.indexOf('jump=')<0) d.classList.add('avvio'); } })();
+    if (location.search.indexOf('jump=')<0 && !location.hash){ d.classList.add('avvio');
+      var tc=document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute('content','#050506'); } } })();
 </script>
 <style>
 /* ═════════ caratteri (copie locali, nessuna richiesta a terzi) ═════════ */
@@ -77,7 +79,7 @@ ul{ list-style:none; }
 .nav-giro .alone{ stroke:rgba(166,239,11,.35); stroke-width:6; filter:blur(5px); }
 .logo{ position:relative; display:block; flex:none; width:173px; height:34px; transform:translateZ(20px); }
 /* il PNG ha aria trasparente sotto la scritta: lo si allinea sul disegno, non sul riquadro */
-.logo img{ position:absolute; left:-6px; top:-4px; height:47px; width:auto; max-width:none; }
+.logo img{ position:absolute; left:0; top:-1.5px; height:31px; width:auto; max-width:none; }
 .links{ display:flex; gap:4px; margin-left:auto; transform-style:preserve-3d; }
 .links a{ position:relative; display:block; padding:9px 14px; font-size:14px; font-weight:500; color:#C9C9D1; white-space:nowrap;
   border-radius:11px; transform:translateZ(8px);
@@ -117,7 +119,7 @@ ul{ list-style:none; }
   .hdr{ top:max(8px, env(safe-area-inset-top)); }
   .slab{ width:calc(100% - 16px); gap:8px; padding:4px 5px 4px 10px; }
   .logo{ width:150px; height:32px; }
-  .logo img{ height:41px; left:-5px; top:-3px; }
+  .logo img{ height:27px; left:0; top:-1px; }
   .burger{ display:block; }
   .cta{ width:40px; padding:0; } .cta span{ display:none; }
   .links{ position:absolute; top:calc(100% + 10px); left:0; right:0; flex-direction:column; gap:6px; padding:10px;
@@ -247,7 +249,7 @@ html.film::-webkit-scrollbar{ display:none; }
   transition:opacity .25s, transform .25s var(--ease); pointer-events:none; }
 .film .rail button:hover span, .film .rail button:focus-visible span{ opacity:1; transform:none; }
 .film .pre{ display:none; }
-.film.avvio .pre{ display:block; position:fixed; inset:0; z-index:40; pointer-events:none; background:var(--fondo); }
+.film.avvio .pre{ display:block; position:fixed; inset:0; z-index:40; pointer-events:none; background:radial-gradient(circle at 50% 46%, #0C0D0F 0, #040405 50vmax); }
 .pre canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
 .film.avvio .hdr, .film.avvio .angolo{ opacity:0; }
 @media (max-width:900px){ .film .rail{ display:none; } }
@@ -270,7 +272,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 <header class="hdr" id="hdr">
   <nav class="slab" aria-label="Principale">
     <svg class="nav-giro" aria-hidden="true"><rect class="alone" x="0" y="0" width="100%" height="100%" rx="16" pathLength="1000"/><rect class="luce" x="0" y="0" width="100%" height="100%" rx="16" pathLength="1000"/></svg>
-    <a class="logo" href="#top" aria-label="Nemesi Web, torna all'inizio"><img id="logo-nav" src="images/logo/nemesi-web-nav-verde.png" alt="" width="447" height="114"></a>
+    <a class="logo" href="#top" aria-label="Nemesi Web, torna all'inizio"><img id="logo-nav" src="images/logo/nemesi-web-barra.svg" alt="" width="1997" height="343"></a>
     <ul class="links" id="links">
       <li><a href="#siti" data-s="siti">Siti</a></li>
       <li><a href="#app" data-s="app">App</a></li>
@@ -289,7 +291,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 
 <main>
   <section class="apertura" id="top" aria-label="Nemesi Web">
-    <h1 class="marchio" id="marchio"><img src="images/logo/nemesi-web-verde.png" alt="Nemesi Web, web design e soluzioni digitali" width="2051" height="618" fetchpriority="high"></h1>
+    <h1 class="marchio" id="marchio"><img src="images/logo/nemesi-web.svg" alt="Nemesi Web, web design e soluzioni digitali" width="1997" height="343" fetchpriority="high"></h1>
     <span class="riga" aria-hidden="true"></span>
     <div class="angoli"><p class="angolo sx mono">Design e sviluppo</p><p class="angolo dx mono">Portfolio 2026</p></div>
   </section>
@@ -363,6 +365,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 <script src="vendor/lenis.min.js"></script>
 <script src="vendor/three/three.min.js"></script>
 <script src="js/lastra.js"></script>
+<script src="js/logo-forma.js"></script>
 <script src="js/logo3d.js"></script>
 <script>
 (function(){
@@ -382,7 +385,8 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
   })();
 
   function fontsReady(){ return document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve(); }
-  function statica(){ d.classList.remove('film', 'avvio', 'pronto'); fontsReady().then(function(){ window.__ready = true; }); }
+  function tema(){ var tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute('content', '#9AA0A8'); }
+  function statica(){ d.classList.remove('film', 'avvio', 'pronto'); tema(); fontsReady().then(function(){ window.__ready = true; }); }
   if (!FILM || !window.Lastra || !window.gsap){ statica(); return; }
 
   var S;
@@ -550,11 +554,13 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
   });
 
   /* ── ogni fotogramma: scena, collegamenti, barra ── */
-  var renderOn = true;
+  /* durante l'apertura la scena non adatta la risoluzione (il logo pesa per qualche secondo);
+     quieto: il nero copre ancora tutto, basta un fotogramma su tre */
+  var renderOn = true, quieto = false, nq = 0, inApertura = d.classList.contains('avvio');
   gsap.ticker.add(function(){
-    if (!renderOn) return;
+    if (!renderOn || (quieto && nq++ % 3)) return;
     S.set(F.p);
-    S.frame(gsap.ticker.time);
+    S.frame(gsap.ticker.time, quieto || inApertura);
     place();
     navState(F.p);
     fill.style.transform = 'scaleY(' + (F.p / K.end).toFixed(4) + ')';
@@ -590,13 +596,15 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
   }
   var pre = document.getElementById('pre');
   var avvio = d.classList.contains('avvio') && !location.hash;
-  /* apertura: il logo in 3D si compone a strisce mentre il sito carica, poi piove via e lascia entrare le aste */
-  var L = null, salto, saltaLogo = new Promise(function(r){ salto = r; });
+  /* apertura: il logo in 3D si compone a strisce sul nero mentre il sito carica; poi torna strisce che cadono,
+     il nero scende a colonne e le file delle aste cadono al loro posto */
+  var L = null, primo = false, salto, saltaLogo = new Promise(function(r){ salto = r; });
   if (avvio){
-    S.ignite(0); lenis.stop();
+    S.ignite(0); S.enter(0); lenis.stop(); quieto = true;
     try { if (window.Logo3D) L = Logo3D.play(document.getElementById('logo3d')); } catch (err){ L = null; }
+    if (L) L.first.then(function(){ primo = true; pre.style.background = 'transparent'; });
     ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(function(ev){ addEventListener(ev, function(){ salto(); }, { once: true, passive: true }); });
-  }
+  } else { d.classList.remove('avvio'); inApertura = false; tema(); }
   datiLocali().then(function(){
     return Promise.all([S.load(urls()), fontsReady()]);
   }).then(function(){
@@ -606,15 +614,19 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     else if (location.hash && (location.hash.slice(1) in TAPPE)){ salta(TAPPE[location.hash.slice(1)] * VH); }
     if (!avvio){ if (L) L.stop(); requestAnimationFrame(function(){ requestAnimationFrame(function(){ window.__ready = true; }); }); return; }
     return Promise.race([L ? L.held : Promise.resolve(), saltaLogo]).then(function(){
-    var IGN = { v: 0 };
+    var IGN = { v: 0 }, ENT = { v: 0 };
+    quieto = false;
     if (L) L.exit(function(){});
-    var intro = gsap.timeline({ onComplete: function(){ d.classList.remove('avvio'); lenis.start(); window.__ready = true; } });
-    /* il fondo del logo si scioglie mentre le strisce cadono; dietro le aste si accendono, poi scende la barra */
-    intro.to(pre, { backgroundColor: 'rgba(154,160,168,0)', duration: .9, ease: 'power1.inOut' }, .15)
-      .to(IGN, { v: 1, duration: 1.8, ease: 'power1.inOut', onUpdate: function(){ S.ignite(IGN.v); } }, .2)
-      .fromTo(hdr, { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', clearProps: 'transform' }, '<.8')
-      .fromTo('.angolo', { opacity: 0 }, { opacity: 1, duration: .8, ease: 'power1.out' }, '<.2')
-      .set({}, {}, L ? L.duration + .1 : 0);
+    var intro = gsap.timeline({ onComplete: function(){ d.classList.remove('avvio'); inApertura = false; window.__ready = true; } });
+    if (!L || !primo) intro.to(pre, { opacity: 0, duration: .8, ease: 'power1.inOut' }, .2);
+    /* mentre il nero scende, le file delle aste cadono dall'alto e si accendono quando toccano; poi scende la barra */
+    intro.to(ENT, { v: 1, duration: 1.7, ease: 'none', onUpdate: function(){ S.enter(ENT.v); } }, .75)
+      .to(IGN, { v: 1, duration: 1.7, ease: 'power1.inOut', onUpdate: function(){ S.ignite(IGN.v); } }, .95)
+      .fromTo(hdr, { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', clearProps: 'transform' }, 1.3)
+      .fromTo('.angolo', { opacity: 0 }, { opacity: 1, duration: .8, ease: 'power1.out' }, 1.5)
+      .call(tema, null, .9)
+      .call(function(){ lenis.start(); }, null, 1.6)
+      .set({}, {}, Math.max(L ? L.duration + .1 : 0, 2.7));
     window.__intro = intro;
     });
   });

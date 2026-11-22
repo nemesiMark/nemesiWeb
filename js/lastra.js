@@ -449,7 +449,7 @@ function create(canvas, opts){
       }
     }
   })();
-  var CL = { y0:.3, dh:.19, sp:1.16 };
+  var CL = { y0:.3, dh:.19, sp:1.16 }, ENT_H = 3.2;
   var qY = new T.Quaternion(), qX = new T.Quaternion(), AY = new T.Vector3(0, 1, 0), AX = new T.Vector3(1, 0, 0),
       pS = new T.Vector3(), nY = new T.Vector3(), nZ = new T.Vector3();
   function smooth01(x){ return x * x * (3 - 2 * x); }
@@ -467,9 +467,13 @@ function create(canvas, opts){
       var phi = (Math.sin(2 * PI * t / 27 - .4 * s.row) + .35 * Math.sin(2 * PI * t / 11.5 + .9 * s.row + 1) + S.ptrS.x * .3) * (1 - er);
       var sp = mix(CL.sp, 1, er), xr = s.lx * sp;
       var h = mix(CL.y0 + s.row * CL.dh + .035 * Math.sin(t * .6 + lv.bob), 0, eh);
+      /* entrata, dopo il logo: le file cadono dall'alto una dopo l'altra (prima quella in basso), girando e rallentando
+         fino al loro piano; quando toccano si accendono con un lampo */
+      var ke = S.ent >= 1 ? 1 : seg(S.ent, s.row / (ROWS - 1) * .5, s.row / (ROWS - 1) * .5 + .5), en = 1 - Math.pow(1 - ke, 4);
+      if (ke < 1){ h += (1 - en) * ENT_H; phi += (1 - en) * (s.row % 2 ? 1.3 : -1.3); }
       s.m.position.set(xr * Math.cos(phi), h, -xr * Math.sin(phi) - s.ly * eh);
       /* e un'onda di rollio: i piani si inclinano uno dopo l'altro e la lacca prende la luce a turno */
-      var roll = (.34 * Math.sin(2 * PI * t / 17 - .55 * s.row) + .06 * Math.sin(t * .9 + s.ph)) * (1 - er);
+      var roll = (.34 * Math.sin(2 * PI * t / 17 - .55 * s.row) + .06 * Math.sin(t * .9 + s.ph)) * (1 - er) + (1 - en) * .4;
       qY.setFromAxisAngle(AY, phi); qX.setFromAxisAngle(AX, -PI / 2 + roll);
       s.m.quaternion.copy(qY).multiply(qX);
       if (ex > 0){                                                  // ultimo tratto: esattamente al suo posto sulla lastra
@@ -477,8 +481,8 @@ function create(canvas, opts){
         s.m.position.lerp(pS, ex); s.m.quaternion.slerp(G.quaternion, ex);
       }
       s.u.uTime.value = t;
-      s.u.uEdge.value = clamp(S.ign * 1.6 - s.ign, 0, 1);
-      s.u.uFlash.value = .85 * Math.exp(-Math.pow((P - s.a - DUR) / .035, 2));
+      s.u.uEdge.value = clamp(S.ign * 1.6 - s.ign, 0, 1) * (ke < 1 ? smooth01(seg(ke, .6, 1)) : 1);
+      s.u.uFlash.value = Math.max(.85 * Math.exp(-Math.pow((P - s.a - DUR) / .035, 2)), ke < 1 ? .9 * Math.exp(-Math.pow((ke - .88) / .07, 2)) : 0);
       s.u.uCutN.value.copy(nY); s.u.uCutD.value = cutD;
     }
   }
@@ -570,7 +574,7 @@ function create(canvas, opts){
   }
 
   /* ── stato ── */
-  var S = { p:0, ign:1, hov:[0,0,0,0,0,0], hovT:[0,0,0,0,0,0], ptr:{x:0, y:0}, ptrS:{x:0, y:0}, t:0, faces:{} };
+  var S = { p:0, ign:1, ent:1, hov:[0,0,0,0,0,0], hovT:[0,0,0,0,0,0], ptr:{x:0, y:0}, ptrS:{x:0, y:0}, t:0, faces:{} };
   var CAM = { z:0, x:0, y:0, tx:0, ty:0, tz:-10, sx:0, sy:0 };
 
   function camZ(p){
@@ -704,7 +708,7 @@ function create(canvas, opts){
 
   /* ── fotogramma ── */
   var v3 = new T.Vector3(), v4 = new T.Vector3(), lastT = 0, slow = 0, frames = 0;
-  function frame(time){
+  function frame(time, quiet){
     var t = time || performance.now() / 1000, dt = Math.min(.1, lastT ? t - lastT : .016);
     lastT = t; S.t = t;
     S.ptrS.x = damp(S.ptrS.x, S.ptr.x, 3, dt); S.ptrS.y = damp(S.ptrS.y, S.ptr.y, 3, dt);
@@ -727,6 +731,7 @@ function create(canvas, opts){
     renderer.render(scene, camera);
     /* risoluzione adattiva: se i fotogrammi pesano, scende (mai risale, per non oscillare) */
     frames++;
+    if (quiet) return;
     if (dt > .028) slow++; else slow = Math.max(0, slow - .25);
     if (slow > 24 && dpr > 1){ dpr = Math.max(1, dpr - .25); slow = 0; resize(); }
   }
@@ -775,6 +780,7 @@ function create(canvas, opts){
     K: KX, load: load, resize: resize, frame: frame, hits: hits, emptyFace: emptyFace,
     set: function(p){ S.p = p; },
     ignite: function(v){ S.ign = v; },
+    enter: function(v){ S.ent = v; },
     hover: function(i, on){ if (i >= 0 && i < 6) S.hovT[i] = on ? 1 : 0; },
     pointer: function(x, y){ S.ptr.x = x; S.ptr.y = y; },
     layout: function(){ return L; },

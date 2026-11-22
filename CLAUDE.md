@@ -6,7 +6,7 @@ Un solo oggetto 3D porta tutti i lavori: la «lastra», nera laccata, a due stra
 Dalla 3.0 il colore d'accento è il verde lime `#CDFD67` (prima era arancio): nel codice le variabili si chiamano ancora `--arancio*` e `COL.arancio`, ma contengono i verdi.
 
 Capitoli:
-1. Apertura: prima il logo in 3D (`js/logo3d.js`), che si compone a strisce come in un segnale disturbato e poi piove via; poi le aste 3D (i pezzi della lastra in vista esplosa, sempre in movimento). Scorrendo compongono la lastra distesa, una riga di luce la salda e la lastra si alza. Il logo sta solo nella barra.
+1. Apertura (dalla 3.4, come il video di riferimento `58d1f4b27220bfbdf84fdabf0155c8cd.mp4`, fuori da git): su nero il logo in 3D (`js/logo3d.js`) arriva a strisce verticali che piovono, il pieno sale dal basso con il bordo frastagliato, resta con una luce che passa; poi torna strisce che cadono e il nero scende a colonne sottili dal centro. Dietro, le file delle aste 3D (i pezzi della lastra in vista esplosa, sempre in movimento) cadono dall'alto e si accendono quando toccano; poi scende la barra. Scorrendo le aste compongono la lastra distesa, una riga di luce la salda e la lastra si alza. Il logo sta solo nella barra.
 2. Siti: Rain Ink 01, Olimp 02.
 3. App: Word 03, Excel 04 (ex Parola e Foglio; repository e immagini si chiamano ancora `parola` e `foglio`), con la lastra sdoppiata.
 4. Giochi: Metal Gear 05, attraversamento in pixel, anelli, Radente 06.
@@ -23,7 +23,7 @@ Dove sono i lavori:
 ## Dove sta online
 - Repository GitHub pubblico: https://github.com/nemesiMark/nemesiWeb (ramo `main`).
 - Online con GitHub Pages: https://nemesimark.github.io/nemesiWeb/ (si aggiorna a ogni push su main).
-- Fuori dal repository (in `.git/info/exclude`): `chat-*.txt`, `riepilogo-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`.
+- Fuori dal repository (in `.git/info/exclude`): `chat-*.txt`, `riepilogo-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`, il video di riferimento `58d1f4b27220bfbdf84fdabf0155c8cd.mp4`.
 
 ## Come si prova in locale
 ```bash
@@ -44,17 +44,21 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
   - Il markup è anche la versione statica completa, usata con «riduci movimento» o senza WebGL.
   - Il JS contiene la timeline madre, il collegamento tra DOM e 3D, la navbar e il filo di avanzamento.
 - `area-riservata.html`: pagina segnaposto del tasto «Area riservata» della barra (dalla 2.5); l'area vera è ancora da fare.
-- `js/logo3d.js`: il logo in 3D dell'apertura, con il suo renderer e il filtro a strisce. `Logo3D.play(canvas)` restituisce `held` (il logo è composto), `exit(fatto)` e `stop()`. Si chiude da solo dopo l'uscita.
+- `js/logo3d.js`: il logo in 3D dell'apertura (dalla 3.4), con il suo renderer (WebGL 2, altrimenti `play` restituisce null e il nero sfuma).
+  - Geometria costruita dalla forma vettoriale: faccia nera piana con il triangolo incassato, nastro grigio come superficie rigata dalla piega (davanti) all'orlo (indietro), barra, spessori con il bordo verde, neon come pinne attaccate ai bordi. Sulle facce è proiettato il disegno SVG del logo (texture da `LOGO_FORMA.art`), quindi di fronte è identico al logo; dietro, l'alone largo (`LOGO_FORMA.glow` senza neon).
+  - Filtro a schermo (`FS_Q`): pieno, strisce con frange (verde giallo a sinistra, menta a destra), sbavature ai fronti, sipario nero a colonne. Tempi in `IN0…EXIT`.
+  - `Logo3D.play(canvas, opzioni)` restituisce `first` (primo fotogramma: il nero è disegnato), `ready` (texture pronte), `held` (logo composto), `exit(fatto)`, `duration`, `stop()`. Si chiude da solo dopo l'uscita. Le opzioni `clock` e `pose` servono solo alle prove.
+- `js/logo-forma.js`: `window.LOGO_FORMA`, forma del simbolo (contorni in pixel del disegno originale) e i due disegni SVG per le texture. Generato con il ricalco del logo (`archivio/logo-svg/`), non si modifica a mano.
 - `js/lastra.js`: scena 3D in Three.js r147 classico, senza moduli. Contiene le aste dell'apertura, la lastra, materiali e shader, camera, anelli e pulviscolo.
 - `js/lavori-dati.js`, `js/caratteri-dati.js`: copie base64 di `images/lavori/*.jpg` e `fonts/*.woff2`, usate solo da `file://`.
   - Vanno rigenerate se cambiano immagini o caratteri.
   - Basta un breve script Python: base64 dei file → oggetto `window.LAVORI_DATI` oppure regole `@font-face`.
 - `images/lavori/<nome>.jpg`: texture 1600×900 q70, ricavate da `<nome>-d.jpg` (master 2000×1125) con `sips -s format jpeg -s formatOptions 70 -Z 1600`. Le `-m.jpg` non sono usate.
 - `images/logo/`:
-  - **In uso dalla 3.0 le copie verdi**: `nemesi-web-verde.png`, `nemesi-web-nav-verde.png`, `favicon-verde.png` e `favicon-verde-16/32/180.png`, ricavate dagli originali spostando la tinta degli arancio sul verde (breve script Python con PIL). Gli originali arancio qui sotto restano intatti.
-  - `nemesi-web-arancio.png`: con il motto, nell'apertura della pagina statica (nel film resta solo per i lettori di schermo);
-  - `nemesi-web-nav.png`: navbar;
-  - `favicon.png`: **il logo** (originale 1536×1024, sfondo trasparente). Da qui si ricavano le icone quadrate `favicon-16.png`, `favicon-32.png` (scheda) e `favicon-180.png` (iPhone, fondo nero), ritagliate attorno al logo con un breve script Python (PIL). Se cambia il logo, rigenerarle e aggiornare `?v=` nei link;
+  - **In uso dalla 3.4 i loghi in SVG**, ricalcati fedelmente dall'originale (nero e verde): `nemesi-web.svg` (con il motto, pagina statica), `nemesi-web-barra.svg` (barra e area riservata), `nemesi-simbolo.svg` (solo il simbolo), `icona.svg` + `icona-16/32/180.png` (icone della scheda e dell'iPhone, link `?v=3.4`). Si rigenerano con `archivio/logo-svg/` (vedi il suo LEGGIMI.txt).
+  - Dalla 3.0 alla 3.3 erano in uso le copie verdi in PNG: `nemesi-web-verde.png`, `nemesi-web-nav-verde.png`, `favicon-verde.png` e `favicon-verde-16/32/180.png` (ora non usate, restano). Gli originali arancio qui sotto restano intatti.
+  - originali arancio, non usati: `nemesi-web-arancio.png` (con il motto) e `nemesi-web-nav.png` (barra);
+  - `favicon.png`: **il logo** (originale 1536×1024, sfondo trasparente): è il riferimento del ricalco in SVG. Le vecchie icone quadrate `favicon-16.png`, `favicon-32.png`, `favicon-180.png` non sono più usate. Se cambia il logo, rigenerare gli SVG e le icone e aggiornare `?v=` nei link;
   - `favicon2.png`: la vecchia icona, non usata;
   - `nemesi-web-originale.png`: l'originale viola.
   - **Mai modificare i PNG del logo.**
@@ -62,7 +66,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - `vendor/`: gsap 3.12.5, ScrollTrigger 3.12.5, lenis 1.1.13, `three/three.min.js` r147.
 - `BRIEF.md`: appunti di produzione (concept, logo, colori, caratteri, copy, divieti). NON è testo per il sito.
 - `LEGGIMI.md`: versioni e cronologia delle modifiche.
-- `archivio/` (fuori da git): `1.25/` è il sito prima del rifacimento, `index-1.4.html` una versione vecchia con le sezioni dopo il film.
+- `archivio/` (fuori da git): `1.25/` è il sito prima del rifacimento, `index-1.4.html` una versione vecchia con le sezioni dopo il film, `logo-svg/` il ricalco del logo (genera gli SVG e `js/logo-forma.js`) e il laboratorio del logo 3D.
 
 ## Punti chiave nel JS
 - **Copione** in `js/lastra.js`, in unità «altezze di schermo»:
@@ -89,7 +93,9 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - **Classi su `<html>`**:
   - `js`;
   - `film`: c'è WebGL e non è attivo «riduci movimento»;
-  - `avvio`: apertura in corso; non c'è con `?jump`.
+  - `avvio`: apertura in corso; non c'è con `?jump` né con un indirizzo `#capitolo`. Durante l'apertura il colore della barra del browser è nero.
+- **Apertura** (fondo di `index.html`): `Logo3D.play` sul canvas `#logo3d` dentro `#pre`; al primo fotogramma `#pre` diventa trasparente (il nero lo disegna il logo). Quando il logo è composto e il sito è caricato (o chi guarda tocca, scorre o preme un tasto) parte `L.exit` e la timeline `intro`: `S.enter` (le file delle aste cadono, in `poseSticks` con `S.ent`), `S.ignite`, barra, angoli; Lenis riparte a 1,6 s.
+  - Finché il nero copre tutto (`quieto`) la scena 3D disegna un fotogramma su tre; per tutta l'apertura (`inApertura`) non abbassa la risoluzione (`S.frame(t, quiet)`).
 
 ## Regole di lavoro
 - Testi in italiano. Il copy non deve mai descrivere lo scorrimento o il meccanismo (copy-gate).
