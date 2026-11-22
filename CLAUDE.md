@@ -43,6 +43,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - `index.html`: CSS, markup e JS del film.
   - Il markup è anche la versione statica completa, usata con «riduci movimento» o senza WebGL.
   - Il JS contiene la timeline madre, il collegamento tra DOM e 3D, la navbar e il filo di avanzamento.
+- `strumenti.html` (dalla 3.7): pagina di prova a parte, giostra 3D delle lastre con gli strumenti di lavoro (icone in `images/strumenti/`, dati in `js/strumenti-icone.js`). Da decidere se e dove entra nel film.
 - `area-riservata.html`: pagina segnaposto del tasto «Area riservata» della barra (dalla 2.5); l'area vera è ancora da fare.
 - `js/logo3d.js`: il logo in 3D dell'apertura (dalla 3.4), con il suo renderer (WebGL 2, altrimenti `play` restituisce null e il nero sfuma).
   - Geometria costruita dalla forma vettoriale: faccia nera piana con il triangolo incassato, nastro grigio come superficie rigata dalla piega (davanti) all'orlo (indietro), barra, spessori con il bordo verde, neon come pinne attaccate ai bordi. Sulle facce è proiettato il disegno SVG del logo (texture da `LOGO_FORMA.art`), quindi di fronte è identico al logo; dietro, l'alone largo (`LOGO_FORMA.glow` senza neon).
@@ -55,7 +56,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
   - Basta un breve script Python: base64 dei file → oggetto `window.LAVORI_DATI` oppure regole `@font-face`.
 - `images/lavori/<nome>.jpg`: texture 1600×900 q70, ricavate da `<nome>-d.jpg` (master 2000×1125) con `sips -s format jpeg -s formatOptions 70 -Z 1600`. Le `-m.jpg` non sono usate.
 - `images/logo/`:
-  - **In uso dalla 3.4 i loghi in SVG**, ricalcati fedelmente dall'originale (nero e verde): `nemesi-web.svg` (con il motto, pagina statica), `nemesi-web-barra.svg` (barra e area riservata), `nemesi-simbolo.svg` (solo il simbolo), `icona.svg` + `icona-16/32/180.png` (icone della scheda e dell'iPhone, link `?v=3.4`). Si rigenerano con `archivio/logo-svg/` (vedi il suo LEGGIMI.txt).
+  - **In uso dalla 3.4 i loghi in SVG**, ricalcati fedelmente dall'originale (nero e verde): `nemesi-web.svg` (con il motto, pagina statica), `nemesi-web-barra.svg` (barra e area riservata), `nemesi-simbolo.svg` (solo il simbolo), `icona.svg` + `icona-16/32/180.png` (icone della scheda, dei segnalibri e dell'iPhone, link `?v=3.8`; **sempre con lo sfondo trasparente, mai un quadrato nero dietro**). Si rigenerano con `archivio/logo-svg/` (vedi il suo LEGGIMI.txt).
   - Dalla 3.0 alla 3.3 erano in uso le copie verdi in PNG: `nemesi-web-verde.png`, `nemesi-web-nav-verde.png`, `favicon-verde.png` e `favicon-verde-16/32/180.png` (ora non usate, restano). Gli originali arancio qui sotto restano intatti.
   - originali arancio, non usati: `nemesi-web-arancio.png` (con il motto) e `nemesi-web-nav.png` (barra);
   - `favicon.png`: **il logo** (originale 1536×1024, sfondo trasparente): è il riferimento del ricalco in SVG. Le vecchie icone quadrate `favicon-16.png`, `favicon-32.png`, `favicon-180.png` non sono più usate. Se cambia il logo, rigenerare gli SVG e le icone e aggiornare `?v=` nei link;

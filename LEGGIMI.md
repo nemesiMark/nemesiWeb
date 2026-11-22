@@ -277,3 +277,16 @@
 
 ### 3.6 — 22/11/2026
 - Tolti i file di riepilogo della chat (`riepilogo-*.txt`, mai finiti online): ora il passaggio tra chat lo fa la mod di handoff. Aggiornato `CLAUDE.md`.
+
+### 3.7 — 22/11/2026
+- Nuova pagina di prova `strumenti.html` (per ora a parte, non collegata dal sito): sei lastre 3D laccate con gli spessori verdi (Claude, VS Code, GitHub, Figma, Cloudflare, Supabase) in giostra intorno a un asse verde, su pavimento a griglia. Girano da sole una alla volta e seguono lo scorrimento; si fermano sempre con una lastra davanti, con didascalia e punti per sceglierla (anche frecce della tastiera).
+- Icone da simple-icons (CC0) in `images/strumenti/`, tracciati in `js/strumenti-icone.js`. Con «riduci movimento» o senza WebGL: griglia ferma di lastre.
+- Verifiche: controllo dei testi pulito, fluidità max 18,6 ms, schermate 1440×900 e 390×844.
+
+### 3.8 — 22/11/2026
+- Icona del sito di nuovo con lo sfondo trasparente (come dalla 2.2): dalla 3.4 `icona.svg` e `icona-16/32/180.png` avevano un quadrato nero arrotondato dietro il logo, che compariva nei segnalibri. Tolto il fondo anche nel generatore (`archivio/logo-svg/trace/build_svg2.py`), così non torna quando si rigenera il logo. Link delle icone a `?v=3.8`.
+
+### 3.8 — 22/11/2026
+- `strumenti.html`: lastre nei colori originali come le icone delle app, corpo intero (facce e spessori) del colore della marca: Claude arancio con logo bianco, VS Code blu con logo bianco, GitHub nero con logo bianco, Figma nero con il logo a cinque colori, Cloudflare bianco con la nuvola arancio, Supabase nero con il logo verde. Anche la griglia ferma usa questi colori.
+- Più definizione: marchi disegnati su texture da 2048 px con filtro anisotropo, bordi arrotondati più lisci, disegno almeno a 1,5× anche sugli schermi normali; tolta la correzione di tono che sbiadiva i colori delle marche.
+- Verifiche: controllo dei testi pulito, fluidità max 19,2 ms, schermate 1440×900 e 390×844.

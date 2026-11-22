@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strumenti · Nemesi Web</title>
+<meta name="description" content="Gli strumenti con cui Nemesi Web lavora ogni giorno: Claude, VS Code, GitHub, Figma, Cloudflare e Supabase.">
+<meta name="theme-color" content="#050506">
+<link rel="icon" href="images/logo/icona.svg?v=3.8" type="image/svg+xml">
+<link rel="apple-touch-icon" href="images/logo/icona-180.png?v=3.8">
+<script>
+document.documentElement.className = 'js';
+(function(){
+  var ridotto = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches, gl = false;
+  try { var c = document.createElement('canvas'); gl = !!(c.getContext('webgl2') || c.getContext('webgl')); } catch(e){}
+  if (gl && !ridotto) document.documentElement.classList.add('film');
+})();
+if (location.protocol === 'file:') document.write('<script src="js/caratteri-dati.js"><\/script>');
+</script>
+<style>
+@font-face{ font-family:"Inter Tight"; src:url(fonts/inter-tight.woff2) format("woff2"); font-weight:100 900; font-display:swap; }
+@font-face{ font-family:"Geist"; src:url(fonts/geist.woff2) format("woff2"); font-weight:100 900; font-display:swap; }
+@font-face{ font-family:"Geist Mono"; src:url(fonts/geist-mono.woff2) format("woff2"); font-weight:100 900; font-display:swap; }
+:root{
+  --nero:#050506; --carta:#F4F3F1; --grigio:#9A9BA3;
+  --verde:#CDFD67; --verde-chiaro:#DCFF8E; --verde-scuro:#79B003;
+  --titoli:"Inter Tight", system-ui, sans-serif; --testo:"Geist", system-ui, sans-serif; --mono:"Geist Mono", ui-monospace, monospace;
+  --m:clamp(16px, 4vw, 56px); --ease:cubic-bezier(.22,1,.36,1);
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ background:var(--nero); color:var(--carta); font-family:var(--testo); -webkit-font-smoothing:antialiased; }
+body{ background:var(--nero); min-height:100vh; overflow-x:hidden; }
+a{ color:inherit; text-decoration:none; }
+::selection{ background:var(--verde); color:#030B1F; }
+:focus-visible{ outline:2px solid var(--verde); outline-offset:3px; border-radius:4px; }
+.mono{ font-family:var(--mono); font-size:12.5px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; }
+
+/* barra: la stessa lastra scura del sito, linea verde sul contorno */
+.hdr{ position:fixed; top:14px; left:0; right:0; z-index:20; pointer-events:none; }
+.slab{ pointer-events:auto; position:relative; width:min(960px, calc(100% - 2 * var(--m) + 24px)); margin-inline:auto;
+  display:flex; align-items:center; gap:18px; padding:6px 7px 6px 14px; border-radius:16px;
+  background:linear-gradient(180deg, rgba(14,14,16,.94), rgba(0,0,0,.94));
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border:1px solid #CCFD64; box-shadow:0 0 10px rgba(166,239,11,.3), 0 4px 0 #040405, 0 24px 48px -16px rgba(0,0,0,.8); }
+.logo{ display:block; width:173px; height:34px; position:relative; }
+.logo img{ position:absolute; left:0; top:-1.5px; height:31px; width:auto; }
+.torna{ margin-left:auto; padding:9px 14px; font-size:14px; font-weight:500; color:#C9C9D1; border-radius:11px;
+  background:linear-gradient(180deg, #2A2B31 0%, #1C1D22 48%, #121317 100%);
+  box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 3px 0 #050506; transition:transform 220ms var(--ease), color 150ms; }
+@media (hover:hover){ .torna:hover{ color:var(--carta); transform:translateY(-2px); } }
+
+/* scena */
+.strumenti{ position:relative; }
+.film .strumenti{ height:600vh; }
+.palco{ position:relative; }
+.film .palco{ position:sticky; top:0; height:100vh; height:100svh; overflow:hidden; }
+#gl{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+.testa{ position:relative; z-index:2; padding:calc(96px + 4vh) var(--m) 0; max-width:1200px; margin-inline:auto; }
+.testa .mono{ color:var(--verde); }
+.testa h1{ font-family:var(--titoli); font-weight:600; font-size:clamp(34px, 5.4vw, 76px); line-height:.98; letter-spacing:-.025em; margin-top:12px; max-width:12ch; }
+.testa h1 em{ font-style:normal; color:var(--verde); text-shadow:0 0 24px rgba(166,239,11,.25); }
+
+.dida{ position:absolute; z-index:2; left:0; right:0; bottom:calc(64px + 3vh); text-align:center; padding-inline:var(--m); pointer-events:none; }
+.dida h2{ font-family:var(--titoli); font-weight:600; font-size:clamp(26px, 3vw, 38px); letter-spacing:-.02em; }
+.dida p{ color:var(--grigio); margin-top:6px; font-size:15px; }
+.dida .mono{ display:block; color:var(--verde); margin-bottom:8px; font-size:11.5px; }
+.dida > div{ transition:opacity 260ms ease, transform 420ms var(--ease); }
+.dida.cambio > div{ opacity:0; transform:translateY(8px); }
+
+.punti{ position:absolute; z-index:3; left:0; right:0; bottom:calc(26px + 2vh); display:flex; justify-content:center; gap:6px; }
+.punti button{ width:28px; height:28px; border:0; background:none; cursor:pointer; display:grid; place-items:center; }
+.punti button::before{ content:""; width:8px; height:8px; border-radius:50%; border:1px solid rgba(205,253,103,.55); transition:background 200ms, transform 300ms var(--ease); }
+.punti button[aria-current]::before{ background:var(--verde); transform:scale(1.25); box-shadow:0 0 10px rgba(166,239,11,.6); }
+
+/* versione ferma: griglia di lastre (riduci movimento o senza WebGL) */
+.griglia{ list-style:none; display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(14px, 2vw, 28px);
+  max-width:1200px; margin:56px auto 0; padding:0 var(--m) 96px; }
+.griglia li{ position:relative; aspect-ratio:5/4; border-radius:14px; background:var(--corpo);
+  background-image:linear-gradient(160deg, rgba(255,255,255,.14), rgba(0,0,0,.18));
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset, 0 10px 0 -2px color-mix(in srgb, var(--corpo) 70%, #000), 0 30px 50px -20px rgba(0,0,0,.9);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:18px; text-align:center; }
+.griglia svg{ width:auto; height:34%; }
+.griglia strong{ font-family:var(--titoli); font-size:20px; font-weight:600; }
+.griglia span{ color:rgba(255,255,255,.72); font-size:13.5px; }
+.griglia .chiaro{ color:#15161A; } .griglia .chiaro span{ color:#55565E; }
+.film .griglia, .film .vh-film{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+html:not(.film) #gl, html:not(.film) .dida, html:not(.film) .punti{ display:none; }
+
+.coda{ padding:80px var(--m) 64px; text-align:center; color:var(--grigio); font-size:14px; border-top:1px solid #16171A; }
+.coda a{ color:var(--verde); }
+
+@media (max-width:720px){
+  .logo{ width:140px; } .logo img{ height:25px; top:1px; }
+  .griglia{ grid-template-columns:repeat(2, 1fr); }
+  .griglia span{ display:none; }
+  .dida{ bottom:calc(58px + 2vh); }
+  .dida p{ font-size:14px; }
+}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <nav class="slab" aria-label="Principale">
+    <a class="logo" href="index.html" aria-label="Nemesi Web, torna al sito"><img src="images/logo/nemesi-web-barra.svg" alt="" width="1997" height="343"></a>
+    <a class="torna" href="index.html">Torna al sito</a>
+  </nav>
+</header>
+
+<main>
+  <section class="strumenti" id="strumenti" aria-labelledby="titolo">
+    <div class="palco">
+      <canvas id="gl" aria-hidden="true"></canvas>
+      <div class="testa">
+        <span class="mono">Strumenti</span>
+        <h1 id="titolo">Con cosa lavoro <em>ogni giorno.</em></h1>
+      </div>
+      <div class="dida" id="dida" aria-live="polite">
+        <div><span class="mono" id="d-casa">Anthropic</span><h2 id="d-nome">Claude</h2><p id="d-testo"></p></div>
+      </div>
+      <div class="punti" id="punti" role="group" aria-label="Scegli lo strumento"></div>
+      <ul class="griglia" id="griglia"></ul>
+    </div>
+  </section>
+  <footer class="coda">© 2026 Nemesi Web · <a href="index.html">Torna al sito</a></footer>
+</main>
+
+<script src="js/strumenti-icone.js"></script>
+<script src="vendor/three/three.min.js"></script>
+<script>
+(function(){
+  'use strict';
+  var T = window.STRUMENTI, N = T.length, PASSO = Math.PI * 2 / N;
+
+  /* ── griglia ferma (anche testo per chi non vede il 3D) ── */
+  var griglia = document.getElementById('griglia');
+  griglia.innerHTML = T.map(function(s){
+    var icona = s.logo === 'figma'
+      ? '<svg viewBox="0 0 38 57" aria-hidden="true"><path fill="#F24E1E" d="M19 0H9.5A9.5 9.5 0 0 0 9.5 19H19Z"/><path fill="#FF7262" d="M19 0H28.5A9.5 9.5 0 0 1 28.5 19H19Z"/><path fill="#A259FF" d="M19 19H9.5A9.5 9.5 0 0 0 9.5 38H19Z"/><circle fill="#1ABCFE" cx="28.5" cy="28.5" r="9.5"/><path fill="#0ACF83" d="M9.5 38H19V47.5A9.5 9.5 0 1 1 9.5 38Z"/></svg>'
+      : '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="' + s.logo + '" d="' + s.d + '"/></svg>';
+    return '<li style="--corpo:' + s.corpo + '"' + (s.chiaro ? ' class="chiaro"' : '') + '>' + icona +
+      '<strong>' + s.nome + '</strong><span>' + s.testo + '</span></li>';
+  }).join('');
+
+  if (!document.documentElement.classList.contains('film')) return;
+
+  /* ── didascalia e punti ── */
+  var dida = document.getElementById('dida'), dCasa = document.getElementById('d-casa'),
+      dNome = document.getElementById('d-nome'), dTesto = document.getElementById('d-testo'),
+      punti = document.getElementById('punti'), davanti = -1, timerDida;
+  T.forEach(function(s, i){
+    var b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('aria-label', s.nome);
+    b.addEventListener('click', function(){ vaiA(i); });
+    punti.appendChild(b);
+  });
+  function mostra(i){
+    if (i === davanti) return;
+    var primo = davanti < 0; davanti = i;
+    punti.querySelectorAll('button').forEach(function(b, k){ if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    function scrivi(){ dCasa.textContent = T[i].casa; dNome.textContent = T[i].nome; dTesto.textContent = T[i].testo; dida.classList.remove('cambio'); }
+    clearTimeout(timerDida);
+    if (primo) return scrivi();
+    dida.classList.add('cambio'); timerDida = setTimeout(scrivi, 240);
+  }
+
+  /* ── renderer e scena ── */
+  var canvas = document.getElementById('gl');
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
+  renderer.setClearColor(0x050506, 1);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.NoToneMapping;   // colori delle marche fedeli
+
+  var scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x050506, 9, 19);
+  var camera = new THREE.PerspectiveCamera(32, 1, 0.1, 60);
+
+  /* ambiente per i riflessi della lacca: una stanza buia con due pannelli di luce e una striscia verde */
+  (function(){
+    var env = new THREE.Scene(); env.background = new THREE.Color(0x060607);
+    function pannello(w, h, col, x, y, z, ry, rx){
+      var m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: col, side: THREE.DoubleSide }));
+      m.position.set(x, y, z); m.rotation.set(rx || 0, ry || 0, 0); env.add(m);
+    }
+    pannello(8, 3, 0xffffff, 0, 6, 2, 0, Math.PI / 2);
+    pannello(2.4, 6, 0xb8bcc8, -7, 1, 3, Math.PI / 2);
+    pannello(1.2, 6, 0x9fd23a, 7, 0, -2, -Math.PI / 2);
+    pannello(10, 0.4, 0x8a8f9a, 0, 0.5, 8, Math.PI);
+    var pm = new THREE.PMREMGenerator(renderer);
+    scene.environment = pm.fromScene(env, 0.04).texture;
+    pm.dispose();
+  })();
+
+  scene.add(new THREE.HemisphereLight(0x9aa0b0, 0x050506, 0.35));
+  var chiave = new THREE.DirectionalLight(0xffffff, 1.15); chiave.position.set(-3, 5, 6); scene.add(chiave);
+  var taglio = new THREE.DirectionalLight(0xcdfd67, 0.6); taglio.position.set(4, 2, -5); scene.add(taglio);
+  var passa = new THREE.PointLight(0xffffff, 0, 6, 2); scene.add(passa);
+
+  /* ── la lastra: corpo laccato con gli spessori verdi, il marchio sulla faccia davanti ── */
+  var W = 1.5, H = 1.2, D = 0.22, BV = 0.035, R = 0.1;
+  function rettangolo(w, h, r){
+    var s = new THREE.Shape(), x = -w / 2, y = -h / 2;
+    s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
+    s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
+    s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y); return s;
+  }
+  var corpo = new THREE.ExtrudeGeometry(rettangolo(W, H, R), { depth: D, bevelEnabled: true, bevelThickness: BV, bevelSize: BV, bevelSegments: 8, curveSegments: 24 });
+  corpo.translate(0, 0, -D / 2);
+  var FZ = D / 2 + BV;   // la faccia davanti
+
+  function lineare(hex){ return new THREE.Color(hex).convertSRGBToLinear(); }
+  function laccaDi(hex, chiaro){
+    return new THREE.MeshPhysicalMaterial({ color: lineare(hex), roughness: chiaro ? 0.3 : 0.2, metalness: 0.05,
+      clearcoat: 1, clearcoatRoughness: 0.05, envMapIntensity: chiaro ? 0.55 : 0.9 });
+  }
+
+  /* marchio di Figma a cinque colori (non esiste in una sola tinta) */
+  function disegnaFigma(g, x, y, alto){
+    var k = alto / 57; g.save(); g.translate(x - 19 * k, y - 28.5 * k); g.scale(k, k);
+    function f(col, d){ g.fillStyle = col; g.fill(new Path2D(d)); }
+    f('#F24E1E', 'M19 0H9.5A9.5 9.5 0 0 0 9.5 19H19Z');
+    f('#FF7262', 'M19 0H28.5A9.5 9.5 0 0 1 28.5 19H19Z');
+    f('#A259FF', 'M19 19H9.5A9.5 9.5 0 0 0 9.5 38H19Z');
+    f('#1ABCFE', 'M38 28.5A9.5 9.5 0 1 1 19 28.5A9.5 9.5 0 0 1 38 28.5Z');
+    f('#0ACF83', 'M9.5 38H19V47.5A9.5 9.5 0 1 1 9.5 38Z');
+    g.restore();
+  }
+
+  /* texture ad alta definizione: 2048 px, marchio pieno e netto */
+  var TW = 2048, TH = Math.round(TW * H / W), MAXANISO = renderer.capabilities.getMaxAnisotropy();
+  function texMarchio(s, retro){
+    var col = s, c = document.createElement('canvas'); c.width = TW; c.height = TH;
+    var g = c.getContext('2d'), lato = TH * 0.46, cx = TW / 2, cy = TH / 2;
+    if (col.logo === 'figma'){
+      g.globalAlpha = retro ? 0.14 : 1; disegnaFigma(g, cx, cy, lato * 1.05);
+    } else {
+      var sc = lato / 24; g.save(); g.translate(cx - lato / 2, cy - lato / 2); g.scale(sc, sc);
+      g.fillStyle = retro ? (col.chiaro ? 'rgba(0,0,0,.1)' : 'rgba(255,255,255,.16)') : col.logo;
+      g.fill(new Path2D(s.d)); g.restore();
+    }
+    var t = new THREE.CanvasTexture(c);
+    t.encoding = THREE.sRGBEncoding; t.anisotropy = MAXANISO;
+    t.minFilter = THREE.LinearMipmapLinearFilter; t.generateMipmaps = true; return t;
+  }
+  var piano = new THREE.PlaneGeometry(W, H);
+  var ombraTex = (function(){
+    var c = document.createElement('canvas'); c.width = c.height = 128; var g = c.getContext('2d');
+    var r = g.createRadialGradient(64, 64, 4, 64, 64, 64); r.addColorStop(0, 'rgba(0,0,0,.75)'); r.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = r; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c);
+  })();
+
+  var PAVIMENTO = -1.05, RAGGIO = 2.7;
+  var giostra = new THREE.Group(); scene.add(giostra);
+  var lastre = T.map(function(s, i){
+    var a = i * PASSO, posto = new THREE.Group();
+    posto.position.set(Math.sin(a) * RAGGIO, 0, Math.cos(a) * RAGGIO);
+    posto.rotation.y = a;
+    var lastra = new THREE.Group();
+    var mat = laccaDi(s.corpo, s.chiaro);
+    lastra.add(new THREE.Mesh(corpo, [mat, mat]));
+    var tex = texMarchio(s, false);
+    var fronte = new THREE.Mesh(piano, new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: 0xffffff, emissiveIntensity: 0.55,
+      transparent: true, roughness: 0.3, metalness: 0, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }));
+    fronte.position.z = FZ + 0.002; lastra.add(fronte);
+    var retro = new THREE.Mesh(piano, new THREE.MeshBasicMaterial({ map: texMarchio(s, true), transparent: true, depthWrite: false }));
+    retro.position.z = -FZ - 0.002; retro.rotation.y = Math.PI; lastra.add(retro);
+    posto.add(lastra);
+    var ombra = new THREE.Mesh(new THREE.PlaneGeometry(W * 1.5, 0.9), new THREE.MeshBasicMaterial({ map: ombraTex, transparent: true, depthWrite: false }));
+    ombra.rotation.x = -Math.PI / 2; ombra.position.y = PAVIMENTO + 0.003; posto.add(ombra);
+    giostra.add(posto);
+    return { lastra: lastra, ombra: ombra, fronte: fronte };
+  });
+
+  /* asse centrale: filo verde con alone, mozzo sul pavimento */
+  var asse = new THREE.Group(); scene.add(asse);
+  var filo = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 3.6, 12), new THREE.MeshBasicMaterial({ color: 0xcdfd67 }));
+  filo.position.y = PAVIMENTO + 1.8; asse.add(filo);
+  var alone = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 3.6, 16, 1, true),
+    new THREE.MeshBasicMaterial({ color: 0xa6ef0b, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false }));
+  alone.position.y = filo.position.y; asse.add(alone);
+  var mozzo = new THREE.Mesh(new THREE.RingGeometry(0.12, 0.16, 48), new THREE.MeshBasicMaterial({ color: 0xcdfd67, transparent: true, opacity: 0.7 }));
+  mozzo.rotation.x = -Math.PI / 2; mozzo.position.y = PAVIMENTO + 0.004; asse.add(mozzo);
+  var orbita = new THREE.Mesh(new THREE.RingGeometry(RAGGIO - 0.004, RAGGIO + 0.004, 160), new THREE.MeshBasicMaterial({ color: 0xcdfd67, transparent: true, opacity: 0.22 }));
+  orbita.rotation.x = -Math.PI / 2; orbita.position.y = PAVIMENTO + 0.003; asse.add(orbita);
+
+  /* pavimento a griglia, come il piano di lavoro del tuo modellatore */
+  var griglia3d = new THREE.GridHelper(40, 80, 0x2a2d33, 0x15171b);
+  griglia3d.position.y = PAVIMENTO; scene.add(griglia3d);
+
+  /* ── inquadratura: tutta la giostra deve entrare, anche sul telefono ── */
+  var largo = 1, alto = 1;
+  function misura(){
+    largo = window.innerWidth; alto = window.innerHeight;
+    renderer.setPixelRatio(Math.min(Math.max(window.devicePixelRatio || 1, 1.5), 2.5));   // anche sugli schermi normali disegna più fitto
+    renderer.setSize(largo, alto, false);
+    var asp = largo / alto; camera.aspect = asp;
+    var vf = THREE.MathUtils.degToRad(camera.fov), hf = 2 * Math.atan(Math.tan(vf / 2) * asp);
+    var telefono = asp < 0.8;
+    /* mezza larghezza della giostra; sul telefono le lastre di lato possono uscire un poco dai bordi */
+    var serve = telefono ? RAGGIO * 0.6 : RAGGIO + W * 0.62 + 0.25;
+    var dist = Math.max(serve / Math.tan(hf / 2) + RAGGIO * 0.35, 8.2);
+    camera.position.set(0, telefono ? 1.3 : 1.45, dist);
+    camera.lookAt(0, telefono ? 0.1 : 0.05, 0);
+    scene.fog.near = dist - 1; scene.fog.far = dist + 9;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', misura); misura();
+
+  /* ── movimento: scorrimento + giro da sole, sempre fermo con una lastra davanti ── */
+  var sezione = document.getElementById('strumenti');
+  var giri = 0, ora = 0, vel = 0, ultimoScroll = -1e9, ultimoGiro = performance.now(), pausa = false;
+  var ATTESA = 3600;   // ms tra un giro da sole e l'altro
+  function daScroll(){
+    var r = sezione.getBoundingClientRect(), corsa = sezione.offsetHeight - window.innerHeight;
+    var p = Math.min(Math.max(-r.top / corsa, 0), 1);
+    return p * (N - 1);
+  }
+  window.addEventListener('scroll', function(){ ultimoScroll = performance.now(); }, { passive: true });
+  function vaiA(i){
+    var cur = Math.round(ora), k = ((cur % N) + N) % N, d = i - k;
+    if (d > N / 2) d -= N; if (d < -N / 2) d += N;
+    giri += d; ultimoGiro = performance.now();
+  }
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight') vaiA((davanti + 1) % N);
+    else if (e.key === 'ArrowLeft') vaiA((davanti + N - 1) % N);
+  });
+  document.addEventListener('visibilitychange', function(){ pausa = document.hidden; ultimoGiro = performance.now(); });
+
+  var prima = performance.now();
+  function fotogramma(adesso){
+    requestAnimationFrame(fotogramma);
+    if (pausa) return;
+    var dt = Math.min((adesso - prima) / 1000, 0.05); prima = adesso;
+    var t = adesso / 1000;
+
+    var scorre = adesso - ultimoScroll < 180;
+    if (adesso - ultimoScroll > 2500 && adesso - ultimoGiro > ATTESA){ giri += 1; ultimoGiro = adesso; }
+    var totale = daScroll() + giri;
+    var meta = scorre ? totale : Math.round(totale);
+    /* molla morbida e smorzata: arriva senza scatti e si posa */
+    var k = 26, c = 9.5;
+    vel += ((meta - ora) * k - vel * c) * dt;
+    ora += vel * dt;
+
+    giostra.rotation.y = -ora * PASSO;
+    mostra(((Math.round(ora) % N) + N) % N);
+
+    lastre.forEach(function(L, i){
+      L.lastra.position.y = Math.sin(t * 1.1 + i * 1.7) * 0.05;
+      L.lastra.rotation.z = Math.sin(t * 0.7 + i) * 0.012;
+      var s = 1 - L.lastra.position.y * 0.6; L.ombra.scale.set(s, s, 1);
+      /* la faccia del marchio si accende quando è davanti */
+      var a = i * PASSO - ora * PASSO, fronte = (Math.cos(a) + 1) / 2;
+      L.fronte.material.emissiveIntensity = 0.45 + fronte * fronte * 0.55;
+    });
+    /* la luce che passa sulla lastra davanti */
+    var sweep = ((t * 0.18) % 1) * 2 - 0.5;
+    passa.position.set(-2.4 + sweep * 4.8, 1.2, RAGGIO + 1.4);
+    passa.intensity = 0.9 * Math.sin(Math.min(Math.max(sweep + 0.5, 0), 2) * Math.PI / 2);
+    alone.material.opacity = 0.1 + Math.sin(t * 2) * 0.03;
+
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(fotogramma);
+
+  /* contratto di verifica: ?jump=<scrollY>, window.__ready */
+  var j = /[?&]jump=(\d+)/.exec(location.search);
+  if (j){ window.scrollTo(0, +j[1]); ora = Math.round(daScroll()); vel = 0; }
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ window.__ready = true; }); });
+})();
+if (!document.documentElement.classList.contains('film')) window.__ready = true;
+</script>
+</body>
+</html>
