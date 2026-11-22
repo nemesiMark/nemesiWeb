@@ -35,7 +35,7 @@ var KX = { o:HO };
 for (var kk in K) KX[kk] = K[kk] + HO;
 for (var kh in KH) KX[kh] = KH[kh];
 
-var COL = { nero:'#9AA0A8', arancio:'#F56F27', chiaro:'#FFA54D', oro:'#F9D377', scuro:'#EA4006', brace:'#C92C02', caldo:'#FFE3B0' };
+var COL = { nero:'#9AA0A8', arancio:'#A6EF0B', chiaro:'#CDFD67', oro:'#CFF977', scuro:'#8ECE05', brace:'#79B003', caldo:'#E5FEB1' };
 function lin(h){ return new T.Color(h).convertSRGBToLinear(); }
 function raw(h){ return new T.Color(h); }
 function clamp(x, a, b){ return x < a ? a : x > b ? b : x; }
@@ -118,7 +118,7 @@ var FS_SCREEN = [
   '    emb = 1.0 - smoothstep(0.0, 0.06, v - thr);',
   '    img = mix(img, texture2D(uMap, (c + 0.5) / cells).rgb, smoothstep(0.0, 0.22, uPix)) * (1.0 - 0.5 * uPix);',
   '  }',
-  '  vec3 emp = vec3(0.026, 0.026, 0.031) + vec3(0.030, 0.016, 0.010) * (1.0 - smoothstep(0.0, 0.75, length(p / uSize)));',
+  '  vec3 emp = vec3(0.026, 0.026, 0.031) + vec3(0.018, 0.030, 0.010) * (1.0 - smoothstep(0.0, 0.75, length(p / uSize)));',
   '  float inner = exp(-pow((d + 0.085) / 0.0045, 2.0));',
   '  emp += uOr * inner * 0.75 * uGlow + uOr * exp(d / 0.09) * 0.16 * uGlow;',
   '  img = mix(img, emp, uEmpty);',
@@ -322,7 +322,7 @@ function stickMaterial(env, halfL, spd, ph, halfH, r4){
         'vec2 on2 = (cq.x > 0.0 && cq.y > 0.0) ? normalize(cq) : (cq.x > cq.y ? vec2(1.0, 0.0) : vec2(0.0, 1.0));\n' +
         'on2 *= vec2(vSP.x < 0.0 ? -1.0 : 1.0, vSP.y < 0.0 ? -1.0 : 1.0);\n' +
         'float lk = smoothstep(-0.05, 0.7, dot(normalize(vAX * on2.x + vAY * on2.y), normalize(vec3(-0.34, 0.56, 0.76))));\n' +
-        'totalEmissiveRadiance += vec3(1.0, 0.86, 0.72) * rimL * (0.03 + 0.2 * lk + run * 0.3) * uEdge;\n' +
+        'totalEmissiveRadiance += vec3(0.86, 1.0, 0.70) * rimL * (0.03 + 0.2 * lk + run * 0.3) * uEdge;\n' +
         'totalEmissiveRadiance += mix(uMid, uGold, 0.45) * uFlash * (side * 1.5 + 0.1);');
   };
   return m;
@@ -350,9 +350,9 @@ function create(canvas, opts){
       m.position.set(x, y, z); m.rotation.set(rx, ry, 0); s.add(m);
     }
     panel(16, 2.4, 0, 10, 3, PI / 2, 0, '#ffffff', 2.4);          // striscia alta
-    panel(2.6, 14, -11, 1.5, 2, 0, PI / 2, '#ffe2c4', 1.3);        // striscia calda a sinistra
+    panel(2.6, 14, -11, 1.5, 2, 0, PI / 2, '#ecfec5', 1.3);        // striscia calda a sinistra
     panel(2, 12, 11, .5, -3, 0, -PI / 2, '#dfe3ff', .8);           // striscia fredda a destra
-    panel(12, 3, 0, -10, 5, -PI / 2, 0, '#F56F27', .45);           // riflesso arancio dal basso
+    panel(12, 3, 0, -10, 5, -PI / 2, 0, '#A6EF0B', .45);           // riflesso arancio dal basso
     var pm = new T.PMREMGenerator(renderer), tx = pm.fromScene(s, .015).texture; pm.dispose();
     return tx;
   }
@@ -409,7 +409,7 @@ function create(canvas, opts){
   function rand(){ rnd = (rnd * 16807) % 2147483647; return (rnd - 1) / 2147483646; }
   for (var di = 0; di < NDUST; di++){ dp[di * 3] = (rand() - .5) * 15; dp[di * 3 + 1] = (rand() - .5) * 9; dp[di * 3 + 2] = 9 - rand() * 36; ds[di] = rand(); }
   var gd = new T.BufferGeometry(); gd.setAttribute('position', new T.BufferAttribute(dp, 3)); gd.setAttribute('aS', new T.BufferAttribute(ds, 1));
-  var dustU = { uTime:{value:0}, uPx:{value:30}, uMax:{value:4}, uCol:{value:raw('#FFDDBB')}, uI:{value:.3} };
+  var dustU = { uTime:{value:0}, uPx:{value:30}, uMax:{value:4}, uCol:{value:raw('#E9FEBC')}, uI:{value:.3} };
   var dust = new T.Points(gd, new T.ShaderMaterial({ vertexShader: VS_DUST, fragmentShader: FS_DUST, uniforms: dustU,
     transparent: true, blending: T.AdditiveBlending, depthWrite: false, toneMapped: false }));
   dust.frustumCulled = false; scene.add(dust);

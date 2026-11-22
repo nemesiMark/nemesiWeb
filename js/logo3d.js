@@ -109,7 +109,7 @@ var FS_Q = [
   '  vec3 glow = vec3(0.0);',
   '  for (int i = 0; i < 12; i++){ float an = float(i) * 0.5236 + 0.26; vec2 o = vec2(cos(an), sin(an));',
   '    vec4 q1 = texture2D(tS, vUv + o * 9.0 * uDpr / uRes); vec4 q2 = texture2D(tS, vUv + o * 22.0 * uDpr / uRes);',
-  '    glow += vec3(1.0, 0.42, 0.12) * (max(q1.r - 1.6 * q1.b, 0.0) * 0.8 + max(q2.r - 1.6 * q2.b, 0.0) * 0.5); }',
+  '    glow += vec3(0.62, 1.0, 0.10) * (max(q1.g - 1.6 * q1.b, 0.0) * 0.8 + max(q2.g - 1.6 * q2.b, 0.0) * 0.5); }',
   '  glow *= (1.0 / 12.0) * 0.9 * pow(1.0 - uOut, 3.0) * (1.0 - smoothstep(0.3, 1.0, a));',
   '  vec3 c = enc(s.rgb) * al;',
   '  float ga = clamp(max(glow.r, max(glow.g, glow.b)), 0.0, 1.0) * (1.0 - al);',
@@ -130,8 +130,8 @@ function play(canvas){
   scene.add(new T.HemisphereLight(0xdfe3ea, 0x101014, 0.32));
   var key = new T.DirectionalLight(0xffffff, 2.4); key.position.set(-1.2, 5, -1.6); scene.add(key);
   var fill = new T.DirectionalLight(0xbfc6d4, 0.5); fill.position.set(2.5, 3, -2); scene.add(fill);
-  var o1 = new T.PointLight(0xff5a14, 1.1, 1.6, 2); o1.position.copy(new T.Vector3(P(600, 640).x, P(600, 640).y, 0.35)); scene.add(o1);
-  var o2 = new T.PointLight(0xff6a1a, 1.0, 1.6, 2); o2.position.copy(new T.Vector3(P(1180, 520).x, P(1180, 520).y, 0.3)); scene.add(o2);
+  var o1 = new T.PointLight(0xa3ee04, 1.1, 1.6, 2); o1.position.copy(new T.Vector3(P(600, 640).x, P(600, 640).y, 0.35)); scene.add(o1);
+  var o2 = new T.PointLight(0xa7f404, 1.0, 1.6, 2); o2.position.copy(new T.Vector3(P(1180, 520).x, P(1180, 520).y, 0.3)); scene.add(o2);
 
   var logo = new T.Group(); scene.add(logo);
   var DEPTH = 0.62;
@@ -142,14 +142,14 @@ function play(canvas){
 
   /* bordo acceso: lo stesso nastro appena più grande, arancio, dietro la faccia (si vede come un filo sul contorno) */
   var bordo = new T.Mesh(new T.ExtrudeGeometry(nastro(), { depth: 0.04, bevelEnabled: true, bevelThickness: 0.004, bevelSize: 0.02, bevelSegments: 2, curveSegments: 1 }),
-    new T.MeshBasicMaterial({ color: lin('#FF7A22') }));
+    new T.MeshBasicMaterial({ color: lin('#ACFB04') }));
   bordo.geometry.translate(0, 0, -0.075); logo.add(bordo);
 
   function pannello(list, k){
     var sh = poligono(list), g = new T.ExtrudeGeometry(sh, { depth: 0.05, bevelEnabled: true, bevelThickness: 0.008, bevelSize: 0.008, bevelSegments: 2 });
     g.computeBoundingBox(); var bb = g.boundingBox;
     var m = new T.ShaderMaterial({ vertexShader: VS, fragmentShader: FS_ARANCIO, uniforms: {
-      uA: { value: lin('#FFE45C') }, uB: { value: lin('#FF7A1E') }, uC: { value: lin('#E42400') },
+      uA: { value: lin('#CAFD5E') }, uB: { value: lin('#A9F704') }, uC: { value: lin('#87C603') },
       uLo: { value: new T.Vector2(bb.min.x, bb.min.y) }, uHi: { value: new T.Vector2(bb.max.x, bb.max.y) }, uK: { value: k } } });
     var mesh = new T.Mesh(g, m); mesh.position.z = -0.03; logo.add(mesh); return mesh;
   }

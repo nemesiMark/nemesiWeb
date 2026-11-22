@@ -242,3 +242,9 @@
 - Passaggio al sito: quando il sito ha caricato (e il logo è rimasto almeno fino a 2,9 s) il logo si sfalda in una pioggia di strisce che cadono. Il fondo si scioglie e dietro si accendono le aste dell'apertura, poi scende la barra. Chi scorre, tocca o preme un tasto salta il logo.
 - Il logo prende il posto della vecchia barra di caricamento (`.pre`). Con `?jump`, «riduci movimento» o senza WebGL non c'è.
 - Verifiche: sito pronto in circa 5,1 s (3,0 s saltando il logo), fluidità max 19,9–25,6 ms, controllo dei testi pulito, schermate computer e telefono.
+
+### 3.0 — 22/11/2026
+- Il colore d'accento passa dall'arancio al verde lime `#CDFD67`, preso dal bottone di riferimento, ovunque. Cambiano bottoni («Contattaci», «Scrivimi», area riservata), aloni e neon, la luce che corre sul bordo della barra, il bordo della lastra, le aste dell'apertura, gli anelli, la riga di luce, il pulviscolo, i riflessi dello studio 3D e il logo in 3D dell'apertura.
+- Ogni arancio è diventato il verde con la stessa luminosità; i toni scuri sono un po' più cupi. Il testo dei bottoni è blu notte `#030B1F`, come nel riferimento. I testi d'accento sul cemento sono verde scuro `#2F5600`, per restare leggibili.
+- Logo e icone della scheda: nuove copie verdi (`nemesi-web-verde.png`, `nemesi-web-nav-verde.png`, `favicon-verde*.png`, link `?v=3.0`). Gli originali arancio restano intatti in `images/logo/`.
+- Verifiche: controllo dei testi pulito, fluidità max 22,7 ms, schermate di apertura, film, finale, area riservata e telefono.

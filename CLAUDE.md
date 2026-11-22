@@ -2,7 +2,8 @@
 
 ## Cos'è
 Sito vetrina/portfolio di Nemesi Web, lo studio di web design di Mark. Dalla 2.0 (21/11/2026) è rifatto da zero: una pagina unica «scroll-film» in puro codice (skill `sito-film`, Corsia A), con il concept «Dritto e rovescio» (dettagli in `BRIEF.md`).
-Un solo oggetto 3D porta tutti i lavori: la «lastra», nera laccata, a due strati, con il bordo arancio come le facce del logo. La camera va solo avanti.
+Un solo oggetto 3D porta tutti i lavori: la «lastra», nera laccata, a due strati, con il bordo verde come le facce del logo. La camera va solo avanti.
+Dalla 3.0 il colore d'accento è il verde lime `#CDFD67` (prima era arancio): nel codice le variabili si chiamano ancora `--arancio*` e `COL.arancio`, ma contengono i verdi.
 
 Capitoli:
 1. Apertura: prima il logo in 3D (`js/logo3d.js`), che si compone a strisce come in un segnale disturbato e poi piove via; poi le aste 3D (i pezzi della lastra in vista esplosa, sempre in movimento). Scorrendo compongono la lastra distesa, una riga di luce la salda e la lastra si alza. Il logo sta solo nella barra.
@@ -50,6 +51,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
   - Basta un breve script Python: base64 dei file → oggetto `window.LAVORI_DATI` oppure regole `@font-face`.
 - `images/lavori/<nome>.jpg`: texture 1600×900 q70, ricavate da `<nome>-d.jpg` (master 2000×1125) con `sips -s format jpeg -s formatOptions 70 -Z 1600`. Le `-m.jpg` non sono usate.
 - `images/logo/`:
+  - **In uso dalla 3.0 le copie verdi**: `nemesi-web-verde.png`, `nemesi-web-nav-verde.png`, `favicon-verde.png` e `favicon-verde-16/32/180.png`, ricavate dagli originali spostando la tinta degli arancio sul verde (breve script Python con PIL). Gli originali arancio qui sotto restano intatti.
   - `nemesi-web-arancio.png`: con il motto, nell'apertura della pagina statica (nel film resta solo per i lettori di schermo);
   - `nemesi-web-nav.png`: navbar;
   - `favicon.png`: **il logo** (originale 1536×1024, sfondo trasparente). Da qui si ricavano le icone quadrate `favicon-16.png`, `favicon-32.png` (scheda) e `favicon-180.png` (iPhone, fondo nero), ritagliate attorno al logo con un breve script Python (PIL). Se cambia il logo, rigenerarle e aggiornare `?v=` nei link;
