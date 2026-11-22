@@ -30,9 +30,19 @@ var K = {
   cross0:7.1, cross1:7.82, rad:8.75,         // attraversamento, anelli, Radente
   fin0:9.45, fin1:10.45, end:11.0            // la lastra torna e mostra la faccia vuota
 };
+/* giostra degli strumenti (dalla 3.9): a metà del mezzo giro tra l'area riservata e Word la lastra è di taglio;
+   lì il film si ferma quasi (il tempo di K scorre di 2·GE mentre si scorre GS) e dal bordo si apre la giostra.
+   K resta il copione di prima: warp() traduce il tempo nuovo nel tempo di K. */
+var GW = { w0:3.624, e:.001, gd:3.1 };          // inizio, mezza durata vista di K, durata aggiunta
+GW.span = GW.gd + 2 * GW.e;
+function warp(q){
+  if (q <= GW.w0) return q;
+  if (q < GW.w0 + GW.span) return GW.w0 + 2 * GW.e * (q - GW.w0) / GW.span;
+  return q - GW.gd;
+}
 /* il copione visto dalla pagina: tempi assoluti (apertura compresa) */
-var KX = { o:HO };
-for (var kk in K) KX[kk] = K[kk] + HO;
+var KX = { o:HO, gio0:GW.w0 + HO, gio1:GW.w0 + GW.span + HO, gd:GW.gd, gw0:GW.w0 };
+for (var kk in K) KX[kk] = (K[kk] > GW.w0 ? K[kk] + GW.gd : K[kk]) + HO;
 for (var kh in KH) KX[kh] = KH[kh];
 
 var COL = { nero:'#9AA0A8', arancio:'#A6EF0B', chiaro:'#CDFD67', oro:'#CFF977', scuro:'#8ECE05', brace:'#79B003', caldo:'#E5FEB1' };
@@ -487,6 +497,160 @@ function create(canvas, opts){
     }
   }
 
+  /* ── giostra degli strumenti (dalla 3.9): sette lastre escono a ventaglio dal bordo della lastra di taglio,
+     nere come lei, e si accendono nei colori delle loro marche girando intorno a un asse verde ── */
+  var STR = window.STRUMENTI || [], NG = STR.length, GP = NG ? 2 * PI / NG : 0;
+  var GSW = 1.3, GSH = 1.04, GST = .2, GR = 2.15;
+  var GIO = new T.Group(); GIO.visible = false; scene.add(GIO);
+  var GIO_S = { on:0, idx:0, x:0, y:0 };
+  var gioSlabs = [];
+  if (NG){
+    /* studio più chiaro di quello della lastra: i colori delle marche si leggono e la lacca prende la luce dall'alto */
+    var envG = (function(){
+      var s = new T.Scene();
+      s.add(new T.Mesh(new T.BoxGeometry(40, 40, 40), new T.MeshBasicMaterial({ color: new T.Color(.11, .11, .12), side: T.BackSide })));
+      function panel(w, h, x, y, z, rx, ry, k){
+        var m = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ color: new T.Color(k, k, k), side: T.DoubleSide }));
+        m.position.set(x, y, z); m.rotation.set(rx, ry, 0); s.add(m);
+      }
+      panel(18, 8, 0, 10, 3, PI / 2, 0, 2.4);
+      panel(5, 14, -11, 1.5, 4, 0, PI / 2, 1.2);
+      panel(3, 12, 11, .5, -2, 0, -PI / 2, .7);
+      panel(16, 5, 0, 1.5, 12, 0, PI, 1.1);
+      var pm = new T.PMREMGenerator(renderer), tx = pm.fromScene(s, .03).texture; pm.dispose();
+      return tx;
+    })();
+    var gSlab = slabGeometry(GSW, GSH, GST, .11, .03), gLogo = new T.PlaneGeometry(GSW - .03, GSH - .03);
+    var cNero = lin('#09090B'), TWG = 1024, THG = Math.round(TWG * GSH / GSW);
+    var figma = function(g, x, y, alto){
+      var k = alto / 57; g.save(); g.translate(x - 19 * k, y - 28.5 * k); g.scale(k, k);
+      [['#F24E1E', 'M19 0H9.5A9.5 9.5 0 0 0 9.5 19H19Z'], ['#FF7262', 'M19 0H28.5A9.5 9.5 0 0 1 28.5 19H19Z'],
+       ['#A259FF', 'M19 19H9.5A9.5 9.5 0 0 0 9.5 38H19Z'], ['#1ABCFE', 'M38 28.5A9.5 9.5 0 1 1 19 28.5A9.5 9.5 0 0 1 38 28.5Z'],
+       ['#0ACF83', 'M9.5 38H19V47.5A9.5 9.5 0 1 1 9.5 38Z']].forEach(function(f){ g.fillStyle = f[0]; g.fill(new Path2D(f[1])); });
+      g.restore();
+    };
+    STR.forEach(function(s, i){
+      var c = document.createElement('canvas'); c.width = TWG; c.height = THG;
+      var g = c.getContext('2d'), lato = THG * .46;
+      if (s.logo === 'figma') figma(g, TWG / 2, THG / 2, lato * 1.05);
+      else { g.save(); g.translate(TWG / 2 - lato / 2, THG / 2 - lato / 2); g.scale(lato / 24, lato / 24); g.fillStyle = s.logo; g.fill(new Path2D(s.d)); g.restore(); }
+      var tx = new T.CanvasTexture(c); tx.encoding = T.sRGBEncoding; tx.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+      var base = lin(s.corpo);
+      var mat = new T.MeshPhysicalMaterial({ color: cNero.clone(), roughness: s.chiaro ? .32 : .22, metalness: 0, clearcoat: 1, clearcoatRoughness: .06,
+        envMap: envG, envMapIntensity: 1, emissive: new T.Color(0, 0, 0) });
+      var o = new T.Group(), m = new T.Mesh(gSlab, mat); o.add(m);
+      var logo = new T.Mesh(gLogo, new T.MeshBasicMaterial({ map: tx, transparent: true, opacity: 0, depthWrite: false, toneMapped: false,
+        polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }));
+      logo.position.z = GST / 2 + .002; o.add(logo);
+      GIO.add(o);
+      gioSlabs.push({ o:o, mat:mat, logo:logo, base:base, ph:i * 1.7 });
+    });
+    /* asse: un filo verde con il suo alone, e l'orbita sotto le lastre */
+    var asse = new T.Mesh(new T.CylinderGeometry(.007, .007, 2.2, 10), new T.MeshBasicMaterial({ color: lin(COL.chiaro), transparent: true, toneMapped: false }));
+    var asseA = new T.Mesh(new T.CylinderGeometry(.045, .045, 2.2, 16, 1, true), new T.MeshBasicMaterial({ color: lin(COL.arancio), transparent: true,
+      opacity: 0, blending: T.AdditiveBlending, depthWrite: false, toneMapped: false }));
+    var orbita = new T.Mesh(new T.RingGeometry(GR - .005, GR + .005, 180), new T.MeshBasicMaterial({ color: lin(COL.chiaro), transparent: true,
+      opacity: 0, depthWrite: false, toneMapped: false, side: T.DoubleSide }));
+    orbita.rotation.x = -PI / 2; orbita.position.y = -GSH / 2 - .22;
+    /* l'asse parte dal piano dell'orbita e sale: sotto resta libero per la didascalia */
+    asse.position.y = asseA.position.y = orbita.position.y + 1.1;
+    GIO.add(asse); GIO.add(asseA); GIO.add(orbita);
+  }
+  var gTmp = new T.Color();
+  var cLuce = lin(COL.chiaro);
+  /* giro da sole: se chi guarda resta fermo nella giostra, le lastre continuano a passare davanti una alla volta */
+  var AUTO = { ok:false, auto:false, xa:0, fa:0, to:0, still:0, timer:0, lastP:-1, lastT:0, PAUSA:1.3, PASSO:3.2 };
+  /* con lo scorrimento una lastra alla volta, con una sosta davanti */
+  function gioDwell(v){ var k = Math.floor(v), f = v - k; return k + io3(clamp((f - .3) / .4, 0, 1)); }
+  /* scorrimento piegato dall'ancora: x = xa dà la lastra fa, i capi restano la prima e l'ultima (a meno di giri interi) */
+  function gioMap(x){
+    var M = NG - 1, a = AUTO.xa, fa = AUTO.fa;
+    var Tend = M + NG * Math.ceil((AUTO.to - M) / NG), Tb = NG * Math.floor(AUTO.to / NG);
+    if (x <= a) return a > 1e-4 ? Tb + (x / a) * (fa - Tb) : fa;
+    return a < M - 1e-4 ? fa + (x - a) / (M - a) * (Tend - fa) : fa;
+  }
+  /* finché la lastra non si è posata del tutto si segue l'ancora senza soste, così non c'è salto */
+  function gioDwellMix(x){
+    var xp = gioMap(x), w = 1 - clamp(Math.abs(AUTO.fa - AUTO.to) / .3, 0, 1);
+    return mix(xp, gioDwell(xp), w);
+  }
+  function autoGiro(u, t){
+    var dt = AUTO.lastT ? Math.min(.1, Math.max(0, t - AUTO.lastT)) : 0; AUTO.lastT = t;
+    if (Math.abs(S.p - AUTO.lastP) > 1e-4){ AUTO.still = 0; AUTO.timer = 0; } else AUTO.still += dt;
+    AUTO.lastP = S.p;
+    return dt;
+  }
+  function poseGio(u, t){
+    var dt = autoGiro(u, t);
+    var vis = NG > 0 && u > 0 && u < 1;
+    GIO.visible = vis; GIO_S.on = 0;
+    if (!vis){ G.scale.setScalar(1); AUTO.ok = AUTO.auto = false; AUTO.fa = AUTO.to = 0; return; }
+    /* tempi della giostra (u da 0 a 1), ingresso e uscita speculari:
+       0–.07 la lastra di taglio si assottiglia nell'asse · .075 lampo · .075–.19 dall'asse escono fili di luce che girano,
+       rallentano, si allargano e si accendono nei colori delle marche ·
+       .20–.80 le lastre passano davanti una alla volta (anche da sole, se chi guarda resta fermo) ·
+       .80–.91 risucchio: la giostra accelera, stringe il raggio, le lastre tornano fili di luce dentro l'asse ·
+       .915 lampo · .90–1 la lastra torna intera, di taglio, e dopo la giostra finisce il mezzo giro su Word */
+    var cIn = 1 - seg(u, .075, .19), cOut = seg(u, .80, .91);
+    var c = u < .5 ? cIn : cOut;                                   // 0 = giostra aperta, 1 = tutto dentro l'asse
+    var on = io3(seg(u, .16, .22)) * (1 - io3(seg(u, .80, .87))); // presenza per le didascalie
+    var fl = Math.exp(-Math.pow((u - .075) / .022, 2)) + Math.exp(-Math.pow((u - .915) / .022, 2));
+    var lift = io2(seg(u, 0, .2)) * (1 - io2(seg(u, .84, 1)));
+    GIO_S.on = on;
+    /* la lastra di taglio si fa sottile e diventa l'asse; torna intera dopo il lampo d'uscita */
+    G.scale.setScalar(1 - .62 * io3(seg(u, 0, .07)) * (1 - io3(seg(u, .9, .99))));
+    if (u > .078 && u < .912) G.visible = false;                    // a giostra aperta la lastra sottile non resta dentro l'asse (sparisce nel lampo, torna nel lampo)
+    var hw = L.dStage * TAN * W / H, sc = clamp(hw / (GR * .78), .6, 1);   // sul telefono le lastre di lato escono un poco dai bordi
+    GIO.position.copy(G.position); GIO.scale.setScalar(sc);
+    /* quale lastra è davanti: con lo scorrimento una alla volta, con una sosta; ai due capi il giro dei fili */
+    var M = NG - 1, x = seg(u, .20, .80) * M, idx;
+    /* da sole: fermi da un attimo dentro la giostra, ogni PASSO secondi arriva la successiva (sempre con una lastra davanti).
+       Quando si riprende a scorrere si riparte dalla lastra davanti: l'«ancora» (xa, fa) piega lo scorrimento in modo che
+       scendendo il giro vada sempre avanti fino all'ultima (Tend) e salendo sempre indietro fino alla prima (Tb). */
+    var dentro = u > .21 && u < .79;
+    if (dentro && AUTO.still > AUTO.PAUSA){
+      if (!AUTO.auto){
+        var cur = AUTO.ok ? gioDwellMix(x) : gioDwell(x);
+        AUTO.auto = AUTO.ok = true; AUTO.fa = cur; AUTO.to = Math.round(cur); AUTO.timer = 0;
+      }
+      AUTO.timer += dt;
+      if (AUTO.timer > AUTO.PASSO){ AUTO.to += 1; AUTO.timer = 0; }
+      if (AUTO.to >= NG){ AUTO.to -= NG; AUTO.fa -= NG; }                    // un giro intero non si vede
+      AUTO.xa = x;
+    } else if (AUTO.auto && (AUTO.still === 0 || !dentro)) AUTO.auto = false;
+    if (AUTO.ok) AUTO.fa = damp(AUTO.fa, AUTO.to, 2.6, dt);
+    if (!AUTO.ok) idx = gioDwell(x);
+    else if (AUTO.auto) idx = AUTO.fa;
+    else idx = gioDwellMix(x);
+    if (u < .20) idx = -6 * cIn * cIn * cIn;
+    else if (u > .80) idx = M + 6 * cOut * cOut * cOut;
+    GIO_S.idx = idx;
+    var rr = 1 - .985 * io2(seg(c, .1, 1)), sq = io3(seg(c, .12, .7)), glow = io2(seg(c, .45, .95));
+    for (var i = 0; i < NG; i++){
+      var s = gioSlabs[i];
+      s.o.visible = c < 1;
+      if (!s.o.visible) continue;
+      var a = (i - idx) * GP, r = GR * rr;
+      s.o.position.set(Math.sin(a) * r, .045 * Math.sin(t * 1.1 + s.ph) * (1 - c), Math.cos(a) * r);
+      s.o.rotation.set(0, a, .012 * Math.sin(t * .7 + s.ph) * (1 - c));
+      s.o.scale.set(1 - .97 * sq, 1 + .35 * sq, 1 - .9 * sq);
+      /* fili: la lacca si spegne e resta solo la luce verde */
+      s.mat.color.copy(cNero).lerp(s.base, 1 - glow);
+      s.mat.emissive.copy(gTmp.copy(s.base).multiplyScalar(.16 * (1 - glow))).lerp(cLuce, glow);
+      s.logo.material.opacity = 1 - io2(seg(c, .1, .55));
+    }
+    var axOn = io2(seg(u, 0, .06)) * (1 - io2(seg(u, .925, .99)));
+    asse.material.opacity = axOn;
+    asseA.material.opacity = Math.min(1, .22 * axOn * (1 + .2 * Math.sin(t * 2)) + .35 * fl);
+    asseA.scale.set(1 + .6 * fl, 1 + .12 * fl, 1 + .6 * fl);
+    asse.scale.set(1 + 3 * fl, 1 + .12 * fl, 1 + 3 * fl);
+    orbita.material.opacity = .32 * (1 - io2(seg(c, 0, .7)));
+    /* la camera sale un poco e guarda la giostra dall'alto */
+    CAM.y += 1.2 * lift * sc; CAM.z += .9 * lift;
+    var aimY = G.position.y - .15 * sc, tyA = CAM.y + (aimY - CAM.y) * (CAM.z - CAM.tz) / Math.max(.5, CAM.z - G.position.z);
+    CAM.ty = mix(CAM.ty, tyA, lift);
+  }
+
   /* immagini dei lavori */
   var tex = [], EMPTY = new T.DataTexture(new Uint8Array([8, 8, 10, 255]), 1, 1); EMPTY.needsUpdate = true;
   function load(urls, onProgress){
@@ -587,7 +751,7 @@ function create(canvas, opts){
   }
 
   function pose(P, t){
-    var i, p = P - HO;                                             // p: tempo del film dopo l'apertura
+    var i, q0 = P - HO, p = warp(q0);                             // p: tempo del film dopo l'apertura (nel copione K)
     /* camera */
     var cz = camZ(p), cx = 0, cy = 0, lx = 0, ly = 0;
     if (p > K.cross1 && p < K.rad + .001){
@@ -647,7 +811,7 @@ function create(canvas, opts){
     /* facce: cosa mostrano e quanto sono accese (deciso solo da p, così si torna indietro senza sorprese) */
     var A, B, rA, rB, eA = 0, gA = 0;
     if (p < 2.9){ A = 0; rA = io2(seg(p, .72, 1.3)); }
-    else if (p < 6.6){ A = 2; rA = io2(seg(p, 3.55, 4.05)); }
+    else if (p < 6.6){ A = 2; rA = io2(seg(p, 3.66, 4.1)); }          // dalla 3.12 la barra di luce parte quando la lastra esce dalla giostra
     else { A = -1; rA = 1; eA = 1; gA = io2(seg(p, 9.95, 10.55)); }
     if (p < 4.6){ B = 1; rB = io2(seg(p, 2.2, 2.72)); } else { B = 4; rB = io2(seg(p, 6.05, 6.58)); }
     setFace(FA, A, rA, eA, gA); setFace(FB, B, rB, 0, 0);
@@ -697,6 +861,7 @@ function create(canvas, opts){
       lineU.uI.value = S.ign * (1 + .4 * Math.sin(PI * hs));
       line.position.copy(G.position).addScaledVector(nY, cutY).addScaledVector(nZ, (LT + .012) * (1 - smooth01(seg(hs, .86, 1))));
     }
+    poseGio(seg(q0, GW.w0, GW.w0 + GW.span), t);
   }
 
   function setFace(mesh, work, reveal, empty, glow){
@@ -767,10 +932,11 @@ function create(canvas, opts){
         var q = quad(m); if (q) out.push({ i:w, q:q });
       });
     }
-    if (R.o.visible && p - HO > 8.2 && p - HO < K.fin0 + .1 && R.front.userData.reveal > .55 && facing(R.front) > .55){ var qr = quad(R.front); if (qr) out.push({ i:5, q:qr }); }
+    var pk = warp(p - HO);
+    if (R.o.visible && pk > 8.2 && pk < K.fin0 + .1 && R.front.userData.reveal > .55 && facing(R.front) > .55){ var qr = quad(R.front); if (qr) out.push({ i:5, q:qr }); }
     return out;
   }
-  function emptyFace(){ return S.p - HO > K.fin0 + .2 && FA.userData.work < 0 ? quad(FA) : null; }
+  function emptyFace(){ return warp(S.p - HO) > K.fin0 + .2 && FA.userData.work < 0 ? quad(FA) : null; }
 
   canvas.addEventListener('webglcontextlost', function(e){ e.preventDefault(); }, false);
   resize();
@@ -784,6 +950,23 @@ function create(canvas, opts){
     hover: function(i, on){ if (i >= 0 && i < 6) S.hovT[i] = on ? 1 : 0; },
     pointer: function(x, y){ S.ptr.x = x; S.ptr.y = y; },
     layout: function(){ return L; },
+    giostra: function(){
+      if (GIO.visible){ v3.set(0, -GSH * .5 - .25, GR).applyMatrix4(GIO.matrixWorld).project(camera); GIO_S.x = (v3.x + 1) / 2 * W; GIO_S.y = (1 - v3.y) / 2 * H; }
+      /* la lastra davanti: i suoi angoli sullo schermo, per il collegamento al sito ufficiale */
+      GIO_S.front = -1; GIO_S.q = null;
+      if (GIO.visible && GIO_S.on > .5){
+        var fi = ((Math.round(GIO_S.idx) % NG) + NG) % NG, so = gioSlabs[fi];
+        if (Math.abs(GIO_S.idx - Math.round(GIO_S.idx)) < .2 && so.o.visible){
+          var q = []; so.o.updateWorldMatrix(true, false);
+          [[-1, 1], [1, 1], [1, -1], [-1, -1]].forEach(function(cn){
+            v3.set(cn[0] * GSW / 2, cn[1] * GSH / 2, GST / 2).applyMatrix4(so.o.matrixWorld).project(camera);
+            q.push((v3.x + 1) / 2 * W, (1 - v3.y) / 2 * H);
+          });
+          GIO_S.front = fi; GIO_S.q = q;
+        }
+      }
+      return GIO_S;
+    },
     state: function(){ return { p:S.p, dpr:dpr, faces:S.faces, cam:[CAM.x, CAM.y, CAM.z], g:[G.position.x, G.position.y, G.position.z, G.rotation.x, G.rotation.y], hits:hits().map(function(h){ return h.i; }) }; }
   };
 }

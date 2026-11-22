@@ -290,3 +290,37 @@
 - `strumenti.html`: lastre nei colori originali come le icone delle app, corpo intero (facce e spessori) del colore della marca: Claude arancio con logo bianco, VS Code blu con logo bianco, GitHub nero con logo bianco, Figma nero con il logo a cinque colori, Cloudflare bianco con la nuvola arancio, Supabase nero con il logo verde. Anche la griglia ferma usa questi colori.
 - Più definizione: marchi disegnati su texture da 2048 px con filtro anisotropo, bordi arrotondati più lisci, disegno almeno a 1,5× anche sugli schermi normali; tolta la correzione di tono che sbiadiva i colori delle marche.
 - Verifiche: controllo dei testi pulito, fluidità max 19,2 ms, schermate 1440×900 e 390×844.
+
+### 3.9 — 22/11/2026
+- Strumenti: aggiunto Netlify (petrolio con il logo turchese), ora sono sette lastre.
+- Lavoro 02: al posto di Olimp c'è l'anteprima dell'area riservata di Rain Ink (`images/lavori/areariservata.jpg`, dalla schermata Portfolio della sua guida, senza il riquadro viola). Stesso effetto nel film, ma senza collegamento: si vede e non si clicca. Didascalia «02 Rain Ink · Area riservata, Foto e testi del sito, gestiti dal titolare». Rigenerato `js/lavori-dati.js`.
+- Nuovo capitolo nel film, tra Siti e App: «Strumenti, Con cosa lavoro ogni giorno.». A metà del mezzo giro verso Word la lastra si ferma di taglio, si fa sottile e diventa l'asse verde; dal suo bordo escono a ventaglio sette lastre nere che si accendono nei colori delle marche e girano una alla volta davanti, con la didascalia sotto; poi rientrano e il mezzo giro riprende verso Word. La camera sale un poco per guardare la giostra dall'alto.
+- Tecnica: in `js/lastra.js` il copione K è rimasto quello di prima; `GW` e `warp()` fermano il film per `GW.gd` (3,1) schermi. In `index.html` i tempi dopo l'inizio della giostra passano da `X()`. Il film ora finisce a 15,2 schermi. Tappa «Strumenti» sul filo di avanzamento. Nella pagina ferma (riduci movimento) gli strumenti sono un elenco con le icone.
+- Verifiche: controllo dei testi pulito, fluidità max 20,4 ms, schermate 1440×900 e 390×844 di tutta la giostra, di Word, di Radente e del finale.
+
+### 3.10 — 22/11/2026
+- Lavoro 02 (area riservata di Rain Ink): al passaggio del mouse si illumina come gli altri lavori (contorno al neon), però resta senza collegamento e il puntatore non diventa la manina.
+
+### 3.11 — 22/11/2026
+- Giostra degli strumenti: l'asse verde ora parte dal piano dell'orbita e sale (più corto, non arriva al titolo), senza scendere sotto le lastre; la didascalia (casa, nome, riga) sta un poco più in basso. Così testo e asse non si sovrappongono più.
+
+### 3.12 — 22/11/2026
+- Giostra degli strumenti, nuova chiusura verso le App («risucchio e saldatura»): la giostra accelera e stringe il raggio, le lastre si assottigliano in fili di luce verde e finiscono dentro l'asse, che lampeggia; la lastra torna intera di taglio e finisce il mezzo giro su Word, mentre la barra di luce accende Word. Prima le lastre rientravano sparse e la lastra si riapriva di sbieco.
+- La lastra davanti della giostra porta al sito ufficiale dello strumento (nuova scheda): velo trasparente deformato sulla sua faccia, con il contorno al neon al passaggio del mouse; raggiungibile anche con la tastiera. Indirizzi in `js/strumenti-icone.js` (`url`). Nella pagina ferma il nome di ogni strumento è un collegamento.
+- Verifiche: controllo dei testi pulito, fluidità e schermate della chiusura fotogramma per fotogramma.
+
+### 3.13 — 22/11/2026
+- Giostra degli strumenti, ingresso uguale all'uscita (al contrario): la lastra di taglio si assottiglia nell'asse, lampo, dall'asse escono fili di luce verde che girano, rallentano, si allargano in lastre e si accendono nei colori delle marche.
+- Giro da sole: se chi guarda resta fermo dentro la giostra, dopo un attimo (1,3 s) le lastre continuano a passare davanti una alla volta, ogni 3,2 s, e si fermano sempre con una lastra davanti; appena si scorre di nuovo, il giro riparte da dove sono arrivate. Ai capi della giostra il giro da sole si scioglie in quello dei fili.
+- Verifiche: schermate dell'ingresso fotogramma per fotogramma; da fermi la lastra davanti passa 2 → 3 → 4 → 5 ogni 3,2 s; fluidità nella norma.
+
+### 3.14 — 22/11/2026
+- Apertura un poco più lenta e morbida: tutto il movimento del logo 3D (strisce, pieno, luce, uscita) e la caduta delle aste, la barra e gli angoli scorrono più piano del 18% (`LENTO` in `js/logo3d.js`, `intro.timeScale` in `index.html`), sempre insieme.
+- Giostra: quando si riprende a scorrere dopo il giro da sole, si riparte dalla lastra che si ha davanti. Scendendo il giro va sempre avanti e arriva all'ultima lastra giusto per l'uscita; salendo torna indietro fino alla prima. Niente più giro all'indietro all'uscita (`gioMap`, ancora `xa`/`fa` in `AUTO`).
+- Barra: nuova voce «Tool» tra Siti e App (indirizzo `#tool`, anche `#strumenti` funziona); nel filo laterale «Strumenti» diventa «Tool».
+- Eliminata la pagina di prova `strumenti.html`.
+
+### 3.15 — 22/11/2026
+- Apertura ancora più lenta: `LENTO` 1,4 (prima 1,18), stesso `timeScale` per la timeline `intro`.
+- Barra: tolta la linea verde sul contorno (con l'alone che sembrava pulsare); al suo posto una sfumatura verde ferma e morbida su tutti i lati (`box-shadow` di `.slab`).
+- Giostra: tolta la lastra sottile che restava dentro l'asse verde a giostra aperta; sparisce nel lampo d'ingresso e torna nel lampo d'uscita.

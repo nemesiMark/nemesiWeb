@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nemesi Web · Web design</title>
-<meta name="description" content="Nemesi Web progetta e costruisce siti, app e giochi per il web: Rain Ink Tattoo, Olimp, Word, Excel, Metal Gear, Radente.">
+<meta name="description" content="Nemesi Web progetta e costruisce siti, app e giochi per il web: Rain Ink Tattoo e la sua area riservata, Word, Excel, Metal Gear, Radente.">
 <meta name="theme-color" content="#9AA0A8">
 <link rel="icon" href="images/logo/icona.svg?v=3.8" type="image/svg+xml">
 <link rel="icon" href="images/logo/icona-32.png?v=3.8" type="image/png" sizes="32x32">
@@ -63,20 +63,16 @@ ul{ list-style:none; }
 .vh{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
 :focus-visible{ outline:2px solid var(--arancio-chiaro); outline-offset:3px; border-radius:4px; }
 
-/* ═════════ barra di navigazione: lastra scura sospesa (come Rain Ink), linea verde fissa sul bordo ═════════ */
+/* ═════════ barra di navigazione: lastra scura sospesa (come Rain Ink), sfumatura verde ferma su tutti i lati ═════════ */
 .hdr{ position:fixed; top:14px; left:0; right:0; z-index:60; perspective:1200px; pointer-events:none; }
 .slab{ pointer-events:auto; position:relative; width:min(960px, calc(100% - 2 * var(--m) + 24px)); margin-inline:auto;
   display:flex; align-items:center; gap:18px; padding:6px 7px 6px 14px; border-radius:16px;
   background:linear-gradient(180deg, rgba(14,14,16,.94), rgba(0,0,0,.94));
   -webkit-backdrop-filter:blur(14px) saturate(1.3); backdrop-filter:blur(14px) saturate(1.3);
   border:1px solid rgba(255,255,255,.075);
-  box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 -1px 0 rgba(0,0,0,.6) inset, 0 4px 0 #040405, 0 24px 48px -16px rgba(0,0,0,.8);
+  box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 -1px 0 rgba(0,0,0,.6) inset, 0 0 16px rgba(205,253,103,.09) inset,
+    0 4px 0 #040405, 0 0 14px 1px rgba(205,253,103,.30), 0 0 34px 4px rgba(205,253,103,.12), 0 24px 48px -16px rgba(0,0,0,.8);
   transform-style:preserve-3d; }
-.nav-giro{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); overflow:visible; pointer-events:none; }
-.nav-giro rect{ fill:none; }
-/* linea verde fissa su tutto il contorno */
-.nav-giro .luce{ stroke:#CCFD64; stroke-width:1.4; }
-.nav-giro .alone{ stroke:rgba(166,239,11,.35); stroke-width:6; filter:blur(5px); }
 .logo{ position:relative; display:block; flex:none; width:173px; height:34px; transform:translateZ(20px); }
 /* il PNG ha aria trasparente sotto la scritta: lo si allinea sul disegno, non sul riquadro */
 .logo img{ position:absolute; left:0; top:-1.5px; height:31px; width:auto; max-width:none; }
@@ -171,6 +167,16 @@ ul{ list-style:none; }
 .desc{ color:var(--fumo-c); font-size:14.5px; }
 .azione{ margin-left:auto; color:var(--arancio-t); font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap; }
 
+/* strumenti: nella pagina ferma un elenco con le icone nei colori delle marche; nel film le didascalie della giostra */
+.strumenti{ list-style:none; display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:22px 28px; margin-top:7vh; }
+.strum{ display:grid; grid-template-columns:58px 1fr; column-gap:16px; align-items:center; }
+.strum .ico{ grid-row:span 3; width:58px; height:58px; border-radius:13px; background:var(--corpo); display:grid; place-items:center;
+  box-shadow:0 1px 0 rgba(255,255,255,.22) inset, 0 4px 0 rgba(0,0,0,.28), 0 14px 24px -12px rgba(0,0,0,.6); }
+.strum .ico svg{ width:54%; height:54%; }
+.s-casa{ color:var(--arancio-t); font-size:11.5px; }
+.s-nome{ font-size:17px; font-weight:550; letter-spacing:-.005em; }
+a.s-nome:hover{ color:var(--arancio-t); }
+.s-desc{ color:var(--fumo-c); font-size:14px; }
 .fine{ display:flex; align-items:center; justify-content:center; min-height:86vh; padding:12vh var(--m); text-align:center; }
 .fine-in{ display:flex; flex-direction:column; align-items:center; }
 .fine .titolo{ max-width:13ch; margin-top:0; }
@@ -221,12 +227,27 @@ html.film::-webkit-scrollbar{ display:none; }
 /* il collegamento è un velo trasparente deformato esattamente sulla faccia della lastra */
 .film .schermo{ position:fixed; left:0; top:0; width:800px; height:450px; transform-origin:0 0; border-radius:0; pointer-events:none; }
 .film .schermo.on{ pointer-events:auto; }
+/* anteprima senza collegamento (area riservata di Rain Ink): si illumina al passaggio come le altre, ma non porta da nessuna parte */
+.schermo.muto{ cursor:default; }
 .film .schermo:not(.on):focus-visible{ outline:none; }
 .film .schermo img, .film .schermo::after{ display:none; }
 .film .schermo:focus-visible{ outline:2px solid rgba(197,252,80,.9); outline-offset:4px; }
 .film .didascalia{ position:fixed; left:0; top:0; margin:0; flex-wrap:nowrap; will-change:transform; pointer-events:none; }
 .film .d-in{ display:flex; align-items:baseline; column-gap:14px; opacity:0; width:100%; }
 .film .azione{ pointer-events:auto; }
+.film .strumenti{ display:block; margin:0; }
+.film .strum{ position:fixed; left:0; top:0; display:flex; flex-direction:column; align-items:center; gap:3px; width:min(460px, 86vw); text-align:center;
+  opacity:0; pointer-events:none; will-change:transform, opacity; }
+.film .strum .ico{ display:none; }
+/* la lastra davanti della giostra porta al sito ufficiale: velo trasparente deformato sulla sua faccia */
+.strum-link{ display:none; }
+.film .strum-link{ display:block; position:fixed; left:0; top:0; width:800px; height:450px; transform-origin:0 0; border-radius:68px; pointer-events:none;
+  transition:box-shadow .35s var(--ease); }
+.film .strum-link.on{ pointer-events:auto; }
+@media (hover:hover) and (pointer:fine){
+  .film .strum-link.on:hover{ box-shadow:0 0 0 4px #E0FEA2, 0 0 18px 4px rgba(166,239,11,.9), 0 0 60px 10px rgba(166,239,11,.45); }
+}
+.film .strum-link:focus-visible{ outline:none; box-shadow:0 0 0 4px #E0FEA2, 0 0 18px 4px rgba(166,239,11,.9); }
 .film .fine{ display:block; min-height:0; padding:0; }
 .film .fine-in{ position:fixed; left:0; top:0; width:min(560px, 80vw); opacity:0; pointer-events:none; will-change:transform, opacity; }
 .film .fine-in.on{ pointer-events:auto; }
@@ -271,10 +292,10 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 <body>
 <header class="hdr" id="hdr">
   <nav class="slab" aria-label="Principale">
-    <svg class="nav-giro" aria-hidden="true"><rect class="alone" x="0" y="0" width="100%" height="100%" rx="16" pathLength="1000"/><rect class="luce" x="0" y="0" width="100%" height="100%" rx="16" pathLength="1000"/></svg>
     <a class="logo" href="#top" aria-label="Nemesi Web, torna all'inizio"><img id="logo-nav" src="images/logo/nemesi-web-barra.svg" alt="" width="1997" height="343"></a>
     <ul class="links" id="links">
       <li><a href="#siti" data-s="siti">Siti</a></li>
+      <li><a href="#tool" data-s="strumenti">Tool</a></li>
       <li><a href="#app" data-s="app">App</a></li>
       <li><a href="#giochi" data-s="giochi">Giochi</a></li>
       <li><a href="mailto:ciao@nemesi.studio">Contattaci</a></li>
@@ -307,10 +328,19 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
         <p class="didascalia" data-i="0"><span class="d-in"><span class="num">01</span><span class="nome">Rain Ink Tattoo</span><span class="desc">Studio di tatuaggi a Montelupone</span><a class="azione" href="https://nemesimark.github.io/rainInk/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Visita il sito ↗</a></span></p>
       </li>
       <li class="lavoro">
-        <a class="schermo" data-i="1" href="https://nemesimark.github.io/olimp/" target="_blank" rel="noopener" aria-label="Olimp, album e fotolibri per fotografi: visita il sito"><img src="images/lavori/olimp.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="1"><span class="d-in"><span class="num">02</span><span class="nome">Olimp</span><span class="desc">Album e fotolibri per fotografi</span><a class="azione" href="https://nemesimark.github.io/olimp/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Visita il sito ↗</a></span></p>
+        <div class="schermo muto" data-i="1"><img src="images/lavori/areariservata.jpg" alt="Area riservata di Rain Ink Tattoo: la scheda Portfolio con lo spazio usato e le foto dei tatuaggi" width="1600" height="900" loading="lazy" decoding="async"></div>
+        <p class="didascalia" data-i="1"><span class="d-in"><span class="num">02</span><span class="nome">Rain Ink · Area riservata</span><span class="desc">Foto e testi del sito, gestiti dal titolare</span></span></p>
       </li>
     </ul>
+  </section>
+
+  <section class="capitolo" id="strumenti" aria-labelledby="strumenti-t">
+    <div class="testa">
+      <p class="kicker mono"><b>Strumenti</b> Banco di lavoro</p>
+      <h2 class="titolo" id="strumenti-t">Con cosa lavoro <em>ogni giorno.</em></h2>
+    </div>
+    <ul class="strumenti" id="strumenti-lista"></ul>
+    <a class="strum-link" id="strum-link" href="#" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
   </section>
 
   <section class="capitolo" id="app" aria-labelledby="app-t">
@@ -364,6 +394,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 <script src="vendor/three/three.min.js"></script>
+<script src="js/strumenti-icone.js"></script>
 <script src="js/lastra.js"></script>
 <script src="js/logo-forma.js"></script>
 <script src="js/logo3d.js"></script>
@@ -383,6 +414,16 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && hdr.classList.contains('open')){ setOpen(false); burger.focus(); } });
     document.addEventListener('click', function(e){ if (hdr.classList.contains('open') && !hdr.contains(e.target)) setOpen(false); });
   })();
+
+  /* ── strumenti: l'elenco (pagina ferma) e le didascalie della giostra (film) vengono dagli stessi dati ── */
+  var FIGMA = '<svg viewBox="0 0 38 57" aria-hidden="true"><path fill="#F24E1E" d="M19 0H9.5A9.5 9.5 0 0 0 9.5 19H19Z"/><path fill="#FF7262" d="M19 0H28.5A9.5 9.5 0 0 1 28.5 19H19Z"/><path fill="#A259FF" d="M19 19H9.5A9.5 9.5 0 0 0 9.5 38H19Z"/><circle fill="#1ABCFE" cx="28.5" cy="28.5" r="9.5"/><path fill="#0ACF83" d="M9.5 38H19V47.5A9.5 9.5 0 1 1 9.5 38Z"/></svg>';
+  var lista = document.getElementById('strumenti-lista');
+  (window.STRUMENTI || []).forEach(function(t){
+    var li = document.createElement('li'); li.className = 'strum'; li.style.setProperty('--corpo', t.corpo);
+    li.innerHTML = '<span class="ico">' + (t.logo === 'figma' ? FIGMA : '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="' + t.logo + '" d="' + t.d + '"/></svg>') + '</span>' +
+      '<span class="s-casa mono">' + t.casa + '</span><a class="s-nome" href="' + t.url + '" target="_blank" rel="noopener">' + t.nome + ' ↗</a><span class="s-desc">' + t.testo + '</span>';
+    lista.appendChild(li);
+  });
 
   function fontsReady(){ return document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve(); }
   function tema(){ var tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute('content', '#9AA0A8'); }
@@ -429,6 +470,8 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
   /* ── timeline madre: la sua durata è il film in «vh» (1 = un'altezza di finestra di scorrimento).
      Le aste dell'apertura occupano i primi O vh: tutti i tempi dopo sono «O + tempo del film» ── */
   var O = K.o;
+  /* la giostra degli strumenti allunga il film: i tempi scritti prima della 3.9 che vengono dopo il suo inizio slittano di K.gd */
+  function X(v){ return v > K.gw0 ? v + K.gd : v; }
   var F = { p: 0 };
   var master = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
   master.to(F, { p: K.end, duration: K.end }, 0);
@@ -443,24 +486,25 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
       master.to(words, { yPercent: -112, duration: .2, stagger: .012, ease: 'power2.in' }, tout);
     }
   }
-  capitolo('#siti', O + .82, O + 3.28);
-  capitolo('#app', O + 3.92, O + 5.38);
-  capitolo('#giochi', O + 5.98, O + 9.32);
+  capitolo('#siti', O + X(.82), O + X(3.28));
+  capitolo('#strumenti', O + 3.5, O + K.gw0 + 2.68);
+  capitolo('#app', O + X(3.92), O + X(5.38));
+  capitolo('#giochi', O + X(5.98), O + X(9.32));
 
   function didascalia(i, tin, tout){
     var el = document.querySelector('.didascalia[data-i="' + i + '"] .d-in');
     master.fromTo(el, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .18, ease: 'power2.out' }, tin);
     master.to(el, { opacity: 0, y: -10, duration: .12, ease: 'power2.in' }, tout);
   }
-  didascalia(0, O + 1.16, O + 1.9); didascalia(1, O + 2.62, O + 3.24);
-  didascalia(2, O + 4.4, O + 5.34); didascalia(3, O + 4.5, O + 5.36);
-  didascalia(4, O + 6.42, O + 7.06); didascalia(5, O + 8.62, O + 9.36);
+  didascalia(0, O + X(1.16), O + X(1.9)); didascalia(1, O + X(2.62), O + X(3.24));
+  didascalia(2, O + X(4.4), O + X(5.34)); didascalia(3, O + X(4.5), O + X(5.36));
+  didascalia(4, O + X(6.42), O + X(7.06)); didascalia(5, O + X(8.62), O + X(9.36));
 
   var fineIn = document.getElementById('fine-in');
-  master.fromTo(fineIn, { opacity: 0 }, { opacity: 1, duration: .3, ease: 'power2.out' }, O + 10.12);
-  master.fromTo(fineIn.querySelectorAll('.wi'), { yPercent: 112 }, { yPercent: 0, duration: .3, stagger: .025, ease: 'power3.out' }, O + 10.12);
-  master.fromTo(fineIn.querySelectorAll('.scrivimi, .email'), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .22, stagger: .06, ease: 'power2.out' }, O + 10.3);
-  master.fromTo('#piede', { opacity: 0 }, { opacity: 1, duration: .2 }, O + 10.4);
+  master.fromTo(fineIn, { opacity: 0 }, { opacity: 1, duration: .3, ease: 'power2.out' }, O + X(10.12));
+  master.fromTo(fineIn.querySelectorAll('.wi'), { yPercent: 112 }, { yPercent: 0, duration: .3, stagger: .025, ease: 'power3.out' }, O + X(10.12));
+  master.fromTo(fineIn.querySelectorAll('.scrivimi, .email'), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .22, stagger: .06, ease: 'power2.out' }, O + X(10.3));
+  master.fromTo('#piede', { opacity: 0 }, { opacity: 1, duration: .2 }, O + X(10.4));
 
   var st = ScrollTrigger.create({ trigger: spacer, start: 'top top', end: 'bottom bottom', scrub: 1, animation: master, invalidateOnRefresh: true });
   /* dopo ogni ricalcolo la timeline perde gli stati iniziali dei fromTo che non sono ancora partiti: la si fa passare dalla fine e la si riporta dov'era */
@@ -479,6 +523,30 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     var g = (dx3 * dy2 - dx2 * dy3) / det, h = (dx1 * dy3 - dx3 * dy1) / det;
     var a = x1 - x0 + g * x1, b = x3 - x0 + h * x3, c = x0, dd = y1 - y0 + g * y1, e = y3 - y0 + h * y3, f = y0, BW = 800, BH = 450;
     return 'matrix3d(' + [a / BW, dd / BW, 0, g / BW, b / BH, e / BH, 0, h / BH, 0, 0, 1, 0, c, f, 0, 1].map(function(v){ return +v.toFixed(6); }).join(',') + ')';
+  }
+  /* didascalia della giostra: sotto la lastra davanti, sfuma mentre la successiva arriva */
+  var strumEl = Array.prototype.slice.call(document.querySelectorAll('.strum')), strumW = [];
+  var strumLink = document.getElementById('strum-link'), strumCur = -2, DATI = window.STRUMENTI || [];
+  function placeStrum(){
+    var g = S.giostra ? S.giostra() : null;
+    /* collegamento al sito ufficiale sulla lastra davanti */
+    var fi = g && g.q ? g.front : -1, m = fi >= 0 ? sq2quad(g.q) : null;
+    if (m){
+      strumLink.style.transform = m;
+      if (strumCur !== fi){
+        strumCur = fi; strumLink.href = DATI[fi].url; strumLink.setAttribute('aria-label', DATI[fi].nome + ': sito ufficiale');
+        strumLink.classList.add('on'); strumLink.tabIndex = 0; strumLink.removeAttribute('aria-hidden');
+      }
+    } else if (strumCur !== -2){
+      strumCur = -2; strumLink.classList.remove('on'); strumLink.tabIndex = -1; strumLink.setAttribute('aria-hidden', 'true');
+    }
+    for (var i = 0; i < strumEl.length; i++){
+      var el = strumEl[i], op = g && g.on > .01 ? g.on * Math.max(0, Math.min(1, 1 - Math.abs(g.idx - i) * 2.6)) : 0;
+      if (op < .005){ if (el._v){ el.style.opacity = '0'; el._v = false; } continue; }
+      if (!strumW[i]) strumW[i] = el.offsetWidth;
+      el._v = true; el.style.opacity = op.toFixed(3);
+      el.style.transform = 'translate3d(' + Math.round(g.x - strumW[i] / 2) + 'px,' + Math.round(g.y + 14 + (1 - op) * 10) + 'px,0)';
+    }
   }
   var fineQ = null, fineSize = [0, 0];
   function place(){
@@ -505,7 +573,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     a.addEventListener('focus', function(){ S.hover(i, true); if (!a.classList.contains('on')) vai(LAVORO[i]); });
     a.addEventListener('blur', function(){ S.hover(i, false); });
   });
-  caps.forEach(function(c, i){ var az = c.querySelector('.azione');
+  caps.forEach(function(c, i){ var az = c.querySelector('.azione'); if (!az) return;
     az.addEventListener('mouseenter', function(){ S.hover(i, true); }); az.addEventListener('mouseleave', function(){ S.hover(i, false); }); });
   if (matchMedia('(hover:hover) and (pointer:fine)').matches){
     addEventListener('pointermove', function(e){ S.pointer(e.clientX / innerWidth * 2 - 1, e.clientY / innerHeight * 2 - 1); }, { passive: true });
@@ -514,8 +582,8 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
   /* ── navigazione: ogni voce porta al momento giusto del film ──
      Un salto lungo non fa correre il film (giri e aste a tutta velocità sembrano a scatti):
      un attimo di nero, si riparte poco prima della tappa e ci si arriva scorrendo piano. */
-  var LAVORO = [1.55, 2.95, 4.85, 4.85, 6.7, 9.05].map(function(v){ return O + v; });
-  var TAPPE = { top: 0, siti: O + 1.55, app: O + 4.85, giochi: O + 6.7, scrivimi: K.end };
+  var LAVORO = [1.55, 2.95, 4.85, 4.85, 6.7, 9.05].map(function(v){ return O + X(v); });
+  var TAPPE = { top: 0, siti: O + X(1.55), strumenti: O + K.gw0 + .75, tool: O + K.gw0 + .75, app: O + X(4.85), giochi: O + X(6.7), scrivimi: K.end };
   var taglio = document.getElementById('taglio'), viaggio = null, GLIDE = .55;
   function easeIO(t){ return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
   function easeOut(t){ return 1 - Math.pow(1 - t, 3); }
@@ -537,7 +605,8 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     a.addEventListener('click', function(e){ e.preventDefault(); vai(TAPPE[id]); });
   });
   var navLinks = hdr.querySelectorAll('.links a');
-  var CAP = [['siti', O + .9, O + 3.5], ['app', O + 3.5, O + 5.65], ['giochi', O + 5.65, O + 9.5]], current = '';
+  var GFINE = O + K.gw0 + K.gd + .1;
+  var CAP = [['siti', O + X(.9), O + 3.5], ['strumenti', O + 3.5, GFINE], ['app', GFINE, O + X(5.65)], ['giochi', O + X(5.65), O + X(9.5)]], current = '';
   function navState(p){
     var cur = '';
     for (var i = 0; i < CAP.length; i++) if (p >= CAP[i][1] && p < CAP[i][2]) cur = CAP[i][0];
@@ -547,7 +616,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 
   /* ── filo di avanzamento a destra ── */
   var rail = document.getElementById('rail'), fill = rail.querySelector('.fill'), ticks = [];
-  [['Siti', TAPPE.siti], ['App', TAPPE.app], ['Giochi', TAPPE.giochi], ['Contattaci', K.end]].forEach(function(t){
+  [['Siti', TAPPE.siti], ['Tool', TAPPE.tool], ['App', TAPPE.app], ['Giochi', TAPPE.giochi], ['Contattaci', K.end]].forEach(function(t){
     var b = document.createElement('button'); b.type = 'button'; b.tabIndex = -1; b.style.top = (t[1] / K.end * 100) + '%';
     b.innerHTML = '<span class="mono">' + t[0] + '</span>'; b.addEventListener('click', function(){ vai(t[1]); });
     rail.appendChild(b); ticks.push([b, t[1]]);
@@ -562,6 +631,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     S.set(F.p);
     S.frame(gsap.ticker.time, quieto || inApertura);
     place();
+    placeStrum();
     navState(F.p);
     fill.style.transform = 'scaleY(' + (F.p / K.end).toFixed(4) + ')';
     for (var i = 0; i < ticks.length; i++) ticks[i][0].classList.toggle('on', F.p >= ticks[i][1] - .35);
@@ -570,7 +640,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 
   var rz;
   addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(function(){
-    setSpacer(); S.resize(); fineSize = [0, 0]; capW = []; ScrollTrigger.refresh();
+    setSpacer(); S.resize(); fineSize = [0, 0]; capW = []; strumW = []; ScrollTrigger.refresh();
   }, 160); });
 
   /* ── atterraggio diretto (?jump=y, o un indirizzo con #capitolo) e contratto di verifica ── */
@@ -583,7 +653,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
   window.__S = S; window.__go = function(y){ salta(y); return new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); }); };
 
   /* immagini: da file locale (doppio clic) le texture vengono dai dati incorporati, altrimenti dai JPG */
-  var NOMI = ['rainink', 'olimp', 'parola', 'foglio', 'metalgear', 'radente'];
+  var NOMI = ['rainink', 'areariservata', 'parola', 'foglio', 'metalgear', 'radente'];
   function urls(){
     if (location.protocol === 'file:' && window.LAVORI_DATI) return NOMI.map(function(n){ return window.LAVORI_DATI[n]; });
     return NOMI.map(function(n){ return 'images/lavori/' + n + '.jpg'; });
@@ -627,6 +697,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
       .call(tema, null, .9)
       .call(function(){ lenis.start(); }, null, 1.6)
       .set({}, {}, Math.max(L ? L.duration + .1 : 0, 2.7));
+    intro.timeScale(1 / 1.4);                                       // stesso rallentamento del logo (LENTO in logo3d.js)
     window.__intro = intro;
     });
   });

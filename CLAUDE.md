@@ -7,12 +7,13 @@ Dalla 3.0 il colore d'accento è il verde lime `#CDFD67` (prima era arancio): ne
 
 Capitoli:
 1. Apertura (dalla 3.4, come il video di riferimento `58d1f4b27220bfbdf84fdabf0155c8cd.mp4`, fuori da git): su nero il logo in 3D (`js/logo3d.js`) arriva a strisce verticali che piovono, il pieno sale dal basso con il bordo frastagliato, resta con una luce che passa; poi torna strisce che cadono e il nero scende a colonne sottili dal centro. Dietro, le file delle aste 3D (i pezzi della lastra in vista esplosa, sempre in movimento) cadono dall'alto e si accendono quando toccano; poi scende la barra. Scorrendo le aste compongono la lastra distesa, una riga di luce la salda e la lastra si alza. Il logo sta solo nella barra.
-2. Siti: Rain Ink 01, Olimp 02.
+2. Siti: Rain Ink 01, area riservata di Rain Ink 02 (dalla 3.9, al posto di Olimp: anteprima senza collegamento).
+2b. Strumenti, «Tool» nella barra (dalla 3.9): a metà del mezzo giro verso Word la lastra di taglio diventa l'asse verde e ne escono a ventaglio sette lastre nei colori delle marche (Claude, VS Code, GitHub, Figma, Cloudflare, Netlify, Supabase) che girano una alla volta davanti; la lastra davanti porta al sito ufficiale (`#strum-link`). Ingresso e chiusura speculari (3.12–3.13): la lastra di taglio diventa l'asse, lampo, fili di luce che si aprono in lastre; all'uscita il contrario, poi la lastra gira su Word. Da fermi le lastre girano da sole (`AUTO` in `poseGio`); quando si riprende a scorrere si riparte dalla lastra davanti (`gioMap`). Nella barra la voce è «Tool» (`#tool`).
 3. App: Word 03, Excel 04 (ex Parola e Foglio: le immagini si chiamano ancora `parola` e `foglio`), con la lastra sdoppiata.
 4. Giochi: Metal Gear 05, attraversamento in pixel, anelli, Radente 06.
 5. Scrivimi: faccia vuota con «Manca solo il tuo progetto.», bottone Scrivimi ed email.
 
-Per ora c'è solo questo (Siti, App, Giochi, Scrivimi): niente sezioni nuove senza richiesta.
+Per ora c'è solo questo (Siti, Strumenti, App, Giochi, Scrivimi): niente sezioni nuove senza richiesta.
 
 Dove sono i lavori:
 - Rain Ink: `~/Desktop/Sites/rainInk`
@@ -34,7 +35,8 @@ Funziona anche con doppio clic su `index.html`. Da `file://` il browser non legg
 Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - `node copy-gate.js ~/Desktop/Sites/nemesiWeb/index.html`: deve uscire 0.
 - `node verify.js shot "http://localhost:8765/?jump=<y>" out.png 1440 900` (e `390 844` per il telefono).
-  - La fine del film è a `K.end` (12,1) × altezza dello schermo: 10890 a 1440×900.
+  - La fine del film è a `K.end` (15,2 dalla 3.9) × altezza dello schermo: 13680 a 1440×900.
+  - La giostra degli strumenti va da `K.gio0` (4,724) a `K.gio1` (7,826): a 1440×900 da 4252 a 7043.
   - `?jump=99999` porta al fondo.
 - `node verify.js jank http://localhost:8765/`: il massimo deve stare sotto i 50 ms (nella 2.1: 18,2 ms).
 - Il server di prova va sempre in background, poi si chiude.
@@ -43,11 +45,11 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - `index.html`: CSS, markup e JS del film.
   - Il markup è anche la versione statica completa, usata con «riduci movimento» o senza WebGL.
   - Il JS contiene la timeline madre, il collegamento tra DOM e 3D, la navbar e il filo di avanzamento.
-- `strumenti.html` (dalla 3.7): pagina di prova a parte, giostra 3D delle lastre con gli strumenti di lavoro (icone in `images/strumenti/`, dati in `js/strumenti-icone.js`). Da decidere se e dove entra nel film.
+- `js/strumenti-icone.js`: dati degli strumenti (tracciati da simple-icons, colore della lastra `corpo`, colore del `logo`, didascalia), usati dal film e dalla pagina ferma (la pagina di prova `strumenti.html` è stata eliminata nella 3.14). Icone originali in `images/strumenti/`.
 - `area-riservata.html`: pagina segnaposto del tasto «Area riservata» della barra (dalla 2.5); l'area vera è ancora da fare.
 - `js/logo3d.js`: il logo in 3D dell'apertura (dalla 3.4), con il suo renderer (WebGL 2, altrimenti `play` restituisce null e il nero sfuma).
   - Geometria costruita dalla forma vettoriale: faccia nera piana con il triangolo incassato, nastro grigio come superficie rigata dalla piega (davanti) all'orlo (indietro), barra, spessori con il bordo verde, neon come pinne attaccate ai bordi. Sulle facce è proiettato il disegno SVG del logo (texture da `LOGO_FORMA.art`), quindi di fronte è identico al logo; dietro, l'alone largo (`LOGO_FORMA.glow` senza neon).
-  - Filtro a schermo (`FS_Q`): pieno, strisce con frange (verde giallo a sinistra, menta a destra), sbavature ai fronti, sipario nero a colonne. Tempi in `IN0…EXIT`.
+  - Filtro a schermo (`FS_Q`): pieno, strisce con frange (verde giallo a sinistra, menta a destra), sbavature ai fronti, sipario nero a colonne. Tempi in `IN0…EXIT`, tutti rallentati da `LENTO` (1,4, dalla 3.14-3.15; la timeline `intro` ha lo stesso `timeScale`).
   - `Logo3D.play(canvas, opzioni)` restituisce `first` (primo fotogramma: il nero è disegnato), `ready` (texture pronte), `held` (logo composto), `exit(fatto)`, `duration`, `stop()`. Si chiude da solo dopo l'uscita. Le opzioni `clock` e `pose` servono solo alle prove.
 - `js/logo-forma.js`: `window.LOGO_FORMA`, forma del simbolo (contorni in pixel del disegno originale) e i due disegni SVG per le texture. Generato con il ricalco del logo (`archivio/logo-svg/`), non si modifica a mano.
 - `js/lastra.js`: scena 3D in Three.js r147 classico, senza moduli. Contiene le aste dell'apertura, la lastra, materiali e shader, camera, anelli e pulviscolo.
@@ -81,7 +83,9 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
     - `cross0`/`cross1`: attraversamento;
     - `rad`: Radente;
     - `fin0`/`fin1`: finale;
-    - `end`: 11 (in `KX` diventa 12,1).
+    - `end`: 11 (in `KX` diventa 15,2).
+  - **Giostra degli strumenti** (dalla 3.9): `GW` (inizio `w0` 3,624 nel tempo di K, durata aggiunta `gd` 3,1) e `warp()` traducono il tempo nuovo in quello di K, che resta il copione di prima. In `KX` i tempi dopo `w0` sono spostati di `gd`. La giostra è in `poseGio()`; `S.giostra()` dà presenza, lastra davanti e punto per la didascalia.
+  - In `index.html` i tempi scritti come `O + X(t)` slittano da soli dopo l'inizio della giostra.
 - **Timeline `master`** in `index.html` (dove `K` è già `KX`): dura `K.end` (12,1) ed è legata con scrub 1 allo spazio vuoto `#film` (alto `K.end`·vh + vh). La scena 3D legge lo stesso progresso.
 - **`ridisegna()`**: dopo ogni refresh di ScrollTrigger esegue `master.progress(1).progress(pr)`. Senza, i `fromTo` perdono gli stati iniziali.
 - **Collegamento tra DOM e 3D**:

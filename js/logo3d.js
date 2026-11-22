@@ -372,6 +372,8 @@ var FS_Q = [
 
 /* ── tempi (secondi dal momento in cui il disegno è pronto) ── */
 var IN0 = .05, IN1 = 1.45, SO0 = 1.0, SO1 = 2.3, THOLD = 3.2, EXIT = 1.45;
+/* LENTO: tutto il movimento del logo scorre più piano di questo fattore (dalla 3.14; i tempi qui sopra restano quelli «di disegno») */
+var LENTO = 1.4;
 
 function svgImg(svg, w, h){
   return new Promise(function(res, rej){
@@ -391,7 +393,8 @@ function canvasTex(im, w, h){
 
 function play(canvas, opts){
   opts = opts || {};
-  var clock = opts.clock || function(){ return performance.now() / 1000; };
+  var clock0 = opts.clock || function(){ return performance.now() / 1000; };
+  var clock = function(){ return clock0() / LENTO; };
   var renderer;
   try { renderer = new T.WebGLRenderer({ canvas: canvas, alpha: true, premultipliedAlpha: true, antialias: false, powerPreference: 'high-performance' }); }
   catch (err){ return null; }
@@ -528,7 +531,7 @@ function play(canvas, opts){
   }
   raf = requestAnimationFrame(tick);
   return {
-    first: first, held: held, ready: pronto, duration: EXIT, stop: stop,
+    first: first, held: held, ready: pronto, duration: EXIT * LENTO, stop: stop,
     exit: function(fatto){
       if (te >= 0 || dead) return;
       var now = clock(), lt = t0 < 0 ? 0 : now - t0;
