@@ -8,15 +8,15 @@ Dalla 3.0 il colore d'accento è il verde lime `#CDFD67` (prima era arancio): ne
 Capitoli:
 1. Apertura (dalla 3.4, come il video di riferimento `58d1f4b27220bfbdf84fdabf0155c8cd.mp4`, fuori da git): su nero il logo in 3D (`js/logo3d.js`) arriva a strisce verticali che piovono, il pieno sale dal basso con il bordo frastagliato, resta con una luce che passa; poi torna strisce che cadono e il nero scende a colonne sottili dal centro. Dietro, le file delle aste 3D (i pezzi della lastra in vista esplosa, sempre in movimento) cadono dall'alto e si accendono quando toccano; poi scende la barra. Scorrendo le aste compongono la lastra distesa, una riga di luce la salda e la lastra si alza. Il logo sta solo nella barra.
 2. Siti: Rain Ink 01, Olimp 02.
-3. App: Word 03, Excel 04 (ex Parola e Foglio; repository e immagini si chiamano ancora `parola` e `foglio`), con la lastra sdoppiata.
+3. App: Word 03, Excel 04 (ex Parola e Foglio: le immagini si chiamano ancora `parola` e `foglio`), con la lastra sdoppiata.
 4. Giochi: Metal Gear 05, attraversamento in pixel, anelli, Radente 06.
 5. Scrivimi: faccia vuota con «Manca solo il tuo progetto.», bottone Scrivimi ed email.
 
 Per ora c'è solo questo (Siti, App, Giochi, Scrivimi): niente sezioni nuove senza richiesta.
 
 Dove sono i lavori:
-- Rain Ink: `~/Desktop/Sites/inkubo`
-- Olimp: `~/Desktop/Sites/olimp`, online come `/trama/`
+- Rain Ink: `~/Desktop/Sites/rainInk`
+- Olimp: `~/Desktop/Sites/olimp`, online come `/olimp/`
 - App e giochi: `~/Desktop/Apps`
 - Tutti online su `nemesimark.github.io/<repo>/`
 
@@ -27,12 +27,12 @@ Dove sono i lavori:
 
 ## Come si prova in locale
 ```bash
-cd ~/Desktop/Sites/site-nemesi && python3 -m http.server 8765   # poi http://localhost:8765
+cd ~/Desktop/Sites/nemesiWeb && python3 -m http.server 8765   # poi http://localhost:8765
 ```
 Funziona anche con doppio clic su `index.html`. Da `file://` il browser non legge immagini (in WebGL) e caratteri locali, quindi arrivano incorporati da `js/lavori-dati.js` e `js/caratteri-dati.js`, caricati solo in quel caso.
 
 Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
-- `node copy-gate.js ~/Desktop/Sites/site-nemesi/index.html`: deve uscire 0.
+- `node copy-gate.js ~/Desktop/Sites/nemesiWeb/index.html`: deve uscire 0.
 - `node verify.js shot "http://localhost:8765/?jump=<y>" out.png 1440 900` (e `390 844` per il telefono).
   - La fine del film è a `K.end` (12,1) × altezza dello schermo: 10890 a 1440×900.
   - `?jump=99999` porta al fondo.

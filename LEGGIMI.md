@@ -271,3 +271,6 @@
 - Corretto: con un indirizzo `#capitolo` il velo dell'apertura restava sopra la pagina e la barra non compariva.
 - Il ricalco del logo e il laboratorio del logo 3D sono in `archivio/logo-svg/` (fuori da git); il video di riferimento è escluso da git.
 - Verifiche: controllo dei testi pulito, fluidità max 19,7 ms, sito pronto in 6,6 s (4,0 s toccando dopo 1 s), apertura registrata su computer 1440×900 e telefono 390×844, da file locale, con «riduci movimento», con `#siti` e area riservata.
+
+### 3.5 — 22/11/2026
+- Repository dei lavori rinominati come le cartelle: i link portano ai nuovi indirizzi `rainInk/` (prima `inkubo/`), `olimp/` (prima `trama/`), `word/` (prima `parola/`) ed `excel/` (prima `foglio/`). La cartella del sito ora si chiama `nemesiWeb`.
