@@ -5,7 +5,7 @@ Sito vetrina/portfolio di Nemesi Web, lo studio di web design di Mark. Dalla 2.0
 Un solo oggetto 3D porta tutti i lavori: la «lastra», nera laccata, a due strati, con il bordo arancio come le facce del logo. La camera va solo avanti.
 
 Capitoli:
-1. Apertura: le aste 3D (i pezzi della lastra in vista esplosa, sempre in movimento). Scorrendo compongono la lastra distesa, una riga di luce la salda e la lastra si alza. Il logo sta solo nella barra.
+1. Apertura: prima il logo in 3D (`js/logo3d.js`), che si compone a strisce come in un segnale disturbato e poi piove via; poi le aste 3D (i pezzi della lastra in vista esplosa, sempre in movimento). Scorrendo compongono la lastra distesa, una riga di luce la salda e la lastra si alza. Il logo sta solo nella barra.
 2. Siti: Rain Ink 01, Olimp 02.
 3. App: Parola 03, Foglio 04, con la lastra sdoppiata.
 4. Giochi: Metal Gear 05, attraversamento in pixel, anelli, Radente 06.
@@ -43,6 +43,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
   - Il markup è anche la versione statica completa, usata con «riduci movimento» o senza WebGL.
   - Il JS contiene la timeline madre, il collegamento tra DOM e 3D, la navbar e il filo di avanzamento.
 - `area-riservata.html`: pagina segnaposto del tasto «Area riservata» della barra (dalla 2.5); l'area vera è ancora da fare.
+- `js/logo3d.js`: il logo in 3D dell'apertura, con il suo renderer e il filtro a strisce. `Logo3D.play(canvas)` restituisce `held` (il logo è composto), `exit(fatto)` e `stop()`. Si chiude da solo dopo l'uscita.
 - `js/lastra.js`: scena 3D in Three.js r147 classico, senza moduli. Contiene le aste dell'apertura, la lastra, materiali e shader, camera, anelli e pulviscolo.
 - `js/lavori-dati.js`, `js/caratteri-dati.js`: copie base64 di `images/lavori/*.jpg` e `fonts/*.woff2`, usate solo da `file://`.
   - Vanno rigenerate se cambiano immagini o caratteri.

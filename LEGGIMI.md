@@ -235,3 +235,10 @@
 - Testi sul cemento scuri: `--inchiostro` #15161A, secondari `--fumo-c` #383C44, arancio dei testi `--arancio-t` #A82E00 (l'arancio chiaro non si leggeva). Vignettatura ai bordi più leggera, filo di avanzamento scuro.
 - Il finale sulla faccia nera della lastra resta con testi chiari. Barra, menu del telefono e bottoni restano neri.
 - Area riservata: il logo sta su una piastra nera, perché la scritta «nemesi» è bianca.
+
+### 2.9 — 22/11/2026
+- Nuova apertura: il logo in 3D (`js/logo3d.js`, Three.js r147). È il nastro nero piegato con il dorso grigio e il filo arancio, con il triangolo e la barra arancio accesi.
+- Effetto come nel video di riferimento: un filtro a schermo taglia il logo in strisce verticali sottili, sfalsate e tremolanti, con frange rosso/blu e un filo di arcobaleno. Il logo si compone dall'alto in circa 2 s, resta e gira piano, con qualche riga che ogni tanto scatta.
+- Passaggio al sito: quando il sito ha caricato (e il logo è rimasto almeno fino a 2,9 s) il logo si sfalda in una pioggia di strisce che cadono. Il fondo si scioglie e dietro si accendono le aste dell'apertura, poi scende la barra. Chi scorre, tocca o preme un tasto salta il logo.
+- Il logo prende il posto della vecchia barra di caricamento (`.pre`). Con `?jump`, «riduci movimento» o senza WebGL non c'è.
+- Verifiche: sito pronto in circa 5,1 s (3,0 s saltando il logo), fluidità max 19,9–25,6 ms, controllo dei testi pulito, schermate computer e telefono.

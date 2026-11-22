@@ -242,12 +242,9 @@ html.film::-webkit-scrollbar{ display:none; }
   transition:opacity .25s, transform .25s var(--ease); pointer-events:none; }
 .film .rail button:hover span, .film .rail button:focus-visible span{ opacity:1; transform:none; }
 .film .pre{ display:none; }
-.film.avvio .pre{ display:block; position:fixed; inset:0; z-index:40; pointer-events:none; }
+.film.avvio .pre{ display:block; position:fixed; inset:0; z-index:40; pointer-events:none; background:var(--fondo); }
+.pre canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
 .film.avvio .hdr, .film.avvio .angolo{ opacity:0; }
-.pre i{ position:absolute; left:50%; top:66.5%; width:min(42vw, 640px); height:2px; margin-left:calc(min(42vw, 640px) / -2); border-radius:2px;
-  background:linear-gradient(90deg, #EA4006, #FFA54D 50%, #EA4006); transform-origin:center; transform:scaleX(0);
-  box-shadow:0 0 12px rgba(245,111,39,.7); }
-.pre span{ position:absolute; left:50%; top:calc(66.5% + 22px); transform:translateX(-50%); color:var(--fumo-c); }
 @media (max-width:900px){ .film .rail{ display:none; } }
 @media (max-width:760px){
   .film .testa{ top:86px; width:auto; right:var(--m); }
@@ -259,7 +256,6 @@ html.film::-webkit-scrollbar{ display:none; }
   .film .fine-in{ width:min(300px, 76vw); }
   .film .fine .titolo{ font-size:30px; }
   .film .scrivimi{ height:48px; padding:0 22px; margin-top:24px; }
-  .pre i{ width:76vw; margin-left:-38vw; top:62%; } .pre span{ top:calc(62% + 22px); }
 }
 </style>
 <script>/* aperta dal disco: i caratteri arrivano incorporati (il browser non legge i .woff2 locali) */
@@ -284,7 +280,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 <canvas class="gl" id="gl" aria-hidden="true"></canvas>
 <div class="velo" aria-hidden="true"></div>
 <div class="taglio" id="taglio" aria-hidden="true"></div>
-<div class="pre" id="pre" aria-hidden="true"><i></i><span class="mono">Nemesi Web</span></div>
+<div class="pre" id="pre" aria-hidden="true"><canvas id="logo3d"></canvas></div>
 
 <main>
   <section class="apertura" id="top" aria-label="Nemesi Web">
@@ -362,6 +358,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 <script src="vendor/lenis.min.js"></script>
 <script src="vendor/three/three.min.js"></script>
 <script src="js/lastra.js"></script>
+<script src="js/logo3d.js"></script>
 <script>
 (function(){
   'use strict';
@@ -586,26 +583,35 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
       var s = document.createElement('script'); s.src = 'js/lavori-dati.js'; s.onload = s.onerror = function(){ res(); }; document.head.appendChild(s);
     });
   }
-  var pre = document.getElementById('pre'), bar = pre.querySelector('i');
+  var pre = document.getElementById('pre');
   var avvio = d.classList.contains('avvio') && !location.hash;
-  if (avvio){ S.ignite(0); lenis.stop(); }
+  /* apertura: il logo in 3D si compone a strisce mentre il sito carica, poi piove via e lascia entrare le aste */
+  var L = null, salto, saltaLogo = new Promise(function(r){ salto = r; });
+  if (avvio){
+    S.ignite(0); lenis.stop();
+    try { if (window.Logo3D) L = Logo3D.play(document.getElementById('logo3d')); } catch (err){ L = null; }
+    ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(function(ev){ addEventListener(ev, function(){ salto(); }, { once: true, passive: true }); });
+  }
   datiLocali().then(function(){
-    return Promise.all([S.load(urls(), function(v){ if (avvio) gsap.to(bar, { scaleX: v * .92, duration: .35, ease: 'power2.out' }); }), fontsReady()]);
+    return Promise.all([S.load(urls()), fontsReady()]);
   }).then(function(){
     ScrollTrigger.refresh();
     d.classList.add('pronto');
     if (JUMP !== null){ salta(+JUMP || 0); }
     else if (location.hash && (location.hash.slice(1) in TAPPE)){ salta(TAPPE[location.hash.slice(1)] * VH); }
-    if (!avvio){ requestAnimationFrame(function(){ requestAnimationFrame(function(){ window.__ready = true; }); }); return; }
-    var IGN = { v: 0 }; gsap.killTweensOf(bar);
+    if (!avvio){ if (L) L.stop(); requestAnimationFrame(function(){ requestAnimationFrame(function(){ window.__ready = true; }); }); return; }
+    return Promise.race([L ? L.held : Promise.resolve(), saltaLogo]).then(function(){
+    var IGN = { v: 0 };
+    if (L) L.exit(function(){});
     var intro = gsap.timeline({ onComplete: function(){ d.classList.remove('avvio'); lenis.start(); window.__ready = true; } });
-    /* le aste si accendono una dopo l'altra, poi scende la barra con il logo */
-    intro.to(bar, { scaleX: 1, duration: .3, ease: 'power2.out' })
-      .to(pre, { opacity: 0, duration: .45, ease: 'power1.out' }, '+=.05')
-      .to(IGN, { v: 1, duration: 1.8, ease: 'power1.inOut', onUpdate: function(){ S.ignite(IGN.v); } }, '<.1')
+    /* il fondo del logo si scioglie mentre le strisce cadono; dietro le aste si accendono, poi scende la barra */
+    intro.to(pre, { backgroundColor: 'rgba(154,160,168,0)', duration: .9, ease: 'power1.inOut' }, .15)
+      .to(IGN, { v: 1, duration: 1.8, ease: 'power1.inOut', onUpdate: function(){ S.ignite(IGN.v); } }, .2)
       .fromTo(hdr, { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', clearProps: 'transform' }, '<.8')
-      .fromTo('.angolo', { opacity: 0 }, { opacity: 1, duration: .8, ease: 'power1.out' }, '<.2');
+      .fromTo('.angolo', { opacity: 0 }, { opacity: 1, duration: .8, ease: 'power1.out' }, '<.2')
+      .set({}, {}, L ? L.duration + .1 : 0);
     window.__intro = intro;
+    });
   });
 })();
 </script>
