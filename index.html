@@ -61,7 +61,7 @@ ul{ list-style:none; }
 .vh{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
 :focus-visible{ outline:2px solid var(--arancio-chiaro); outline-offset:3px; border-radius:4px; }
 
-/* ═════════ barra di navigazione: lastra scura sospesa (come Rain Ink), luce arancio che corre sul bordo ═════════ */
+/* ═════════ barra di navigazione: lastra scura sospesa (come Rain Ink), linea verde fissa sul bordo ═════════ */
 .hdr{ position:fixed; top:14px; left:0; right:0; z-index:60; perspective:1200px; pointer-events:none; }
 .slab{ pointer-events:auto; position:relative; width:min(960px, calc(100% - 2 * var(--m) + 24px)); margin-inline:auto;
   display:flex; align-items:center; gap:18px; padding:6px 7px 6px 14px; border-radius:16px;
@@ -71,27 +71,29 @@ ul{ list-style:none; }
   box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 -1px 0 rgba(0,0,0,.6) inset, 0 4px 0 #040405, 0 24px 48px -16px rgba(0,0,0,.8);
   transform-style:preserve-3d; }
 .nav-giro{ position:absolute; inset:-1px; width:calc(100% + 2px); height:calc(100% + 2px); overflow:visible; pointer-events:none; }
-.nav-giro rect{ fill:none; stroke-linecap:round; stroke-dasharray:90 910; animation:nav-giro 11s ease-in-out infinite alternate; }
+.nav-giro rect{ fill:none; }
+/* linea verde fissa su tutto il contorno */
 .nav-giro .luce{ stroke:#CCFD64; stroke-width:1.4; }
-.nav-giro .alone{ stroke:rgba(166,239,11,.5); stroke-width:7; filter:blur(5px); }
-@keyframes nav-giro{ from{ stroke-dashoffset:0; } to{ stroke-dashoffset:-1000; } }
+.nav-giro .alone{ stroke:rgba(166,239,11,.35); stroke-width:6; filter:blur(5px); }
 .logo{ position:relative; display:block; flex:none; width:173px; height:34px; transform:translateZ(20px); }
 /* il PNG ha aria trasparente sotto la scritta: lo si allinea sul disegno, non sul riquadro */
 .logo img{ position:absolute; left:-6px; top:-4px; height:47px; width:auto; max-width:none; }
 .links{ display:flex; gap:4px; margin-left:auto; transform-style:preserve-3d; }
-.links a{ position:relative; display:block; padding:10px 14px; font-size:14px; font-weight:500; color:#A6A6AF; white-space:nowrap;
+.links a{ position:relative; display:block; padding:9px 14px; font-size:14px; font-weight:500; color:#C9C9D1; white-space:nowrap;
   border-radius:11px; transform:translateZ(8px);
+  /* tasti in rilievo come il lucchetto: luce sul bordo alto, spessore sotto */
+  background:linear-gradient(180deg, #2A2B31 0%, #1C1D22 48%, #121317 100%);
+  box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 3px 0 #050506, 0 10px 18px -10px rgba(0,0,0,.9);
   transition:transform 220ms var(--ease), color 150ms ease, box-shadow 220ms var(--ease); }
-/* tasti: fondo nero come la barra; al passaggio un contorno arancio sfumato */
-.links a[aria-current], .links a:focus-visible{ outline:none; color:#F4F3F1; background:#000;
-  transform:translateZ(18px) translateY(-2px); box-shadow:0 0 0 1px rgba(255,255,255,.08) inset, 0 12px 22px -8px rgba(0,0,0,.85); }
-.links a:focus-visible{ box-shadow:0 0 0 1px rgba(201,253,92,.6), 0 0 10px rgba(166,239,11,.55), 0 0 24px rgba(166,239,11,.25), inset 0 0 8px rgba(166,239,11,.22); }
-.links a[aria-current]::before{ content:""; position:absolute; left:14px; right:14px; bottom:5px; height:2px; border-radius:2px;
+.links a[aria-current], .links a:focus-visible{ outline:none; color:#F4F3F1; }
+.links a:focus-visible{ box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 3px 0 #050506, 0 0 0 1px rgba(201,253,92,.6), 0 0 12px rgba(166,239,11,.45); }
+.links a[aria-current]::before{ content:""; position:absolute; left:14px; right:14px; bottom:4px; height:2px; border-radius:2px;
   background:linear-gradient(90deg, var(--arancio-chiaro), var(--arancio-scuro)); }
+.links a:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 1px 0 #050506; }
 @media (hover:hover) and (pointer:fine){
-  .links a:hover{ color:#F4F3F1; background:#000;
-    transform:translateZ(18px) translateY(-3px) scale(1.07);
-    box-shadow:0 0 0 1px rgba(201,253,92,.6), 0 0 10px rgba(166,239,11,.55), 0 0 24px rgba(166,239,11,.25), inset 0 0 8px rgba(166,239,11,.22); }
+  .links a:hover{ color:#F4F3F1; transform:translateZ(8px) translateY(-3px) scale(1.05);
+    box-shadow:0 1px 0 rgba(255,255,255,.18) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 5px 0 #050506, 0 0 0 1px rgba(201,253,92,.45), 0 16px 26px -8px rgba(166,239,11,.35); }
+  .links a:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 1px 0 #050506; }
 }
 .cta{ flex:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:40px; height:40px; padding:0; border-radius:11px;
   color:#030B1F; font-size:14px; font-weight:600; letter-spacing:.005em;
@@ -103,7 +105,10 @@ ul{ list-style:none; }
 @media (hover:hover) and (pointer:fine){ .cta:hover{ transform:translateZ(8px) translateY(-3px) scale(1.05);
   box-shadow:0 1px 0 rgba(237,254,201,.6) inset, 0 5px 0 #537903, 0 16px 30px -8px rgba(166,239,11,.75); } }
 .burger{ display:none; margin-left:auto; width:40px; height:40px; border-radius:11px; border:0; cursor:pointer;
-  background:#000; box-shadow:0 0 0 1px rgba(255,255,255,.08) inset; transform:translateZ(8px); }
+  background:linear-gradient(180deg, #2A2B31 0%, #1C1D22 48%, #121317 100%);
+  box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 3px 0 #050506, 0 10px 18px -10px rgba(0,0,0,.9);
+  transform:translateZ(8px); transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+.burger:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 1px 0 #050506; }
 .burger span{ display:block; width:18px; height:2px; margin:4px auto; background:#F4F3F1; border-radius:2px; transition:transform 300ms var(--ease), opacity 150ms ease; }
 .hdr.open .burger span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
 .hdr.open .burger span:nth-child(2){ opacity:0; }

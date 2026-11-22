@@ -256,3 +256,8 @@
 ### 3.2 — 22/11/2026
 - App: Parola ora si chiama **Word** (03) e Foglio **Excel** (04), nelle didascalie, nelle etichette per i lettori di schermo e nella descrizione della pagina. Gli indirizzi restano `nemesimark.github.io/parola/` e `/foglio/`.
 - Nuove anteprime `parola-d.jpg`/`parola.jpg` (Word, dal sito online) e `foglio-d.jpg`/`foglio.jpg` (Excel, dal sito online), aggiornate anche in `js/lavori-dati.js`.
+
+### 3.3 — 22/11/2026
+- Barra: la linea verde non corre più sul bordo, ora è fissa e accesa su tutto il contorno, con un alone leggero.
+- Tasti Siti, App, Giochi, Contattaci in rilievo come quello del lucchetto: scuri, con luce sul bordo alto e spessore sotto; al passaggio del mouse si alzano con un filo verde, al clic si abbassano. In rilievo anche il tasto del menu sul telefono e le voci del menu aperto.
+- Verifiche: controllo dei testi pulito, fluidità max 46,1 ms, schermate barra su computer (anche al passaggio del mouse) e telefono (anche con il menu aperto).
