@@ -16,6 +16,7 @@
 /* Prima del disegno: con WebGL e senza «riduci movimento» la pagina diventa il film (classe film). */
 (function(){ var d=document.documentElement, ok=false; d.classList.add('js');
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try { if (window.self !== window.top) return; } catch(e){ return; }   /* dentro un riquadro (anteprima dell'area riservata) la pagina resta ferma */
   try { var c=document.createElement('canvas'); ok=!!(c.getContext('webgl2')||c.getContext('webgl')); } catch(e){}
   if (ok){ d.classList.add('film');
     if (location.search.indexOf('jump=')<0 && !location.hash){ d.classList.add('avvio');
@@ -104,6 +105,22 @@ ul{ list-style:none; }
 .cta:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(237,254,201,.5) inset, 0 1px 0 #537903; }
 @media (hover:hover) and (pointer:fine){ .cta:hover{ transform:translateZ(14px) translateY(-2px) scale(1.1);
   box-shadow:0 1px 0 rgba(237,254,201,.6) inset, 0 4px 0 #537903, 0 0 12px 2px rgba(205,253,103,.6), 0 0 28px 6px rgba(205,253,103,.28), 0 0 48px 10px rgba(166,239,11,.12); } }
+/* sottomenu Portfolio: sul computer si apre sotto la voce (mouse sopra o tastiera), stessa lastra scura della barra */
+.links .dd{ position:relative; transform-style:preserve-3d; }
+.dd-su{ display:flex !important; align-items:center; gap:6px; }
+.frecc{ width:12px; height:12px; flex:none; transition:transform 250ms var(--ease); }
+.links .sub{ position:absolute; top:calc(100% + 12px); left:50%; min-width:150px; display:flex; flex-direction:column; gap:5px; padding:7px;
+  border-radius:14px; background:linear-gradient(180deg, rgba(14,14,16,.97), rgba(0,0,0,.97)); border:1px solid rgba(255,255,255,.075);
+  box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 0 14px 1px rgba(205,253,103,.26), 0 0 32px 4px rgba(205,253,103,.1), 0 24px 48px -16px rgba(0,0,0,.8);
+  transform:translate(-50%, -6px); transform-style:preserve-3d; opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity 160ms ease-in, transform 200ms ease-in, visibility 0s 200ms; }
+.links .sub::before{ content:""; position:absolute; left:0; right:0; top:-14px; height:14px; }   /* ponte: il mouse passa dalla voce al sottomenu senza chiuderlo */
+.links .sub a{ text-align:left; }
+@media (min-width:761px){
+  .links .dd:hover .sub, .links .dd:focus-within .sub, .links .dd.open .sub{ opacity:1; visibility:visible; pointer-events:auto; transform:translate(-50%, 0);
+    transition:opacity 200ms var(--ease), transform 250ms var(--ease); }
+  .links .dd:hover .frecc, .links .dd:focus-within .frecc{ transform:rotate(180deg); }
+}
 .burger{ display:none; margin-left:auto; width:40px; height:40px; border-radius:11px; border:0; cursor:pointer;
   background:linear-gradient(180deg, #2A2B31 0%, #1C1D22 48%, #121317 100%);
   box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 3px 0 #050506, 0 10px 18px -10px rgba(0,0,0,.9);
@@ -130,6 +147,12 @@ ul{ list-style:none; }
   .hdr.open .links li:nth-child(2){ transition-delay:30ms; }
   .hdr.open .links li:nth-child(3){ transition-delay:60ms; }
   .links a{ padding:13px 14px; font-size:16px; }
+  /* sul telefono le voci del Portfolio stanno sempre in vista, rientrate sotto la voce */
+  .links .sub{ position:static; min-width:0; padding:6px 0 0 18px; gap:6px; background:none; border:0; box-shadow:none;
+    transform:none; opacity:1; visibility:inherit; pointer-events:auto; transition:none; }
+  .links .sub::before{ display:none; }
+  .links .sub a{ padding:11px 14px; font-size:15px; }
+  .hdr.open .links li:nth-child(4){ transition-delay:90ms; }
 }
 
 /* ═════════ pagina statica (senza WebGL o con «riduci movimento»): tutto il contenuto, in ordine ═════════ */
@@ -357,11 +380,15 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
   <nav class="slab" aria-label="Principale">
     <a class="logo" href="#top" aria-label="Nemesi Web, torna all'inizio"><img id="logo-nav" src="images/logo/nemesi-web-barra.svg" alt="" width="1997" height="343"></a>
     <ul class="links" id="links">
-      <li><a href="#siti" data-s="siti">Siti</a></li>
-      <li><a href="#tool" data-s="strumenti">Tool</a></li>
-      <li><a href="#app" data-s="app">App</a></li>
-      <li><a href="#giochi" data-s="giochi">Giochi</a></li>
+      <li class="dd"><a class="dd-su" href="#siti" data-s="portfolio" aria-haspopup="true">Portfolio<svg class="frecc" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <ul class="sub" aria-label="Portfolio">
+          <li><a href="#siti" data-s="siti" data-testo="menu-t001">Siti</a></li>
+          <li><a href="#app" data-s="app" data-testo="menu-t002">App</a></li>
+          <li><a href="#giochi" data-s="giochi" data-testo="menu-t003">Giochi</a></li>
+        </ul>
+      </li>
       <li><a href="#studio" data-s="studio">Studio</a></li>
+      <li><a href="#tool" data-s="strumenti">Tool</a></li>
       <li><a href="mailto:ciao@nemesi.studio">Contattaci</a></li>
     </ul>
     <button class="burger" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
@@ -378,30 +405,30 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
   <section class="apertura" id="top" aria-label="Nemesi Web">
     <h1 class="marchio" id="marchio"><img src="images/logo/nemesi-web.svg" alt="Nemesi Web, web design e soluzioni digitali" width="1997" height="343" fetchpriority="high"></h1>
     <span class="riga" aria-hidden="true"></span>
-    <div class="angoli"><p class="angolo sx mono">Design e sviluppo</p><p class="angolo dx mono">Portfolio 2026</p></div>
+    <div class="angoli"><p class="angolo sx mono" data-testo="index-t001">Design e sviluppo</p><p class="angolo dx mono" data-testo="index-t002">Portfolio 2026</p></div>
   </section>
 
   <section class="capitolo" id="siti" aria-labelledby="siti-t">
     <div class="testa">
-      <p class="kicker mono"><b>Siti</b> Pelle e carta</p>
-      <h2 class="titolo" id="siti-t">Siti chiari, intuitivi, <em>costruiti per durare.</em></h2>
+      <p class="kicker mono" data-testo="index-t004"><b data-testo="index-t003">Siti</b> Pelle e carta</p>
+      <h2 class="titolo" id="siti-t"><span data-testo="index-t005">Siti chiari, intuitivi,</span> <em data-testo="index-t006">costruiti per durare.</em></h2>
     </div>
     <ul class="lavori">
       <li class="lavoro">
-        <a class="schermo" data-i="0" href="https://nemesimark.github.io/rainInk/" target="_blank" rel="noopener" aria-label="Rain Ink Tattoo, studio di tatuaggi a Montelupone: visita il sito"><img src="images/lavori/rainink.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="0"><span class="d-in"><span class="num">01</span><span class="nome">Rain Ink Tattoo</span><span class="desc">Studio di tatuaggi a Montelupone</span><a class="azione" href="https://nemesimark.github.io/rainInk/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Visita il sito ↗</a></span></p>
+        <a class="schermo" data-i="0" href="https://nemesimark.github.io/rainInk/" target="_blank" rel="noopener" aria-label="Rain Ink Tattoo, studio di tatuaggi a Montelupone: visita il sito"><img data-slot="lavoro-rainink" src="images/lavori/rainink.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="0"><span class="d-in"><span class="num">01</span><span class="nome" data-testo="index-t007">Rain Ink Tattoo</span><span class="desc" data-testo="index-t008">Studio di tatuaggi a Montelupone</span><a class="azione" href="https://nemesimark.github.io/rainInk/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Visita il sito ↗</a></span></p>
       </li>
       <li class="lavoro">
-        <div class="schermo muto" data-i="1"><img src="images/lavori/areariservata.jpg" alt="Area riservata di Rain Ink Tattoo: la scheda Portfolio con lo spazio usato e le foto dei tatuaggi" width="1600" height="900" loading="lazy" decoding="async"></div>
-        <p class="didascalia" data-i="1"><span class="d-in"><span class="num">02</span><span class="nome">Rain Ink · Area riservata</span><span class="desc">Foto e testi del sito, gestiti dal titolare</span></span></p>
+        <div class="schermo muto" data-i="1"><img data-slot="lavoro-areariservata" src="images/lavori/areariservata.jpg" alt="Area riservata di Rain Ink Tattoo: la scheda Portfolio con lo spazio usato e le foto dei tatuaggi" width="1600" height="900" loading="lazy" decoding="async"></div>
+        <p class="didascalia" data-i="1"><span class="d-in"><span class="num">02</span><span class="nome" data-testo="index-t009">Rain Ink · Area riservata</span><span class="desc" data-testo="index-t010">Foto e testi del sito, gestiti dal titolare</span></span></p>
       </li>
     </ul>
   </section>
 
   <section class="capitolo" id="strumenti" aria-labelledby="strumenti-t">
     <div class="testa">
-      <p class="kicker mono"><b>Strumenti</b> Banco di lavoro</p>
-      <h2 class="titolo" id="strumenti-t">Con cosa lavoro <em>ogni giorno.</em></h2>
+      <p class="kicker mono" data-testo="index-t012"><b data-testo="index-t011">Strumenti</b> Banco di lavoro</p>
+      <h2 class="titolo" id="strumenti-t"><span data-testo="index-t013">Con cosa lavoro</span> <em data-testo="index-t014">ogni giorno.</em></h2>
     </div>
     <ul class="strumenti" id="strumenti-lista"></ul>
     <a class="strum-link" id="strum-link" href="#" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
@@ -409,50 +436,50 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 
   <section class="capitolo" id="app" aria-labelledby="app-t">
     <div class="testa">
-      <p class="kicker mono"><b>App</b> Lettere e numeri</p>
-      <h2 class="titolo" id="app-t">Scrivere e calcolare, <em>dal browser al Mac.</em></h2>
+      <p class="kicker mono" data-testo="index-t016"><b data-testo="index-t015">App</b> Lettere e numeri</p>
+      <h2 class="titolo" id="app-t"><span data-testo="index-t017">Scrivere e calcolare,</span> <em data-testo="index-t018">dal browser al Mac.</em></h2>
     </div>
     <ul class="lavori">
       <li class="lavoro">
-        <a class="schermo" data-i="2" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" aria-label="Word, editor di testi: apri l'app"><img src="images/lavori/parola.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="2"><span class="d-in"><span class="num">03</span><span class="nome">Word</span><span class="desc">Editor di testi, salva in .docx</span><a class="azione" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
+        <a class="schermo" data-i="2" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" aria-label="Word, editor di testi: apri l'app"><img data-slot="lavoro-word" src="images/lavori/parola.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="2"><span class="d-in"><span class="num">03</span><span class="nome" data-testo="index-t019">Word</span><span class="desc" data-testo="index-t020">Editor di testi, salva in .docx</span><a class="azione" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
       </li>
       <li class="lavoro">
-        <a class="schermo" data-i="3" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" aria-label="Excel, foglio di calcolo: apri l'app"><img src="images/lavori/foglio.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="3"><span class="d-in"><span class="num">04</span><span class="nome">Excel</span><span class="desc">Formule in italiano, file .xlsx</span><a class="azione" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
+        <a class="schermo" data-i="3" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" aria-label="Excel, foglio di calcolo: apri l'app"><img data-slot="lavoro-excel" src="images/lavori/foglio.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="3"><span class="d-in"><span class="num">04</span><span class="nome" data-testo="index-t021">Excel</span><span class="desc" data-testo="index-t022">Formule in italiano, file .xlsx</span><a class="azione" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
       </li>
     </ul>
   </section>
 
   <section class="capitolo" id="giochi" aria-labelledby="giochi-t">
     <div class="testa">
-      <p class="kicker mono"><b>Giochi</b> Piano e profondità</p>
-      <h2 class="titolo" id="giochi-t">Mondi interi, <em>dentro una pagina web.</em></h2>
+      <p class="kicker mono" data-testo="index-t024"><b data-testo="index-t023">Giochi</b> Piano e profondità</p>
+      <h2 class="titolo" id="giochi-t"><span data-testo="index-t025">Mondi interi,</span> <em data-testo="index-t026">dentro una pagina web.</em></h2>
     </div>
     <ul class="lavori">
       <li class="lavoro">
-        <a class="schermo" data-i="4" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" aria-label="Metal Gear, Operazione Omega, gioco d'azione: gioca"><img src="images/lavori/metalgear.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="4"><span class="d-in"><span class="num">05</span><span class="nome">Metal Gear</span><span class="desc">Operazione Omega, azione in sei livelli</span><a class="azione" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
+        <a class="schermo" data-i="4" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" aria-label="Metal Gear, Operazione Omega, gioco d'azione: gioca"><img data-slot="lavoro-metalgear" src="images/lavori/metalgear.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="4"><span class="d-in"><span class="num">05</span><span class="nome" data-testo="index-t027">Metal Gear</span><span class="desc" data-testo="index-t028">Operazione Omega, azione in sei livelli</span><a class="azione" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
       </li>
       <li class="lavoro">
-        <a class="schermo" data-i="5" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" aria-label="Radente, gioco di volo in 3D: gioca"><img src="images/lavori/radente.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="5"><span class="d-in"><span class="num">06</span><span class="nome">Radente</span><span class="desc">Volo 3D in cinque mondi</span><a class="azione" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
+        <a class="schermo" data-i="5" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" aria-label="Radente, gioco di volo in 3D: gioca"><img data-slot="lavoro-radente" src="images/lavori/radente.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="5"><span class="d-in"><span class="num">06</span><span class="nome" data-testo="index-t029">Radente</span><span class="desc" data-testo="index-t030">Volo 3D in cinque mondi</span><a class="azione" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
       </li>
     </ul>
   </section>
 
   <section class="capitolo studio" id="studio" aria-labelledby="studio-t">
     <div class="testa">
-      <p class="kicker mono"><b>Studio</b> Bologna</p>
-      <h2 class="titolo" id="studio-t">Lo studio è a Bologna, <em>i progetti ovunque.</em></h2>
+      <p class="kicker mono" data-testo="index-t032"><b data-testo="index-t031">Studio</b> Bologna</p>
+      <h2 class="titolo" id="studio-t"><span data-testo="index-t033">Lo studio è a Bologna,</span> <em data-testo="index-t034">i progetti ovunque.</em></h2>
     </div>
     <div class="map map-anim" role="region" aria-label="Mappa animata: dallo spazio fino allo studio Nemesi Web in via dello Scalo 12, 40131 Bologna">
       <div class="map-canvas"></div>
       <div class="map-ok">
         <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 12h19M12 2.5c2.8 3 2.8 16 0 19M12 2.5c-2.8 3-2.8 16 0 19" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
-        <h3>Dallo spazio fino allo studio</h3>
-        <p>La mappa animata carica le foto satellitari da un servizio esterno (Esri).</p>
-        <button type="button" class="map-ok-btn">Mostra la mappa</button>
+        <h3 data-testo="index-t035">Dallo spazio fino allo studio</h3>
+        <p data-testo="index-t036">La mappa animata carica le foto satellitari da un servizio esterno (Esri).</p>
+        <button type="button" class="map-ok-btn" data-testo="index-t037">Mostra la mappa</button>
       </div>
       <button type="button" class="map-replay">↻ Rivedi</button>
     </div>
@@ -460,8 +487,8 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 
   <section class="fine" id="scrivimi" aria-labelledby="fine-t">
     <div class="fine-in" id="fine-in">
-      <h2 class="titolo" id="fine-t">Manca solo <em>il tuo progetto.</em></h2>
-      <a class="scrivimi" href="mailto:ciao@nemesi.studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.5 8.2 6.2 8.2-6.2"/></svg>Scrivimi</a>
+      <h2 class="titolo" id="fine-t"><span data-testo="index-t038">Manca solo</span> <em data-testo="index-t039">il tuo progetto.</em></h2>
+      <a class="scrivimi" data-testo="index-t040" href="mailto:ciao@nemesi.studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.5 8.2 6.2 8.2-6.2"/></svg>Scrivimi</a>
       <a class="email" href="mailto:ciao@nemesi.studio">ciao@nemesi.studio</a>
     </div>
   </section>
@@ -717,7 +744,8 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     var cur = '';
     for (var i = 0; i < CAP.length; i++) if (p >= CAP[i][1] && p < CAP[i][2]) cur = CAP[i][0];
     if (cur === current) return; current = cur;
-    navLinks.forEach(function(a){ if (a.dataset.s === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+    var port = cur === 'siti' || cur === 'app' || cur === 'giochi';           // dentro Siti, App o Giochi resta acceso anche Portfolio
+    navLinks.forEach(function(a){ if (a.dataset.s === cur || (port && a.dataset.s === 'portfolio')) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
   }
 
   /* ── filo di avanzamento a destra ── */
@@ -761,9 +789,14 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 
   /* immagini: da file locale (doppio clic) le texture vengono dai dati incorporati, altrimenti dai JPG */
   var NOMI = ['rainink', 'areariservata', 'parola', 'foglio', 'metalgear', 'radente'];
+  /* dalla 3.20 la foto di ogni lavoro è quella scritta nella pagina (data-slot, si cambia dall'area riservata) */
   function urls(){
-    if (location.protocol === 'file:' && window.LAVORI_DATI) return NOMI.map(function(n){ return window.LAVORI_DATI[n]; });
-    return NOMI.map(function(n){ return 'images/lavori/' + n + '.jpg'; });
+    return NOMI.map(function(n, i){
+      var img = document.querySelector('[data-i="' + i + '"] img[data-slot]'), src = img ? img.getAttribute('src') : 'images/lavori/' + n + '.jpg';
+      var m = src.match(/^images\/lavori\/([a-z]+)\.jpg$/);
+      if (location.protocol === 'file:' && window.LAVORI_DATI && m && window.LAVORI_DATI[m[1]]) return window.LAVORI_DATI[m[1]];
+      return src;
+    });
   }
   function datiLocali(){
     return new Promise(function(res){

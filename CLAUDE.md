@@ -5,6 +5,8 @@ Sito vetrina/portfolio di Nemesi Web, lo studio di web design di Mark. Dalla 2.0
 Un solo oggetto 3D porta tutti i lavori: la «lastra», nera laccata, a due strati, con il bordo verde come le facce del logo. La camera va solo avanti.
 Dalla 3.0 il colore d'accento è il verde lime `#CDFD67` (prima era arancio): nel codice le variabili si chiamano ancora `--arancio*` e `COL.arancio`, ma contengono i verdi.
 
+Barra (dalla 3.20): Portfolio ▾ (Siti, App, Giochi), Studio, Tool, Contattaci, lucchetto.
+
 Capitoli:
 1. Apertura (dalla 3.4, come il video di riferimento `58d1f4b27220bfbdf84fdabf0155c8cd.mp4`, fuori da git): su nero il logo in 3D (`js/logo3d.js`) arriva a strisce verticali che piovono, il pieno sale dal basso con il bordo frastagliato, resta con una luce che passa; poi torna strisce che cadono e il nero scende a colonne sottili dal centro. Dietro, le file delle aste 3D (i pezzi della lastra in vista esplosa, sempre in movimento) cadono dall'alto e si accendono quando toccano; poi scende la barra. Scorrendo le aste compongono la lastra distesa, una riga di luce la salda e la lastra si alza. Il logo sta solo nella barra.
 2. Siti: Rain Ink 01, area riservata di Rain Ink 02 (dalla 3.9, al posto di Olimp: anteprima senza collegamento).
@@ -48,7 +50,9 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
   - Il markup è anche la versione statica completa, usata con «riduci movimento» o senza WebGL.
   - Il JS contiene la timeline madre, il collegamento tra DOM e 3D, la navbar e il filo di avanzamento.
 - `js/strumenti-icone.js`: dati degli strumenti (tracciati da simple-icons, colore della lastra `corpo`, colore del `logo`, didascalia), usati dal film e dalla pagina ferma (la pagina di prova `strumenti.html` è stata eliminata nella 3.14). Icone originali in `images/strumenti/`.
-- `area-riservata.html`: pagina segnaposto del tasto «Area riservata» della barra (dalla 2.5); l'area vera è ancora da fare.
+- `area-riservata.html` (dalla 3.20): area riservata copiata da Olimp (skill `area-ris`), attiva dalla 3.21 con il Worker https://nemesiweb-area-riservata.nemesi-mark.workers.dev. Foto dei 6 lavori (`data/immagini.json`, `data-slot`), 40 testi (`data/testi.json`, `data-testo`) e le voci del sottomenu Portfolio (`menu-t001…003`). Dettagli e attivazione nel `LEGGIMI.md`, sezione «Area riservata».
+- `scripts/genera_contenuti.py`: scrive in `index.html` foto e testi dai JSON (`--check` per controllare). Testi e foto con `data-testo`/`data-slot` si cambiano nei JSON, non nell'HTML.
+- `worker/` (Worker Cloudflare dell'area, non pubblicato sul sito), `.github/workflows/pubblica.yml` (dalla 3.21 pubblica a ogni push su main: Pages usa GitHub Actions), `js/vendor/sortable/`, `images/guida/` (schermate della guida), `images/caricate/`.
 - `js/logo3d.js`: il logo in 3D dell'apertura (dalla 3.4), con il suo renderer (WebGL 2, altrimenti `play` restituisce null e il nero sfuma).
   - Geometria costruita dalla forma vettoriale: faccia nera piana con il triangolo incassato, nastro grigio come superficie rigata dalla piega (davanti) all'orlo (indietro), barra, spessori con il bordo verde, neon come pinne attaccate ai bordi. Sulle facce è proiettato il disegno SVG del logo (texture da `LOGO_FORMA.art`), quindi di fronte è identico al logo; dietro, l'alone largo (`LOGO_FORMA.glow` senza neon).
   - Filtro a schermo (`FS_Q`): pieno, strisce con frange (verde giallo a sinistra, menta a destra), sbavature ai fronti, sipario nero a colonne. Tempi in `IN0…EXIT`, tutti rallentati da `LENTO` (1,4, dalla 3.14-3.15; la timeline `intro` ha lo stesso `timeScale`).
@@ -111,11 +115,11 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - Testi in italiano. Il copy non deve mai descrivere lo scorrimento o il meccanismo (copy-gate).
 - Nel copy niente «non X, ma Y» e niente lineette nei testi brevi.
 - Ogni modifica → nuova versione in `LEGGIMI.md`.
-- Commit solo su richiesta; «g» = commit e push su `origin main`.
+- Commit solo su richiesta; «g» = commit e push su `origin main`. Prima del commit: `python3 scripts/genera_contenuti.py --check` (deve passare) e niente file di prova `_*.html`.
 - Rispettare `prefers-reduced-motion`: è già gestito con la pagina statica completa.
 
 ## In sospeso
-- Area riservata vera (oggi il tasto porta alla pagina segnaposto `area-riservata.html`).
+- Area riservata: provare dal vero accesso, salvataggio su GitHub e cambio password; il Worker si aggiorna con `npx wrangler deploy` da `worker/` (Node in `~/.local/lib/node/bin`).
 - Email `ciao@nemesi.studio`: dominio non verificato, da sostituire con quella vera.
 - Mappa: manca una pagina privacy dove citare Esri (le foto satellitari si caricano solo dopo «Mostra la mappa»).
 - Partita IVA (obbligatoria per un professionista in Italia): oggi c'è solo «© 2026 Nemesi Web» nel finale. Va aggiunta lì.

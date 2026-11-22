@@ -341,3 +341,28 @@
 
 ### 3.19 — 22/11/2026
 - Mappa dello studio: tolta la sosta sul quartiere Porto-Saragozza. Ora Italia → Emilia-Romagna → Bologna (sosta di 3 s, come l'ultimo livello di Rain Ink) e poi si scende dritti al civico di via dello Scalo 12; la durata resta 14 s.
+
+### 3.20 — 22/11/2026
+- Barra riorganizzata: **Portfolio** (con il sottomenu Siti · App · Giochi), Studio, Tool, Contattaci e il lucchetto. Sul computer il sottomenu si apre sotto Portfolio al passaggio del mouse o con la tastiera (stessa lastra scura con la sfumatura verde, freccia che gira); sul telefono le tre voci stanno sempre in vista, rientrate sotto Portfolio. Dentro Siti, App o Giochi resta acceso anche Portfolio. Il filo laterale resta nell'ordine del film.
+- **Area riservata** (skill area-ris, copia di quella di Olimp): vedi la sezione «Area riservata» qui sotto. Non ancora attivata.
+- Le foto dei lavori sulla lastra 3D ora vengono dall'`<img data-slot>` della pagina (non più da nomi fissi), così una foto cambiata dall'area riservata cambia anche sulla lastra.
+- Dentro un riquadro (anteprima dell'area riservata) la pagina resta ferma, come con «riduci movimento».
+
+### 3.21 — 22/11/2026
+- **Area riservata attivata**: Worker `nemesiweb-area-riservata` su Cloudflare (https://nemesiweb-area-riservata.nemesi-mark.workers.dev) con il suo KV `DATI` e i secret; indirizzo in `<meta name="ar-api">`; GitHub Pages ora pubblica con GitHub Actions (`pubblica.yml` parte a ogni push su main).
+
+## Area riservata
+
+Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e funzioni); cambiano nome, logo, caratteri del sito (Inter Tight, Geist), barra in alto nera come quella del sito e colore d'accento: il verde scuro del logo `#8ECE05` (più scuro `#79B003`), con il testo scuro `#0B1200` sopra (il bianco non avrebbe contrasto). Prefisso di localStorage `nemesiweb-`.
+
+- **Accesso**: `area-riservata.html` (lucchetto in fondo alla barra, `noindex`), password controllata dal Worker, sessione di 30 giorni, «Esci», «Cambia password» (impronta PBKDF2 nel KV `DATI`), dopo 5 errori tutto bloccato per 15 minuti. Guida che si apre da sola al primo accesso, con le schede Foto | Testi | Menu e 6 schermate in `images/guida/` (i `data-punti` vengono da `riquadri.py` della skill). Riquadro «Spazio per le foto» su 1 GB.
+- **Schede**: `Home` (la pagina del sito) e `Menu` (il sottomenu Portfolio). In Home: **Foto** = le 6 foto dei lavori (`data/immagini.json`, `data-slot` sulle `<img>`: `lavoro-rainink`, `lavoro-areariservata`, `lavoro-word`, `lavoro-excel`, `lavoro-metalgear`, `lavoro-radente`), tutte 16:9 a 1600 × 900, con nome e descrizione del lavoro nella stessa finestra; anteprima identica al sito (computer e telefono) con la foto da trascinare e ingrandire. **Testi** = 40 testi (`data/testi.json`, `data-testo` `index-t001`…`index-t040`): angoli dell'apertura, occhielli e titoli dei capitoli (ogni titolo è due testi: la parte scura e la parte verde), nome e descrizione dei lavori, testi del riquadro della mappa, frase finale e pulsante Scrivimi (il clic non si cambia). **Menu** = Siti, App, Giochi (`menu-t001`…`menu-t003`).
+- **Non si cambiano da qui**: le lastre dei Tool (`js/strumenti-icone.js`), le voci principali della barra, l'email, i numeri dei lavori, «Visita il sito ↗» e simili, il piè di pagina, il logo, i testi per Google.
+- **Attenzione**: i testi e le foto con `data-testo` / `data-slot` si cambiano in `data/testi.json` e `data/immagini.json` (o dall'area), non a mano nell'HTML: `python3 scripts/genera_contenuti.py` li riscrive nella pagina (`--check` per controllare). Per un testo nuovo: `data-testo` nell'elemento e una voce nel JSON.
+- **File**: `area-riservata.html` (in testa `<meta name="ar-api">`, con l'indirizzo del Worker; nello script `PAGINE`, `FORME`), `worker/area-riservata-worker.js` e `worker/wrangler.toml` (Worker `nemesiweb-area-riservata`, REPO `nemesiMark/nemesiWeb`, KV `DATI` id `0e74b3797bac4e6bbf0f678b438d95d0`), `scripts/genera_contenuti.py`, `data/*.json` (`gallerie.json` vuoto: niente gallerie), `.github/workflows/pubblica.yml` (pubblica a ogni push su main), `js/vendor/sortable/`, `images/caricate/` (foto caricate dal titolare).
+- **Attivazione** (fatta il 22/11/2026, versione 3.21; Worker https://nemesiweb-area-riservata.nemesi-mark.workers.dev):
+  1. GitHub: token fine-grained solo per `nemesiWeb`, «Contents: Read and write».
+  2. Cloudflare: dalla cartella `worker/` `npx wrangler kv namespace create DATI` (id in `wrangler.toml`), `npx wrangler deploy`.
+  3. `npx wrangler secret put ADMIN_PASSWORD`, `SESSION_SECRET`, `GITHUB_TOKEN` (valori scritti nel terminale, mai nei file).
+  4. GitHub → Settings → Pages → Source «GitHub Actions» e in `pubblica.yml` rimettere `push: branches: [main]`.
+  5. Indirizzo del Worker in `<meta name="ar-api">`, poi push.

@@ -1,0 +1,17 @@
+# Configurazione per pubblicare il Worker da qui:  npx wrangler deploy
+# (dalla cartella worker/). Le chiavi (ADMIN_PASSWORD, SESSION_SECRET, GITHUB_TOKEN)
+# NON stanno qui: si mettono con  npx wrangler secret put NOME
+name = "nemesiweb-area-riservata"
+main = "area-riservata-worker.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+keep_vars = false
+
+[vars]
+REPO = "nemesiMark/nemesiWeb"
+BRANCH = "main"
+ORIGINS = "https://nemesimark.github.io"
+
+[[kv_namespaces]]
+binding = "DATI"
+id = "0e74b3797bac4e6bbf0f678b438d95d0"

@@ -1,0 +1,79 @@
+[
+ {
+  "id": "lavoro-rainink",
+  "pagina": "index.html",
+  "sezione": "Rain Ink Tattoo",
+  "descrizione": "Lavoro 01 · Siti",
+  "foto": "images/lavori/rainink.jpg",
+  "alt": "",
+  "testi": [
+   "index-t007",
+   "index-t008"
+  ],
+  "decorativa": true
+ },
+ {
+  "id": "lavoro-areariservata",
+  "pagina": "index.html",
+  "sezione": "Rain Ink · Area riservata",
+  "descrizione": "Lavoro 02 · Siti",
+  "foto": "images/lavori/areariservata.jpg",
+  "alt": "Area riservata di Rain Ink Tattoo: la scheda Portfolio con lo spazio usato e le foto dei tatuaggi",
+  "testi": [
+   "index-t009",
+   "index-t010"
+  ]
+ },
+ {
+  "id": "lavoro-word",
+  "pagina": "index.html",
+  "sezione": "Word",
+  "descrizione": "Lavoro 03 · App",
+  "foto": "images/lavori/parola.jpg",
+  "alt": "",
+  "testi": [
+   "index-t019",
+   "index-t020"
+  ],
+  "decorativa": true
+ },
+ {
+  "id": "lavoro-excel",
+  "pagina": "index.html",
+  "sezione": "Excel",
+  "descrizione": "Lavoro 04 · App",
+  "foto": "images/lavori/foglio.jpg",
+  "alt": "",
+  "testi": [
+   "index-t021",
+   "index-t022"
+  ],
+  "decorativa": true
+ },
+ {
+  "id": "lavoro-metalgear",
+  "pagina": "index.html",
+  "sezione": "Metal Gear",
+  "descrizione": "Lavoro 05 · Giochi",
+  "foto": "images/lavori/metalgear.jpg",
+  "alt": "",
+  "testi": [
+   "index-t027",
+   "index-t028"
+  ],
+  "decorativa": true
+ },
+ {
+  "id": "lavoro-radente",
+  "pagina": "index.html",
+  "sezione": "Radente",
+  "descrizione": "Lavoro 06 · Giochi",
+  "foto": "images/lavori/radente.jpg",
+  "alt": "",
+  "testi": [
+   "index-t029",
+   "index-t030"
+  ],
+  "decorativa": true
+ }
+]

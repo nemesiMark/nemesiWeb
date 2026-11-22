@@ -1,0 +1,347 @@
+[
+ {
+  "id": "index-t001",
+  "pagina": "index.html",
+  "sezione": "Apertura",
+  "descrizione": "Angolo in basso a sinistra",
+  "tipo": "semplice",
+  "testo": "Design e sviluppo"
+ },
+ {
+  "id": "index-t002",
+  "pagina": "index.html",
+  "sezione": "Apertura",
+  "descrizione": "Angolo in basso a destra",
+  "tipo": "semplice",
+  "testo": "Portfolio 2026"
+ },
+ {
+  "id": "index-t003",
+  "pagina": "index.html",
+  "sezione": "Siti",
+  "descrizione": "Occhiello: nome del capitolo",
+  "tipo": "semplice",
+  "testo": "Siti"
+ },
+ {
+  "id": "index-t004",
+  "pagina": "index.html",
+  "sezione": "Siti",
+  "descrizione": "Occhiello: accanto al nome",
+  "tipo": "semplice",
+  "testo": "Pelle e carta"
+ },
+ {
+  "id": "index-t005",
+  "pagina": "index.html",
+  "sezione": "Siti",
+  "descrizione": "Titolo, prima parte (scura)",
+  "tipo": "semplice",
+  "testo": "Siti chiari, intuitivi,"
+ },
+ {
+  "id": "index-t006",
+  "pagina": "index.html",
+  "sezione": "Siti",
+  "descrizione": "Titolo, seconda parte (verde)",
+  "tipo": "semplice",
+  "testo": "costruiti per durare."
+ },
+ {
+  "id": "index-t007",
+  "pagina": "index.html",
+  "sezione": "Siti",
+  "descrizione": "Nome del lavoro Rain Ink Tattoo",
+  "tipo": "semplice",
+  "testo": "Rain Ink Tattoo"
+ },
+ {
+  "id": "index-t008",
+  "pagina": "index.html",
+  "sezione": "Siti",
+  "descrizione": "Descrizione di Rain Ink Tattoo",
+  "tipo": "semplice",
+  "testo": "Studio di tatuaggi a Montelupone"
+ },
+ {
+  "id": "index-t009",
+  "pagina": "index.html",
+  "sezione": "Siti",
+  "descrizione": "Nome del lavoro Rain Ink · Area riservata",
+  "tipo": "semplice",
+  "testo": "Rain Ink · Area riservata"
+ },
+ {
+  "id": "index-t010",
+  "pagina": "index.html",
+  "sezione": "Siti",
+  "descrizione": "Descrizione di Rain Ink · Area riservata",
+  "tipo": "semplice",
+  "testo": "Foto e testi del sito, gestiti dal titolare"
+ },
+ {
+  "id": "index-t011",
+  "pagina": "index.html",
+  "sezione": "Tool",
+  "descrizione": "Occhiello: nome del capitolo",
+  "tipo": "semplice",
+  "testo": "Strumenti"
+ },
+ {
+  "id": "index-t012",
+  "pagina": "index.html",
+  "sezione": "Tool",
+  "descrizione": "Occhiello: accanto al nome",
+  "tipo": "semplice",
+  "testo": "Banco di lavoro"
+ },
+ {
+  "id": "index-t013",
+  "pagina": "index.html",
+  "sezione": "Tool",
+  "descrizione": "Titolo, prima parte (scura)",
+  "tipo": "semplice",
+  "testo": "Con cosa lavoro"
+ },
+ {
+  "id": "index-t014",
+  "pagina": "index.html",
+  "sezione": "Tool",
+  "descrizione": "Titolo, seconda parte (verde)",
+  "tipo": "semplice",
+  "testo": "ogni giorno."
+ },
+ {
+  "id": "index-t015",
+  "pagina": "index.html",
+  "sezione": "App",
+  "descrizione": "Occhiello: nome del capitolo",
+  "tipo": "semplice",
+  "testo": "App"
+ },
+ {
+  "id": "index-t016",
+  "pagina": "index.html",
+  "sezione": "App",
+  "descrizione": "Occhiello: accanto al nome",
+  "tipo": "semplice",
+  "testo": "Lettere e numeri"
+ },
+ {
+  "id": "index-t017",
+  "pagina": "index.html",
+  "sezione": "App",
+  "descrizione": "Titolo, prima parte (scura)",
+  "tipo": "semplice",
+  "testo": "Scrivere e calcolare,"
+ },
+ {
+  "id": "index-t018",
+  "pagina": "index.html",
+  "sezione": "App",
+  "descrizione": "Titolo, seconda parte (verde)",
+  "tipo": "semplice",
+  "testo": "dal browser al Mac."
+ },
+ {
+  "id": "index-t019",
+  "pagina": "index.html",
+  "sezione": "App",
+  "descrizione": "Nome del lavoro Word",
+  "tipo": "semplice",
+  "testo": "Word"
+ },
+ {
+  "id": "index-t020",
+  "pagina": "index.html",
+  "sezione": "App",
+  "descrizione": "Descrizione di Word",
+  "tipo": "semplice",
+  "testo": "Editor di testi, salva in .docx"
+ },
+ {
+  "id": "index-t021",
+  "pagina": "index.html",
+  "sezione": "App",
+  "descrizione": "Nome del lavoro Excel",
+  "tipo": "semplice",
+  "testo": "Excel"
+ },
+ {
+  "id": "index-t022",
+  "pagina": "index.html",
+  "sezione": "App",
+  "descrizione": "Descrizione di Excel",
+  "tipo": "semplice",
+  "testo": "Formule in italiano, file .xlsx"
+ },
+ {
+  "id": "index-t023",
+  "pagina": "index.html",
+  "sezione": "Giochi",
+  "descrizione": "Occhiello: nome del capitolo",
+  "tipo": "semplice",
+  "testo": "Giochi"
+ },
+ {
+  "id": "index-t024",
+  "pagina": "index.html",
+  "sezione": "Giochi",
+  "descrizione": "Occhiello: accanto al nome",
+  "tipo": "semplice",
+  "testo": "Piano e profondità"
+ },
+ {
+  "id": "index-t025",
+  "pagina": "index.html",
+  "sezione": "Giochi",
+  "descrizione": "Titolo, prima parte (scura)",
+  "tipo": "semplice",
+  "testo": "Mondi interi,"
+ },
+ {
+  "id": "index-t026",
+  "pagina": "index.html",
+  "sezione": "Giochi",
+  "descrizione": "Titolo, seconda parte (verde)",
+  "tipo": "semplice",
+  "testo": "dentro una pagina web."
+ },
+ {
+  "id": "index-t027",
+  "pagina": "index.html",
+  "sezione": "Giochi",
+  "descrizione": "Nome del lavoro Metal Gear",
+  "tipo": "semplice",
+  "testo": "Metal Gear"
+ },
+ {
+  "id": "index-t028",
+  "pagina": "index.html",
+  "sezione": "Giochi",
+  "descrizione": "Descrizione di Metal Gear",
+  "tipo": "semplice",
+  "testo": "Operazione Omega, azione in sei livelli"
+ },
+ {
+  "id": "index-t029",
+  "pagina": "index.html",
+  "sezione": "Giochi",
+  "descrizione": "Nome del lavoro Radente",
+  "tipo": "semplice",
+  "testo": "Radente"
+ },
+ {
+  "id": "index-t030",
+  "pagina": "index.html",
+  "sezione": "Giochi",
+  "descrizione": "Descrizione di Radente",
+  "tipo": "semplice",
+  "testo": "Volo 3D in cinque mondi"
+ },
+ {
+  "id": "index-t031",
+  "pagina": "index.html",
+  "sezione": "Studio",
+  "descrizione": "Occhiello: nome del capitolo",
+  "tipo": "semplice",
+  "testo": "Studio"
+ },
+ {
+  "id": "index-t032",
+  "pagina": "index.html",
+  "sezione": "Studio",
+  "descrizione": "Occhiello: accanto al nome",
+  "tipo": "semplice",
+  "testo": "Bologna"
+ },
+ {
+  "id": "index-t033",
+  "pagina": "index.html",
+  "sezione": "Studio",
+  "descrizione": "Titolo, prima parte (scura)",
+  "tipo": "semplice",
+  "testo": "Lo studio è a Bologna,"
+ },
+ {
+  "id": "index-t034",
+  "pagina": "index.html",
+  "sezione": "Studio",
+  "descrizione": "Titolo, seconda parte (verde)",
+  "tipo": "semplice",
+  "testo": "i progetti ovunque."
+ },
+ {
+  "id": "index-t035",
+  "pagina": "index.html",
+  "sezione": "Studio",
+  "descrizione": "Riquadro della mappa: titolo",
+  "tipo": "semplice",
+  "testo": "Dallo spazio fino allo studio"
+ },
+ {
+  "id": "index-t036",
+  "pagina": "index.html",
+  "sezione": "Studio",
+  "descrizione": "Riquadro della mappa: spiegazione",
+  "tipo": "testo",
+  "testo": "La mappa animata carica le foto satellitari da un servizio esterno (Esri)."
+ },
+ {
+  "id": "index-t037",
+  "pagina": "index.html",
+  "sezione": "Studio",
+  "descrizione": "Riquadro della mappa: pulsante",
+  "tipo": "semplice",
+  "testo": "Mostra la mappa"
+ },
+ {
+  "id": "index-t038",
+  "pagina": "index.html",
+  "sezione": "Scrivimi",
+  "descrizione": "Frase finale, prima parte (chiara)",
+  "tipo": "semplice",
+  "testo": "Manca solo"
+ },
+ {
+  "id": "index-t039",
+  "pagina": "index.html",
+  "sezione": "Scrivimi",
+  "descrizione": "Frase finale, seconda parte (verde)",
+  "tipo": "semplice",
+  "testo": "il tuo progetto."
+ },
+ {
+  "id": "index-t040",
+  "pagina": "index.html",
+  "sezione": "Scrivimi",
+  "descrizione": "Pulsante",
+  "tipo": "semplice",
+  "testo": "Scrivimi",
+  "link": "mailto:ciao@nemesi.studio"
+ },
+ {
+  "id": "menu-t001",
+  "pagina": "menu",
+  "sezione": "Portfolio",
+  "descrizione": "Voce 1 del sottomenu Portfolio",
+  "tipo": "semplice",
+  "testo": "Siti"
+ },
+ {
+  "id": "menu-t002",
+  "pagina": "menu",
+  "sezione": "Portfolio",
+  "descrizione": "Voce 2 del sottomenu Portfolio",
+  "tipo": "semplice",
+  "testo": "App"
+ },
+ {
+  "id": "menu-t003",
+  "pagina": "menu",
+  "sezione": "Portfolio",
+  "descrizione": "Voce 3 del sottomenu Portfolio",
+  "tipo": "semplice",
+  "testo": "Giochi"
+ }
+]
