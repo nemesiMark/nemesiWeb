@@ -42,6 +42,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - `index.html`: CSS, markup e JS del film.
   - Il markup è anche la versione statica completa, usata con «riduci movimento» o senza WebGL.
   - Il JS contiene la timeline madre, il collegamento tra DOM e 3D, la navbar e il filo di avanzamento.
+- `area-riservata.html`: pagina segnaposto del tasto «Area riservata» della barra (dalla 2.5); l'area vera è ancora da fare.
 - `js/lastra.js`: scena 3D in Three.js r147 classico, senza moduli. Contiene le aste dell'apertura, la lastra, materiali e shader, camera, anelli e pulviscolo.
 - `js/lavori-dati.js`, `js/caratteri-dati.js`: copie base64 di `images/lavori/*.jpg` e `fonts/*.woff2`, usate solo da `file://`.
   - Vanno rigenerate se cambiano immagini o caratteri.
@@ -50,10 +51,11 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - `images/logo/`:
   - `nemesi-web-arancio.png`: con il motto, nell'apertura della pagina statica (nel film resta solo per i lettori di schermo);
   - `nemesi-web-nav.png`: navbar;
-  - `favicon.png`;
+  - `favicon.png`: **il logo** (originale 1536×1024, sfondo trasparente). Da qui si ricavano le icone quadrate `favicon-16.png`, `favicon-32.png` (scheda) e `favicon-180.png` (iPhone, fondo nero), ritagliate attorno al logo con un breve script Python (PIL). Se cambia il logo, rigenerarle e aggiornare `?v=` nei link;
+  - `favicon2.png`: la vecchia icona, non usata;
   - `nemesi-web-originale.png`: l'originale viola.
   - **Mai modificare i PNG del logo.**
-- `fonts/`: Bodoni Moda (tondo e corsivo), Geist, Geist Mono, in woff2 latin.
+- `fonts/`: Inter Tight (titoli, come la scritta RAIN INK), Geist, Geist Mono, in woff2 latin.
 - `vendor/`: gsap 3.12.5, ScrollTrigger 3.12.5, lenis 1.1.13, `three/three.min.js` r147.
 - `BRIEF.md`: appunti di produzione (concept, logo, colori, caratteri, copy, divieti). NON è testo per il sito.
 - `LEGGIMI.md`: versioni e cronologia delle modifiche.
@@ -94,6 +96,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - Rispettare `prefers-reduced-motion`: è già gestito con la pagina statica completa.
 
 ## In sospeso
+- Area riservata vera (oggi il tasto porta alla pagina segnaposto `area-riservata.html`).
 - Email `ciao@nemesi.studio`: dominio non verificato, da sostituire con quella vera.
 - Partita IVA (obbligatoria per un professionista in Italia): oggi c'è solo «© 2026 Nemesi Web» nel finale. Va aggiunta lì.
 - Scegliere l'hosting (oggi GitHub Pages; Netlify o Vercel?) e il dominio.

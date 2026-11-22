@@ -39,8 +39,8 @@ Ha proposto il jolly, adottato. Del Nastro tengo la camera che va sempre avanti 
 - Il marchio non si rifà in 3D: la lastra ne riprende solo la materia, cioè faccia scura e bordo arancio.
 
 ## Colori (misurati sul PNG composto su nero)
-- Nero pagina `#08080A`, grafite `#17171B` / `#212126`
-- Bianco «nemesi» `#F4F3F1`; fumo (testo secondario, preso dalla faccia del nastro `#767783` e schiarito) `#8E8E99`
+- Fondo pagina grafite scuro `#17171C` (dalla 2.3; prima nero `#08080A`), grafite `#24242A` / `#2D2D33`
+- Bianco «nemesi» `#F4F3F1`; fumo (testo secondario, preso dalla faccia del nastro `#767783` e schiarito) `#A4A4AE` (dalla 2.3; prima `#8E8E99`)
 - Arancio «web»:
   - luce `#FFA54D`
   - centro `#F56F27`
@@ -50,7 +50,7 @@ Ha proposto il jolly, adottato. Del Nastro tengo la camera che va sempre avanti 
 - Regola dei titoli, come il logo («nemesi» bianco + «web» arancio): prima parte bianca, parte in corsivo arancio chiaro.
 
 ## Caratteri (copie locali in `fonts/`, nessuna richiesta a Google)
-- Titoli: **Bodoni Moda** (variabile, dimensione ottica automatica), tondo e corsivo. È il Bodoni, carattere italiano, per un registro editoriale.
+- Titoli: **Inter Tight** 800, lo stesso carattere della scritta RAIN INK (dalla 2.4; prima Bodoni Moda). Seconda riga in arancio, dritta.
 - Testo e interfaccia: **Geist**. Etichette e numeri: **Geist Mono** (maiuscolo spaziato).
 
 ## Movimento

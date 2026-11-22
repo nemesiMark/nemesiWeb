@@ -193,3 +193,36 @@
   - fluidità max 18,2 ms su tutto il film;
   - salto dal menu: la pagina salta quando il nero è pieno, e poi avanza per fotogramma 9 volte più piano di prima;
   - schermate su computer e telefono, apertura al caricamento, pagina statica.
+
+### 2.2 — 22/11/2026
+- Nuova icona della scheda: il logo è ora `images/logo/favicon.png` (originale 1536×1024, sfondo trasparente). La vecchia icona è `favicon2.png` e non è più usata.
+- Prima Chrome riceveva direttamente l'originale, rettangolare e da 1,3 MB, e nella scheda lo mostrava male.
+- Ora dall'originale (che resta intatto) si ricavano icone quadrate, ritagliate attorno al logo:
+  - `favicon-32.png` e `favicon-16.png` per la scheda, con sfondo trasparente (si legge sia sulle schede chiare sia su quelle scure);
+  - `favicon-180.png` per la schermata Home di iPhone e iPad, su fondo nero.
+- Nei link c'è `?v=2.2` perché Chrome tiene a lungo in memoria le icone vecchie.
+
+### 2.3 — 22/11/2026
+- Sfondo meno scuro: da quasi nero #08080A a grafite scuro #17171C, nella pagina e nella scena 3D (fondo, nebbia, sfumatura ai bordi più leggera). Anche i grigi vicini salgono di pari passo.
+- Aste dell'apertura: sullo sfondo più chiaro le barrette nere ora si staccano. In più il bordo della faccia nera che guarda la luce prende un filo di luce calda, nitido a un pixel, che si accende quando ci passa la luce che scorre.
+- Bordo arancio della lastra: di fronte lo spigolo è più sottile di un pixel e si vedeva sgranato, a puntini. Ora c'è un filo disegnato sul bordo della faccia, largo sempre un pixel a qualunque distanza, che si unisce allo spigolo: la linea resta leggera ma continua.
+- Caratteri:
+  - titoli in Bodoni con taglio ottico fisso (`opsz` 24): con «auto» Chrome sceglieva il taglio da manifesto, con filetti così sottili che le lettere si spezzavano;
+  - scritte piccole in maiuscolo (es. «DESIGN E SVILUPPO», «PORTFOLIO 2026», «VISITA IL SITO») più grandi e più spesse;
+  - grigi dei testi più chiari: descrizioni, email, piede.
+- Verifiche: copy-gate pulito, fluidità max 21,4 ms, schermate su computer (anche a densità doppia) e telefono.
+
+### 2.4 — 22/11/2026
+- Alone arancio attorno alla lastra (al passaggio del mouse): prima si fermava di colpo sul bordo di un riquadro; ora il piano è più grande e l'alone si spegne piano fino a zero.
+- Barra di navigazione con il fondo nero (anche il menu a tendina del telefono).
+- Titoli nel carattere della scritta RAIN INK: Inter Tight 800, al posto del Bodoni. La seconda riga resta arancio, dritta. Tolti i file del Bodoni; rigenerato `js/caratteri-dati.js`.
+
+### 2.5 — 22/11/2026
+- Barra: i tasti Siti, App, Giochi e Scrivimi hanno il fondo nero come la barra; al passaggio del mouse prendono un contorno arancio sfumato. Nero anche il tasto del menu sul telefono.
+- Scrivimi diventa un tasto come gli altri (apre l'email); sul telefono sta nel menu.
+- In fondo a destra, al posto di Scrivimi, il tasto arancio «Area riservata» con il lucchetto (sul telefono solo il lucchetto). Per ora porta a `area-riservata.html`, una pagina segnaposto con «Presto qui i tuoi progetti.» e «Torna al sito».
+
+### 2.6 — 22/11/2026
+- Barra: «Scrivimi» diventa «Contattaci» (anche nel filo a destra); il tasto dell'area riservata è solo il lucchetto, senza scritta.
+- Alone al passaggio del mouse uguale su tutti i lavori: su Metal Gear (che sta sul retro della lastra, dopo i mezzi giri) l'alone esterno non si vedeva, perché il piano dell'alone era visibile solo da davanti. Ora si vede da entrambi i lati.
+- Metal Gear: nuova anteprima presa dal gioco online dopo l'aggiornamento grafico (`metalgear-d.jpg` 2000×1125 e `metalgear.jpg` 1600×900), aggiornata anche in `js/lavori-dati.js`.

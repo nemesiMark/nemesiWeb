@@ -35,7 +35,7 @@ var KX = { o:HO };
 for (var kk in K) KX[kk] = K[kk] + HO;
 for (var kh in KH) KX[kh] = KH[kh];
 
-var COL = { nero:'#08080A', arancio:'#F56F27', chiaro:'#FFA54D', oro:'#F9D377', scuro:'#EA4006', brace:'#C92C02', caldo:'#FFE3B0' };
+var COL = { nero:'#17171C', arancio:'#F56F27', chiaro:'#FFA54D', oro:'#F9D377', scuro:'#EA4006', brace:'#C92C02', caldo:'#FFE3B0' };
 function lin(h){ return new T.Color(h).convertSRGBToLinear(); }
 function raw(h){ return new T.Color(h); }
 function clamp(x, a, b){ return x < a ? a : x > b ? b : x; }
@@ -138,7 +138,7 @@ var FS_SCREEN = [
   '  col = mix(col, mix(uOr, uGold, emb * emb * 0.6), emb * 0.9);',
   '  col *= 1.0 - uDim;',
   '  float dist = length(cameraPosition - vWP);',
-  '  col = mix(col, vec3(0.031, 0.031, 0.039), 1.0 - exp(-pow(uFogD * dist, 2.0)));',
+  '  col = mix(col, vec3(0.090, 0.090, 0.110), 1.0 - exp(-pow(uFogD * dist, 2.0)));',
   '  gl_FragColor = vec4(col, 1.0);',
   '}'].join('\n');
 
@@ -151,6 +151,7 @@ var FS_NEON = [
   '  float d = sdBox(p, uHalf, uR);',
   '  if (d < 0.0) discard;',
   '  float g = exp(-d / 0.028) * 0.8 + exp(-d / 0.12) * 0.36 + exp(-d / 0.36) * 0.12;',
+  '  g *= 1.0 - smoothstep(0.55, 1.4, d);',                       /* si spegne del tutto prima del bordo del piano */
   '  vec3 col = mix(uOr, uGold, exp(-d / 0.018) * 0.7) * g;',
   '  gl_FragColor = vec4(col * uI, 1.0);',
   '}'].join('\n');
@@ -217,7 +218,8 @@ var FS_DUST = [
 
 function glowMat(fs, uniforms){
   return new T.ShaderMaterial({ vertexShader: VS_PLANE, fragmentShader: fs, uniforms: uniforms,
-    transparent: true, blending: T.AdditiveBlending, depthWrite: false, toneMapped: false });
+    transparent: true, blending: T.AdditiveBlending, depthWrite: false, toneMapped: false,
+    side: T.DoubleSide });                                  // anche da dietro: dopo i mezzi giri l'alone si guarda dal retro del piano
 }
 
 /* ── corpo laccato: faccia nera lucida, bordo arancio acceso con una luce che gli corre intorno ── */
@@ -226,17 +228,18 @@ function bodyMaterial(env){
     envMap: env, envMapIntensity: 1 });
   var u = { uEdge:{value:1}, uHover:{value:0}, uPix:{value:0}, uCell:{value:SCW / 96}, uTime:{value:0}, uRun:{value:1},
     uDeep:{value:lin(COL.brace)}, uMid:{value:lin(COL.arancio)}, uGold:{value:lin(COL.oro)}, uHot:{value:lin(COL.caldo)},
-    uHalfW:{value:SW / 2}, uHalfH:{value:SH / 2}, uCut:{value:-1e4} };
+    uHalfW:{value:SW / 2}, uHalfH:{value:SH / 2}, uCut:{value:-1e4}, uCap:{value:new T.Vector3(CW / 2, CH / 2, RC)} };
   m.userData.u = u;
   m.onBeforeCompile = function(sh){
     for (var k in u) sh.uniforms[k] = u[k];
     sh.vertexShader = sh.vertexShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vObjN; varying vec3 vObjP; varying vec3 vWN2;')
-      .replace('#include <beginnormal_vertex>', '#include <beginnormal_vertex>\nvObjN = objectNormal; vWN2 = normalize(mat3(modelMatrix) * objectNormal);')
+      .replace('#include <common>', '#include <common>\nvarying vec3 vObjN; varying vec3 vObjP; varying vec3 vWN2; varying vec3 vAX; varying vec3 vAY;')
+      .replace('#include <beginnormal_vertex>', '#include <beginnormal_vertex>\nvObjN = objectNormal; vWN2 = normalize(mat3(modelMatrix) * objectNormal);\n' +
+        'vAX = normalize(mat3(modelMatrix) * vec3(1.0, 0.0, 0.0)); vAY = normalize(mat3(modelMatrix) * vec3(0.0, 1.0, 0.0));')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvObjP = position;');
     sh.fragmentShader = sh.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vObjN; varying vec3 vObjP; varying vec3 vWN2;\n' +
-        'uniform float uEdge, uHover, uPix, uCell, uTime, uRun, uHalfW, uHalfH, uCut; uniform vec3 uDeep, uMid, uGold, uHot;\n' +
+      .replace('#include <common>', '#include <common>\nvarying vec3 vObjN; varying vec3 vObjP; varying vec3 vWN2; varying vec3 vAX; varying vec3 vAY;\n' +
+        'uniform float uEdge, uHover, uPix, uCell, uTime, uRun, uHalfW, uHalfH, uCut; uniform vec3 uDeep, uMid, uGold, uHot, uCap;\n' +
         'float hh1(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }')
       .replace('#include <clipping_planes_fragment>', '#include <clipping_planes_fragment>\n' +
         'if (vObjP.y < uCut) discard;\n' +
@@ -245,14 +248,26 @@ function bodyMaterial(env){
         '  float pt = uPix * 1.08 - 0.04; if (pv < pt) discard; pE = 1.0 - smoothstep(0.0, 0.06, pv - pt); }')
       .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n' +
         'float side = smoothstep(0.16, 0.92, 1.0 - abs(normalize(vObjN).z));\n' +
-        'float bl = dot(normalize(vWN2), normalize(vec3(-0.34, 0.56, 0.76)));\n' +
+        /* filo nitido sul bordo del tappo, largo un pixel a qualunque distanza: di fronte lo spigolo è più sottile
+           di un pixel e da solo si vedrebbe sgranato */
+        'float capF = smoothstep(0.02, 0.0, 1.0 - abs(normalize(vObjN).z));\n' +
+        'vec2 cq = abs(vObjP.xy) - uCap.xy + uCap.z;\n' +
+        'float cd = length(max(cq, 0.0)) + min(max(cq.x, cq.y), 0.0) - uCap.z;\n' +
+        'float cw = max(fwidth(cd), 1e-5);\n' +
+        'float rimL = smoothstep(-1.7 * cw, -0.5 * cw, cd) * capF;\n' +
+        'float bev = smoothstep(0.0, 0.03, 1.0 - abs(normalize(vObjN).z));\n' +   // l'inizio dello spigolo, perché il filo non si sdoppi
+        'rimL = max(rimL, bev);\n' +
+        'vec2 on2 = (cq.x > 0.0 && cq.y > 0.0) ? normalize(cq) : (cq.x > cq.y ? vec2(1.0, 0.0) : vec2(0.0, 1.0));\n' +
+        'on2 *= vec2(vObjP.x < 0.0 ? -1.0 : 1.0, vObjP.y < 0.0 ? -1.0 : 1.0);\n' +
+        'vec3 nB = normalize(mix(normalize(vWN2), normalize(vAX * on2.x + vAY * on2.y), rimL));\n' +
+        'float bl = dot(nB, normalize(vec3(-0.34, 0.56, 0.76)));\n' +
         'vec3 ec = mix(uDeep, uMid, smoothstep(-0.75, 0.15, bl));\n' +
         'ec = mix(ec, uGold, smoothstep(0.35, 0.97, bl));\n' +
         'float ang = atan(vObjP.y / uHalfH, vObjP.x / uHalfW);\n' +
         'float dA = abs(mod(ang - uTime * 0.42 + 3.14159, 6.28318) - 3.14159);\n' +
         'ec += uHot * exp(-dA * dA / 0.045) * 0.5 * uRun;\n' +
         'ec = mix(ec, uHot, uHover * 0.3);\n' +
-        'totalEmissiveRadiance += ec * side * uEdge * (1.0 + uHover * 0.9);\n' +
+        'totalEmissiveRadiance += ec * max(side, rimL * 0.55) * uEdge * (1.0 + uHover * 0.9);\n' +
         'totalEmissiveRadiance += mix(uMid, uGold, pE * pE * 0.6) * pE * 1.3;');
   };
   return m;
@@ -268,22 +283,24 @@ function screenMaterial(seed){
 }
 
 /* ── aste dell'apertura: stessa lacca della lastra, fianchi arancio e una luce che scorre lungo ognuna ── */
-function stickMaterial(env, halfL, spd, ph){
+function stickMaterial(env, halfL, spd, ph, halfH, r4){
   var m = new T.MeshPhysicalMaterial({ color: lin('#0A0A0C'), roughness: .28, metalness: 0, clearcoat: 1, clearcoatRoughness: .06,
     envMap: env, envMapIntensity: 1.15 });
   var u = { uEdge:{value:0}, uFlash:{value:0}, uTime:{value:0}, uHalfL:{value:halfL}, uSpd:{value:spd}, uPh:{value:ph},
+    uHalfH:{value:halfH}, uR4:{value:new T.Vector4(r4[0], r4[1], r4[2], r4[3])},
     uCutN:{value:new T.Vector3(0, 0, -1)}, uCutD:{value:1e4},
     uDeep:{value:lin(COL.brace)}, uMid:{value:lin(COL.arancio)}, uGold:{value:lin(COL.oro)}, uHot:{value:lin(COL.caldo)} };
   m.userData.u = u;
   m.onBeforeCompile = function(sh){
     for (var k in u) sh.uniforms[k] = u[k];
     sh.vertexShader = sh.vertexShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vSN; varying vec3 vSP; varying vec3 vSWN; varying vec3 vSWP;')
-      .replace('#include <beginnormal_vertex>', '#include <beginnormal_vertex>\nvSN = objectNormal; vSWN = normalize(mat3(modelMatrix) * objectNormal);')
+      .replace('#include <common>', '#include <common>\nvarying vec3 vSN; varying vec3 vSP; varying vec3 vSWN; varying vec3 vSWP; varying vec3 vAX; varying vec3 vAY;')
+      .replace('#include <beginnormal_vertex>', '#include <beginnormal_vertex>\nvSN = objectNormal; vSWN = normalize(mat3(modelMatrix) * objectNormal);\n' +
+        'vAX = normalize(mat3(modelMatrix) * vec3(1.0, 0.0, 0.0)); vAY = normalize(mat3(modelMatrix) * vec3(0.0, 1.0, 0.0));')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvSP = position; vSWP = (modelMatrix * vec4(position, 1.0)).xyz;');
     sh.fragmentShader = sh.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vSN; varying vec3 vSP; varying vec3 vSWN; varying vec3 vSWP;\n' +
-        'uniform float uEdge, uFlash, uTime, uHalfL, uSpd, uPh, uCutD; uniform vec3 uCutN, uDeep, uMid, uGold, uHot;')
+      .replace('#include <common>', '#include <common>\nvarying vec3 vSN; varying vec3 vSP; varying vec3 vSWN; varying vec3 vSWP; varying vec3 vAX; varying vec3 vAY;\n' +
+        'uniform float uEdge, uFlash, uTime, uHalfL, uHalfH, uSpd, uPh, uCutD; uniform vec4 uR4; uniform vec3 uCutN, uDeep, uMid, uGold, uHot;')
       .replace('#include <clipping_planes_fragment>', '#include <clipping_planes_fragment>\n' +
         'if (dot(uCutN, vSWP) > uCutD) discard;')                    // dove è passata la luce resta la lastra vera
       .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n' +
@@ -295,6 +312,17 @@ function stickMaterial(env, halfL, spd, ph){
         'float c = fract(uTime * uSpd + uPh) * 1.9 - 0.45;\n' +
         'float run = exp(-pow((s - c) / 0.06, 2.0));\n' +
         'totalEmissiveRadiance += (ec * 0.5 + uHot * run * 0.7) * side * uEdge;\n' +
+        /* filo di luce sul piano nero: il bordo della faccia che guarda la luce chiave, nitido a un pixel */
+        'float capF = smoothstep(0.02, 0.0, 1.0 - abs(normalize(vSN).z));\n' +
+        'float cr = vSP.x > 0.0 ? (vSP.y > 0.0 ? uR4.x : uR4.w) : (vSP.y > 0.0 ? uR4.y : uR4.z);\n' +
+        'vec2 cq = abs(vSP.xy) - vec2(uHalfL, uHalfH) + cr;\n' +
+        'float cd = length(max(cq, 0.0)) + min(max(cq.x, cq.y), 0.0) - cr;\n' +
+        'float cw = max(fwidth(cd), 1e-5);\n' +
+        'float rimL = smoothstep(-2.2 * cw, -0.6 * cw, cd) * capF;\n' +
+        'vec2 on2 = (cq.x > 0.0 && cq.y > 0.0) ? normalize(cq) : (cq.x > cq.y ? vec2(1.0, 0.0) : vec2(0.0, 1.0));\n' +
+        'on2 *= vec2(vSP.x < 0.0 ? -1.0 : 1.0, vSP.y < 0.0 ? -1.0 : 1.0);\n' +
+        'float lk = smoothstep(-0.05, 0.7, dot(normalize(vAX * on2.x + vAY * on2.y), normalize(vec3(-0.34, 0.56, 0.76))));\n' +
+        'totalEmissiveRadiance += vec3(1.0, 0.86, 0.72) * rimL * (0.03 + 0.2 * lk + run * 0.3) * uEdge;\n' +
         'totalEmissiveRadiance += mix(uMid, uGold, 0.45) * uFlash * (side * 1.5 + 0.1);');
   };
   return m;
@@ -339,8 +367,8 @@ function create(canvas, opts){
     o.add(body);
     var front = new T.Mesh(gScreen, screenMaterial(seedA)); front.position.z = LT / 2 + .0007; o.add(front);
     var back = new T.Mesh(gScreen, screenMaterial(seedB)); back.position.z = -LT / 2 - .0007; back.rotation.y = PI; o.add(back);
-    var neon = new T.Mesh(new T.PlaneGeometry(SW + 1.2, SH + 1.2), glowMat(FS_NEON, {
-      uSz:{value:new T.Vector2(SW + 1.2, SH + 1.2)}, uHalf:{value:new T.Vector2(SW / 2, SH / 2)}, uR:{value:RC + RB},
+    var neon = new T.Mesh(new T.PlaneGeometry(SW + 3, SH + 3), glowMat(FS_NEON, {
+      uSz:{value:new T.Vector2(SW + 3, SH + 3)}, uHalf:{value:new T.Vector2(SW / 2, SH / 2)}, uR:{value:RC + RB},
       uI:{value:0}, uOr:{value:raw(COL.arancio)}, uGold:{value:raw(COL.oro)} }));
     neon.renderOrder = 5; o.add(neon);
     return { o:o, body:body, mat:mat, front:front, back:back, neon:neon, hover:0 };
@@ -412,8 +440,9 @@ function create(canvas, opts){
         var x0 = -CW / 2 + xs[k2] * CW + (first ? 0 : GAP / 2), x1 = -CW / 2 + xs[k2 + 1] * CW - (last ? 0 : GAP / 2);
         var y1 = CH / 2 - j * rh - (top ? 0 : GAP / 2), y0 = CH / 2 - (j + 1) * rh + (bot ? 0 : GAP / 2);
         var w = x1 - x0, rs = .014;
-        var geo = slabGeometry(w, y1 - y0, LT * 2, rs, RB, [top && last ? RC : rs, top && first ? RC : rs, bot && first ? RC : rs, bot && last ? RC : rs]);
-        var mat = stickMaterial(env, w / 2, .045 + .07 * rr(), rr());
+        var r4 = [top && last ? RC : rs, top && first ? RC : rs, bot && first ? RC : rs, bot && last ? RC : rs];
+        var geo = slabGeometry(w, y1 - y0, LT * 2, rs, RB, r4);
+        var mat = stickMaterial(env, w / 2, .045 + .07 * rr(), rr(), (y1 - y0) / 2, r4.map(function(v){ return Math.min(v, w / 2, (y1 - y0) / 2); }));
         var mesh = new T.Mesh(geo, mat); STK.add(mesh);
         sticks.push({ m:mesh, u:mat.userData.u, row:j, lx:(x0 + x1) / 2, ly:(y0 + y1) / 2, ign:rr() * .6, ph:rr() * 6.28,
           a:KH.c0 + j / (ROWS - 1) * (KH.c1 - DUR - KH.c0 - .03) + k2 * .012 });

@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nemesi Web · Web design</title>
 <meta name="description" content="Nemesi Web progetta e costruisce siti, app e giochi per il web: Rain Ink Tattoo, Olimp, Parola, Foglio, Metal Gear, Radente.">
-<meta name="theme-color" content="#08080A">
-<link rel="icon" href="images/logo/favicon.png" type="image/png">
-<link rel="preload" href="fonts/bodoni-moda.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/bodoni-moda-italic.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#17171C">
+<link rel="icon" href="images/logo/favicon-32.png?v=2.2" type="image/png" sizes="32x32">
+<link rel="icon" href="images/logo/favicon-16.png?v=2.2" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="images/logo/favicon-180.png?v=2.2">
+<link rel="preload" href="fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
 <script>
 /* Prima del disegno: con WebGL e senza «riduci movimento» la pagina diventa il film (classe film). */
@@ -20,24 +21,23 @@
 </script>
 <style>
 /* ═════════ caratteri (copie locali, nessuna richiesta a terzi) ═════════ */
-@font-face{ font-family:"Bodoni Moda"; src:url(fonts/bodoni-moda.woff2) format("woff2"); font-weight:400 900; font-style:normal; font-display:swap; }
-@font-face{ font-family:"Bodoni Moda"; src:url(fonts/bodoni-moda-italic.woff2) format("woff2"); font-weight:400 900; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Inter Tight"; src:url(fonts/inter-tight.woff2) format("woff2"); font-weight:500 900; font-style:normal; font-display:swap; }
 @font-face{ font-family:"Geist"; src:url(fonts/geist.woff2) format("woff2"); font-weight:100 900; font-style:normal; font-display:swap; }
 @font-face{ font-family:"Geist Mono"; src:url(fonts/geist-mono.woff2) format("woff2"); font-weight:100 900; font-style:normal; font-display:swap; }
 
 /* ═════════ colori presi dal logo (misurati sui pixel del PNG su nero) ═════════ */
 :root{
-  --nero:#08080A; --nero-2:#0E0E11; --grafite:#17171B; --grafite-2:#212126;
+  --nero:#17171C; --nero-2:#1D1D22; --grafite:#24242A; --grafite-2:#2D2D33;   /* fondo: grafite scuro (2.3), prima quasi nero #08080A */
   --bianco:#F4F3F1;            /* «nemesi» */
-  --fumo:#8E8E99;              /* faccia del nastro, schiarita per il testo */
-  --fumo-2:#5D5D67;
+  --fumo:#A4A4AE;              /* faccia del nastro, schiarita per il testo */
+  --fumo-2:#85858F;
   --linea:rgba(255,255,255,.09);
   --arancio:#F56F27;           /* «web», tono centrale */
   --arancio-chiaro:#FFA54D;    /* «web», luce */
   --oro:#F9D377;               /* riflesso sul marchio */
   --arancio-scuro:#EA4006;     /* «web», ombra */
   --brace:#C92C02;             /* fondo del marchio */
-  --serif:"Bodoni Moda", "Bodoni 72", Didot, Georgia, serif;
+  --titoli:"Inter Tight", "Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;   /* come la scritta RAIN INK */
   --sans:"Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;
   --mono:"Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --m:clamp(20px, 5.2vw, 76px);
@@ -53,7 +53,7 @@ img{ display:block; max-width:100%; height:auto; }
 a{ color:inherit; text-decoration:none; }
 ul{ list-style:none; }
 ::selection{ background:var(--arancio); color:#140802; }
-.mono{ font-family:var(--mono); font-size:11.5px; font-weight:450; letter-spacing:.14em; text-transform:uppercase; }
+.mono{ font-family:var(--mono); font-size:12.5px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; }
 .vh{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
 :focus-visible{ outline:2px solid var(--arancio-chiaro); outline-offset:3px; border-radius:4px; }
 
@@ -61,7 +61,7 @@ ul{ list-style:none; }
 .hdr{ position:fixed; top:14px; left:0; right:0; z-index:60; perspective:1200px; pointer-events:none; }
 .slab{ pointer-events:auto; position:relative; width:min(960px, calc(100% - 2 * var(--m) + 24px)); margin-inline:auto;
   display:flex; align-items:center; gap:18px; padding:6px 7px 6px 14px; border-radius:16px;
-  background:linear-gradient(180deg, rgba(34,34,39,.9), rgba(17,17,20,.9));
+  background:linear-gradient(180deg, rgba(14,14,16,.94), rgba(0,0,0,.94));
   -webkit-backdrop-filter:blur(14px) saturate(1.3); backdrop-filter:blur(14px) saturate(1.3);
   border:1px solid rgba(255,255,255,.075);
   box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 -1px 0 rgba(0,0,0,.6) inset, 0 4px 0 #040405, 0 24px 48px -16px rgba(0,0,0,.8);
@@ -78,25 +78,28 @@ ul{ list-style:none; }
 .links a{ position:relative; display:block; padding:10px 14px; font-size:14px; font-weight:500; color:#A6A6AF; white-space:nowrap;
   border-radius:11px; transform:translateZ(8px);
   transition:transform 220ms var(--ease), color 150ms ease, box-shadow 220ms var(--ease); }
-.links a[aria-current], .links a:focus-visible{ outline:none; color:#F4F3F1; background:linear-gradient(180deg, #303036, #1D1D22);
-  transform:translateZ(18px) translateY(-2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 4px 0 #050506, 0 12px 22px -8px rgba(0,0,0,.85); }
+/* tasti: fondo nero come la barra; al passaggio un contorno arancio sfumato */
+.links a[aria-current], .links a:focus-visible{ outline:none; color:#F4F3F1; background:#000;
+  transform:translateZ(18px) translateY(-2px); box-shadow:0 0 0 1px rgba(255,255,255,.08) inset, 0 12px 22px -8px rgba(0,0,0,.85); }
+.links a:focus-visible{ box-shadow:0 0 0 1px rgba(255,170,90,.6), 0 0 10px rgba(245,111,39,.55), 0 0 24px rgba(245,111,39,.25), inset 0 0 8px rgba(245,111,39,.22); }
 .links a[aria-current]::before{ content:""; position:absolute; left:14px; right:14px; bottom:5px; height:2px; border-radius:2px;
   background:linear-gradient(90deg, var(--arancio-chiaro), var(--arancio-scuro)); }
 @media (hover:hover) and (pointer:fine){
-  .links a:hover{ color:#F4F3F1; background:linear-gradient(180deg, #36363D, #222227);
-    transform:translateZ(18px) translateY(-3px) scale(1.07); box-shadow:0 1px 0 rgba(255,255,255,.13) inset, 0 5px 0 #050506, 0 16px 26px -8px rgba(0,0,0,.9); }
+  .links a:hover{ color:#F4F3F1; background:#000;
+    transform:translateZ(18px) translateY(-3px) scale(1.07);
+    box-shadow:0 0 0 1px rgba(255,170,90,.6), 0 0 10px rgba(245,111,39,.55), 0 0 24px rgba(245,111,39,.25), inset 0 0 8px rgba(245,111,39,.22); }
 }
-.cta{ flex:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; height:40px; padding:0 17px; border-radius:11px;
+.cta{ flex:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:40px; height:40px; padding:0; border-radius:11px;
   color:#180903; font-size:14px; font-weight:600; letter-spacing:.005em;
   background:linear-gradient(180deg, #FFAA55 0%, #F57A2C 48%, #EA4E0C 100%);
   box-shadow:0 1px 0 rgba(255,236,200,.55) inset, 0 3px 0 #8A2803, 0 10px 22px -10px rgba(245,111,39,.7);
   transform:translateZ(8px); transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
-.cta svg{ width:16px; height:16px; flex:none; }
+.cta svg{ width:18px; height:18px; flex:none; }
 .cta:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,236,200,.5) inset, 0 1px 0 #8A2803; }
 @media (hover:hover) and (pointer:fine){ .cta:hover{ transform:translateZ(8px) translateY(-3px) scale(1.05);
   box-shadow:0 1px 0 rgba(255,236,200,.6) inset, 0 5px 0 #8A2803, 0 16px 30px -8px rgba(245,111,39,.75); } }
 .burger{ display:none; margin-left:auto; width:40px; height:40px; border-radius:11px; border:0; cursor:pointer;
-  background:linear-gradient(180deg, #303036, #1A1A1E); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 3px 0 #050506; transform:translateZ(8px); }
+  background:#000; box-shadow:0 0 0 1px rgba(255,255,255,.08) inset; transform:translateZ(8px); }
 .burger span{ display:block; width:18px; height:2px; margin:4px auto; background:#F4F3F1; border-radius:2px; transition:transform 300ms var(--ease), opacity 150ms ease; }
 .hdr.open .burger span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
 .hdr.open .burger span:nth-child(2){ opacity:0; }
@@ -109,7 +112,7 @@ ul{ list-style:none; }
   .burger{ display:block; }
   .cta{ width:40px; padding:0; } .cta span{ display:none; }
   .links{ position:absolute; top:calc(100% + 10px); left:0; right:0; flex-direction:column; gap:6px; padding:10px;
-    border-radius:16px; background:rgba(18,18,21,.97); border:1px solid rgba(255,255,255,.07); box-shadow:0 30px 60px -10px rgba(0,0,0,.8);
+    border-radius:16px; background:rgba(4,4,5,.97); border:1px solid rgba(255,255,255,.07); box-shadow:0 30px 60px -10px rgba(0,0,0,.8);
     visibility:hidden; opacity:0; transform:rotateX(-12deg) scale(.97); transform-origin:top right;
     transition:opacity 180ms ease-in, transform 180ms ease-in, visibility 0s 180ms; }
   .hdr.open .links{ visibility:visible; opacity:1; transform:none; transition:opacity 220ms var(--ease), transform 250ms var(--ease); }
@@ -137,9 +140,9 @@ ul{ list-style:none; }
 .kicker{ display:flex; align-items:center; gap:12px; color:var(--fumo); }
 .kicker::before{ content:""; width:30px; height:1px; background:linear-gradient(90deg, var(--arancio-scuro), var(--arancio-chiaro)); }
 .kicker b{ color:var(--arancio-chiaro); font-weight:500; }
-.titolo{ margin-top:18px; max-width:17ch; font-family:var(--serif); font-weight:400; font-size:clamp(38px, 4.6vw, 74px); line-height:1.02;
-  letter-spacing:-.012em; font-optical-sizing:auto; text-wrap:balance; }
-.titolo em{ font-style:italic; color:var(--arancio-chiaro); }
+.titolo{ margin-top:18px; max-width:17ch; font-family:var(--titoli); font-weight:800; font-size:clamp(38px, 4.6vw, 74px); line-height:1.02;
+  letter-spacing:-.02em; text-wrap:balance; }
+.titolo em{ font-style:normal; color:var(--arancio-chiaro); }
 .lavori{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(22px, 3vw, 46px); margin-top:7vh; }
 .schermo{ position:relative; display:block; border-radius:10px; }
 .schermo img{ width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:10px; border:1px solid var(--linea); background:var(--grafite); }
@@ -152,10 +155,10 @@ ul{ list-style:none; }
 .schermo:focus-visible{ outline:none; }
 .didascalia{ display:flex; flex-wrap:wrap; align-items:baseline; column-gap:14px; row-gap:2px; margin-top:16px; line-height:1.3; }
 .d-in{ display:contents; }
-.num{ color:var(--arancio-chiaro); font-family:var(--mono); font-size:12px; letter-spacing:.08em; }
+.num{ color:var(--arancio-chiaro); font-family:var(--mono); font-size:12.5px; font-weight:500; letter-spacing:.08em; }
 .nome{ font-size:17px; font-weight:550; letter-spacing:-.005em; }
 .desc{ color:var(--fumo); font-size:14.5px; }
-.azione{ margin-left:auto; color:var(--arancio-chiaro); font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; }
+.azione{ margin-left:auto; color:var(--arancio-chiaro); font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap; }
 
 .fine{ display:flex; align-items:center; justify-content:center; min-height:86vh; padding:12vh var(--m); text-align:center; }
 .fine-in{ display:flex; flex-direction:column; align-items:center; }
@@ -175,7 +178,7 @@ ul{ list-style:none; }
 
 @media (max-width:760px){
   .lavori{ grid-template-columns:1fr; }
-  .angolo{ bottom:20px; font-size:10px; }
+  .angolo{ bottom:20px; font-size:11px; }
   .riga{ width:76vw; }
 }
 
@@ -184,7 +187,7 @@ html.film{ scrollbar-width:none; }
 html.film::-webkit-scrollbar{ display:none; }
 .film .gl{ display:block; position:fixed; left:0; top:0; width:100%; height:100vh; z-index:0; }
 .film .velo{ display:block; position:fixed; inset:0; z-index:1; pointer-events:none;
-  background:radial-gradient(ellipse 120% 90% at 50% 46%, rgba(8,8,10,0) 58%, rgba(4,4,5,.62) 100%); }
+  background:radial-gradient(ellipse 120% 90% at 50% 46%, rgba(10,10,13,0) 58%, rgba(10,10,13,.5) 100%); }
 .film .velo::after{ content:""; position:absolute; inset:0; opacity:.05;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 .film .film-spazio{ display:block; }
@@ -224,7 +227,7 @@ html.film::-webkit-scrollbar{ display:none; }
 .film .rail .fill{ position:absolute; left:5px; top:0; width:2px; height:100%; transform-origin:top; transform:scaleY(0);
   background:linear-gradient(180deg, var(--arancio-chiaro), var(--arancio-scuro)); border-radius:2px; }
 .film .rail button{ position:absolute; left:0; width:12px; height:12px; margin-top:-6px; border:0; background:none; cursor:pointer; }
-.film .rail button::before{ content:""; position:absolute; left:3.5px; top:3.5px; width:5px; height:5px; border-radius:50%; background:#3A3A42; transition:background .3s, box-shadow .3s; }
+.film .rail button::before{ content:""; position:absolute; left:3.5px; top:3.5px; width:5px; height:5px; border-radius:50%; background:#4C4C55; transition:background .3s, box-shadow .3s; }
 .film .rail button.on::before{ background:var(--arancio-chiaro); box-shadow:0 0 8px rgba(245,111,39,.9); }
 .film .rail button span{ position:absolute; right:20px; top:-3px; color:var(--fumo); white-space:nowrap; opacity:0; transform:translateX(6px);
   transition:opacity .25s, transform .25s var(--ease); pointer-events:none; }
@@ -262,9 +265,10 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
       <li><a href="#siti" data-s="siti">Siti</a></li>
       <li><a href="#app" data-s="app">App</a></li>
       <li><a href="#giochi" data-s="giochi">Giochi</a></li>
+      <li><a href="mailto:ciao@nemesi.studio">Contattaci</a></li>
     </ul>
     <button class="burger" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
-    <a class="cta" href="mailto:ciao@nemesi.studio" aria-label="Scrivimi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.5 8.2 6.2 8.2-6.2"/></svg><span>Scrivimi</span></a>
+    <a class="cta" href="area-riservata.html" aria-label="Area riservata" title="Area riservata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></a>
   </nav>
 </header>
 
@@ -528,7 +532,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
 
   /* ── filo di avanzamento a destra ── */
   var rail = document.getElementById('rail'), fill = rail.querySelector('.fill'), ticks = [];
-  [['Siti', TAPPE.siti], ['App', TAPPE.app], ['Giochi', TAPPE.giochi], ['Scrivimi', K.end]].forEach(function(t){
+  [['Siti', TAPPE.siti], ['App', TAPPE.app], ['Giochi', TAPPE.giochi], ['Contattaci', K.end]].forEach(function(t){
     var b = document.createElement('button'); b.type = 'button'; b.tabIndex = -1; b.style.top = (t[1] / K.end * 100) + '%';
     b.innerHTML = '<span class="mono">' + t[0] + '</span>'; b.addEventListener('click', function(){ vai(t[1]); });
     rail.appendChild(b); ticks.push([b, t[1]]);
