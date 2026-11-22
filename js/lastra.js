@@ -551,15 +551,16 @@ function create(canvas, opts){
       GIO.add(o);
       gioSlabs.push({ o:o, mat:mat, logo:logo, base:base, ph:i * 1.7 });
     });
-    /* asse: un filo verde con il suo alone, e l'orbita sotto le lastre */
-    var asse = new T.Mesh(new T.CylinderGeometry(.007, .007, 2.2, 10), new T.MeshBasicMaterial({ color: lin(COL.chiaro), transparent: true, toneMapped: false }));
-    var asseA = new T.Mesh(new T.CylinderGeometry(.045, .045, 2.2, 16, 1, true), new T.MeshBasicMaterial({ color: lin(COL.arancio), transparent: true,
+    /* asse: un filo verde con il suo alone, e l'orbita sotto le lastre; AXH: altezza (dalla 3.18 più bassa, finisce poco sopra le lastre) */
+    var AXH = 1.5;
+    var asse = new T.Mesh(new T.CylinderGeometry(.007, .007, AXH, 10), new T.MeshBasicMaterial({ color: lin(COL.chiaro), transparent: true, toneMapped: false }));
+    var asseA = new T.Mesh(new T.CylinderGeometry(.045, .045, AXH, 16, 1, true), new T.MeshBasicMaterial({ color: lin(COL.arancio), transparent: true,
       opacity: 0, blending: T.AdditiveBlending, depthWrite: false, toneMapped: false }));
     var orbita = new T.Mesh(new T.RingGeometry(GR - .005, GR + .005, 180), new T.MeshBasicMaterial({ color: lin(COL.chiaro), transparent: true,
       opacity: 0, depthWrite: false, toneMapped: false, side: T.DoubleSide }));
     orbita.rotation.x = -PI / 2; orbita.position.y = -GSH / 2 - .22;
     /* l'asse parte dal piano dell'orbita e sale: sotto resta libero per la didascalia */
-    asse.position.y = asseA.position.y = orbita.position.y + 1.1;
+    asse.position.y = asseA.position.y = orbita.position.y + AXH / 2;
     GIO.add(asse); GIO.add(asseA); GIO.add(orbita);
   }
   var gTmp = new T.Color();

@@ -334,3 +334,10 @@
 - Consenso: il sito non ha altri cookie, quindi niente barra; vale il riquadro «Mostra la mappa» (scelta ricordata in localStorage, chiave `nemesi_cookie_v1`).
 - Copione: `MW` in `js/lastra.js` ferma il film a `K.fin1` per 3,2 schermi (`poseMappa`, `S.mappa()`), `X()` in `index.html` slitta anche dopo la mappa; la frase finale e il bottone Scrivimi arrivano dopo la mappa e non si cliccano prima che compaiano. `K.end` passa da 15,2 a 18,4.
 - Pagina ferma («riduci movimento»): sezione Studio con la mappa nel riquadro alto 600 px, come in Rain Ink.
+
+### 3.18 — 22/11/2026
+- Studio: quando la mappa si apre (dalla faccia fino al tutto schermo) titolo e occhiello diventano chiari, con un'ombra leggera, così si leggono sopra le foto satellitari; «Bologna» nell'occhiello in verde lime.
+- Giostra Tool: asse verde più basso (alto 1,5 invece di 2,2): parte sempre dall'orbita e finisce poco sopra le lastre, lontano dal titolo.
+
+### 3.19 — 22/11/2026
+- Mappa dello studio: tolta la sosta sul quartiere Porto-Saragozza. Ora Italia → Emilia-Romagna → Bologna (sosta di 3 s, come l'ultimo livello di Rain Ink) e poi si scende dritti al civico di via dello Scalo 12; la durata resta 14 s.

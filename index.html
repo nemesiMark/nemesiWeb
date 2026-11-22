@@ -342,6 +342,11 @@ html.film::-webkit-scrollbar{ display:none; }
 .film .studio .map.on{ visibility:visible; }
 .film .studio .map.pieno{ pointer-events:auto; }
 .film .studio .testa{ z-index:2; }
+/* sopra la mappa (e sulla faccia scura che si apre) titolo e occhiello diventano chiari */
+.film .studio .titolo, .film .studio .kicker, .film .studio .kicker b{ transition:color .4s var(--ease), text-shadow .4s var(--ease); }
+.film .studio.su-mappa .titolo{ color:var(--bianco); text-shadow:0 1px 2px rgba(0,0,0,.7), 0 0 24px rgba(0,0,0,.45); }
+.film .studio.su-mappa .kicker{ color:#D8D8DE; text-shadow:0 1px 2px rgba(0,0,0,.8); }
+.film .studio.su-mappa .kicker b{ color:var(--arancio-chiaro); }
 .film .map-replay{ top:auto; right:auto; left:var(--m); bottom:26px; }
 </style>
 <script>/* aperta dal disco: i caratteri arrivano incorporati (il browser non legge i .woff2 locali) */
@@ -628,7 +633,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     }
   }
   /* mappa dello studio: ritagliata sulla faccia della lastra mentre avanza; a faccia oltre lo schermo è a tutto schermo */
-  var mappaEl = document.querySelector('#studio .map'), mappaStato = '';
+  var mappaEl = document.querySelector('#studio .map'), studioEl = document.getElementById('studio'), mappaStato = '';
   function placeMappa(){
     var m = S.mappa(), stato;
     if (m.a <= 0){ stato = 'off'; }
@@ -644,6 +649,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     mappaStato = stato;
     mappaEl.classList.toggle('on', stato !== 'off');
     mappaEl.classList.toggle('pieno', stato === 'pieno');
+    studioEl.classList.toggle('su-mappa', stato !== 'off');
     if (stato === 'pieno'){ mappaEl.style.clipPath = 'none'; mappaEl.style.opacity = '1'; }
     if (stato === 'off') mappaEl.style.opacity = '0';
     if (stato === 'pieno' && window.nemesiMappaVista) window.nemesiMappaVista();

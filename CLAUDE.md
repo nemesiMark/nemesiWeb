@@ -11,7 +11,7 @@ Capitoli:
 2b. Strumenti, «Tool» nella barra (dalla 3.9): a metà del mezzo giro verso Word la lastra di taglio diventa l'asse verde e ne escono a ventaglio sette lastre nei colori delle marche (Claude, VS Code, GitHub, Figma, Cloudflare, Netlify, Supabase) che girano una alla volta davanti; la lastra davanti porta al sito ufficiale (`#strum-link`). Ingresso e chiusura speculari (3.12–3.13): la lastra di taglio diventa l'asse, lampo, fili di luce che si aprono in lastre; all'uscita il contrario, poi la lastra gira su Word. Da fermi le lastre girano da sole (`AUTO` in `poseGio`); quando si riprende a scorrere si riparte dalla lastra davanti (`gioMap`). Nella barra la voce è «Tool» (`#tool`).
 3. App: Word 03, Excel 04 (ex Parola e Foglio: le immagini si chiamano ancora `parola` e `foglio`), con la lastra sdoppiata.
 4. Giochi: Metal Gear 05, attraversamento in pixel, anelli, Radente 06.
-4b. Studio (dalla 3.17, «Studio» nella barra, `#studio`): la lastra torna da Radente con la faccia vuota, avanza finché la faccia riempie lo schermo e si apre nella mappa animata (skill `mappa-uni`, `js/mappa.js`: dallo spazio a via dello Scalo 12, Bologna; Italia → Emilia-Romagna → Bologna → Porto-Saragozza); poi si richiude.
+4b. Studio (dalla 3.17, «Studio» nella barra, `#studio`): la lastra torna da Radente con la faccia vuota, avanza finché la faccia riempie lo schermo e si apre nella mappa animata (skill `mappa-uni`, `js/mappa.js`: dallo spazio a via dello Scalo 12, Bologna; Italia → Emilia-Romagna → Bologna, poi dritti al civico); poi si richiude.
 5. Scrivimi: faccia vuota con «Manca solo il tuo progetto.», bottone Scrivimi ed email.
 
 Per ora c'è solo questo (Siti, Strumenti, App, Giochi, Studio, Scrivimi): niente sezioni nuove senza richiesta.
