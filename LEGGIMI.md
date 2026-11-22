@@ -351,6 +351,9 @@
 ### 3.21 — 22/11/2026
 - **Area riservata attivata**: Worker `nemesiweb-area-riservata` su Cloudflare (https://nemesiweb-area-riservata.nemesi-mark.workers.dev) con il suo KV `DATI` e i secret; indirizzo in `<meta name="ar-api">`; GitHub Pages ora pubblica con GitHub Actions (`pubblica.yml` parte a ogni push su main).
 
+### 3.22 — 22/11/2026
+- Area riservata, anteprima dei testi del menu (Siti, App, Giochi): il tratteggio verde ora sta dentro il pulsante, prima usciva fuori ed era tagliato dal sottomenu e coperto dalle voci vicine.
+
 ## Area riservata
 
 Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e funzioni); cambiano nome, logo, caratteri del sito (Inter Tight, Geist), barra in alto nera come quella del sito e colore d'accento: il verde scuro del logo `#8ECE05` (più scuro `#79B003`), con il testo scuro `#0B1200` sopra (il bianco non avrebbe contrasto). Prefisso di localStorage `nemesiweb-`.

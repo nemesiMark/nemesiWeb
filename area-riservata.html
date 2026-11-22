@@ -1897,7 +1897,8 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     var y = r.height * s > H - 24 ? 12 - r.top * s : H / 2 - (r.top + r.height / 2) * s;
     y = Math.min(0, Math.max(H - vh * s, y));
     el.style.outline = Math.max(2, Math.round(2 / s)) + 'px dashed ' + (getComputedStyle(document.documentElement).getPropertyValue('--acc').trim() || '#c4372a');
-    el.style.outlineOffset = Math.round(6 / s) + 'px';
+    // nella barra (voci del menu) il tratteggio sta dentro il pulsante: fuori verrebbe tagliato dal sottomenu e coperto dalle voci vicine
+    el.style.outlineOffset = (el.closest('#hdr') ? -Math.round(5 / s) : Math.round(6 / s)) + 'px';
     c.f.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + s + ')';
     fin.classList.add('pronta'); c.guasto = false; vtRiserva();
   }
