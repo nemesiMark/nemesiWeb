@@ -248,3 +248,7 @@
 - Ogni arancio è diventato il verde con la stessa luminosità; i toni scuri sono un po' più cupi. Il testo dei bottoni è blu notte `#030B1F`, come nel riferimento. I testi d'accento sul cemento sono verde scuro `#2F5600`, per restare leggibili.
 - Logo e icone della scheda: nuove copie verdi (`nemesi-web-verde.png`, `nemesi-web-nav-verde.png`, `favicon-verde*.png`, link `?v=3.0`). Gli originali arancio restano intatti in `images/logo/`.
 - Verifiche: controllo dei testi pulito, fluidità max 22,7 ms, schermate di apertura, film, finale, area riservata e telefono.
+
+### 3.1 — 22/11/2026
+- Le parole d'accento dei titoli («costruiti per durare.», «dentro una pagina web.», «i tuoi progetti.» nell'area riservata) ora sono nel verde lime `#CDFD67` del bottone (prima verde scuro `#2F5600`). Un'ombra blu notte leggera le stacca dal grigio cemento.
+- Le scritte piccole d'accento (numeri dei lavori, «Gioca», la parola evidenziata sopra i titoli) restano verde scuro, perché in lime a quella misura sul cemento non si leggerebbero.

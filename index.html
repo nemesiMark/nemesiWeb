@@ -146,7 +146,7 @@ ul{ list-style:none; }
 .kicker b{ color:var(--arancio-t); font-weight:500; }
 .titolo{ margin-top:18px; max-width:17ch; font-family:var(--titoli); font-weight:800; font-size:clamp(38px, 4.6vw, 74px); line-height:1.02;
   letter-spacing:-.02em; text-wrap:balance; }
-.titolo em{ font-style:normal; color:var(--arancio-t); }
+.titolo em{ font-style:normal; color:var(--arancio-chiaro); text-shadow:0 1px 0 rgba(3,11,31,.55), 0 2px 10px rgba(3,11,31,.35); }   /* lime come il bottone, staccato dal cemento da un'ombra */
 .lavori{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(22px, 3vw, 46px); margin-top:7vh; }
 .schermo{ position:relative; display:block; border-radius:10px; }
 .schermo img{ width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:10px; border:1px solid var(--linea); background:var(--grafite); }
@@ -226,7 +226,7 @@ html.film::-webkit-scrollbar{ display:none; }
 .film .fine .titolo{ font-size:clamp(34px, 3.6vw, 58px); }
 /* nel film il finale sta sulla faccia nera della lastra: lì i testi restano chiari */
 .film .fine-in{ color:var(--bianco); }
-.film .fine .titolo em{ color:var(--arancio-chiaro); }
+.film .fine .titolo em{ color:var(--arancio-chiaro); text-shadow:none; }
 .film .fine .email{ color:var(--fumo); }
 .film .fine .email:hover{ color:var(--bianco); }
 .fine .titolo em{ display:block; }
