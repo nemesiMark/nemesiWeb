@@ -35,7 +35,7 @@ var KX = { o:HO };
 for (var kk in K) KX[kk] = K[kk] + HO;
 for (var kh in KH) KX[kh] = KH[kh];
 
-var COL = { nero:'#17171C', arancio:'#F56F27', chiaro:'#FFA54D', oro:'#F9D377', scuro:'#EA4006', brace:'#C92C02', caldo:'#FFE3B0' };
+var COL = { nero:'#9AA0A8', arancio:'#F56F27', chiaro:'#FFA54D', oro:'#F9D377', scuro:'#EA4006', brace:'#C92C02', caldo:'#FFE3B0' };
 function lin(h){ return new T.Color(h).convertSRGBToLinear(); }
 function raw(h){ return new T.Color(h); }
 function clamp(x, a, b){ return x < a ? a : x > b ? b : x; }
@@ -138,7 +138,7 @@ var FS_SCREEN = [
   '  col = mix(col, mix(uOr, uGold, emb * emb * 0.6), emb * 0.9);',
   '  col *= 1.0 - uDim;',
   '  float dist = length(cameraPosition - vWP);',
-  '  col = mix(col, vec3(0.090, 0.090, 0.110), 1.0 - exp(-pow(uFogD * dist, 2.0)));',
+  '  col = mix(col, vec3(0.604, 0.627, 0.659), 1.0 - exp(-pow(uFogD * dist, 2.0)));',
   '  gl_FragColor = vec4(col, 1.0);',
   '}'].join('\n');
 

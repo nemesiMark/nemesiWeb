@@ -229,3 +229,9 @@
 
 ### 2.7 — 22/11/2026
 - Radente: nuova anteprima presa dal gioco online dopo l'aggiornamento grafico (Radente 2.0, con il jet): `radente-d.jpg` 2000×1125 e `radente.jpg` 1600×900, aggiornata anche in `js/lavori-dati.js`.
+
+### 2.8 — 22/11/2026
+- Sfondo delle pagine grigio cemento `#9AA0A8` (prima grafite `#17171C`) in `index.html`, `area-riservata.html` e nella scena 3D (colore di fondo e nebbia in `js/lastra.js`); `theme-color` aggiornato.
+- Testi sul cemento scuri: `--inchiostro` #15161A, secondari `--fumo-c` #383C44, arancio dei testi `--arancio-t` #A82E00 (l'arancio chiaro non si leggeva). Vignettatura ai bordi più leggera, filo di avanzamento scuro.
+- Il finale sulla faccia nera della lastra resta con testi chiari. Barra, menu del telefono e bottoni restano neri.
+- Area riservata: il logo sta su una piastra nera, perché la scritta «nemesi» è bianca.
