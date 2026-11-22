@@ -11,9 +11,10 @@ Capitoli:
 2b. Strumenti, «Tool» nella barra (dalla 3.9): a metà del mezzo giro verso Word la lastra di taglio diventa l'asse verde e ne escono a ventaglio sette lastre nei colori delle marche (Claude, VS Code, GitHub, Figma, Cloudflare, Netlify, Supabase) che girano una alla volta davanti; la lastra davanti porta al sito ufficiale (`#strum-link`). Ingresso e chiusura speculari (3.12–3.13): la lastra di taglio diventa l'asse, lampo, fili di luce che si aprono in lastre; all'uscita il contrario, poi la lastra gira su Word. Da fermi le lastre girano da sole (`AUTO` in `poseGio`); quando si riprende a scorrere si riparte dalla lastra davanti (`gioMap`). Nella barra la voce è «Tool» (`#tool`).
 3. App: Word 03, Excel 04 (ex Parola e Foglio: le immagini si chiamano ancora `parola` e `foglio`), con la lastra sdoppiata.
 4. Giochi: Metal Gear 05, attraversamento in pixel, anelli, Radente 06.
+4b. Studio (dalla 3.17, «Studio» nella barra, `#studio`): la lastra torna da Radente con la faccia vuota, avanza finché la faccia riempie lo schermo e si apre nella mappa animata (skill `mappa-uni`, `js/mappa.js`: dallo spazio a via dello Scalo 12, Bologna; Italia → Emilia-Romagna → Bologna → Porto-Saragozza); poi si richiude.
 5. Scrivimi: faccia vuota con «Manca solo il tuo progetto.», bottone Scrivimi ed email.
 
-Per ora c'è solo questo (Siti, Strumenti, App, Giochi, Scrivimi): niente sezioni nuove senza richiesta.
+Per ora c'è solo questo (Siti, Strumenti, App, Giochi, Studio, Scrivimi): niente sezioni nuove senza richiesta.
 
 Dove sono i lavori:
 - Rain Ink: `~/Desktop/Sites/rainInk`
@@ -35,7 +36,8 @@ Funziona anche con doppio clic su `index.html`. Da `file://` il browser non legg
 Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - `node copy-gate.js ~/Desktop/Sites/nemesiWeb/index.html`: deve uscire 0.
 - `node verify.js shot "http://localhost:8765/?jump=<y>" out.png 1440 900` (e `390 844` per il telefono).
-  - La fine del film è a `K.end` (15,2 dalla 3.9) × altezza dello schermo: 13680 a 1440×900.
+  - La fine del film è a `K.end` (18,4 dalla 3.17) × altezza dello schermo: 16560 a 1440×900.
+  - La mappa va da `K.map0` (14,65) a `K.map1` (17,85): a 1440×900 da 13185 a 16065; aperta a tutto schermo nel tratto centrale.
   - La giostra degli strumenti va da `K.gio0` (4,724) a `K.gio1` (7,826): a 1440×900 da 4252 a 7043.
   - `?jump=99999` porta al fondo.
 - `node verify.js jank http://localhost:8765/`: il massimo deve stare sotto i 50 ms (nella 2.1: 18,2 ms).
@@ -66,7 +68,8 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
   - `nemesi-web-originale.png`: l'originale viola.
   - **Mai modificare i PNG del logo.**
 - `fonts/`: Inter Tight (titoli, come la scritta RAIN INK), Geist, Geist Mono, in woff2 latin.
-- `vendor/`: gsap 3.12.5, ScrollTrigger 3.12.5, lenis 1.1.13, `three/three.min.js` r147.
+- `vendor/`: gsap 3.12.5, ScrollTrigger 3.12.5, lenis 1.1.13, `three/three.min.js` r147, `maplibre/` 5.6.0 (caricata solo dopo il consenso alla mappa).
+- `js/mappa.js`: mappa animata dello studio (copiata da Rain Ink, cambiano solo dati e colori; non riscriverla).
 - `BRIEF.md`: appunti di produzione (concept, logo, colori, caratteri, copy, divieti). NON è testo per il sito.
 - `LEGGIMI.md`: versioni e cronologia delle modifiche.
 - `archivio/` (fuori da git): `1.25/` è il sito prima del rifacimento, `index-1.4.html` una versione vecchia con le sezioni dopo il film, `logo-svg/` il ricalco del logo (genera gli SVG e `js/logo-forma.js`) e il laboratorio del logo 3D.
@@ -83,9 +86,11 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
     - `cross0`/`cross1`: attraversamento;
     - `rad`: Radente;
     - `fin0`/`fin1`: finale;
-    - `end`: 11 (in `KX` diventa 15,2).
+    - `end`: 11 (in `KX` diventa 18,4).
   - **Giostra degli strumenti** (dalla 3.9): `GW` (inizio `w0` 3,624 nel tempo di K, durata aggiunta `gd` 3,1) e `warp()` traducono il tempo nuovo in quello di K, che resta il copione di prima. In `KX` i tempi dopo `w0` sono spostati di `gd`. La giostra è in `poseGio()`; `S.giostra()` dà presenza, lastra davanti e punto per la didascalia.
-  - In `index.html` i tempi scritti come `O + X(t)` slittano da soli dopo l'inizio della giostra.
+  - In `index.html` i tempi scritti come `O + X(t)` slittano da soli dopo l'inizio della giostra e dopo la mappa.
+  - **Mappa dello studio** (dalla 3.17): `MW` (inizio `K.fin1`, durata aggiunta `gd` 3,2) ferma il film sulla faccia vuota; `poseMappa()` fa avanzare la lastra, `S.mappa()` dà quanto è avanzata (`a`) e gli angoli della faccia (`q`); in `index.html` `placeMappa()` ritaglia la mappa fissa a tutto schermo sulla faccia (`clip-path`) e, a faccia aperta, chiama `window.nemesiMappaVista()` che fa partire la discesa. A mappa aperta la scena 3D non si disegna.
+  - Mappa: consenso col riquadro «Mostra la mappa» (`window.nemesiCookie`, chiave `nemesi_cookie_v1`); verifiche con la skill `mappa-uni` (`programma.js js/mappa.js --computer 1440x900 --telefono 390x844`).
 - **Timeline `master`** in `index.html` (dove `K` è già `KX`): dura `K.end` (12,1) ed è legata con scrub 1 allo spazio vuoto `#film` (alto `K.end`·vh + vh). La scena 3D legge lo stesso progresso.
 - **`ridisegna()`**: dopo ogni refresh di ScrollTrigger esegue `master.progress(1).progress(pr)`. Senza, i `fromTo` perdono gli stati iniziali.
 - **Collegamento tra DOM e 3D**:
@@ -112,5 +117,6 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 ## In sospeso
 - Area riservata vera (oggi il tasto porta alla pagina segnaposto `area-riservata.html`).
 - Email `ciao@nemesi.studio`: dominio non verificato, da sostituire con quella vera.
+- Mappa: manca una pagina privacy dove citare Esri (le foto satellitari si caricano solo dopo «Mostra la mappa»).
 - Partita IVA (obbligatoria per un professionista in Italia): oggi c'è solo «© 2026 Nemesi Web» nel finale. Va aggiunta lì.
 - Scegliere l'hosting (oggi GitHub Pages; Netlify o Vercel?) e il dominio.

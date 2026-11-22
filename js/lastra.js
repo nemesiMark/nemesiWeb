@@ -35,14 +35,20 @@ var K = {
    K resta il copione di prima: warp() traduce il tempo nuovo nel tempo di K. */
 var GW = { w0:3.624, e:.001, gd:3.1 };          // inizio, mezza durata vista di K, durata aggiunta
 GW.span = GW.gd + 2 * GW.e;
+/* mappa dello studio (dalla 3.17): quando la lastra è tornata da Radente e mostra la faccia vuota (K.fin1) il film si ferma;
+   la lastra avanza finché la faccia riempie lo schermo e si apre nella mappa, poi si richiude e torna al suo posto. */
+var MW = { w0:K.fin1, gd:3.2 };                 // inizio (tempo di K), durata aggiunta
+MW.n0 = MW.w0 + GW.gd;                          // inizio nel tempo nuovo (dopo la giostra)
 function warp(q){
+  if (q > MW.n0) q = q < MW.n0 + MW.gd ? MW.n0 : q - MW.gd;
   if (q <= GW.w0) return q;
   if (q < GW.w0 + GW.span) return GW.w0 + 2 * GW.e * (q - GW.w0) / GW.span;
   return q - GW.gd;
 }
 /* il copione visto dalla pagina: tempi assoluti (apertura compresa) */
-var KX = { o:HO, gio0:GW.w0 + HO, gio1:GW.w0 + GW.span + HO, gd:GW.gd, gw0:GW.w0 };
-for (var kk in K) KX[kk] = (K[kk] > GW.w0 ? K[kk] + GW.gd : K[kk]) + HO;
+var KX = { o:HO, gio0:GW.w0 + HO, gio1:GW.w0 + GW.span + HO, gd:GW.gd, gw0:GW.w0,
+           map0:MW.n0 + HO, map1:MW.n0 + MW.gd + HO, md:MW.gd, mw0:MW.w0 };
+for (var kk in K) KX[kk] = (K[kk] > GW.w0 ? K[kk] + GW.gd : K[kk]) + (K[kk] > MW.w0 ? MW.gd : 0) + HO;
 for (var kh in KH) KX[kh] = KH[kh];
 
 var COL = { nero:'#9AA0A8', arancio:'#A6EF0B', chiaro:'#CDFD67', oro:'#CFF977', scuro:'#8ECE05', brace:'#79B003', caldo:'#E5FEB1' };
@@ -862,6 +868,18 @@ function create(canvas, opts){
       line.position.copy(G.position).addScaledVector(nY, cutY).addScaledVector(nZ, (LT + .012) * (1 - smooth01(seg(hs, .86, 1))));
     }
     poseGio(seg(q0, GW.w0, GW.w0 + GW.span), t);
+    poseMappa(seg(q0, MW.n0, MW.n0 + MW.gd));
+  }
+
+  /* mappa: la lastra (faccia vuota) avanza verso chi guarda finché la faccia è molto più grande dello schermo;
+     la pagina ritaglia la mappa sulla forma della faccia (S.mappa), così sembra che la faccia si apra nella mappa.
+     0–.3 avanza · .3–.7 mappa a tutto schermo · .7–1 torna al suo posto */
+  var MAP_S = { u:0, a:0, q:null };
+  function poseMappa(u){
+    var a = io3(seg(u, 0, .3)) * (1 - io3(seg(u, .7, 1)));
+    MAP_S.u = u; MAP_S.a = a;
+    if (a <= 0) return;
+    G.position.z += L.dFin * .82 * a;
   }
 
   function setFace(mesh, work, reveal, empty, glow){
@@ -893,7 +911,7 @@ function create(canvas, opts){
     camera.lookAt(CAM.tx, CAM.ty, CAM.tz);
     camera.setViewOffset(W, H, -CAM.sx, -CAM.sy, W, H);
     camera.updateProjectionMatrix();
-    renderer.render(scene, camera);
+    if (MAP_S.a < .999) renderer.render(scene, camera);           // a mappa aperta la scena è tutta coperta
     /* risoluzione adattiva: se i fotogrammi pesano, scende (mai risale, per non oscillare) */
     frames++;
     if (quiet) return;
@@ -950,6 +968,8 @@ function create(canvas, opts){
     hover: function(i, on){ if (i >= 0 && i < 6) S.hovT[i] = on ? 1 : 0; },
     pointer: function(x, y){ S.ptr.x = x; S.ptr.y = y; },
     layout: function(){ return L; },
+    /* mappa: a = quanto è avanzata la lastra (0–1), q = angoli della faccia sullo schermo (null se esce dietro la camera) */
+    mappa: function(){ MAP_S.q = MAP_S.u > 0 && MAP_S.u < 1 && G.visible ? quad(FA) : null; return MAP_S; },
     giostra: function(){
       if (GIO.visible){ v3.set(0, -GSH * .5 - .25, GR).applyMatrix4(GIO.matrixWorld).project(camera); GIO_S.x = (v3.x + 1) / 2 * W; GIO_S.y = (1 - v3.y) / 2 * H; }
       /* la lastra davanti: i suoi angoli sullo schermo, per il collegamento al sito ufficiale */

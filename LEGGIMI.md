@@ -324,3 +324,13 @@
 - Apertura ancora più lenta: `LENTO` 1,4 (prima 1,18), stesso `timeScale` per la timeline `intro`.
 - Barra: tolta la linea verde sul contorno (con l'alone che sembrava pulsare); al suo posto una sfumatura verde ferma e morbida su tutti i lati (`box-shadow` di `.slab`).
 - Giostra: tolta la lastra sottile che restava dentro l'asse verde a giostra aperta; sparisce nel lampo d'ingresso e torna nel lampo d'uscita.
+
+### 3.16 — 22/11/2026
+- Tasti della barra (Siti, Tool, App, Giochi, Contattaci e il lucchetto): al passaggio del mouse zoom più marcato (1,1) e alone verde sfumato su tutti i lati; tolta la linea di contorno verde. Anche il tasto scelto con la tastiera ha l'alone al posto della linea.
+
+### 3.17 — 22/11/2026
+- Nuovo capitolo «Studio» (voce nella barra tra Giochi e Contattaci, indirizzo `#studio`): dopo Radente la lastra torna con la faccia vuota, avanza verso chi guarda e la faccia si apre nella mappa a tutto schermo; poi si richiude, la lastra torna al suo posto e compare «Manca solo il tuo progetto.».
+- La mappa è quella di «Dove siamo» di Rain Ink 6.26 (skill mappa-uni, `js/mappa.js`, MapLibre 5.6.0 in `vendor/maplibre/`): dalla Terra vista dallo spazio a via dello Scalo 12 in 14 s, con le soste Italia → Emilia-Romagna → Bologna → Porto-Saragozza, contorni al neon verde lime (`#F6FFE4`, `#CDFD67`, `#A6EF0B`) e segnaposto «Nemesi Web» che apre Google Maps. Parte quando la faccia si è aperta del tutto.
+- Consenso: il sito non ha altri cookie, quindi niente barra; vale il riquadro «Mostra la mappa» (scelta ricordata in localStorage, chiave `nemesi_cookie_v1`).
+- Copione: `MW` in `js/lastra.js` ferma il film a `K.fin1` per 3,2 schermi (`poseMappa`, `S.mappa()`), `X()` in `index.html` slitta anche dopo la mappa; la frase finale e il bottone Scrivimi arrivano dopo la mappa e non si cliccano prima che compaiano. `K.end` passa da 15,2 a 18,4.
+- Pagina ferma («riduci movimento»): sezione Studio con la mappa nel riquadro alto 600 px, come in Rain Ink.
