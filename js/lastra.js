@@ -646,7 +646,8 @@ function create(canvas, opts){
       s.mat.emissive.copy(gTmp.copy(s.base).multiplyScalar(.16 * (1 - glow))).lerp(cLuce, glow);
       s.logo.material.opacity = 1 - io2(seg(c, .1, .55));
     }
-    var axOn = io2(seg(u, 0, .06)) * (1 - io2(seg(u, .925, .99)));
+    /* dalla 3.23 l'asse c'è solo all'ingresso e all'uscita: si spegne mentre le lastre si aprono, a giostra aperta non si vede */
+    var axOn = io2(seg(u, 0, .06)) * (1 - io2(seg(u, .925, .99))) * io2(seg(c, .05, .6));
     asse.material.opacity = axOn;
     asseA.material.opacity = Math.min(1, .22 * axOn * (1 + .2 * Math.sin(t * 2)) + .35 * fl);
     asseA.scale.set(1 + .6 * fl, 1 + .12 * fl, 1 + .6 * fl);

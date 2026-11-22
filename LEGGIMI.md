@@ -354,6 +354,9 @@
 ### 3.22 — 22/11/2026
 - Area riservata, anteprima dei testi del menu (Siti, App, Giochi): il tratteggio verde ora sta dentro il pulsante, prima usciva fuori ed era tagliato dal sottomenu e coperto dalle voci vicine.
 
+### 3.23 — 22/11/2026
+- Giostra dei Tool: l'asta verde al centro c'è solo all'ingresso e all'uscita (la lastra di taglio che si stringe, il lampo, i fili di luce); mentre le lastre si aprono si spegne e a giostra aperta non si vede più.
+
 ## Area riservata
 
 Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e funzioni); cambiano nome, logo, caratteri del sito (Inter Tight, Geist), barra in alto nera come quella del sito e colore d'accento: il verde scuro del logo `#8ECE05` (più scuro `#79B003`), con il testo scuro `#0B1200` sopra (il bianco non avrebbe contrasto). Prefisso di localStorage `nemesiweb-`.
