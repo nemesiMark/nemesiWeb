@@ -369,6 +369,9 @@
 ### 3.26 — 23/11/2026
 - **Area riservata, misura della foto** (come Olimp 3.39): quando si carica una foto nuova di misura diversa da quella del posto, sotto la misura si sceglie **Adatta in automatico** (già scelto: ritaglio alla forma del posto con la parte scelta nell'anteprima e misura esatta, es. 1600 × 900, anche ingrandendo) oppure **Usa la mia foto così com'è** (stessi pixel, niente tagli né ridimensionamenti; si toglie solo l'EXIF; oltre i 4 MB del Worker si abbassa la qualità JPEG e se non basta un messaggio chiede di adattarla). Se la foto è già della misura giusta la scelta non compare. Avvisi gialli e guida «Foto: formati e misure» aggiornati. Worker non toccato.
 
+### 3.27 — 23/11/2026
+- Guida dell'area riservata: rifatta la schermata `fissa-scheda` (ora con «Misura giusta: …»), punti che lampeggiano ricalcolati con `riquadri.py`; nel passo delle foto una riga sulla scelta **Adatta in automatico / Usa la mia foto così com'è**.
+
 ## Area riservata
 
 Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e funzioni); cambiano nome, logo, caratteri del sito (Inter Tight, Geist), barra in alto nera come quella del sito e colore d'accento: il verde scuro del logo `#8ECE05` (più scuro `#79B003`), con il testo scuro `#0B1200` sopra (il bianco non avrebbe contrasto). Prefisso di localStorage `nemesiweb-`.
