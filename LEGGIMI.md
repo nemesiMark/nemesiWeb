@@ -434,3 +434,6 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 
 ### 3.38 — 23/11/2026
 - Area riservata, schermata di accesso: sfondo nero con la pioggia di codice alla Matrix attorno al riquadro (katakana a mezza larghezza specchiati, cifre e simboli; testa quasi bianca e scia verde che si spegne, alcuni segni cambiano mentre scendono). Disegnata su canvas, circa 30 passi al secondo, ferma quando la scheda è nascosta o dopo l'accesso; con «movimento ridotto» resta un fotogramma fermo.
+
+### 3.39 — 23/11/2026
+- Olimp: nuova anteprima presa dal sito online dopo il cambio di stile (hero chiara con l'album «Elisa & Andrea» sul piedistallo), senza il banner dei cookie: `olimp-d.jpg` 2000×1125, `olimp.jpg` 1600×900 (Home e Portfolio) e `olimp-m.jpg` 900×1947 (telefono); aggiornata anche in `js/lavori-dati.js`.
