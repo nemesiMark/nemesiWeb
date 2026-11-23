@@ -1,12 +1,5 @@
 {
-  "portfolio-siti": [
-    {
-      "foto": "images/caricate/2026-11-23-prova-k98kcp.jpg",
-      "titolo": "Prova",
-      "descrizione": "sito di prova",
-      "link": "https://www.youtube.com/watch?v=1Dyld3y-V7Y&t=729s"
-    }
-  ],
+  "portfolio-siti": [],
   "portfolio-app": [],
   "portfolio-giochi": []
 }
