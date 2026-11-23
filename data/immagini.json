@@ -13,16 +13,17 @@
   "decorativa": true
  },
  {
-  "id": "lavoro-areariservata",
+  "id": "lavoro-olimp",
   "pagina": "index.html",
-  "sezione": "Rain Ink · Area riservata",
+  "sezione": "Olimp",
   "descrizione": "Lavoro 02 · Siti",
-  "foto": "images/lavori/areariservata.jpg",
-  "alt": "Area riservata di Rain Ink Tattoo: la scheda Portfolio con lo spazio usato e le foto dei tatuaggi",
+  "foto": "images/lavori/olimp.jpg",
+  "alt": "",
   "testi": [
    "index-t009",
    "index-t010"
-  ]
+  ],
+  "decorativa": true
  },
  {
   "id": "lavoro-word",
