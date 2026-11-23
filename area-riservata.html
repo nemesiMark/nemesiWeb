@@ -461,6 +461,10 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
 .testi-foto textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(0,0,0,.08)}
 .testi-foto .campo .aiuto{margin:4px 0 0;word-break:break-all}
 @media (max-width:480px){.testo{grid-template-columns:1fr}.testo .btn{justify-self:start}}
+/* accesso: pioggia di codice alla Matrix dietro il riquadro */
+.login{position:relative;overflow:hidden;background:#000;isolation:isolate}
+.login .pioggia{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block;filter:contrast(1.15)}
+.login form{position:relative;box-shadow:0 0 0 1px rgba(0,255,70,.18),0 30px 80px -20px rgba(0,0,0,.9)}
 </style>
 </head>
 <body>
@@ -476,6 +480,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
 
 <!-- accesso -->
 <main class="login" id="vista-login">
+  <canvas class="pioggia" id="pioggia" aria-hidden="true"></canvas>
   <form id="f-login" novalidate>
     <h1>Area riservata</h1>
     <p class="login-intro">Entra per:</p>
@@ -2209,6 +2214,69 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     var t = mem.get('ar-token');
     if (t && t.token && t.scade > Date.now() / 1000) { token = t.token; carica(); } else mostraVista('login');
   }
+})();
+</script>
+
+<script>
+/* pioggia di codice alla Matrix: katakana a mezza larghezza specchiati, cifre e qualche simbolo */
+(function () {
+  var cv = document.getElementById('pioggia'), box = document.getElementById('vista-login');
+  if (!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var SEGNI = 'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ0123456789Z:.\"=*+-<>¦|ç';
+  var FONT = '"Hiragino Kaku Gothic ProN","Hiragino Sans","MS Gothic","Yu Gothic","Noto Sans JP",monospace';
+  var ridotto = matchMedia('(prefers-reduced-motion: reduce)');
+  var L, H, dpr, cella, col, gocce, ultimo = 0, raf = 0;
+  function segno() { return SEGNI.charAt(Math.random() * SEGNI.length | 0); }
+  function nuova(sopra) { return { y: sopra ? -Math.random() * (H / cella) * 1.5 : Math.random() * (H / cella), v: .35 + Math.random() * .75, prima: -1 }; }
+  function misura() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    L = box.clientWidth; H = box.clientHeight;
+    cv.width = L * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cella = L < 600 ? 15 : 19;
+    col = Math.ceil(L / cella);
+    gocce = []; for (var i = 0; i < col; i++) gocce.push(nuova(false));
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, L, H);
+    ctx.font = (cella - 2) + 'px ' + FONT; ctx.textBaseline = 'top'; ctx.textAlign = 'center';
+  }
+  function scrivi(c, r, colore, luce) {
+    var x = c * cella + cella / 2, y = r * cella;
+    ctx.fillStyle = '#000'; ctx.fillRect(c * cella, y, cella, cella);
+    ctx.save(); ctx.translate(x, y); ctx.scale(-1, 1); // segni specchiati, come nel film
+    ctx.shadowColor = colore; ctx.shadowBlur = luce;
+    ctx.fillStyle = colore; ctx.fillText(segno(), 0, 1);
+    ctx.restore();
+  }
+  function passo() {
+    ctx.fillStyle = 'rgba(0,0,0,.075)'; ctx.fillRect(0, 0, L, H); // la scia si spegne piano
+    for (var c = 0; c < col; c++) {
+      var g = gocce[c], r = Math.floor(g.y);
+      if (r !== g.prima) {
+        if (g.prima >= 0) scrivi(c, g.prima, '#3dff6e', 4); // la testa lascia un segno verde
+        if (r >= 0) scrivi(c, r, '#e6ffe9', 12);            // testa quasi bianca, luminosa
+        g.prima = r;
+      }
+      // qualche segno della scia cambia mentre scende
+      if (Math.random() < .03 && r > 2) scrivi(c, r - 1 - (Math.random() * 12 | 0), '#0f9d35', 0);
+      g.y += g.v;
+      if (r * cella > H && Math.random() < .04) gocce[c] = nuova(true);
+    }
+  }
+  function giro(t) {
+    raf = requestAnimationFrame(giro);
+    if (box.hidden || document.hidden) return;
+    if (t - ultimo < 33) return; ultimo = t; // ~30 passi al secondo
+    passo();
+  }
+  function avvia() {
+    cancelAnimationFrame(raf); misura();
+    if (ridotto.matches) { for (var i = 0; i < 60; i++) passo(); return; } // con movimento ridotto: un fotogramma fermo
+    raf = requestAnimationFrame(giro);
+  }
+  var t0; window.addEventListener('resize', function () { clearTimeout(t0); t0 = setTimeout(avvia, 150); });
+  new MutationObserver(function () { if (!box.hidden) avvia(); }).observe(box, { attributes: true, attributeFilter: ['hidden'] });
+  avvia();
 })();
 </script>
 </body>

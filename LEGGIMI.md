@@ -431,3 +431,6 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
   3. `npx wrangler secret put ADMIN_PASSWORD`, `SESSION_SECRET`, `GITHUB_TOKEN` (valori scritti nel terminale, mai nei file).
   4. GitHub → Settings → Pages → Source «GitHub Actions» e in `pubblica.yml` rimettere `push: branches: [main]`.
   5. Indirizzo del Worker in `<meta name="ar-api">`, poi push.
+
+### 3.38 — 23/11/2026
+- Area riservata, schermata di accesso: sfondo nero con la pioggia di codice alla Matrix attorno al riquadro (katakana a mezza larghezza specchiati, cifre e simboli; testa quasi bianca e scia verde che si spegne, alcuni segni cambiano mentre scendono). Disegnata su canvas, circa 30 passi al secondo, ferma quando la scheda è nascosta o dopo l'accesso; con «movimento ridotto» resta un fotogramma fermo.
