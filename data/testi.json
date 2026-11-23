@@ -321,6 +321,62 @@
   "link": "mailto:ciao@nemesi.studio"
  },
  {
+  "id": "portfolio-t001",
+  "pagina": "portfolio.html",
+  "sezione": "In cima alla pagina",
+  "descrizione": "Occhiello: nome della pagina",
+  "tipo": "semplice",
+  "testo": "Portfolio"
+ },
+ {
+  "id": "portfolio-t002",
+  "pagina": "portfolio.html",
+  "sezione": "In cima alla pagina",
+  "descrizione": "Occhiello: accanto al nome",
+  "tipo": "semplice",
+  "testo": "Lavori 2026"
+ },
+ {
+  "id": "portfolio-t003",
+  "pagina": "portfolio.html",
+  "sezione": "In cima alla pagina",
+  "descrizione": "Titolo, prima parte (scura)",
+  "tipo": "semplice",
+  "testo": "Siti, app e giochi,"
+ },
+ {
+  "id": "portfolio-t004",
+  "pagina": "portfolio.html",
+  "sezione": "In cima alla pagina",
+  "descrizione": "Titolo, seconda parte (verde)",
+  "tipo": "semplice",
+  "testo": "tutti qui."
+ },
+ {
+  "id": "portfolio-t005",
+  "pagina": "portfolio.html",
+  "sezione": "In cima alla pagina",
+  "descrizione": "Scorciatoia 1 (porta ai Siti)",
+  "tipo": "semplice",
+  "testo": "Siti"
+ },
+ {
+  "id": "portfolio-t006",
+  "pagina": "portfolio.html",
+  "sezione": "In cima alla pagina",
+  "descrizione": "Scorciatoia 2 (porta alle App)",
+  "tipo": "semplice",
+  "testo": "App"
+ },
+ {
+  "id": "portfolio-t007",
+  "pagina": "portfolio.html",
+  "sezione": "In cima alla pagina",
+  "descrizione": "Scorciatoia 3 (porta ai Giochi)",
+  "tipo": "semplice",
+  "testo": "Giochi"
+ },
+ {
   "id": "menu-t001",
   "pagina": "menu",
   "sezione": "Portfolio",

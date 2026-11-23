@@ -670,7 +670,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       <p class="g-nota">Le voci principali (Portfolio, Studio, Tool, Contattaci) e dove porta il clic non si cambiano.</p>
     </section>
     </div>
-    <p class="g-intro g-generale"><b>In generale:</b> in alto c'è il menu delle pagine: <b>Home</b> è la pagina del sito, <b>Menu</b> le voci del menu Portfolio. In Home scegli se cambiare le <b>Foto</b> o i <b>Testi</b>. Le modifiche si vedono online entro qualche minuto dal salvataggio. Questa guida si riapre quando vuoi dal pulsante <b>Guida</b> in alto. Clicca una schermata per ingrandirla. Dal telefono funziona allo stesso modo: al posto del clic si tocca con il dito.</p>
+    <p class="g-intro g-generale"><b>In generale:</b> in alto c'è il menu delle pagine: <b>Home</b> è la pagina principale, <b>Portfolio</b> la pagina con tutti i lavori, <b>Menu</b> le voci del menu Portfolio. In ogni pagina scegli se cambiare le <b>Foto</b> o i <b>Testi</b>. I sei lavori sono gli stessi in Home e in Portfolio: cambiati in una pagina, cambiano anche nell'altra. Le modifiche si vedono online entro qualche minuto dal salvataggio. Questa guida si riapre quando vuoi dal pulsante <b>Guida</b> in alto. Clicca una schermata per ingrandirla. Dal telefono funziona allo stesso modo: al posto del clic si tocca con il dito.</p>
   </div>
   <div class="g-piede"><button class="btn pri" type="button" id="g-ok">Ho capito</button></div>
 </dialog>
@@ -700,7 +700,9 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
      { t: titolo, galleria: nome in data/gallerie.json } elenco da riordinare (uguale a scripts/genera_contenuti.py)
      { t: titolo, nota: testo } solo una spiegazione */
   var MENU = 'menu';
-  // Nemesi Web è una pagina sola (index.html): le foto sono quelle dei sei lavori, che si vedono anche sulla lastra 3D
+  /* OGNI PAGINA HTML DEL SITO VA AGGIUNTA QUI (foto, testi e, se ci sono, video), anche quelle aggiunte dopo.
+     Le foto e i testi che una pagina ripete da un'altra (es. Portfolio ripete i lavori della Home) compaiono
+     anche nella sua scheda: l'area legge la pagina vera e vede quali data-testo e data-slot contiene (PRESENTI). */
   var PAGINE = [
     ['index.html', 'Home', 'Home (la pagina del sito)', [
       { t: 'Siti', slots: ['lavoro-rainink', 'lavoro-olimp'] },
@@ -708,6 +710,12 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       { t: 'App', slots: ['lavoro-word', 'lavoro-excel'] },
       { t: 'Giochi', slots: ['lavoro-metalgear', 'lavoro-radente'] },
       { t: 'Studio', nota: 'La mappa dello studio (dallo spazio fino a via dello Scalo) non ha foto da cambiare: i suoi testi sono in Testi.' }]],
+    // pagina ferma con tutti i lavori (dalla 3.24): foto e testi dei lavori sono gli stessi della Home
+    ['portfolio.html', 'Portfolio', 'Portfolio (tutti i lavori)', [
+      { t: 'Siti', slots: ['lavoro-rainink', 'lavoro-olimp'] },
+      { t: 'App', slots: ['lavoro-word', 'lavoro-excel'] },
+      { t: 'Giochi', slots: ['lavoro-metalgear', 'lavoro-radente'] },
+      { t: 'Le foto valgono anche nella Home', nota: 'I sei lavori sono gli stessi della Home: una foto o un testo dei lavori cambiato qui cambia anche lì, e viceversa. Il titolo in cima alla pagina è solo di Portfolio: è in Testi.' }]],
     // il sottomenu Portfolio della barra in alto
     [MENU, 'Menu', 'Menu della barra in alto', [
       { t: 'Che cosa si cambia qui', nota: 'Le voci del menu che si apre da Portfolio (Siti, App, Giochi): si cambiano in Testi. Sono le stesse sul computer e su tablet e telefono. Le voci principali della barra (Portfolio, Studio, Tool, Contattaci) e dove porta il clic non si cambiano.' }]]
@@ -752,9 +760,31 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       .then(function () { $('entra').disabled = false; $('entra').textContent = 'Entra'; });
   };
 
+  /* testi e foto che si vedono davvero in ogni pagina (letti dalle pagine del sito): così una pagina che ripete
+     i contenuti di un'altra li mostra anche nella sua scheda. Se la lettura non riesce, restano quelli della pagina. */
+  var PRESENTI = {};
+  function leggiPagine() {
+    return Promise.all(PAGINE.filter(function (p) { return p[0] !== MENU; }).map(function (p) {
+      return fetch(new URL(p[0], location.href).href, { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.text() : ''; })
+        .then(function (h) {
+          var d = new DOMParser().parseFromString(h, 'text/html'), s = {};
+          [].forEach.call(d.querySelectorAll('[data-testo]'), function (e) { s[e.getAttribute('data-testo')] = true; });
+          [].forEach.call(d.querySelectorAll('[data-slot]'), function (e) { s['slot:' + e.getAttribute('data-slot')] = true; });
+          PRESENTI[p[0]] = s;
+        }).catch(function () {});
+    }));
+  }
+  // il testo si vede nella pagina pag? (il menu ha la sua scheda e non si ripete nelle altre)
+  function inPagina(v, pag) { return v.pagina === pag || (v.pagina !== MENU && pag !== MENU && !!(PRESENTI[pag] && PRESENTI[pag][v.id])); }
+  function pagineDel(v) { return PAGINE.filter(function (p) { return inPagina(v, p[0]); }).map(function (p) { return p[0]; }); }
+  // pagina su cui mostrare l'anteprima: quella aperta, se il testo (o la foto) c'è; altrimenti la sua
+  function paginaVista(pagina, chiave) { return tabAttiva !== MENU && PRESENTI[tabAttiva] && PRESENTI[tabAttiva][chiave] ? tabAttiva : pagina; }
+
   function carica() {
     mostraVista('lavori'); centraTab(); stato('lav', 'Caricamento delle foto…');
-    chiama('/contenuti').then(function (d) {
+    Promise.all([chiama('/contenuti'), leggiPagine()]).then(function (r) {
+      var d = r[0];
       gallerie = d.gallerie || {}; immagini = d.immagini || []; testi = d.testi || [];
       disegna(); stato('', ''); aggiornaSpazio();
       if (!mem.get('ar-guida-vista')) apriGuida(); // la prima volta si apre da sola
@@ -798,7 +828,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
      Prima riga: Home, Grafica & Stampa, Servizi, Prodotti, Collezioni. Scegliendo una pagina che ha
      sottopagine compare sotto la riga successiva (es. Collezioni → Matrimoniali → le linee). */
   var GENITORE = {}; // una pagina sola: nessuna sottopagina
-  var ORDINE_PRIMA = ['index.html', MENU];
+  var ORDINE_PRIMA = ['index.html', 'portfolio.html', MENU];
   var NOME = {}; PAGINE.forEach(function (p) { NOME[p[0]] = p[1]; });
   function figli(id) { return PAGINE.filter(function (p) { return (GENITORE[p[0]] || '') === id; }).map(function (p) { return p[0]; }); }
   function catena(id) { var c = [id]; while (GENITORE[c[0]]) c.unshift(GENITORE[c[0]]); return c; }
@@ -1002,15 +1032,16 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
   }
   // i testi delle pagine sono uno solo per tutti gli schermi; nel menu le linee si vedono solo nell'elenco
   function doveSiVede(v) { return 'Computer, tablet e telefono'; } // Nemesi Web: le voci del sottomenu Portfolio sono le stesse su tutti gli schermi
-  function cartaTesto(v) {
-    var li = document.createElement('li'); li.className = 'testo'; li.tabIndex = 0; li.id = 'tx-' + v.id;
+  function cartaTesto(v, pag) {
+    var li = document.createElement('li'); li.className = 'testo'; li.tabIndex = 0; li.id = 'tx-' + v.id + (pag && pag !== v.pagina ? '-' + pag : '');
     li.setAttribute('aria-label', v.descrizione + ': ' + v.testo.slice(0, 80) + '. Premi Invio per modificarlo');
     var tx = document.createElement('div');
     var b = document.createElement('b'); b.textContent = v.descrizione + ('link' in v ? ' ' : '');
     if ('link' in v) { var l = document.createElement('span'); l.className = 'dove-link'; l.textContent = '→ ' + v.link; b.appendChild(l); }
     var q = document.createElement('div'); q.className = 'anteprima-testo'; q.innerHTML = htmlTesto(v.testo, v.tipo !== 'semplice' && !('link' in v));
     var righe = document.createElement('div'); righe.className = 'coppia-righe';
-    var e = document.createElement('span'); e.className = 'dove-schermo'; e.textContent = doveSiVede(v);
+    var altre = pagineDel(v).filter(function (x) { return x !== pag; }).map(function (x) { return NOME[x] || x; });
+    var e = document.createElement('span'); e.className = 'dove-schermo'; e.textContent = doveSiVede(v) + (altre.length ? ' · uguale anche in ' + altre.join(', ') : '');
     righe.appendChild(e); righe.appendChild(q);
     tx.appendChild(b); tx.appendChild(righe);
     var bt = document.createElement('span'); bt.className = 'btn'; bt.textContent = 'Modifica';
@@ -1025,8 +1056,9 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     PAGINE.forEach(function (p) {
       var ol = $('testi-' + p[0]); ol.innerHTML = '';
       var sezioni = [], per = {};
-      testi.forEach(function (v) {
-        if (v.pagina !== p[0]) return;
+      // prima i testi della pagina stessa (in cima), poi quelli ripresi da altre pagine
+      testi.filter(function (v) { return v.pagina === p[0]; }).concat(testi.filter(function (v) { return v.pagina !== p[0]; })).forEach(function (v) {
+        if (!inPagina(v, p[0])) return;
         if (!per[v.sezione]) { per[v.sezione] = []; sezioni.push(v.sezione); }
         per[v.sezione].push(v);
       });
@@ -1039,12 +1071,12 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
         var u = document.createElement('ul'); u.className = 'testi';
         per[nome].forEach(function (v) {
           var g = COPPIE[v.id];
-          if (!g) u.appendChild(cartaTesto(v));
+          if (!g) u.appendChild(cartaTesto(v, p[0]));
           else if (!g.fatta) { g.fatta = true; u.appendChild(cartaCoppia(g)); }
         });
         li.appendChild(h2); li.appendChild(u); ol.appendChild(li);
       });
-      var nT = testi.filter(function (v) { return v.pagina === p[0] && (!COPPIE[v.id] || COPPIE[v.id].voci[0] === v); }).length;
+      var nT = testi.filter(function (v) { return inPagina(v, p[0]) && (!COPPIE[v.id] || COPPIE[v.id].voci[0] === v); }).length;
       $('modo-testi-' + p[0]).querySelector('small').textContent = nT ? '(' + nT + ')' : '';
       $('modo-foto-' + p[0]).querySelector('small').textContent = '';
     });
@@ -1711,7 +1743,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     $('img-alt').value = immAperta.alt || ''; $('err-img').textContent = '';
     $('img-alt-campo').hidden = !!immAperta.decorativa; // foto del menu: la scritta sotto la descrive già
     $('avv-img').hidden = true; mostraRequisiti($('req-img'), $('img-ant').parentNode, formaDi(immAperta.id)); sceltaMisura($('modo-img'), $('img-ant').parentNode, null);
-    vistaSito($('img-ant').parentNode, immAperta.pagina, trovaSlot(immAperta.id));
+    vistaSito($('img-ant').parentNode, paginaVista(immAperta.pagina, 'slot:' + immAperta.id), trovaSlot(immAperta.id));
     var im = $('img-ant'); spegniInquadra(im.parentNode); riserva(im, immAperta.foto, immAperta.provvisoria); im.src = sorgente(immAperta.foto); im.alt = 'Foto attuale'; inquadra(im.parentNode, null);
     var box = $('img-testi'); box.innerHTML = '';
     var vicini = (immAperta.testi || []).map(function (id) { return testi.filter(function (v) { return v.id === id; })[0]; }).filter(Boolean);
@@ -1868,7 +1900,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     txAperto = testi.filter(function (v) { return v.id === id; })[0]; if (!txAperto) return;
     var semplice = txAperto.tipo === 'semplice', link = 'link' in txAperto;
     $('tx-t').textContent = txAperto.descrizione;
-    $('tx-dove').textContent = (NOME[txAperto.pagina] || txAperto.pagina) + ' · ' + txAperto.sezione + ' · si vede su: ' + doveSiVede(txAperto).toLowerCase();
+    $('tx-dove').textContent = pagineDel(txAperto).map(function (x) { return NOME[x] || x; }).join(' e ') + ' · ' + txAperto.sezione + ' · si vede su: ' + doveSiVede(txAperto).toLowerCase();
     txEd = editore($('tx-parti'), txAperto, anteprimaTesto);
     if (txEd.campi.length === 1) txEd.primo.id = 'tx-testo';
     $('tx-etichetta').textContent = txEd.campi.length > 1 ? 'Testo (diviso in parti)' : 'Testo';
@@ -1927,7 +1959,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     vtFin.forEach(function (fin, k) {
       if (vtStato[k]) vtStato[k].guasto = false;
       vtMsg(k, 'Preparazione dell\'anteprima…');
-      vtPagina(k, v.pagina === MENU ? 'index.html' : v.pagina).then(function (d) { // menu: uguale in tutte le pagine, si mostra sulla Home
+      vtPagina(k, v.pagina === MENU ? 'index.html' : paginaVista(v.pagina, v.id)).then(function (d) { // menu: uguale in tutte le pagine, si mostra sulla Home
         if (vtVoce !== v || !dtx.open) return;
         var c = vtStato[k];
         if (c.el) { c.el.innerHTML = c.el._vtOrig; c.el.style.outline = ''; c.el.style.outlineOffset = ''; c.el = null; }
