@@ -248,7 +248,7 @@ async function leggiJson(env, percorso, sha) {
 /* ---------- salvataggio ---------- */
 
 /**
- * Corpo: { gallerie: { "linea-fashion": [ {foto, titolo, alt?, provvisoria?} ], … } (facoltativo:
+ * Corpo: { gallerie: { "portfolio-siti": [ {foto, titolo, alt?, provvisoria?, descrizione?, link?} ], … } (facoltativo:
  *          solo le gallerie che già esistono in data/gallerie.json),
  *         immagini: [ {id, foto, alt} ] (facoltativo), testi: [ {id, testo, link?} ] (facoltativo),
  *         nuoveFoto: { "nuova:ID": "base64…" }, messaggio }
@@ -293,6 +293,14 @@ async function salva(request, env, cors) {
         const o = { foto, titolo };
         const alt = pulisci(v && v.alt, 200);
         if (alt) o.alt = alt;
+        // lavori aggiunti al Portfolio (dalla 3.36): descrizione sotto il nome e indirizzo del lavoro
+        const descr = pulisci(v && v.descrizione, 120);
+        if (descr) o.descrizione = descr;
+        const link = String((v && v.link) || "").trim();
+        if (link) {
+          if (link.length > 300 || !/^https?:\/\/[^\s<>"']+$/.test(link)) throw errore(`Indirizzo non valido (n. ${i + 1}): deve iniziare con https://`, 400);
+          o.link = link;
+        }
         const prov = String((v && v.provvisoria) || "");
         if (prov && FOTO_VALIDA.test(prov) && !(foto in percorsi)) o.provvisoria = prov;
         return o;

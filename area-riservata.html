@@ -168,6 +168,17 @@ body.selezione .card:not(.scelta),body.selezione .aggiungi,body.selezione .slot{
 body.selezione .card:not(.scelta){cursor:pointer}
 body.selezione .blocchi{padding-bottom:220px}
 #blocchi-port .griglia{padding-bottom:8px}
+/* Portfolio (dalla 3.36): lavori fissi, lavori aggiunti e + su due colonne, come in portfolio.html */
+@media (min-width:760px){.slots.due{grid-template-columns:1fr 1fr}}
+.slots .card.lav{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center;padding:12px;overflow:visible}
+.slots .card.lav .ph{border-radius:3px;overflow:hidden}
+.slots .card.lav .n{display:none}
+.slots .card.lav .tx{padding:0;min-width:0}
+.slots .card.lav b{font-size:16px;margin-bottom:10px}
+.slots .card.lav span{margin-bottom:10px}
+.slots .card.lav span.btn{display:inline-flex;min-height:38px;font-size:14px;margin:0;pointer-events:none}
+.slots .aggiungi button{min-height:114px;height:100%;flex-direction:row}
+@media (max-width:480px){.slots .card.lav{grid-template-columns:96px 1fr;gap:12px}}
 .blocchi h2 small{font-size:.6em;font-weight:400;color:var(--mute);letter-spacing:0;text-transform:none}
 /* barra della foto selezionata */
 .posiziona{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));z-index:25;width:min(560px,100% - 24px);transform:translateX(-50%);
@@ -513,8 +524,16 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     <div class="requisiti" id="req-scheda"></div>
     <div class="modo-foto" id="modo-scheda" role="radiogroup" aria-label="Misura della foto" hidden></div>
     <div class="campo">
-      <label for="titolo">Titolo <span class="facoltativo">(il nome del modello, scritto sotto la foto)</span></label>
+      <label for="titolo" id="titolo-l">Titolo <span class="facoltativo">(il nome del modello, scritto sotto la foto)</span></label>
       <input type="text" id="titolo" maxlength="80" required placeholder="Es. Modello Flower">
+    </div>
+    <div class="campo" id="campo-descr" hidden>
+      <label for="descr">Descrizione <span class="facoltativo">(una riga accanto al nome)</span></label>
+      <input type="text" id="descr" maxlength="120" placeholder="Es. Studio di tatuaggi a Montelupone">
+    </div>
+    <div class="campo" id="campo-link" hidden>
+      <label for="link-lav">Indirizzo <span class="facoltativo">(facoltativo: dove porta la foto)</span></label>
+      <input type="text" id="link-lav" maxlength="300" placeholder="https://…" inputmode="url" autocapitalize="off" autocomplete="off" spellcheck="false">
     </div>
     <p class="errore" id="err-scheda" role="alert"></p>
     <div class="azioni">
@@ -704,10 +723,10 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       { t: 'Studio', nota: 'La mappa dello studio (dallo spazio fino a via dello Scalo) non ha foto da cambiare: i suoi testi sono in Testi.' }]],
     // pagina ferma con tutti i lavori (dalla 3.24): foto e testi dei lavori sono gli stessi della Home
     ['portfolio.html', 'Portfolio', 'Portfolio (tutti i lavori)', [
-      { t: 'Siti', slots: ['lavoro-rainink', 'lavoro-olimp'] },
-      { t: 'App', slots: ['lavoro-word', 'lavoro-excel'] },
-      { t: 'Giochi', slots: ['lavoro-metalgear', 'lavoro-radente'] },
-      { t: 'Le foto valgono anche nella Home', nota: 'I sei lavori sono gli stessi della Home: una foto o un testo dei lavori cambiato qui cambia anche lì, e viceversa. Il titolo in cima alla pagina è solo di Portfolio: è in Testi.' }]]
+      { t: 'Siti', slots: ['lavoro-rainink', 'lavoro-olimp'], galleria: 'portfolio-siti', lavori: 'un sito' },
+      { t: 'App', slots: ['lavoro-word', 'lavoro-excel'], galleria: 'portfolio-app', lavori: 'un\'app' },
+      { t: 'Giochi', slots: ['lavoro-metalgear', 'lavoro-radente'], galleria: 'portfolio-giochi', lavori: 'un gioco' },
+      { t: 'Lavori della Home e lavori aggiunti', nota: 'I primi sei lavori sono gli stessi della Home: una foto o un testo cambiato qui cambia anche lì, e viceversa. I lavori aggiunti con il + si vedono solo in questa pagina, sotto gli altri del loro capitolo, sempre su due colonne; i numeri si rifanno da soli di fila. Il titolo in cima alla pagina è in Testi.' }]]
   ];
 
   /* ---------- chiamate al servizio ---------- */
@@ -852,8 +871,13 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       h2.appendChild(document.createTextNode(bl.t));
       li.appendChild(h2);
       if (bl.nota) { var n = document.createElement('p'); n.className = 'nota-pw'; n.textContent = bl.nota; li.appendChild(n); }
-      if (bl.slots) { var u = document.createElement('ul'); u.className = 'slots'; u.dataset.slots = bl.slots.join(' '); li.appendChild(u); }
-      if (bl.galleria) {
+      if (bl.slots && bl.galleria) { // Portfolio: i lavori fissi, poi quelli aggiunti e il + (dalla 3.36)
+        var c2 = document.createElement('small'); c2.id = 'conta-' + bl.galleria; h2.appendChild(document.createTextNode(' ')); h2.appendChild(c2);
+        var u2 = document.createElement('ul'); u2.className = 'slots due'; u2.id = 'gal-' + bl.galleria; u2.dataset.slots = bl.slots.join(' '); li.appendChild(u2);
+        SEZIONI[bl.galleria] = { id: u2.id, lista: bl.galleria, pagina: p[0], nome: p[1] + ' · ' + bl.t, capitolo: bl.t, accetta: SOLO_FOTO,
+          lavori: bl.lavori, fissi: bl.slots, trova: trovaSlot(bl.slots[0]) };
+      } else if (bl.slots) { var u = document.createElement('ul'); u.className = 'slots'; u.dataset.slots = bl.slots.join(' '); li.appendChild(u); }
+      else if (bl.galleria) {
         var c = document.createElement('small'); c.id = 'conta-' + bl.galleria; h2.appendChild(document.createTextNode(' ')); h2.appendChild(c);
         var g = document.createElement('ul'); g.className = 'griglia'; g.id = 'gal-' + bl.galleria; li.appendChild(g);
         SEZIONI[bl.galleria] = { id: g.id, lista: bl.galleria, pagina: p[0], nome: p[1] + ' · ' + bl.t, accetta: SOLO_FOTO };
@@ -911,7 +935,20 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
   function membri(sez) { return elenco(sez).map(function (x, i) { return i; }); }
   function posto(sez, x) { return elenco(sez).indexOf(x) + 1; }
 
+  /* Portfolio: lavori numerati di fila nell'ordine della pagina (fissi e aggiunti), come in portfolio.html */
+  function numeriLavori() {
+    var m = { slot: {}, gal: new Map() }, n = 0;
+    Object.keys(SEZIONI).forEach(function (g) {
+      var z = SEZIONI[g]; if (!z.lavori) return;
+      z.fissi.forEach(function (id) { m.slot[id] = ++n; });
+      elenco(z).forEach(function (x) { m.gal.set(x, ++n); });
+    });
+    return m;
+  }
+  function duecifre(n) { return (n < 10 ? '0' : '') + n; }
+  var NUMERI = { slot: {}, gal: new Map() };
   function cartaLavoro(sez, x, numero) {
+    if (sez.lavori) return cartaAggiunto(sez, x, numero);
     var li = document.createElement('li'); li.className = 'card'; li.tabIndex = 0;
     var ph = document.createElement('div'); ph.className = 'ph';
     var im = document.createElement('img'); im.alt = ''; im.loading = 'lazy'; riserva(im, x.foto, x.provvisoria); im.src = sorgente(x.foto);
@@ -930,7 +967,27 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     li.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tocca(); } };
     return li;
   }
-  function cartaImmagine(v) {
+  // lavoro aggiunto al Portfolio: si presenta come i lavori fissi (foto, nome, numero e capitolo)
+  function cartaAggiunto(sez, x, numero) {
+    var li = document.createElement('li'); li.className = 'card lav'; li.tabIndex = 0;
+    var ph = document.createElement('div'); ph.className = 'ph';
+    var im = document.createElement('img'); im.alt = ''; im.loading = 'lazy'; riserva(im, x.foto, x.provvisoria); im.src = sorgente(x.foto);
+    ph.appendChild(im); li.appendChild(ph);
+    var n = document.createElement('span'); n.className = 'n'; n.textContent = numero; li.appendChild(n);
+    var tx = document.createElement('div'); tx.className = 'tx';
+    var b = document.createElement('b'); b.textContent = x.titolo;
+    var d = document.createElement('span'); d.textContent = 'Lavoro ' + duecifre(NUMERI.gal.get(x) || 0) + ' · ' + sez.capitolo + ' · solo Portfolio';
+    var bt = document.createElement('span'); bt.className = 'btn'; bt.textContent = 'Sposta o modifica';
+    tx.appendChild(b); tx.appendChild(d); tx.appendChild(bt); li.appendChild(tx);
+    var scelta = sel && sel.x === x;
+    if (scelta) li.classList.add('scelta');
+    li.setAttribute('aria-label', x.titolo + (scelta ? ', selezionato: trascinalo dove vuoi' : '. Premi Invio per spostarlo, modificarlo o eliminarlo'));
+    function tocca() { if (trascinato || scelta) return; scegli(sez, x); }
+    li.onclick = tocca;
+    li.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tocca(); } };
+    return li;
+  }
+  function cartaImmagine(v, descr) {
     var li = document.createElement('li'); li.className = 'slot'; li.tabIndex = 0;
     li.setAttribute('aria-label', v.sezione + '. Premi Invio per cambiare la foto');
     var ph = document.createElement('div'); ph.className = 'ph';
@@ -938,9 +995,9 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     ph.appendChild(im);
     var tx = document.createElement('div');
     var b = document.createElement('b'); b.textContent = v.sezione;
-    var d = document.createElement('span'); d.textContent = v.descrizione || '';
+    var d = document.createElement('span'); d.textContent = descr || v.descrizione || '';
     var bt = document.createElement('span'); bt.className = 'btn'; bt.textContent = 'Cambia foto';
-    tx.appendChild(b); if (v.descrizione) tx.appendChild(d); tx.appendChild(bt);
+    tx.appendChild(b); if (d.textContent) tx.appendChild(d); tx.appendChild(bt);
     li.appendChild(ph); li.appendChild(tx);
     li.onclick = function () { if (sel) confermaScelta(); apriImmagine(v.id); };
     li.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); li.onclick(); } };
@@ -956,11 +1013,13 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     li.appendChild(b); return li;
   }
   function disegnaImmagini() {
+    NUMERI = numeriLavori();
     [].forEach.call(document.querySelectorAll('[data-slots]'), function (ul) {
       ul.innerHTML = '';
+      var z = ul.id && SEZIONI[ul.id.slice(4)]; // Portfolio: numero di fila nella pagina
       ul.dataset.slots.split(' ').forEach(function (id) {
         var v = immagini.filter(function (x) { return x.id === id; })[0];
-        if (v) ul.appendChild(cartaImmagine(v));
+        if (v) ul.appendChild(cartaImmagine(v, z && z.lavori ? 'Lavoro ' + duecifre(NUMERI.slot[id]) + ' · ' + z.capitolo : ''));
       });
     });
   }
@@ -1074,10 +1133,10 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
 
   var ordinatori = [], trascinato = false;
   function disegnaSezione(sez, ul) {
-    ul.innerHTML = '';
+    [].slice.call(ul.children).forEach(function (c) { if (!c.classList.contains('slot')) c.remove(); }); // i lavori fissi restano
     var lista = elenco(sez);
     membri(sez).forEach(function (i, k) { ul.appendChild(cartaLavoro(sez, lista[i], k + 1)); });
-    ul.appendChild(cartaAggiungi('Aggiungi una foto', sez));
+    ul.appendChild(cartaAggiungi(sez.lavori ? 'Aggiungi ' + sez.lavori : 'Aggiungi una foto', sez));
     ordinatori.push(new Sortable(ul, {
       // si trascina solo la foto selezionata (le altre sono «filtrate»); trascinamento gestito da
       // Sortable con il puntatore, uguale su telefono e computer
@@ -1086,7 +1145,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       draggable: '.card', filter: '.card:not(.scelta), .aggiungi', preventOnFilter: false,
       ghostClass: 'sortable-ghost', chosenClass: 'sortable-chosen', fallbackClass: 'sortable-drag',
       onStart: function () { trascinato = true; },
-      onMove: function (e) { return !e.related.classList.contains('aggiungi'); }, // il + resta in fondo
+      onMove: function (e) { return !e.related.classList.contains('aggiungi') && !e.related.classList.contains('slot'); }, // il + resta in fondo, i lavori fissi in cima
       onEnd: function (e) {
         setTimeout(function () { trascinato = false; }, 50);
         if (e.oldDraggableIndex === e.newDraggableIndex) return;
@@ -1104,7 +1163,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     Object.keys(SEZIONI).forEach(function (g) {
       var z = SEZIONI[g];
       disegnaSezione(z, $(z.id));
-      $('conta-' + g).textContent = '(' + elenco(z).length + ')';
+      $('conta-' + g).textContent = '(' + (elenco(z).length + (z.fissi ? z.fissi.length : 0)) + ')';
     });
     document.body.classList.toggle('selezione', !!sel);
   }
@@ -1215,6 +1274,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       gal[g] = gallerie[g].map(function (v) {
         var o = { foto: v.foto, titolo: v.titolo };
         if (v.alt) o.alt = v.alt; if (v.provvisoria) o.provvisoria = v.provvisoria;
+        if (v.descrizione) o.descrizione = v.descrizione; if (v.link) o.link = v.link;
         return o;
       });
     });
@@ -1665,7 +1725,12 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
   function apriScheda(sez, x) {
     schSez = sez; schX = x; fotoScelta = null; confermaElimina = false;
     var nuovo = !x || (sel && sel.nuovo && sel.x === x);
-    $('scheda-t').textContent = (nuovo ? 'Nuova foto · ' : 'Modifica · ') + sez.nome;
+    $('scheda-t').textContent = (nuovo ? (sez.lavori ? 'Nuovo lavoro · ' : 'Nuova foto · ') : 'Modifica · ') + sez.nome;
+    // lavori del Portfolio: nome, descrizione e indirizzo
+    $('campo-descr').hidden = $('campo-link').hidden = !sez.lavori;
+    $('titolo-l').innerHTML = sez.lavori ? 'Nome del lavoro <span class="facoltativo">(scritto sotto la foto)</span>' : 'Titolo <span class="facoltativo">(il nome del modello, scritto sotto la foto)</span>';
+    $('titolo').placeholder = sez.lavori ? 'Es. Rain Ink Tattoo' : 'Es. Modello Flower';
+    $('descr').value = x && x.descrizione || ''; $('link-lav').value = x && x.link || '';
     $('cambia').textContent = 'Cambia foto';
     $('avanza').textContent = '';
     $('conferma').textContent = x ? 'Salva' : 'Aggiungi';
@@ -1673,7 +1738,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     $('elimina').hidden = !x; $('elimina').textContent = 'Elimina'; $('elimina').classList.remove('conf');
     $('err-scheda').textContent = ''; $('avv-scheda').hidden = true;
     mostraRequisiti($('req-scheda'), $('anteprima').parentNode, formaDi()); sceltaMisura($('modo-scheda'), $('anteprima').parentNode, null);
-    vistaSito($('anteprima').parentNode, sez.pagina, trovaGalleria(sez.lista));
+    vistaSito($('anteprima').parentNode, sez.pagina, sez.trova || trovaGalleria(sez.lista));
     var im = $('anteprima'); spegniInquadra(im.parentNode);
     if (x) { riserva(im, x.foto, x.provvisoria); mostraAnteprima(sorgente(x.foto)); im.alt = 'Foto attuale'; inquadra(im.parentNode, null); } else { mostraAnteprima(null); im.alt = ''; }
     if (!scheda.open) scheda.showModal();
@@ -1691,8 +1756,12 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
   $('f-lavoro').onsubmit = function (e) {
     e.preventDefault();
     var titolo = $('titolo').value.trim();
-    var err = !schX && !fotoScelta ? 'Scegli una foto' : !titolo ? 'Scrivi un titolo' : '';
+    var descr = schSez.lavori ? $('descr').value.replace(/\s+/g, ' ').trim() : '';
+    var link = schSez.lavori ? $('link-lav').value.trim() : '';
+    if (link && !/^https?:\/\//i.test(link)) link = 'https://' + link; // «www.sito.it» basta
+    var err = !schX && !fotoScelta ? 'Scegli una foto' : !titolo ? (schSez.lavori ? 'Scrivi il nome del lavoro' : 'Scrivi un titolo') : '';
     if (err) { $('err-scheda').textContent = err; if (!titolo && fotoScelta) $('titolo').focus(); return; }
+    if (link && (link.length > 300 || !/^https?:\/\/[^\s<>"']+\.[^\s<>"']+$/.test(link))) { $('err-scheda').textContent = 'L\'indirizzo non sembra giusto: scrivilo come https://www.sito.it'; $('link-lav').focus(); return; }
     // si salva esattamente la parte della foto che si vede nell'anteprima
     if (tagliaPrima($('anteprima').parentNode, function (b) { ['conferma', 'annulla', 'cambia'].forEach(function (k) { $(k).disabled = b; }); },
       function (m) { $('err-scheda').textContent = m; },
@@ -1705,6 +1774,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     scheda.close();
     if (!schX) { // foto nuova: in fondo alla galleria, già selezionata per scegliere il posto
       var x = { foto: id, titolo: titolo }, l = elenco(schSez);
+      if (descr) x.descrizione = descr; if (link) x.link = link;
       sel = { sez: schSez, x: x, nuovo: true, nuove: nuove, prima: l.slice() };
       l.push(x); mostraScelta('center'); return;
     }
@@ -1713,6 +1783,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     if (id) { x2.foto = id; delete x2.alt; delete x2.provvisoria; }
     if (titolo !== x2.titolo) delete x2.alt;
     x2.titolo = titolo;
+    if (schSez.lavori) { if (descr) x2.descrizione = descr; else delete x2.descrizione; if (link) x2.link = link; else delete x2.link; }
     if (sel && sel.nuovo && sel.x === x2) { // ancora da salvare: si aggiorna e si continua a posizionarla
       if (nuove) sel.nuove = nuove;
       disegna(); barraScelta(); return;

@@ -2,9 +2,11 @@
 """Nemesi Web: scrive in index.html le foto dei lavori e i testi che si cambiano dall'area riservata
 (copiato da Olimp, skill area-ris).
 
-- data/gallerie.json: le gallerie (Nemesi Web per ora non ne ha: il file è {}). Se un giorno ci saranno,
-  ogni pagina avrà un elenco di {foto, titolo, alt?, provvisoria?} fra <!-- galleria:inizio --> e
-  <!-- galleria:fine -->, come in Olimp.
+- data/gallerie.json: i lavori aggiunti dall'area riservata al Portfolio (dalla 3.36), uno per
+  capitolo: portfolio-siti, portfolio-app, portfolio-giochi, ognuno un elenco di
+  {foto, titolo, descrizione?, link?, provvisoria?}. In portfolio.html vanno fra
+  <!-- portfolio-siti:inizio --> e <!-- portfolio-siti:fine --> (dopo i lavori fissi), poi
+  i numeri dei lavori e delle scorciatoie in cima si rifanno di fila (01, 02, 03…).
 - data/immagini.json: le immagini fisse; ogni <img data-slot="id"> prende foto e testo
   alternativo (e data-fallback se la voce ha «provvisoria»).
 - data/testi.json: i testi delle pagine; ogni elemento con data-testo="id" prende il suo testo.
@@ -21,11 +23,14 @@ Uso:  python3 scripts/genera_contenuti.py           (scrive i file)
 import html, json, os, re, sys
 
 RADICE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-INIZIO, FINE = "<!-- galleria:inizio -->", "<!-- galleria:fine -->"
 
-# galleria (= nome della pagina senza .html) → linea per il testo alternativo e se ha la didascalia.
-# Le stesse gallerie sono in area-riservata.html (GALLERIE).
-GALLERIE = {}  # Nemesi Web: nessuna galleria (le foto sono le 6 dei lavori, fisse)
+# galleria → (pagina, id del capitolo, scritta del link). Le stesse gallerie sono in area-riservata.html (PAGINE).
+GALLERIE = {
+    "portfolio-siti": ("portfolio.html", "siti", "Visita il sito"),
+    "portfolio-app": ("portfolio.html", "app", "Apri l'app"),
+    "portfolio-giochi": ("portfolio.html", "giochi", "Gioca"),
+}
+LINK_LAVORO = re.compile(r"^https?://[^\s<>\"']+$")
 
 # pagine che ripetono una parte di un'altra (dalla 3.24 portfolio.html ripete i lavori di index.html):
 # ricevono le stesse foto e gli stessi testi, quelli che non hanno si saltano senza avviso
@@ -37,30 +42,40 @@ def txt(t): return html.escape(t, quote=False)
 def esiste(foto): return os.path.exists(os.path.join(RADICE, foto.split("?")[0]))
 
 
-def alt_predefinito(titolo, linea):
-    if not linea:
-        return titolo
-    modello = titolo if titolo.lower().startswith("modello") else "Modello " + titolo
-    return f"{modello} della {linea}"
-
-
 def righe_galleria(nome, voci, rientro):
-    linea, didascalia = GALLERIE[nome]
+    """lavori aggiunti: stesso markup dei lavori fissi di portfolio.html (il numero lo mette rinumera)"""
+    scritta = GALLERIE[nome][2]
     righe = []
     for n, v in enumerate(voci, 1):
         foto = str(v.get("foto") or "").strip().lstrip("/")
         titolo = str(v.get("titolo") or "").strip()
+        desc = str(v.get("descrizione") or "").strip()
+        link = str(v.get("link") or "").strip()
         prov = str(v.get("provvisoria") or "").strip().lstrip("/")
         if not foto or not titolo:
-            print(f"avviso: {nome} n. {n} saltata (manca la foto o il titolo)", file=sys.stderr)
+            print(f"avviso: {nome} n. {n} saltato (manca la foto o il nome)", file=sys.stderr)
             continue
         if not esiste(foto) and not (prov and esiste(prov)):
-            print(f"avviso: {nome} n. {n} saltata, la foto {foto} non esiste", file=sys.stderr)
+            print(f"avviso: {nome} n. {n} saltato, la foto {foto} non esiste", file=sys.stderr)
             continue
-        alt = str(v.get("alt") or "").strip() or alt_predefinito(titolo, linea)
+        if link and not LINK_LAVORO.match(link):
+            print(f"avviso: {nome} n. {n}, indirizzo non valido: {link}", file=sys.stderr)
+            link = ""
         fb = f' data-fallback="{att(prov)}"' if prov else ""
-        cap = f"<figcaption>{txt(titolo)}</figcaption>" if didascalia else ""
-        righe.append(f'{rientro}<figure class="ph"><img src="{att(foto)}"{fb} alt="{att(alt)}" loading="lazy">{cap}</figure>')
+        img = f'<img src="{att(foto)}"{fb} alt="" width="1600" height="900" loading="lazy" decoding="async">'
+        etichetta = titolo + (f", {desc[:1].lower() + desc[1:]}" if desc else "")
+        if link:
+            schermo = (f'<a class="schermo" href="{att(link)}" target="_blank" rel="noopener" '
+                       f'aria-label="{att(etichetta)}: {att(scritta[:1].lower() + scritta[1:])}">{img}</a>')
+            azione = f'<a class="azione" href="{att(link)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">{txt(scritta)} ↗</a>'
+        else:
+            schermo = f'<div class="schermo" role="img" aria-label="{att(etichetta)}">{img}</div>'
+            azione = ""
+        d = f'<span class="desc">{txt(desc)}</span>' if desc else ""
+        righe += [f'{rientro}<li class="lavoro aggiunto">',
+                  f'{rientro}  {schermo}',
+                  f'{rientro}  <p class="didascalia"><span class="d-in"><span class="num">00</span><span class="nome">{txt(titolo)}</span>{d}{azione}</span></p>',
+                  f'{rientro}</li>']
     return righe
 
 
@@ -71,13 +86,48 @@ def gallerie(pagine):
         if nome not in GALLERIE:
             print(f"avviso: galleria sconosciuta {nome}", file=sys.stderr)
             continue
-        pagina = nome + ".html"
+        pagina = GALLERIE[nome][0]
         s = pagine.leggi(pagina)
-        a, b = s.index(INIZIO), s.index(FINE)
+        inizio, fine = f"<!-- {nome}:inizio -->", f"<!-- {nome}:fine -->"
+        if inizio not in s or fine not in s:
+            print(f"avviso: in {pagina} mancano i segni della galleria {nome}", file=sys.stderr)
+            continue
+        a, b = s.index(inizio), s.index(fine)
         rientro = s[s.rfind("\n", 0, a) + 1:a]
-        a += len(INIZIO)
-        nuovo = s[:a] + "\n" + "\n".join(righe_galleria(nome, voci, rientro)) + "\n" + rientro + s[b:]
+        a += len(inizio)
+        corpo = righe_galleria(nome, voci, rientro)
+        nuovo = s[:a] + ("\n" + "\n".join(corpo) if corpo else "") + "\n" + rientro + s[b:]
         pagine.scrivi(pagina, nuovo)
+    rinumera(pagine)
+
+
+def rinumera(pagine):
+    """portfolio.html: i lavori si numerano di fila (01, 02…) nell'ordine della pagina e le scorciatoie
+    in cima dicono quali numeri ha ogni capitolo (01 · 02 · 03, oppure 01 … 05 se sono più di tre)"""
+    nome = "portfolio.html"
+    if not os.path.exists(os.path.join(RADICE, nome)):
+        return
+    s = pagine.leggi(nome)
+    n, capitoli = 0, []
+    for cap in [g[1] for g in GALLERIE.values() if g[0] == nome]:
+        a = s.find(f'<section class="capitolo" id="{cap}"')
+        if a < 0:
+            continue
+        b = s.index("</section>", a)
+        pezzo, primo = s[a:b], n + 1
+
+        def numero(m):
+            nonlocal n
+            n += 1
+            return f'<span class="num">{n:02d}</span>'
+        pezzo = re.sub(r'<span class="num">\d+</span>', numero, pezzo)
+        s = s[:a] + pezzo + s[b:]
+        capitoli.append((cap, primo, n))
+    for cap, da, a_ in capitoli:
+        # fino a tre lavori tutti i numeri (01 · 02 · 03), di più il primo e l'ultimo (01 … 05): niente lineette
+        quale = " · ".join(f"{k:02d}" for k in range(da, a_ + 1)) if a_ - da < 3 else f"{da:02d} … {a_:02d}"
+        s = re.sub(rf'(<a href="#{cap}"[^>]*><span>)[^<]*(</span>)', lambda m: m.group(1) + quale + m.group(2), s, count=1)
+    pagine.scrivi(nome, s)
 
 
 def immagini(pagine):
