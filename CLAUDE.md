@@ -95,6 +95,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - Rispettare `prefers-reduced-motion`: è già gestito con la pagina statica completa.
 
 ## In sospeso
+- Google: verificare il sito in Search Console (tag HTML da mettere nell'`<head>` di `index.html`), inviare `sitemap.xml`, chiedere l'indicizzazione; manca un'immagine `og:image` per le anteprime.
 - Area riservata: provare dal vero accesso, salvataggio su GitHub e cambio password; il Worker si aggiorna con `npx wrangler deploy` da `worker/` (Node in `~/.local/lib/node/bin`).
 - Email `ciao@nemesi.studio`: dominio non verificato, da sostituire con quella vera.
 - Mappa: manca una pagina privacy dove citare Esri (le foto satellitari si caricano solo dopo «Mostra la mappa»).

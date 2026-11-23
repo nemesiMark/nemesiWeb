@@ -392,6 +392,11 @@
 - Area riservata solo HTTPS: «Enforce HTTPS» è attivo su GitHub Pages (certificato approvato per nemesiweb.it e www.nemesiweb.it), tolte le origini `http://` da `ORIGINS` in `worker/wrangler.toml`.
 - Il Worker rifiuta le richieste arrivate in http («Usa l'indirizzo sicuro (https)», 403) e quelle dal browser con un'origine non ammessa (403); da `ORIGINS` prende solo gli indirizzi `https://`. Ripubblicato e provato: http 403, https da nemesiweb.it e www ammesso, origine http o estranea 403.
 
+### 3.33 — 23/11/2026
+- Per farsi trovare da Google: `robots.txt` (tutto aperto tranne `area-riservata.html`, indica la sitemap) e `sitemap.xml` (home e portfolio su https://nemesiweb.it/).
+- In `index.html` e `portfolio.html`: link `canonical` all'indirizzo su nemesiweb.it, meta Open Graph (titolo, descrizione, indirizzo, lingua) e `twitter:card`. Descrizione della home aggiornata con Olimp.
+- Da fare: verifica del sito in Google Search Console (tag HTML), invio della sitemap, immagine per le anteprime (`og:image`).
+
 ## Area riservata
 
 Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e funzioni); cambiano nome, logo, caratteri del sito (Inter Tight, Geist), barra in alto nera come quella del sito e colore d'accento: il verde scuro del logo `#8ECE05` (più scuro `#79B003`), con il testo scuro `#0B1200` sopra (il bianco non avrebbe contrasto). Prefisso di localStorage `nemesiweb-`.
