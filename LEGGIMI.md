@@ -412,6 +412,10 @@
 - Numeri rifatti di fila in `portfolio.html` (un sito in più: Word diventa 04 e così via; nella Home i numeri restano 01–06). Le scorciatoie in cima mostrano i numeri di ogni capitolo (fino a tre tutti, «01 · 02 · 03», di più «01 … 05»).
 - Dati in `data/gallerie.json` (`portfolio-siti`, `portfolio-app`, `portfolio-giochi`: `{foto, titolo, descrizione?, link?}`); `scripts/genera_contenuti.py` li scrive fra i segni `<!-- portfolio-…:inizio -->` e `:fine -->` e rinumera. Il Worker accetta e controlla `descrizione` e `link` (va ripubblicato con `npx wrangler deploy`).
 
+### 3.37 — 23/11/2026
+- Area riservata, scheda **Portfolio**: anche i sei lavori della Home si spostano, si modificano e si tolgono, come quelli aggiunti («Sposta o modifica»). «Modifica o elimina» apre la finestra della foto della Home (foto, nome, descrizione: cambiano anche nella Home) con in più **Togli dal Portfolio**: il lavoro sparisce solo da `portfolio.html` e resta nella Home. Un lavoro della Home tolto si rimette con il riquadro **Rimetti «…» (dalla Home)** in fondo al suo capitolo.
+- Dati: in `data/gallerie.json` i lavori della Home sono `{"rif": "lavoro-rainink"}` nell'ordine scelto; `scripts/genera_contenuti.py` copia il loro `<li>` da `index.html`, quindi in `portfolio.html` tutti i lavori stanno fra i segni `<!-- portfolio-…:inizio/fine -->`. Il Worker accetta i `rif` (ripubblicato).
+
 ## Area riservata
 
 Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e funzioni); cambiano nome, logo, caratteri del sito (Inter Tight, Geist), barra in alto nera come quella del sito e colore d'accento: il verde scuro del logo `#8ECE05` (più scuro `#79B003`), con il testo scuro `#0B1200` sopra (il bianco non avrebbe contrasto). Prefisso di localStorage `nemesiweb-`.

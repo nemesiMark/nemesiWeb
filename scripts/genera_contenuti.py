@@ -4,8 +4,9 @@
 
 - data/gallerie.json: i lavori aggiunti dall'area riservata al Portfolio (dalla 3.36), uno per
   capitolo: portfolio-siti, portfolio-app, portfolio-giochi, ognuno un elenco di
-  {foto, titolo, descrizione?, link?, provvisoria?}. In portfolio.html vanno fra
-  <!-- portfolio-siti:inizio --> e <!-- portfolio-siti:fine --> (dopo i lavori fissi), poi
+  {foto, titolo, descrizione?, link?, provvisoria?} oppure {rif: "lavoro-rainink"} per un lavoro della Home
+  (dalla 3.37: si sposta o si toglie dal Portfolio, foto e testi restano della Home). In portfolio.html vanno fra
+  <!-- portfolio-siti:inizio --> e <!-- portfolio-siti:fine -->, poi
   i numeri dei lavori e delle scorciatoie in cima si rifanno di fila (01, 02, 03…).
 - data/immagini.json: le immagini fisse; ogni <img data-slot="id"> prende foto e testo
   alternativo (e data-fallback se la voce ha «provvisoria»).
@@ -42,11 +43,32 @@ def txt(t): return html.escape(t, quote=False)
 def esiste(foto): return os.path.exists(os.path.join(RADICE, foto.split("?")[0]))
 
 
-def righe_galleria(nome, voci, rientro):
-    """lavori aggiunti: stesso markup dei lavori fissi di portfolio.html (il numero lo mette rinumera)"""
+def lavoro_home(pagine, rif):
+    """il <li class="lavoro"> della Home con la foto data-slot="rif" (righe senza il rientro)"""
+    s = pagine.leggi("index.html")
+    k = s.find(f'data-slot="{rif}"')
+    if k < 0:
+        return None
+    a = s.rfind('<li class="lavoro">', 0, k)
+    b = s.index("</li>", k) + len("</li>")
+    a0 = s.rfind("\n", 0, a) + 1
+    rientro = s[a0:a]
+    return [r[len(rientro):] if r.startswith(rientro) else r.lstrip() for r in s[a0:b].split("\n")]
+
+
+def righe_galleria(pagine, nome, voci, rientro):
+    """lavori del capitolo nell'ordine scelto: {"rif": id} = un lavoro della Home (copiato da index.html,
+    foto e testi restano quelli della Home), gli altri = lavori aggiunti (il numero lo mette rinumera)"""
     scritta = GALLERIE[nome][2]
     righe = []
     for n, v in enumerate(voci, 1):
+        if v.get("rif"):
+            li = lavoro_home(pagine, str(v["rif"]))
+            if li is None:
+                print(f"avviso: {nome} n. {n}, nella Home non c'è il lavoro {v['rif']}", file=sys.stderr)
+            else:
+                righe += [rientro + r for r in li]
+            continue
         foto = str(v.get("foto") or "").strip().lstrip("/")
         titolo = str(v.get("titolo") or "").strip()
         desc = str(v.get("descrizione") or "").strip()
@@ -95,7 +117,7 @@ def gallerie(pagine):
         a, b = s.index(inizio), s.index(fine)
         rientro = s[s.rfind("\n", 0, a) + 1:a]
         a += len(inizio)
-        corpo = righe_galleria(nome, voci, rientro)
+        corpo = righe_galleria(pagine, nome, voci, rientro)
         nuovo = s[:a] + ("\n" + "\n".join(corpo) if corpo else "") + "\n" + rientro + s[b:]
         pagine.scrivi(pagina, nuovo)
     rinumera(pagine)

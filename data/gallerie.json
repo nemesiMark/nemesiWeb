@@ -1,5 +1,26 @@
 {
-  "portfolio-siti": [],
-  "portfolio-app": [],
-  "portfolio-giochi": []
+  "portfolio-siti": [
+    {
+      "rif": "lavoro-rainink"
+    },
+    {
+      "rif": "lavoro-olimp"
+    }
+  ],
+  "portfolio-app": [
+    {
+      "rif": "lavoro-word"
+    },
+    {
+      "rif": "lavoro-excel"
+    }
+  ],
+  "portfolio-giochi": [
+    {
+      "rif": "lavoro-metalgear"
+    },
+    {
+      "rif": "lavoro-radente"
+    }
+  ]
 }

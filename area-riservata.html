@@ -178,6 +178,8 @@ body.selezione .blocchi{padding-bottom:220px}
 .slots .card.lav span{margin-bottom:10px}
 .slots .card.lav span.btn{display:inline-flex;min-height:38px;font-size:14px;margin:0;pointer-events:none}
 .slots .aggiungi button{min-height:114px;height:100%;flex-direction:row}
+.slots .rimetti button{min-height:72px}
+.slots .rimetti .croce{width:40px;height:40px}
 @media (max-width:480px){.slots .card.lav{grid-template-columns:96px 1fr;gap:12px}}
 .blocchi h2 small{font-size:.6em;font-weight:400;color:var(--mute);letter-spacing:0;text-transform:none}
 /* barra della foto selezionata */
@@ -563,6 +565,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     </fieldset>
     <p class="errore" id="err-img" role="alert"></p>
     <div class="azioni">
+      <button class="btn del" type="button" id="img-togli" hidden>Togli dal Portfolio</button>
       <button class="btn" type="button" id="img-annulla">Annulla</button>
       <button class="btn pri" type="submit" id="img-ok">Salva</button>
     </div>
@@ -726,7 +729,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       { t: 'Siti', slots: ['lavoro-rainink', 'lavoro-olimp'], galleria: 'portfolio-siti', lavori: 'un sito' },
       { t: 'App', slots: ['lavoro-word', 'lavoro-excel'], galleria: 'portfolio-app', lavori: 'un\'app' },
       { t: 'Giochi', slots: ['lavoro-metalgear', 'lavoro-radente'], galleria: 'portfolio-giochi', lavori: 'un gioco' },
-      { t: 'Lavori della Home e lavori aggiunti', nota: 'I primi sei lavori sono gli stessi della Home: una foto o un testo cambiato qui cambia anche lì, e viceversa. I lavori aggiunti con il + si vedono solo in questa pagina, sotto gli altri del loro capitolo, sempre su due colonne; i numeri si rifanno da soli di fila. Il titolo in cima alla pagina è in Testi.' }]]
+      { t: 'Lavori della Home e lavori aggiunti', nota: 'Tutti i lavori si spostano, si modificano e si tolgono. I sei lavori della Home (segnati «anche nella Home») hanno la stessa foto e gli stessi testi della Home: cambiati qui cambiano anche lì; tolti da qui restano nella Home e si rimettono con «Rimetti». I lavori aggiunti con il + si vedono solo in questa pagina. Sempre due colonne; i numeri si rifanno da soli di fila. Il titolo in cima alla pagina è in Testi.' }]]
   ];
 
   /* ---------- chiamate al servizio ---------- */
@@ -871,9 +874,9 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       h2.appendChild(document.createTextNode(bl.t));
       li.appendChild(h2);
       if (bl.nota) { var n = document.createElement('p'); n.className = 'nota-pw'; n.textContent = bl.nota; li.appendChild(n); }
-      if (bl.slots && bl.galleria) { // Portfolio: i lavori fissi, poi quelli aggiunti e il + (dalla 3.36)
+      if (bl.slots && bl.galleria) { // Portfolio: lavori della Home ({rif}) e aggiunti in un solo elenco, poi il + (dalla 3.37)
         var c2 = document.createElement('small'); c2.id = 'conta-' + bl.galleria; h2.appendChild(document.createTextNode(' ')); h2.appendChild(c2);
-        var u2 = document.createElement('ul'); u2.className = 'slots due'; u2.id = 'gal-' + bl.galleria; u2.dataset.slots = bl.slots.join(' '); li.appendChild(u2);
+        var u2 = document.createElement('ul'); u2.className = 'slots due'; u2.id = 'gal-' + bl.galleria; li.appendChild(u2);
         SEZIONI[bl.galleria] = { id: u2.id, lista: bl.galleria, pagina: p[0], nome: p[1] + ' · ' + bl.t, capitolo: bl.t, accetta: SOLO_FOTO,
           lavori: bl.lavori, fissi: bl.slots, trova: trovaSlot(bl.slots[0]) };
       } else if (bl.slots) { var u = document.createElement('ul'); u.className = 'slots'; u.dataset.slots = bl.slots.join(' '); li.appendChild(u); }
@@ -940,12 +943,15 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     var m = { slot: {}, gal: new Map() }, n = 0;
     Object.keys(SEZIONI).forEach(function (g) {
       var z = SEZIONI[g]; if (!z.lavori) return;
-      z.fissi.forEach(function (id) { m.slot[id] = ++n; });
       elenco(z).forEach(function (x) { m.gal.set(x, ++n); });
     });
     return m;
   }
   function duecifre(n) { return (n < 10 ? '0' : '') + n; }
+  // lavoro della Home nell'elenco del Portfolio: foto e nome sono quelli della Home
+  function slotDi(x) { return x && x.rif ? immagini.filter(function (v) { return v.id === x.rif; })[0] : null; }
+  function nomeSlot(v) { var t = v && v.testi && testi.filter(function (y) { return y.id === v.testi[0]; })[0]; return t ? t.testo : v ? v.sezione : ''; }
+  function nomeVoce(x) { return x.rif ? nomeSlot(slotDi(x)) || x.rif : x.titolo; }
   var NUMERI = { slot: {}, gal: new Map() };
   function cartaLavoro(sez, x, numero) {
     if (sez.lavori) return cartaAggiunto(sez, x, numero);
@@ -971,17 +977,18 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
   function cartaAggiunto(sez, x, numero) {
     var li = document.createElement('li'); li.className = 'card lav'; li.tabIndex = 0;
     var ph = document.createElement('div'); ph.className = 'ph';
-    var im = document.createElement('img'); im.alt = ''; im.loading = 'lazy'; riserva(im, x.foto, x.provvisoria); im.src = sorgente(x.foto);
+    var v = slotDi(x), foto = v ? v.foto : x.foto;
+    var im = document.createElement('img'); im.alt = ''; im.loading = 'lazy'; riserva(im, foto, v ? v.provvisoria : x.provvisoria); im.src = sorgente(foto);
     ph.appendChild(im); li.appendChild(ph);
     var n = document.createElement('span'); n.className = 'n'; n.textContent = numero; li.appendChild(n);
     var tx = document.createElement('div'); tx.className = 'tx';
-    var b = document.createElement('b'); b.textContent = x.titolo;
-    var d = document.createElement('span'); d.textContent = 'Lavoro ' + duecifre(NUMERI.gal.get(x) || 0) + ' · ' + sez.capitolo + ' · solo Portfolio';
+    var b = document.createElement('b'); b.textContent = nomeVoce(x);
+    var d = document.createElement('span'); d.textContent = 'Lavoro ' + duecifre(NUMERI.gal.get(x) || 0) + ' · ' + sez.capitolo + (x.rif ? ' · anche nella Home' : ' · solo Portfolio');
     var bt = document.createElement('span'); bt.className = 'btn'; bt.textContent = 'Sposta o modifica';
     tx.appendChild(b); tx.appendChild(d); tx.appendChild(bt); li.appendChild(tx);
     var scelta = sel && sel.x === x;
     if (scelta) li.classList.add('scelta');
-    li.setAttribute('aria-label', x.titolo + (scelta ? ', selezionato: trascinalo dove vuoi' : '. Premi Invio per spostarlo, modificarlo o eliminarlo'));
+    li.setAttribute('aria-label', nomeVoce(x) + (scelta ? ', selezionato: trascinalo dove vuoi' : '. Premi Invio per spostarlo, modificarlo o toglierlo'));
     function tocca() { if (trascinato || scelta) return; scegli(sez, x); }
     li.onclick = tocca;
     li.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tocca(); } };
@@ -1137,6 +1144,18 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     var lista = elenco(sez);
     membri(sez).forEach(function (i, k) { ul.appendChild(cartaLavoro(sez, lista[i], k + 1)); });
     ul.appendChild(cartaAggiungi(sez.lavori ? 'Aggiungi ' + sez.lavori : 'Aggiungi una foto', sez));
+    if (sez.lavori) sez.fissi.forEach(function (id) { // lavori della Home tolti dal Portfolio: si possono rimettere
+      if (lista.some(function (x) { return x.rif === id; })) return;
+      var c = cartaAggiungi('Rimetti «' + nomeSlot(slotDi({ rif: id })) + '» (dalla Home)', sez);
+      c.classList.add('rimetti');
+      c.querySelector('button').onclick = function () {
+        if (sel) confermaScelta();
+        var x = { rif: id }, l = elenco(sez);
+        sel = { sez: sez, x: x, nuovo: true, nuove: null, prima: l.slice() };
+        l.push(x); mostraScelta('center');
+      };
+      ul.appendChild(c);
+    });
     ordinatori.push(new Sortable(ul, {
       // si trascina solo la foto selezionata (le altre sono «filtrate»); trascinamento gestito da
       // Sortable con il puntatore, uguale su telefono e computer
@@ -1145,7 +1164,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       draggable: '.card', filter: '.card:not(.scelta), .aggiungi', preventOnFilter: false,
       ghostClass: 'sortable-ghost', chosenClass: 'sortable-chosen', fallbackClass: 'sortable-drag',
       onStart: function () { trascinato = true; },
-      onMove: function (e) { return !e.related.classList.contains('aggiungi') && !e.related.classList.contains('slot'); }, // il + resta in fondo, i lavori fissi in cima
+      onMove: function (e) { return !e.related.classList.contains('aggiungi'); }, // il + resta in fondo
       onEnd: function (e) {
         setTimeout(function () { trascinato = false; }, 50);
         if (e.oldDraggableIndex === e.newDraggableIndex) return;
@@ -1163,7 +1182,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     Object.keys(SEZIONI).forEach(function (g) {
       var z = SEZIONI[g];
       disegnaSezione(z, $(z.id));
-      $('conta-' + g).textContent = '(' + (elenco(z).length + (z.fissi ? z.fissi.length : 0)) + ')';
+      $('conta-' + g).textContent = '(' + elenco(z).length + ')';
     });
     document.body.classList.toggle('selezione', !!sel);
   }
@@ -1182,7 +1201,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
   }
   function barraScelta() {
     if (!sel) return;
-    $('sc-t').textContent = '«' + sel.x.titolo + '» · posto ' + posto(sel.sez, sel.x) + ' di ' + membri(sel.sez).length + ' in ' + sel.sez.nome;
+    $('sc-t').textContent = '«' + nomeVoce(sel.x) + '» · posto ' + posto(sel.sez, sel.x) + ' di ' + membri(sel.sez).length + ' in ' + sel.sez.nome;
     $('sc-ok').textContent = sel.nuovo ? 'Conferma e salva' : 'Conferma';
     document.body.classList.toggle('bloccata', cambiato(sel));
   }
@@ -1210,7 +1229,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
   function confermaScelta() {
     if (!sel) return;
     var s = sel, n = posto(s.sez, s.x), mod = cambiato(s); fineScelta();
-    if (mod) salva((s.nuovo ? 'Aggiunto «' : 'Spostato «') + s.x.titolo + '» (' + s.sez.nome + ', posto ' + n + ')', s.nuove);
+    if (mod) salva((s.nuovo ? (s.x.rif ? 'Rimesso «' : 'Aggiunto «') : 'Spostato «') + nomeVoce(s.x) + '» (' + s.sez.nome + ', posto ' + n + ')', s.nuove);
   }
   function annullaScelta() {
     if (!sel) return;
@@ -1219,7 +1238,13 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
   }
   $('sc-ok').onclick = confermaScelta;
   $('sc-annulla').onclick = annullaScelta;
-  $('sc-mod').onclick = function () { apriScheda(sel.sez, sel.x); };
+  $('sc-mod').onclick = function () {
+    if (!sel.x.rif) { apriScheda(sel.sez, sel.x); return; }
+    // lavoro della Home: la finestra della foto della Home (foto, nome, descrizione) con «Togli dal Portfolio»
+    var z = sel.sez, x = sel.x, nuovo = sel.nuovo;
+    if (nuovo) { annullaScelta(); return; } // appena rimesso e non salvato: «Modifica» lo toglie di nuovo
+    confermaScelta(); apriImmagine(x.rif, { sez: z, x: x });
+  };
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && sel && !document.querySelector('dialog[open]')) annullaScelta(); });
   // si avvisa prima di chiudere o ricaricare la pagina se c'è una scelta non confermata o un salvataggio in corso
   window.addEventListener('beforeunload', function (e) { if ((sel && cambiato(sel)) || svAttivo) { e.preventDefault(); e.returnValue = ''; } });
@@ -1270,8 +1295,9 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     var foto = fotoInAttesa; fotoInAttesa = {};
     var inviati = {}, gal = {};
     Object.keys(gallerie).forEach(function (g) {
-      inviati[g] = gallerie[g].map(function (v) { return v.foto; });
+      inviati[g] = gallerie[g].map(function (v) { return v.foto || ''; });
       gal[g] = gallerie[g].map(function (v) {
+        if (v.rif) return { rif: v.rif };
         var o = { foto: v.foto, titolo: v.titolo };
         if (v.alt) o.alt = v.alt; if (v.provvisoria) o.provvisoria = v.provvisoria;
         if (v.descrizione) o.descrizione = v.descrizione; if (v.link) o.link = v.link;
@@ -1289,7 +1315,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
         inviati[g].forEach(function (f, i) { if (f.indexOf('nuova:') === 0 && d.gallerie && d.gallerie[g] && d.gallerie[g][i]) nomi[f] = d.gallerie[g][i].foto; });
       });
       Object.keys(gallerie).forEach(function (g) {
-        gallerie[g].forEach(function (l) { var n = nomi[l.foto]; if (n) { anteprimeLocali[n] = anteprimeLocali[l.foto]; l.foto = n; } });
+        gallerie[g].forEach(function (l) { var n = l.foto && nomi[l.foto]; if (n) { anteprimeLocali[n] = anteprimeLocali[l.foto]; l.foto = n; } });
       });
       (d.immagini || []).forEach(function (srv) {
         var loc = immagini.filter(function (v) { return v.id === srv.id; })[0];
@@ -1794,12 +1820,15 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
   };
 
   /* ---------- immagini fisse delle pagine ---------- */
-  var dimg = $('d-img'), immAperta = null, fotoImm = null, imgEd = [];
-  function apriImmagine(id) {
+  var dimg = $('d-img'), immAperta = null, fotoImm = null, imgEd = [], immPort = null, confermaTogli = false;
+  // port = { sez, x }: aperta da un lavoro della Home nel Portfolio, si può togliere da lì (resta nella Home)
+  function apriImmagine(id, port) {
     immAperta = immagini.filter(function (v) { return v.id === id; })[0]; if (!immAperta) return;
-    fotoImm = null;
+    fotoImm = null; immPort = port || null; confermaTogli = false;
+    $('img-togli').hidden = !immPort; $('img-togli').textContent = 'Togli dal Portfolio'; $('img-togli').classList.remove('conf');
     $('img-t').textContent = immAperta.sezione;
-    $('img-dove').textContent = immAperta.descrizione || ''; $('img-dove').hidden = !immAperta.descrizione;
+    var dove = immPort ? 'Lavoro ' + duecifre(NUMERI.gal.get(immPort.x) || 0) + ' · ' + immPort.sez.capitolo + ' · foto e testi sono gli stessi della Home: cambiati qui cambiano anche lì' : immAperta.descrizione || '';
+    $('img-dove').textContent = dove; $('img-dove').hidden = !dove;
     $('img-alt').value = immAperta.alt || ''; $('err-img').textContent = '';
     $('img-alt-campo').hidden = !!immAperta.decorativa; // foto del menu: la scritta sotto la descrive già
     $('avv-img').hidden = true; mostraRequisiti($('req-img'), $('img-ant').parentNode, formaDi(immAperta.id)); sceltaMisura($('modo-img'), $('img-ant').parentNode, null);
@@ -1835,6 +1864,12 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
   }
   $('img-cambia').onclick = function () { $('file').value = ''; $('file').click(); };
   $('img-annulla').onclick = function () { dimg.close(); };
+  $('img-togli').onclick = function () {
+    if (!confermaTogli) { confermaTogli = true; this.textContent = 'Sì, togli (resta nella Home)'; this.classList.add('conf'); return; }
+    var p = immPort, l = elenco(p.sez), i = l.indexOf(p.x);
+    dimg.close(); if (i < 0) return;
+    l.splice(i, 1); disegna(); salva('Tolto «' + nomeVoce(p.x) + '» dal Portfolio (' + p.sez.nome + ')');
+  };
   $('f-img').onsubmit = function (e) {
     e.preventDefault();
     var alt = $('img-alt').value.trim();

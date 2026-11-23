@@ -248,7 +248,7 @@ async function leggiJson(env, percorso, sha) {
 /* ---------- salvataggio ---------- */
 
 /**
- * Corpo: { gallerie: { "portfolio-siti": [ {foto, titolo, alt?, provvisoria?, descrizione?, link?} ], … } (facoltativo:
+ * Corpo: { gallerie: { "portfolio-siti": [ {foto, titolo, alt?, provvisoria?, descrizione?, link?} | {rif} ], … } (facoltativo:
  *          solo le gallerie che già esistono in data/gallerie.json),
  *         immagini: [ {id, foto, alt} ] (facoltativo), testi: [ {id, testo, link?} ] (facoltativo),
  *         nuoveFoto: { "nuova:ID": "base64…" }, messaggio }
@@ -287,6 +287,11 @@ async function salva(request, env, cors) {
       if (!/^[a-z0-9-]{1,60}$/.test(nome) || !Array.isArray(voci)) throw errore("Galleria non valida", 400);
       if (voci.length > MAX_PER_GALLERIA) throw errore("Troppe foto in una galleria", 400);
       gallerie[nome] = voci.map((v, i) => {
+        // Portfolio (dalla 3.37): un lavoro della Home, solo il riferimento (foto e testi sono della Home)
+        if (v && v.rif != null) {
+          if (typeof v.rif !== "string" || !/^[a-z0-9-]{1,40}$/.test(v.rif)) throw errore(`Lavoro non valido (n. ${i + 1})`, 400);
+          return { rif: v.rif };
+        }
         const titolo = pulisci(v && v.titolo, 80), foto = String((v && v.foto) || "");
         if (!titolo) throw errore(`Manca il titolo della foto n. ${i + 1}`, 400);
         if (!fotoOk(foto)) throw errore(`Foto non valida (n. ${i + 1})`, 400);
