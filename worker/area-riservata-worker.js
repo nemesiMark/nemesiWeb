@@ -56,6 +56,11 @@ const FOTO_VALIDA = /^images\/(?!guida\/|non-usate\/)[a-z0-9-]{1,60}\/(?:[a-z0-9
 export default {
   async fetch(request, env) {
     const cors = intestazioniCors(request, env);
+    // solo connessioni sicure: niente http (password e accesso viaggerebbero in chiaro)
+    if (schema(request) !== "https") return json({ errore: "Usa l'indirizzo sicuro (https)" }, 403, cors);
+    // dal browser si accetta solo l'area riservata del sito (origini in ORIGINS, tutte https)
+    const origine = request.headers.get("Origin");
+    if (origine && !origini(env).includes(origine)) return json({ errore: "Origine non ammessa" }, 403, cors);
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     try {
       const url = new URL(request.url);
@@ -404,8 +409,19 @@ async function gh(env, percorso, metodo = "GET", corpo) {
 
 /* ---------- utilità ---------- */
 
+// solo le origini https di ORIGINS (un indirizzo http scritto per sbaglio viene ignorato)
+function origini(env) {
+  return String(env.ORIGINS || "").split(",").map((s) => s.trim()).filter((s) => s.startsWith("https://"));
+}
+
+// schema con cui è arrivata la richiesta (Cloudflare lo scrive in cf-visitor)
+function schema(request) {
+  try { const v = JSON.parse(request.headers.get("cf-visitor") || "{}"); if (v.scheme) return v.scheme; } catch (e) {}
+  return new URL(request.url).protocol.replace(":", "");
+}
+
 function intestazioniCors(request, env) {
-  const ammessi = String(env.ORIGINS || "").split(",").map((s) => s.trim()).filter(Boolean);
+  const ammessi = origini(env);
   const origine = request.headers.get("Origin") || "";
   return {
     "Access-Control-Allow-Origin": ammessi.includes(origine) ? origine : (ammessi[0] || "null"),

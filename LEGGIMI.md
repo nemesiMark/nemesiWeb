@@ -388,6 +388,10 @@
 - L'area legge le pagine vere (`PRESENTI`) e mostra in ogni scheda i testi e le foto che la pagina contiene davvero, anche se ripresi da un'altra; le anteprime si aprono sulla pagina della scheda aperta.
 - Regola: **ogni pagina HTML nuova va aggiunta subito all'area riservata** (`PAGINE` e `ORDINE_PRIMA` in `area-riservata.html`, `data-testo`/`data-slot` nella pagina, voci in `data/*.json`), con foto, testi e video se la pagina ne ha.
 
+### 3.32 — 23/11/2026
+- Area riservata solo HTTPS: «Enforce HTTPS» è attivo su GitHub Pages (certificato approvato per nemesiweb.it e www.nemesiweb.it), tolte le origini `http://` da `ORIGINS` in `worker/wrangler.toml`.
+- Il Worker rifiuta le richieste arrivate in http («Usa l'indirizzo sicuro (https)», 403) e quelle dal browser con un'origine non ammessa (403); da `ORIGINS` prende solo gli indirizzi `https://`. Ripubblicato e provato: http 403, https da nemesiweb.it e www ammesso, origine http o estranea 403.
+
 ## Area riservata
 
 Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e funzioni); cambiano nome, logo, caratteri del sito (Inter Tight, Geist), barra in alto nera come quella del sito e colore d'accento: il verde scuro del logo `#8ECE05` (più scuro `#79B003`), con il testo scuro `#0B1200` sopra (il bianco non avrebbe contrasto). Prefisso di localStorage `nemesiweb-`.
