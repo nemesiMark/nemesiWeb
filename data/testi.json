@@ -375,29 +375,5 @@
   "descrizione": "Scorciatoia 3 (porta ai Giochi)",
   "tipo": "semplice",
   "testo": "Giochi"
- },
- {
-  "id": "menu-t001",
-  "pagina": "menu",
-  "sezione": "Portfolio",
-  "descrizione": "Voce 1 del sottomenu Portfolio",
-  "tipo": "semplice",
-  "testo": "Siti"
- },
- {
-  "id": "menu-t002",
-  "pagina": "menu",
-  "sezione": "Portfolio",
-  "descrizione": "Voce 2 del sottomenu Portfolio",
-  "tipo": "semplice",
-  "testo": "App"
- },
- {
-  "id": "menu-t003",
-  "pagina": "menu",
-  "sezione": "Portfolio",
-  "descrizione": "Voce 3 del sottomenu Portfolio",
-  "tipo": "semplice",
-  "testo": "Giochi"
  }
 ]

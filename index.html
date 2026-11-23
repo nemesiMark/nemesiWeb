@@ -118,22 +118,6 @@ ul{ list-style:none; }
 .cta:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(237,254,201,.5) inset, 0 1px 0 #537903; }
 @media (hover:hover) and (pointer:fine){ .cta:hover{ transform:translateZ(14px) translateY(-2px) scale(1.1);
   box-shadow:0 1px 0 rgba(237,254,201,.6) inset, 0 4px 0 #537903, 0 0 12px 2px rgba(205,253,103,.6), 0 0 28px 6px rgba(205,253,103,.28), 0 0 48px 10px rgba(166,239,11,.12); } }
-/* sottomenu Portfolio: sul computer si apre sotto la voce (mouse sopra o tastiera), stessa lastra scura della barra */
-.links .dd{ position:relative; transform-style:preserve-3d; }
-.dd-su{ display:flex !important; align-items:center; gap:6px; }
-.frecc{ width:12px; height:12px; flex:none; transition:transform 250ms var(--ease); }
-.links .sub{ position:absolute; top:calc(100% + 12px); left:50%; min-width:150px; display:flex; flex-direction:column; gap:5px; padding:7px;
-  border-radius:14px; background:linear-gradient(180deg, rgba(14,14,16,.97), rgba(0,0,0,.97)); border:1px solid rgba(255,255,255,.075);
-  box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 0 14px 1px rgba(205,253,103,.26), 0 0 32px 4px rgba(205,253,103,.1), 0 24px 48px -16px rgba(0,0,0,.8);
-  transform:translate(-50%, -6px); transform-style:preserve-3d; opacity:0; visibility:hidden; pointer-events:none;
-  transition:opacity 160ms ease-in, transform 200ms ease-in, visibility 0s 200ms; }
-.links .sub::before{ content:""; position:absolute; left:0; right:0; top:-14px; height:14px; }   /* ponte: il mouse passa dalla voce al sottomenu senza chiuderlo */
-.links .sub a{ text-align:left; }
-@media (min-width:761px){
-  .links .dd:hover .sub, .links .dd:focus-within .sub, .links .dd.open .sub{ opacity:1; visibility:visible; pointer-events:auto; transform:translate(-50%, 0);
-    transition:opacity 200ms var(--ease), transform 250ms var(--ease); }
-  .links .dd:hover .frecc, .links .dd:focus-within .frecc{ transform:rotate(180deg); }
-}
 .burger{ display:none; margin-left:auto; width:40px; height:40px; border-radius:11px; border:0; cursor:pointer;
   background:linear-gradient(180deg, #2A2B31 0%, #1C1D22 48%, #121317 100%);
   box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 3px 0 #050506, 0 10px 18px -10px rgba(0,0,0,.9);
@@ -160,11 +144,6 @@ ul{ list-style:none; }
   .hdr.open .links li:nth-child(2){ transition-delay:30ms; }
   .hdr.open .links li:nth-child(3){ transition-delay:60ms; }
   .links a{ padding:13px 14px; font-size:16px; }
-  /* sul telefono le voci del Portfolio stanno sempre in vista, rientrate sotto la voce */
-  .links .sub{ position:static; min-width:0; padding:6px 0 0 18px; gap:6px; background:none; border:0; box-shadow:none;
-    transform:none; opacity:1; visibility:inherit; pointer-events:auto; transition:none; }
-  .links .sub::before{ display:none; }
-  .links .sub a{ padding:11px 14px; font-size:15px; }
   .hdr.open .links li:nth-child(4){ transition-delay:90ms; }
 }
 
@@ -393,13 +372,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
   <nav class="slab" aria-label="Principale">
     <a class="logo" href="#top" aria-label="Nemesi Web, torna all'inizio"><img id="logo-nav" src="images/logo/nemesi-web-barra.svg" alt="" width="1997" height="343"></a>
     <ul class="links" id="links">
-      <li class="dd"><a class="dd-su" href="portfolio.html" data-s="portfolio" aria-haspopup="true">Portfolio<svg class="frecc" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <ul class="sub" aria-label="Portfolio">
-          <li><a href="portfolio.html#siti" data-s="siti" data-testo="menu-t001">Siti</a></li>
-          <li><a href="portfolio.html#app" data-s="app" data-testo="menu-t002">App</a></li>
-          <li><a href="portfolio.html#giochi" data-s="giochi" data-testo="menu-t003">Giochi</a></li>
-        </ul>
-      </li>
+      <li><a href="portfolio.html" data-s="portfolio">Portfolio</a></li>
       <li><a href="#studio" data-s="studio">Studio</a></li>
       <li><a href="#tool" data-s="strumenti">Tool</a></li>
       <li><a href="mailto:ciao@nemesi.studio">Contattaci</a></li>

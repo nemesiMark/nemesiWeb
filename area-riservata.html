@@ -622,7 +622,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     <button class="btn link g-chiudi" type="button" id="g-x" aria-label="Chiudi la guida">&times;</button>
   </div>
   <div class="modo g-schede" role="tablist" aria-label="Cosa vuoi fare">
-    <button type="button" role="tab" id="g-s-foto" aria-controls="g-p-foto" aria-selected="true" aria-pressed="true">Foto</button><button type="button" role="tab" id="g-s-testi" aria-controls="g-p-testi" aria-selected="false" aria-pressed="false">Testi</button><button type="button" role="tab" id="g-s-menu" aria-controls="g-p-menu" aria-selected="false" aria-pressed="false">Menu</button>
+    <button type="button" role="tab" id="g-s-foto" aria-controls="g-p-foto" aria-selected="true" aria-pressed="true">Foto</button><button type="button" role="tab" id="g-s-testi" aria-controls="g-p-testi" aria-selected="false" aria-pressed="false">Testi</button>
   </div>
   <div class="g-corpo">
     <div class="g-pannello" id="g-p-foto" role="tabpanel" aria-labelledby="g-s-foto">
@@ -662,15 +662,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       <p class="g-nota">Le voci principali del menu in alto (Portfolio, Studio, Tool, Contattaci), le lastre dei Tool, l'indirizzo email, i numeri dei lavori e il piè di pagina non si cambiano da qui: per quelli chiedi a chi cura il sito.</p>
     </section>
     </div>
-    <div class="g-pannello" id="g-p-menu" role="tabpanel" aria-labelledby="g-s-menu" hidden>
-    <section class="g-sez" id="g-menu" aria-labelledby="g-menu-t">
-      <h3 id="g-menu-t">Cambiare le scritte del menu</h3>
-      <div class="g-passo"><span class="num">1</span><p>Nel menu delle pagine, accanto a Home, clicca <b>Menu</b> e poi <b>Testi</b>. Lì trovi le voci del menu che si apre da <b>Portfolio</b>: Siti, App e Giochi.</p></div>
-      <div class="g-passo"><span class="num">2</span><p>Si cambiano come gli altri testi: clicca la voce, scrivi la parola nuova e clicca <b>Salva</b>. Nell'anteprima vedi il menu aperto, sul computer e sul telefono.</p></div>
-      <p class="g-nota">Le voci principali (Portfolio, Studio, Tool, Contattaci) e dove porta il clic non si cambiano.</p>
-    </section>
-    </div>
-    <p class="g-intro g-generale"><b>In generale:</b> in alto c'è il menu delle pagine: <b>Home</b> è la pagina principale, <b>Portfolio</b> la pagina con tutti i lavori, <b>Menu</b> le voci del menu Portfolio. In ogni pagina scegli se cambiare le <b>Foto</b> o i <b>Testi</b>. I sei lavori sono gli stessi in Home e in Portfolio: cambiati in una pagina, cambiano anche nell'altra. Le modifiche si vedono online entro qualche minuto dal salvataggio. Questa guida si riapre quando vuoi dal pulsante <b>Guida</b> in alto. Clicca una schermata per ingrandirla. Dal telefono funziona allo stesso modo: al posto del clic si tocca con il dito.</p>
+    <p class="g-intro g-generale"><b>In generale:</b> in alto c'è il menu delle pagine: <b>Home</b> è la pagina principale, <b>Portfolio</b> la pagina con tutti i lavori. In ogni pagina scegli se cambiare le <b>Foto</b> o i <b>Testi</b>. I sei lavori sono gli stessi in Home e in Portfolio: cambiati in una pagina, cambiano anche nell'altra. Le modifiche si vedono online entro qualche minuto dal salvataggio. Questa guida si riapre quando vuoi dal pulsante <b>Guida</b> in alto. Clicca una schermata per ingrandirla. Dal telefono funziona allo stesso modo: al posto del clic si tocca con il dito.</p>
   </div>
   <div class="g-piede"><button class="btn pri" type="button" id="g-ok">Ho capito</button></div>
 </dialog>
@@ -715,10 +707,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
       { t: 'Siti', slots: ['lavoro-rainink', 'lavoro-olimp'] },
       { t: 'App', slots: ['lavoro-word', 'lavoro-excel'] },
       { t: 'Giochi', slots: ['lavoro-metalgear', 'lavoro-radente'] },
-      { t: 'Le foto valgono anche nella Home', nota: 'I sei lavori sono gli stessi della Home: una foto o un testo dei lavori cambiato qui cambia anche lì, e viceversa. Il titolo in cima alla pagina è solo di Portfolio: è in Testi.' }]],
-    // il sottomenu Portfolio della barra in alto
-    [MENU, 'Menu', 'Menu della barra in alto', [
-      { t: 'Che cosa si cambia qui', nota: 'Le voci del menu che si apre da Portfolio (Siti, App, Giochi): si cambiano in Testi. Sono le stesse sul computer e su tablet e telefono. Le voci principali della barra (Portfolio, Studio, Tool, Contattaci) e dove porta il clic non si cambiano.' }]]
+      { t: 'Le foto valgono anche nella Home', nota: 'I sei lavori sono gli stessi della Home: una foto o un testo dei lavori cambiato qui cambia anche lì, e viceversa. Il titolo in cima alla pagina è solo di Portfolio: è in Testi.' }]]
   ];
 
   /* ---------- chiamate al servizio ---------- */
@@ -828,7 +817,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
      Prima riga: Home, Grafica & Stampa, Servizi, Prodotti, Collezioni. Scegliendo una pagina che ha
      sottopagine compare sotto la riga successiva (es. Collezioni → Matrimoniali → le linee). */
   var GENITORE = {}; // una pagina sola: nessuna sottopagina
-  var ORDINE_PRIMA = ['index.html', 'portfolio.html', MENU];
+  var ORDINE_PRIMA = ['index.html', 'portfolio.html'];
   var NOME = {}; PAGINE.forEach(function (p) { NOME[p[0]] = p[1]; });
   function figli(id) { return PAGINE.filter(function (p) { return (GENITORE[p[0]] || '') === id; }).map(function (p) { return p[0]; }); }
   function catena(id) { var c = [id]; while (GENITORE[c[0]]) c.unshift(GENITORE[c[0]]); return c; }
@@ -2046,7 +2035,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
     dg.showModal(); dg.scrollTop = 0; $('g-t').focus();
     dg.style.setProperty('--g-testa', dg.querySelector('.g-testa').offsetHeight + 'px');
   }
-  // in alto Foto | Testi | Menu; sotto, gli argomenti di quella scheda
+  // in alto Foto | Testi; sotto, gli argomenti di quella scheda
   var gSchede = [].slice.call(dg.querySelectorAll('.g-schede button'));
   gSchede.forEach(function (b) {
     b.onclick = function () {
