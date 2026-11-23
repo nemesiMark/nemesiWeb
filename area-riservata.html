@@ -1909,7 +1909,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
         try {
           var d = f.contentDocument, st = d.createElement('style');
           // niente animazioni d'entrata, niente barra dei cookie, scorrimento immediato
-          st.textContent = 'html{scroll-behavior:auto!important}.hdr .links,.hdr .links li,.links .sub,.map-ok{transition:none!important}.hdr.open .links li{opacity:1!important;transform:none!important}';
+          st.textContent = 'html{scroll-behavior:auto!important}.hdr .links,.hdr .links li,.links .sub,.map-ok{transition:none!important}.cookie{display:none!important}.hdr.open .links li{opacity:1!important;transform:none!important}';
           d.head.appendChild(st);
           d.documentElement.classList.remove('fx-pre', 'fx-on'); // effetto «Sipario» spento: tutto subito al suo posto
           [].forEach.call(d.querySelectorAll('.fx'), function (e) { e.classList.add('in', 'fx-done'); });

@@ -376,6 +376,13 @@
 - Home, capitolo Siti: il lavoro 02 ora è **Olimp** (stessa anteprima della pagina Portfolio, `images/lavori/olimp.jpg`), cliccabile: apre https://nemesimark.github.io/olimp/ con «Visita il sito ↗». Didascalia «02 Olimp, Album fotografici su misura, dal 1969».
 - Il posto della foto si chiama ora `lavoro-olimp` (prima `lavoro-areariservata`): si cambia dall'area riservata e vale per home e Portfolio (in `portfolio.html` aggiunti `data-slot` e `data-testo`). Testi `index-t009`/`index-t010` aggiornati; in `js/lavori-dati.js` la foto di Olimp al posto di quella dell'area riservata.
 
+### 3.29 — 23/11/2026
+- Dominio nuovo **nemesiweb.it** (GitHub Pages, dominio personalizzato). Il Worker dell'area riservata accettava solo `https://nemesimark.github.io`, quindi dal dominio nuovo l'accesso dava «Nessuna connessione, riprova». In `worker/wrangler.toml` `ORIGINS` ora comprende anche `nemesiweb.it` e `www.nemesiweb.it` (http e https); Worker ripubblicato con `npx wrangler deploy`.
+- Da fare: in GitHub → Settings → Pages spuntare «Enforce HTTPS» appena il certificato è pronto.
+
+### 3.30 — 23/11/2026
+- Barra dei cookie semplice (`js/cookie.js`, in home e Portfolio): compare in basso dopo l'apertura finché non si sceglie; «Accetta» attiva la mappa dello studio dallo spazio, «Rifiuta» la lascia spenta (resta il riquadro «Mostra la mappa»). Stessa chiave della mappa (`nemesi_cookie_v1`); non compare nell'anteprima dell'area riservata.
+
 ## Area riservata
 
 Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e funzioni); cambiano nome, logo, caratteri del sito (Inter Tight, Geist), barra in alto nera come quella del sito e colore d'accento: il verde scuro del logo `#8ECE05` (più scuro `#79B003`), con il testo scuro `#0B1200` sopra (il bianco non avrebbe contrasto). Prefisso di localStorage `nemesiweb-`.

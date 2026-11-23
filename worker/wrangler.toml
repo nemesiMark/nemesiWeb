@@ -10,7 +10,7 @@ keep_vars = false
 [vars]
 REPO = "nemesiMark/nemesiWeb"
 BRANCH = "main"
-ORIGINS = "https://nemesimark.github.io"
+ORIGINS = "https://nemesimark.github.io,https://nemesiweb.it,http://nemesiweb.it,https://www.nemesiweb.it,http://www.nemesiweb.it"
 
 [[kv_namespaces]]
 binding = "DATI"

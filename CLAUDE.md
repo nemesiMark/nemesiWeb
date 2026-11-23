@@ -27,7 +27,8 @@ Dove sono i lavori:
 
 ## Dove sta online
 - Repository GitHub pubblico: https://github.com/nemesiMark/nemesiWeb (ramo `main`).
-- Online con GitHub Pages: https://nemesimark.github.io/nemesiWeb/ (si aggiorna a ogni push su main).
+- Online con GitHub Pages sul dominio **http://nemesiweb.it/** (dalla 3.29; resta raggiungibile anche https://nemesimark.github.io/nemesiWeb/, che rimanda lì). Si aggiorna a ogni push su main.
+- Se cambia il dominio, va aggiunto a `ORIGINS` in `worker/wrangler.toml` e il Worker va ripubblicato (`npx wrangler deploy` da `worker/`), altrimenti l'area riservata dà «Nessuna connessione».
 - Fuori dal repository (in `.git/info/exclude`): `chat-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`, i video `58d1f4b27220bfbdf84fdabf0155c8cd.mp4` (riferimento dell'apertura) e `pixel-effects.mp4`.
 
 ## Come si prova in locale
@@ -75,6 +76,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
   - **Mai modificare i PNG del logo.**
 - `fonts/`: Inter Tight (titoli, come la scritta RAIN INK), Geist, Geist Mono, in woff2 latin.
 - `vendor/`: gsap 3.12.5, ScrollTrigger 3.12.5, lenis 1.1.13, `three/three.min.js` r147, `maplibre/` 5.6.0 (caricata solo dopo il consenso alla mappa).
+- `js/cookie.js` (dalla 3.30): barra dei cookie, caricata in `index.html` e `portfolio.html`; stessa chiave della mappa, Accetta fa partire la mappa.
 - `js/mappa.js`: mappa animata dello studio (copiata da Rain Ink, cambiano solo dati e colori; non riscriverla).
 - `BRIEF.md`: appunti di produzione (concept, logo, colori, caratteri, copy, divieti). NON è testo per il sito.
 - `LEGGIMI.md`: versioni e cronologia delle modifiche.
@@ -96,7 +98,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
   - **Giostra degli strumenti** (dalla 3.9): `GW` (inizio `w0` 3,624 nel tempo di K, durata aggiunta `gd` 3,1) e `warp()` traducono il tempo nuovo in quello di K, che resta il copione di prima. In `KX` i tempi dopo `w0` sono spostati di `gd`. La giostra è in `poseGio()`; `S.giostra()` dà presenza, lastra davanti e punto per la didascalia.
   - In `index.html` i tempi scritti come `O + X(t)` slittano da soli dopo l'inizio della giostra e dopo la mappa.
   - **Mappa dello studio** (dalla 3.17): `MW` (inizio `K.fin1`, durata aggiunta `gd` 3,2) ferma il film sulla faccia vuota; `poseMappa()` fa avanzare la lastra, `S.mappa()` dà quanto è avanzata (`a`) e gli angoli della faccia (`q`); in `index.html` `placeMappa()` ritaglia la mappa fissa a tutto schermo sulla faccia (`clip-path`) e, a faccia aperta, chiama `window.nemesiMappaVista()` che fa partire la discesa. A mappa aperta la scena 3D non si disegna.
-  - Mappa: consenso col riquadro «Mostra la mappa» (`window.nemesiCookie`, chiave `nemesi_cookie_v1`); verifiche con la skill `mappa-uni` (`programma.js js/mappa.js --computer 1440x900 --telefono 390x844`).
+  - Mappa: consenso dalla barra dei cookie (`js/cookie.js`) o dal riquadro «Mostra la mappa» (`window.nemesiCookie`, chiave `nemesi_cookie_v1`); verifiche con la skill `mappa-uni` (`programma.js js/mappa.js --computer 1440x900 --telefono 390x844`).
 - **Timeline `master`** in `index.html` (dove `K` è già `KX`): dura `K.end` (12,1) ed è legata con scrub 1 allo spazio vuoto `#film` (alto `K.end`·vh + vh). La scena 3D legge lo stesso progresso.
 - **`ridisegna()`**: dopo ogni refresh di ScrollTrigger esegue `master.progress(1).progress(pr)`. Senza, i `fromTo` perdono gli stati iniziali.
 - **Collegamento tra DOM e 3D**:
@@ -125,4 +127,4 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - Email `ciao@nemesi.studio`: dominio non verificato, da sostituire con quella vera.
 - Mappa: manca una pagina privacy dove citare Esri (le foto satellitari si caricano solo dopo «Mostra la mappa»).
 - Partita IVA (obbligatoria per un professionista in Italia): oggi c'è solo «© 2026 Nemesi Web» nel finale. Va aggiunta lì.
-- Scegliere l'hosting (oggi GitHub Pages; Netlify o Vercel?) e il dominio.
+- Dominio nemesiweb.it attivo su GitHub Pages: spuntare «Enforce HTTPS» appena il certificato è pronto, poi togliere `http://nemesiweb.it` e `http://www.nemesiweb.it` da `ORIGINS` in `worker/wrangler.toml` e ripubblicare il Worker (solo HTTPS).

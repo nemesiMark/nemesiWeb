@@ -37,7 +37,7 @@
 
   var box, started=false, map=null, pin=null, visible=false, loaded=false, animando=false, P=null;
 
-  /* consenso: il sito non ha altri cookie né una barra; vale il riquadro «Mostra la mappa» (scelta ricordata) */
+  /* consenso: vale la barra dei cookie (js/cookie.js) o il riquadro «Mostra la mappa» (scelta ricordata) */
   var CHIAVE='nemesi_cookie_v1';
   window.nemesiCookie={
     get:function(){try{return JSON.parse(localStorage.getItem(CHIAVE)||'null')}catch(e){return null}},
