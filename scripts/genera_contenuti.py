@@ -27,6 +27,10 @@ INIZIO, FINE = "<!-- galleria:inizio -->", "<!-- galleria:fine -->"
 # Le stesse gallerie sono in area-riservata.html (GALLERIE).
 GALLERIE = {}  # Nemesi Web: nessuna galleria (le foto sono le 6 dei lavori, fisse)
 
+# pagine che ripetono una parte di un'altra (dalla 3.24 portfolio.html ripete i lavori di index.html):
+# ricevono le stesse foto e gli stessi testi, quelli che non hanno si saltano senza avviso
+COPIE = {"index.html": ["portfolio.html"]}
+
 
 def att(t): return html.escape(t, quote=True)
 def txt(t): return html.escape(t, quote=False)
@@ -90,7 +94,8 @@ def immagini(pagine):
             segno = f'<img data-slot="{v["id"]}" '
             a = s.find(segno)
             if a < 0:
-                print(f"avviso: in {nome} manca l'immagine {v['id']}", file=sys.stderr)
+                if not pagine.copia(nome):
+                    print(f"avviso: in {nome} manca l'immagine {v['id']}", file=sys.stderr)
                 continue
             immagine(pagine, nome, s, a, foto, prov, v)
 
@@ -203,7 +208,8 @@ def testo(pagine, nome, v, vid, t):
     s = pagine.leggi(nome)
     pos = elemento(s, vid)
     if not pos:
-        print(f"avviso: in {nome} manca il testo {vid}", file=sys.stderr)
+        if not pagine.copia(nome):
+            print(f"avviso: in {nome} manca il testo {vid}", file=sys.stderr)
         return
     a, c, e, tag = pos
     if v.get("tipo") == "semplice":
@@ -230,9 +236,12 @@ class Pagine:
     def di(self, pagina):
         """le pagine a cui va una voce: "menu" (sottomenu della navbar) vale per tutte"""
         if pagina != MENU:
-            return [pagina]
+            return [pagina] + [c for c in COPIE.get(pagina, []) if os.path.exists(os.path.join(RADICE, c))]
         return [f for f in sorted(os.listdir(RADICE)) if f.endswith(".html") and f != "area-riservata.html"
                 and not f.startswith(("_", "prova-", "zz-"))]
+
+    def copia(self, nome):
+        return any(nome in c for c in COPIE.values())
 
     def leggi(self, nome):
         if nome not in self.testi:

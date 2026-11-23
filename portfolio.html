@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="it" class="portfolio">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portfolio · Nemesi Web</title>
+<meta name="description" content="Tutti i lavori di Nemesi Web: siti, app e giochi. Rain Ink Tattoo e la sua area riservata, Word, Excel, Metal Gear, Radente.">
+<meta name="theme-color" content="#9AA0A8">
+<link rel="icon" href="images/logo/icona.svg?v=3.8" type="image/svg+xml">
+<link rel="icon" href="images/logo/icona-32.png?v=3.8" type="image/png" sizes="32x32">
+<link rel="icon" href="images/logo/icona-16.png?v=3.8" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="images/logo/icona-180.png?v=3.8">
+<link rel="preload" href="fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ═════════ caratteri (copie locali, nessuna richiesta a terzi) ═════════ */
+@font-face{ font-family:"Inter Tight"; src:url(fonts/inter-tight.woff2) format("woff2"); font-weight:500 900; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Geist"; src:url(fonts/geist.woff2) format("woff2"); font-weight:100 900; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Geist Mono"; src:url(fonts/geist-mono.woff2) format("woff2"); font-weight:100 900; font-style:normal; font-display:swap; }
+
+/* ═════════ colori presi dal logo (misurati sui pixel del PNG su nero) ═════════ */
+:root{
+  --nero:#17171C; --nero-2:#1D1D22; --grafite:#24242A; --grafite-2:#2D2D33;   /* fondo: grafite scuro (2.3), prima quasi nero #08080A */
+  --fondo:#9AA0A8;             /* sfondo delle pagine: grigio cemento (2.8) */
+  --inchiostro:#15161A;        /* testo sul cemento */
+  --fumo-c:#383C44;            /* testo secondario sul cemento */
+  --arancio-t:#2F5600;         /* arancio leggibile sul cemento */
+  --bianco:#F4F3F1;            /* «nemesi» */
+  --fumo:#A4A4AE;              /* faccia del nastro, schiarita per il testo */
+  --fumo-2:#85858F;
+  --linea:rgba(255,255,255,.09);
+  --arancio:#A6EF0B;           /* «web», tono centrale */
+  --arancio-chiaro:#CDFD67;    /* «web», luce */
+  --oro:#CFF977;               /* riflesso sul marchio */
+  --arancio-scuro:#8ECE05;     /* «web», ombra */
+  --brace:#79B003;             /* fondo del marchio */
+  --titoli:"Inter Tight", "Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;   /* come la scritta RAIN INK */
+  --sans:"Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono:"Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --m:clamp(20px, 5.2vw, 76px);
+  --ease:cubic-bezier(.2,.7,.1,1);
+  --ease-io:cubic-bezier(.65,0,.35,1);
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ -webkit-text-size-adjust:100%; background:var(--fondo); }
+body{ background:var(--fondo); color:var(--inchiostro); font-family:var(--sans); font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility; }
+img{ display:block; max-width:100%; height:auto; }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; }
+::selection{ background:var(--arancio); color:#030B1F; }
+.mono{ font-family:var(--mono); font-size:12.5px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; }
+.vh{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+:focus-visible{ outline:2px solid var(--arancio-chiaro); outline-offset:3px; border-radius:4px; }
+
+/* ═════════ barra di navigazione: lastra scura sospesa (come Rain Ink), sfumatura verde ferma su tutti i lati ═════════ */
+.hdr{ position:fixed; top:14px; left:0; right:0; z-index:60; perspective:1200px; pointer-events:none; }
+.slab{ pointer-events:auto; position:relative; width:min(960px, calc(100% - 2 * var(--m) + 24px)); margin-inline:auto;
+  display:flex; align-items:center; gap:18px; padding:6px 7px 6px 14px; border-radius:16px;
+  background:linear-gradient(180deg, rgba(14,14,16,.94), rgba(0,0,0,.94));
+  -webkit-backdrop-filter:blur(14px) saturate(1.3); backdrop-filter:blur(14px) saturate(1.3);
+  border:1px solid rgba(255,255,255,.075);
+  box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 -1px 0 rgba(0,0,0,.6) inset, 0 0 16px rgba(205,253,103,.09) inset,
+    0 4px 0 #040405, 0 0 14px 1px rgba(205,253,103,.30), 0 0 34px 4px rgba(205,253,103,.12), 0 24px 48px -16px rgba(0,0,0,.8);
+  transform-style:preserve-3d; }
+.logo{ position:relative; display:block; flex:none; width:173px; height:34px; transform:translateZ(20px); }
+/* il PNG ha aria trasparente sotto la scritta: lo si allinea sul disegno, non sul riquadro */
+.logo img{ position:absolute; left:0; top:-1.5px; height:31px; width:auto; max-width:none; }
+.links{ display:flex; gap:4px; margin-left:auto; transform-style:preserve-3d; }
+.links a{ position:relative; display:block; padding:9px 14px; font-size:14px; font-weight:500; color:#C9C9D1; white-space:nowrap;
+  border-radius:11px; transform:translateZ(8px);
+  /* tasti in rilievo come il lucchetto: luce sul bordo alto, spessore sotto */
+  background:linear-gradient(180deg, #2A2B31 0%, #1C1D22 48%, #121317 100%);
+  box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 3px 0 #050506, 0 10px 18px -10px rgba(0,0,0,.9);
+  transition:transform 220ms var(--ease), color 150ms ease, box-shadow 220ms var(--ease); }
+.links a[aria-current], .links a:focus-visible{ outline:none; color:#F4F3F1; }
+.links a:focus-visible{ box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 3px 0 #050506, 0 0 10px 1px rgba(205,253,103,.5), 0 0 24px 4px rgba(205,253,103,.22); }
+.links a[aria-current]::before{ content:""; position:absolute; left:14px; right:14px; bottom:4px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg, var(--arancio-chiaro), var(--arancio-scuro)); }
+.links a:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 1px 0 #050506; }
+@media (hover:hover) and (pointer:fine){
+  /* al passaggio: zoom e alone verde sfumato su tutti i lati, senza linea di contorno */
+  .links a:hover{ z-index:2; color:#F4F3F1; transform:translateZ(14px) translateY(-2px) scale(1.1);   /* più avanti dei vicini: l'alone passa sopra */
+    box-shadow:0 1px 0 rgba(255,255,255,.18) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 4px 0 #050506,
+      0 0 12px 2px rgba(205,253,103,.62), 0 0 26px 6px rgba(205,253,103,.3), 0 0 48px 10px rgba(166,239,11,.13); }
+  .links a:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 1px 0 #050506; }
+}
+.cta{ flex:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:40px; height:40px; padding:0; border-radius:11px;
+  color:#030B1F; font-size:14px; font-weight:600; letter-spacing:.005em;
+  background:linear-gradient(180deg, #DCFF8E 0%, #CDFD67 48%, #B4EA4A 100%);
+  box-shadow:0 1px 0 rgba(237,254,201,.55) inset, 0 3px 0 #537903, 0 10px 22px -10px rgba(166,239,11,.7);
+  transform:translateZ(8px); transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+.cta svg{ width:18px; height:18px; flex:none; }
+.cta:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(237,254,201,.5) inset, 0 1px 0 #537903; }
+@media (hover:hover) and (pointer:fine){ .cta:hover{ transform:translateZ(14px) translateY(-2px) scale(1.1);
+  box-shadow:0 1px 0 rgba(237,254,201,.6) inset, 0 4px 0 #537903, 0 0 12px 2px rgba(205,253,103,.6), 0 0 28px 6px rgba(205,253,103,.28), 0 0 48px 10px rgba(166,239,11,.12); } }
+/* sottomenu Portfolio: sul computer si apre sotto la voce (mouse sopra o tastiera), stessa lastra scura della barra */
+.links .dd{ position:relative; transform-style:preserve-3d; }
+.dd-su{ display:flex !important; align-items:center; gap:6px; }
+.frecc{ width:12px; height:12px; flex:none; transition:transform 250ms var(--ease); }
+.links .sub{ position:absolute; top:calc(100% + 12px); left:50%; min-width:150px; display:flex; flex-direction:column; gap:5px; padding:7px;
+  border-radius:14px; background:linear-gradient(180deg, rgba(14,14,16,.97), rgba(0,0,0,.97)); border:1px solid rgba(255,255,255,.075);
+  box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 0 14px 1px rgba(205,253,103,.26), 0 0 32px 4px rgba(205,253,103,.1), 0 24px 48px -16px rgba(0,0,0,.8);
+  transform:translate(-50%, -6px); transform-style:preserve-3d; opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity 160ms ease-in, transform 200ms ease-in, visibility 0s 200ms; }
+.links .sub::before{ content:""; position:absolute; left:0; right:0; top:-14px; height:14px; }   /* ponte: il mouse passa dalla voce al sottomenu senza chiuderlo */
+.links .sub a{ text-align:left; }
+@media (min-width:761px){
+  .links .dd:hover .sub, .links .dd:focus-within .sub, .links .dd.open .sub{ opacity:1; visibility:visible; pointer-events:auto; transform:translate(-50%, 0);
+    transition:opacity 200ms var(--ease), transform 250ms var(--ease); }
+  .links .dd:hover .frecc, .links .dd:focus-within .frecc{ transform:rotate(180deg); }
+}
+.burger{ display:none; margin-left:auto; width:40px; height:40px; border-radius:11px; border:0; cursor:pointer;
+  background:linear-gradient(180deg, #2A2B31 0%, #1C1D22 48%, #121317 100%);
+  box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 3px 0 #050506, 0 10px 18px -10px rgba(0,0,0,.9);
+  transform:translateZ(8px); transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+.burger:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 1px 0 #050506; }
+.burger span{ display:block; width:18px; height:2px; margin:4px auto; background:#F4F3F1; border-radius:2px; transition:transform 300ms var(--ease), opacity 150ms ease; }
+.hdr.open .burger span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+.hdr.open .burger span:nth-child(2){ opacity:0; }
+.hdr.open .burger span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+@media (max-width:760px){
+  .hdr{ top:max(8px, env(safe-area-inset-top)); }
+  .slab{ width:calc(100% - 16px); gap:8px; padding:4px 5px 4px 10px; }
+  .logo{ width:150px; height:32px; }
+  .logo img{ height:27px; left:0; top:-1px; }
+  .burger{ display:block; }
+  .cta{ width:40px; padding:0; } .cta span{ display:none; }
+  .links{ position:absolute; top:calc(100% + 10px); left:0; right:0; flex-direction:column; gap:6px; padding:10px;
+    border-radius:16px; background:rgba(4,4,5,.97); border:1px solid rgba(255,255,255,.07); box-shadow:0 30px 60px -10px rgba(0,0,0,.8);
+    visibility:hidden; opacity:0; transform:rotateX(-12deg) scale(.97); transform-origin:top right;
+    transition:opacity 180ms ease-in, transform 180ms ease-in, visibility 0s 180ms; }
+  .hdr.open .links{ visibility:visible; opacity:1; transform:none; transition:opacity 220ms var(--ease), transform 250ms var(--ease); }
+  .links li{ transform:rotateX(-40deg); transform-origin:top; opacity:0; transition:transform 220ms var(--ease), opacity 200ms var(--ease); }
+  .hdr.open .links li{ transform:none; opacity:1; }
+  .hdr.open .links li:nth-child(2){ transition-delay:30ms; }
+  .hdr.open .links li:nth-child(3){ transition-delay:60ms; }
+  .links a{ padding:13px 14px; font-size:16px; }
+  /* sul telefono le voci del Portfolio stanno sempre in vista, rientrate sotto la voce */
+  .links .sub{ position:static; min-width:0; padding:6px 0 0 18px; gap:6px; background:none; border:0; box-shadow:none;
+    transform:none; opacity:1; visibility:inherit; pointer-events:auto; transition:none; }
+  .links .sub::before{ display:none; }
+  .links .sub a{ padding:11px 14px; font-size:15px; }
+  .hdr.open .links li:nth-child(4){ transition-delay:90ms; }
+}
+
+
+.capitolo{ position:relative; max-width:1320px; margin:0 auto; padding:16vh var(--m) 6vh; }
+.kicker{ display:flex; align-items:center; gap:12px; color:var(--fumo-c); }
+.kicker::before{ content:""; width:30px; height:1px; background:linear-gradient(90deg, var(--arancio-scuro), var(--arancio-chiaro)); }
+.kicker b{ color:var(--arancio-t); font-weight:500; }
+.titolo{ margin-top:18px; max-width:17ch; font-family:var(--titoli); font-weight:800; font-size:clamp(38px, 4.6vw, 74px); line-height:1.02;
+  letter-spacing:-.02em; text-wrap:balance; }
+.titolo em{ font-style:normal; color:var(--arancio-chiaro); text-shadow:0 1px 0 rgba(3,11,31,.55), 0 2px 10px rgba(3,11,31,.35); }   /* lime come il bottone, staccato dal cemento da un'ombra */
+.lavori{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(22px, 3vw, 46px); margin-top:7vh; }
+.schermo{ position:relative; display:block; border-radius:10px; }
+.schermo img{ width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:10px; border:1px solid var(--linea); background:var(--grafite); }
+/* contorno arancio al neon al passaggio del mouse (richiesto da Mark nella 1.23) */
+.schermo::after{ content:""; position:absolute; inset:-6px; border:1.5px solid #E0FEA2; border-radius:14px; pointer-events:none;
+  box-shadow:0 0 2px #CDFD68, 0 0 8px rgba(166,239,11,.95), 0 0 20px rgba(166,239,11,.6), 0 0 42px rgba(142,206,5,.4),
+    inset 0 0 6px rgba(166,239,11,.75), inset 0 0 16px rgba(166,239,11,.3);
+  opacity:0; transform:scale(.985); transition:opacity .45s var(--ease), transform .45s var(--ease); }
+.schermo:hover::after, .schermo:focus-visible::after{ opacity:1; transform:none; }
+.schermo:focus-visible{ outline:none; }
+.didascalia{ display:flex; flex-wrap:wrap; align-items:baseline; column-gap:14px; row-gap:2px; margin-top:16px; line-height:1.3; }
+.d-in{ display:contents; }
+.num{ color:var(--arancio-t); font-family:var(--mono); font-size:12.5px; font-weight:500; letter-spacing:.08em; }
+.nome{ font-size:17px; font-weight:550; letter-spacing:-.005em; }
+.desc{ color:var(--fumo-c); font-size:14.5px; }
+.azione{ margin-left:auto; color:var(--arancio-t); font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap; }
+
+.fine{ display:flex; align-items:center; justify-content:center; min-height:86vh; padding:12vh var(--m); text-align:center; }
+.fine-in{ display:flex; flex-direction:column; align-items:center; }
+.fine .titolo{ max-width:13ch; margin-top:0; }
+.scrivimi{ display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 26px; margin-top:34px; border-radius:13px;
+  color:#030B1F; font-size:16px; font-weight:600; background:linear-gradient(180deg, #DCFF8E 0%, #CDFD67 48%, #B4EA4A 100%);
+  box-shadow:0 1px 0 rgba(237,254,201,.55) inset, 0 4px 0 #537903, 0 18px 40px -14px rgba(166,239,11,.8);
+  transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+.scrivimi svg{ width:18px; height:18px; }
+@media (hover:hover) and (pointer:fine){ .scrivimi:hover{ transform:translateY(-3px) scale(1.04);
+  box-shadow:0 1px 0 rgba(237,254,201,.6) inset, 0 6px 0 #537903, 0 22px 46px -12px rgba(166,239,11,.85); } }
+.scrivimi:active{ transform:translateY(2px); box-shadow:0 1px 0 rgba(237,254,201,.5) inset, 0 1px 0 #537903; }
+.email{ margin-top:18px; color:var(--fumo-c); font-family:var(--mono); font-size:13px; letter-spacing:.04em; }
+.email:hover{ color:var(--inchiostro); }
+.piede{ display:block; padding:0 var(--m) 28px; color:var(--fumo-c); text-align:center; }
+@media (max-width:760px){
+  .lavori{ grid-template-columns:1fr; }
+}
+
+/* ═════════ pagina Portfolio: tutti i lavori fermi, senza film ═════════ */
+html{ scroll-padding-top:84px; }
+@media (prefers-reduced-motion:no-preference){ html{ scroll-behavior:smooth; } }
+.testa-pagina{ max-width:1320px; margin:0 auto; padding:clamp(130px, 22vh, 210px) var(--m) 0; }
+.testa-pagina h1.titolo{ max-width:14ch; font-size:clamp(44px, 6vw, 96px); }
+.indice{ display:flex; flex-wrap:wrap; gap:10px; margin-top:34px; }
+.indice a{ display:inline-flex; align-items:baseline; gap:10px; padding:10px 16px; border-radius:11px; color:#C9C9D1; font-size:14px; font-weight:500;
+  background:linear-gradient(180deg, #2A2B31 0%, #1C1D22 48%, #121317 100%);
+  box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 3px 0 #050506, 0 10px 18px -10px rgba(0,0,0,.9);
+  transition:transform 220ms var(--ease), color 150ms ease, box-shadow 220ms var(--ease); }
+.indice a span{ color:var(--arancio-chiaro); font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; }
+@media (hover:hover) and (pointer:fine){ .indice a:hover{ color:#F4F3F1; transform:translateY(-2px);
+  box-shadow:0 1px 0 rgba(255,255,255,.18) inset, 0 4px 0 #050506, 0 0 12px 2px rgba(205,253,103,.5), 0 0 26px 6px rgba(205,253,103,.2); } }
+.indice a:active{ transform:translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 1px 0 #050506; }
+.portfolio .capitolo{ padding-top:12vh; }
+.portfolio .fine{ min-height:70vh; }
+</style>
+<script>/* aperta dal disco: i caratteri arrivano incorporati (il browser non legge i .woff2 locali) */
+if (location.protocol === 'file:') document.write('<script src="js/caratteri-dati.js"><\/script>');</script>
+</head>
+<body>
+<header class="hdr" id="hdr">
+  <nav class="slab" aria-label="Principale">
+    <a class="logo" href="index.html" aria-label="Nemesi Web, torna alla home"><img id="logo-nav" src="images/logo/nemesi-web-barra.svg" alt="" width="1997" height="343"></a>
+    <ul class="links" id="links">
+      <li class="dd"><a class="dd-su" href="portfolio.html" aria-current="page" data-s="portfolio" aria-haspopup="true">Portfolio<svg class="frecc" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <ul class="sub" aria-label="Portfolio">
+          <li><a href="portfolio.html#siti" data-s="siti" data-testo="menu-t001">Siti</a></li>
+          <li><a href="portfolio.html#app" data-s="app" data-testo="menu-t002">App</a></li>
+          <li><a href="portfolio.html#giochi" data-s="giochi" data-testo="menu-t003">Giochi</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#studio" data-s="studio">Studio</a></li>
+      <li><a href="index.html#tool" data-s="strumenti">Tool</a></li>
+      <li><a href="mailto:ciao@nemesi.studio">Contattaci</a></li>
+    </ul>
+    <button class="burger" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
+    <a class="cta" href="area-riservata.html" aria-label="Area riservata" title="Area riservata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></a>
+  </nav>
+</header>
+
+
+<main>
+  <header class="testa-pagina" id="top">
+    <p class="kicker mono"><b>Portfolio</b> Lavori 2026</p>
+    <h1 class="titolo">Siti, app e giochi, <em>tutti qui.</em></h1>
+    <nav class="indice" aria-label="Sezioni del portfolio">
+      <a href="#siti"><span>01 · 02</span>Siti</a>
+      <a href="#app"><span>03 · 04</span>App</a>
+      <a href="#giochi"><span>05 · 06</span>Giochi</a>
+    </nav>
+  </header>
+
+  <section class="capitolo" id="siti" aria-labelledby="siti-t">
+    <div class="testa">
+      <p class="kicker mono" data-testo="index-t004"><b data-testo="index-t003">Siti</b> Pelle e carta</p>
+      <h2 class="titolo" id="siti-t"><span data-testo="index-t005">Siti chiari, intuitivi,</span> <em data-testo="index-t006">costruiti per durare.</em></h2>
+    </div>
+    <ul class="lavori">
+      <li class="lavoro">
+        <a class="schermo" data-i="0" href="https://nemesimark.github.io/rainInk/" target="_blank" rel="noopener" aria-label="Rain Ink Tattoo, studio di tatuaggi a Montelupone: visita il sito"><img data-slot="lavoro-rainink" src="images/lavori/rainink.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="0"><span class="d-in"><span class="num">01</span><span class="nome" data-testo="index-t007">Rain Ink Tattoo</span><span class="desc" data-testo="index-t008">Studio di tatuaggi a Montelupone</span><a class="azione" href="https://nemesimark.github.io/rainInk/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Visita il sito ↗</a></span></p>
+      </li>
+      <li class="lavoro">
+        <div class="schermo muto" data-i="1"><img data-slot="lavoro-areariservata" src="images/lavori/areariservata.jpg" alt="Area riservata di Rain Ink Tattoo: la scheda Portfolio con lo spazio usato e le foto dei tatuaggi" width="1600" height="900" loading="lazy" decoding="async"></div>
+        <p class="didascalia" data-i="1"><span class="d-in"><span class="num">02</span><span class="nome" data-testo="index-t009">Rain Ink · Area riservata</span><span class="desc" data-testo="index-t010">Foto e testi del sito, gestiti dal titolare</span></span></p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="capitolo" id="app" aria-labelledby="app-t">
+    <div class="testa">
+      <p class="kicker mono" data-testo="index-t016"><b data-testo="index-t015">App</b> Lettere e numeri</p>
+      <h2 class="titolo" id="app-t"><span data-testo="index-t017">Scrivere e calcolare,</span> <em data-testo="index-t018">dal browser al Mac.</em></h2>
+    </div>
+    <ul class="lavori">
+      <li class="lavoro">
+        <a class="schermo" data-i="2" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" aria-label="Word, editor di testi: apri l'app"><img data-slot="lavoro-word" src="images/lavori/parola.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="2"><span class="d-in"><span class="num">03</span><span class="nome" data-testo="index-t019">Word</span><span class="desc" data-testo="index-t020">Editor di testi, salva in .docx</span><a class="azione" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
+      </li>
+      <li class="lavoro">
+        <a class="schermo" data-i="3" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" aria-label="Excel, foglio di calcolo: apri l'app"><img data-slot="lavoro-excel" src="images/lavori/foglio.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="3"><span class="d-in"><span class="num">04</span><span class="nome" data-testo="index-t021">Excel</span><span class="desc" data-testo="index-t022">Formule in italiano, file .xlsx</span><a class="azione" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="capitolo" id="giochi" aria-labelledby="giochi-t">
+    <div class="testa">
+      <p class="kicker mono" data-testo="index-t024"><b data-testo="index-t023">Giochi</b> Piano e profondità</p>
+      <h2 class="titolo" id="giochi-t"><span data-testo="index-t025">Mondi interi,</span> <em data-testo="index-t026">dentro una pagina web.</em></h2>
+    </div>
+    <ul class="lavori">
+      <li class="lavoro">
+        <a class="schermo" data-i="4" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" aria-label="Metal Gear, Operazione Omega, gioco d'azione: gioca"><img data-slot="lavoro-metalgear" src="images/lavori/metalgear.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="4"><span class="d-in"><span class="num">05</span><span class="nome" data-testo="index-t027">Metal Gear</span><span class="desc" data-testo="index-t028">Operazione Omega, azione in sei livelli</span><a class="azione" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
+      </li>
+      <li class="lavoro">
+        <a class="schermo" data-i="5" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" aria-label="Radente, gioco di volo in 3D: gioca"><img data-slot="lavoro-radente" src="images/lavori/radente.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="5"><span class="d-in"><span class="num">06</span><span class="nome" data-testo="index-t029">Radente</span><span class="desc" data-testo="index-t030">Volo 3D in cinque mondi</span><a class="azione" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="fine" id="scrivimi" aria-labelledby="fine-t">
+    <div class="fine-in" id="fine-in">
+      <h2 class="titolo" id="fine-t"><span data-testo="index-t038">Manca solo</span> <em data-testo="index-t039">il tuo progetto.</em></h2>
+      <a class="scrivimi" data-testo="index-t040" href="mailto:ciao@nemesi.studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.5 8.2 6.2 8.2-6.2"/></svg>Scrivimi</a>
+      <a class="email" href="mailto:ciao@nemesi.studio">ciao@nemesi.studio</a>
+    </div>
+  </section>
+</main>
+<p class="piede mono">© 2026 Nemesi Web</p>
+
+<script>
+/* menu del telefono (come nella home) */
+(function(){
+  var hdr = document.getElementById('hdr'), burger = hdr.querySelector('.burger');
+  function setOpen(o){ hdr.classList.toggle('open', o); burger.setAttribute('aria-expanded', String(o)); burger.setAttribute('aria-label', o ? 'Chiudi il menu' : 'Apri il menu'); }
+  burger.addEventListener('click', function(){ setOpen(!hdr.classList.contains('open')); });
+  hdr.querySelectorAll('.links a').forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && hdr.classList.contains('open')){ setOpen(false); burger.focus(); } });
+  document.addEventListener('click', function(e){ if (hdr.classList.contains('open') && !hdr.contains(e.target)) setOpen(false); });
+})();
+/* contratto di verifica (verify.js della skill sito-film): pagina pronta quando i caratteri sono caricati */
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(function(){ window.__ready = true; });
+</script>
+</body>
+</html>

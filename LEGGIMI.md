@@ -357,6 +357,11 @@
 ### 3.23 — 22/11/2026
 - Giostra dei Tool: l'asta verde al centro c'è solo all'ingresso e all'uscita (la lastra di taglio che si stringe, il lampo, i fili di luce); mentre le lastre si aprono si spegne e a giostra aperta non si vede più.
 
+### 3.24 — 23/11/2026
+- **Pagina Portfolio** (`portfolio.html`): nella barra «Portfolio» ora apre una pagina nuova, ferma (senza film e senza animazioni di scorrimento), con tutti i lavori come nella pagina statica: Siti (Rain Ink 01, area riservata 02), App (Word 03, Excel 04), Giochi (Metal Gear 05, Radente 06), ognuno con la foto 16:9, il contorno verde al neon al passaggio, numero, nome, descrizione e «Visita il sito ↗ / Apri l'app ↗ / Gioca ↗». In testa il titolo «Siti, app e giochi, tutti qui.» e tre tasti per saltare alle sezioni; in fondo «Manca solo il tuo progetto.» con Scrivimi.
+- Barra: Portfolio → `portfolio.html`; Siti, App, Giochi → `portfolio.html#siti`, `#app`, `#giochi` (anche dalla home). Nella pagina Portfolio il logo torna alla home e Studio e Tool portano al punto del film (`index.html#studio`, `index.html#tool`).
+- `scripts/genera_contenuti.py`: con `COPIE` le foto e i testi dei lavori cambiati dall'area riservata vanno sia in `index.html` sia in `portfolio.html`. Titolo e tasti in testa alla pagina Portfolio non si cambiano dall'area.
+
 ## Area riservata
 
 Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e funzioni); cambiano nome, logo, caratteri del sito (Inter Tight, Geist), barra in alto nera come quella del sito e colore d'accento: il verde scuro del logo `#8ECE05` (più scuro `#79B003`), con il testo scuro `#0B1200` sopra (il bianco non avrebbe contrasto). Prefisso di localStorage `nemesiweb-`.
