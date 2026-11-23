@@ -58,6 +58,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - `js/lavori-dati.js`, `js/caratteri-dati.js`: copie base64 di `images/lavori/*.jpg` e `fonts/*.woff2`, solo per `file://`. Vanno rigenerate se cambiano immagini o caratteri (breve script Python: base64 → `window.LAVORI_DATI` oppure regole `@font-face`).
 - `images/lavori/<nome>.jpg`: texture 1600×900 q70, ricavate da `<nome>-d.jpg` (master 2000×1125) con `sips -s format jpeg -s formatOptions 70 -Z 1600`. Le `-m.jpg` non sono usate.
 - `images/logo/`: in uso solo gli SVG ricalcati dall'originale (nero e verde): `nemesi-web.svg` (con il motto, pagina statica), `nemesi-web-barra.svg` (barra e area riservata), `nemesi-simbolo.svg`, `icona.svg` + `icona-16/32/180.png` (link `?v=3.8`; **sempre con lo sfondo trasparente, mai un quadrato nero dietro**). Si rigenerano con `archivio/logo-svg/` (vedi il suo LEGGIMI.txt). `favicon.png` (1536×1024, trasparente) è **il logo** di riferimento del ricalco. Gli altri PNG sono vecchie versioni non usate. Se cambia il logo, rigenerare SVG e icone e aggiornare `?v=`. **Mai modificare i PNG del logo.**
+- `images/anteprima.jpg`: immagine 1200×630 per le anteprime dei link (`og:image` in `index.html` e `portfolio.html`). Si rifà da `archivio/og/og.html` (fotografia a 1200×630 con Chrome, poi `sips` in JPEG q85); se cambia, aggiornare il nome o aggiungere `?v=` perché WhatsApp e i social la tengono in memoria.
 - `fonts/`: Inter Tight (titoli), Geist, Geist Mono, in woff2 latin.
 - `vendor/`: gsap 3.12.5, ScrollTrigger 3.12.5, lenis 1.1.13, `three/three.min.js` r147, `maplibre/` 5.6.0 (caricata solo dopo il consenso alla mappa).
 - `js/cookie.js`: barra dei cookie in `index.html` e `portfolio.html`; stessa chiave della mappa, Accetta fa partire la mappa.
@@ -95,7 +96,7 @@ Verifiche (skill sito-film, cartella `~/.claude/skills/sito-film/scripts`):
 - Rispettare `prefers-reduced-motion`: è già gestito con la pagina statica completa.
 
 ## In sospeso
-- Google: verificare il sito in Search Console (tag HTML da mettere nell'`<head>` di `index.html`), inviare `sitemap.xml`, chiedere l'indicizzazione; manca un'immagine `og:image` per le anteprime.
+- Google: sito verificato in Search Console (proprietà di dominio, record TXT sul DNS di Aruba: niente tag nell'`<head>`) e `sitemap.xml` inviata (23/11/2026). Immagine delle anteprime dei link (`og:image`): `images/anteprima.jpg` (dalla 3.34). Resta da chiedere l'indicizzazione delle due pagine.
 - Area riservata: provare dal vero accesso, salvataggio su GitHub e cambio password; il Worker si aggiorna con `npx wrangler deploy` da `worker/` (Node in `~/.local/lib/node/bin`).
 - Email `ciao@nemesi.studio`: dominio non verificato, da sostituire con quella vera.
 - Mappa: manca una pagina privacy dove citare Esri (le foto satellitari si caricano solo dopo «Mostra la mappa»).

@@ -397,6 +397,11 @@
 - In `index.html` e `portfolio.html`: link `canonical` all'indirizzo su nemesiweb.it, meta Open Graph (titolo, descrizione, indirizzo, lingua) e `twitter:card`. Descrizione della home aggiornata con Olimp.
 - Da fare: verifica del sito in Google Search Console (tag HTML), invio della sitemap, immagine per le anteprime (`og:image`).
 
+### 3.34 — 23/11/2026
+- Google: sito verificato in Search Console come proprietà di dominio, con il record TXT sul DNS di Aruba (nessun tag nell'`<head>`); `sitemap.xml` inviata.
+- Immagine per le anteprime dei link (WhatsApp, social): `images/anteprima.jpg`, 1200 × 630. Fondo scuro, logo con il motto, «Siti, app e giochi per il web.», nemesiweb.it · Bologna, a destra la lastra nera con il bordo verde acceso che mostra Rain Ink. Sorgente in `archivio/og/og.html` (fuori da git), fotografata a 1200 × 630 con Chrome.
+- In `index.html` e `portfolio.html`: `og:image` (con misure e testo alternativo), `twitter:card` ora `summary_large_image`, `twitter:image`.
+
 ## Area riservata
 
 Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e funzioni); cambiano nome, logo, caratteri del sito (Inter Tight, Geist), barra in alto nera come quella del sito e colore d'accento: il verde scuro del logo `#8ECE05` (più scuro `#79B003`), con il testo scuro `#0B1200` sopra (il bianco non avrebbe contrasto). Prefisso di localStorage `nemesiweb-`.
