@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Portfolio · Nemesi Web</title>
-<meta name="description" content="Tutti i lavori di Nemesi Web: siti, app e giochi. Rain Ink Tattoo e la sua area riservata, Word, Excel, Metal Gear, Radente.">
+<meta name="description" content="Tutti i lavori di Nemesi Web: siti, app e giochi. Rain Ink Tattoo, Olimp, Word, Excel, Metal Gear, Radente.">
 <meta name="theme-color" content="#9AA0A8">
 <link rel="icon" href="images/logo/icona.svg?v=3.8" type="image/svg+xml">
 <link rel="icon" href="images/logo/icona-32.png?v=3.8" type="image/png" sizes="32x32">
@@ -204,6 +204,53 @@ html{ scroll-padding-top:84px; }
 .indice a:active{ transform:translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 1px 0 #050506; }
 .portfolio .capitolo{ padding-top:12vh; }
 .portfolio .fine{ min-height:70vh; }
+
+/* ═════════ la lastra della home, in CSS (misure e luci copiate da js/lastra.js) ═════════
+   --u = un centesimo della larghezza della lastra (lo scrive lo script). Nella scena la lastra è larga SW = 3,217:
+   cornice BZ 0,05 → 1,55u · angoli RC+RB 0,08 → 2,5u · angoli dello schermo 0,024 → 0,75u.
+   A riposo: bordo verde con la luce che gli gira intorno (15 s), lucido sul vetro, alone tenue dietro (FS_HALO),
+   la lastra ondeggia piano e guarda il puntatore. Al passaggio (FS_NEON, uHover): alone verde fuori dalla sagoma,
+   riflesso verde sul bordo dello schermo, bordo più acceso. Gli aloni si sommano alla luce come nella scena (plus-lighter). */
+@property --giro{ syntax:"<angle>"; inherits:false; initial-value:0deg; }
+.portfolio .lavoro{ --u:6px; position:relative; }
+.portfolio .schermo{ --rx:0deg; --ry:0deg;
+  padding:calc(var(--u) * 1.55); border-radius:calc(var(--u) * 2.5);
+  background:linear-gradient(158deg, #1C1D22 0%, #0B0B0E 38%, #060607 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 calc(var(--u) * 2.4) calc(var(--u) * 4) calc(var(--u) * -2) rgba(0,0,0,.55);
+  transform:perspective(1600px) rotateX(var(--rx)) rotateY(var(--ry)); will-change:transform; }
+.portfolio .schermo img{ position:relative; border:0; border-radius:calc(var(--u) * .75); background:#050506; }
+/* bordo: verde col lato in luce più chiaro (luce dall'alto a sinistra), più la luce calda che gli corre intorno */
+.portfolio .schermo::before{ content:""; position:absolute; inset:0; z-index:1; border-radius:inherit; pointer-events:none;
+  padding:max(1.5px, calc(var(--u) * .3));
+  background:conic-gradient(from var(--giro), rgba(229,254,177,0) 0deg, rgba(229,254,177,.5) 12deg, rgba(229,254,177,0) 24deg, rgba(229,254,177,0) 360deg),
+    linear-gradient(150deg, #CFF977 0%, #A6EF0B 38%, #8ECE05 70%, #79B003 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude;
+  animation:giro 15s linear infinite; transition:filter .35s var(--ease); }
+@keyframes giro{ to{ --giro:-360deg; } }
+/* vetro dello schermo: lucido obliquo sempre; al passaggio il riflesso verde lungo il bordo (rim · 0,55) */
+.portfolio .schermo::after{ inset:calc(var(--u) * 1.55); z-index:1; border:0; border-radius:calc(var(--u) * .75); transform:none; opacity:1;
+  mix-blend-mode:plus-lighter;
+  background:linear-gradient(118deg, rgba(255,245,235,0) 28%, rgba(255,245,235,.045) 44%, rgba(255,245,235,0) 60%);
+  box-shadow:inset 0 0 calc(var(--u) * 3.4) calc(var(--u) * .5) rgba(166,239,11,0);
+  transition:box-shadow .35s var(--ease); }
+/* alone: un velo della stessa forma dietro la lastra, che la segue */
+.portfolio .alone{ position:absolute; left:0; top:0; width:100%; border-radius:calc(var(--u) * 2.5); pointer-events:none;
+  mix-blend-mode:plus-lighter; transform:perspective(1600px) rotateX(var(--rx)) rotateY(var(--ry));
+  box-shadow:0 0 calc(var(--u) * 2.6) calc(var(--u) * .7) rgba(207,249,119,0), 0 0 calc(var(--u) * 9) calc(var(--u) * 1.4) rgba(166,239,11,0),
+    0 0 calc(var(--u) * 22) calc(var(--u) * 2) rgba(166,239,11,0);
+  transition:box-shadow .35s var(--ease); }
+.portfolio .alone::before{ content:""; position:absolute; left:50%; top:50%; width:calc(var(--u) * 200); height:calc(var(--u) * 130);
+  transform:translate(-50%, -50%); background:radial-gradient(closest-side, rgba(166,239,11,.06), rgba(166,239,11,.025) 45%, rgba(166,239,11,0)); }
+.portfolio .lavoro.su .alone{ box-shadow:0 0 calc(var(--u) * 2.6) calc(var(--u) * .7) rgba(207,249,119,1), 0 0 calc(var(--u) * 9) calc(var(--u) * 1.4) rgba(166,239,11,.8),
+    0 0 calc(var(--u) * 22) calc(var(--u) * 2) rgba(166,239,11,.22); }
+.portfolio .lavoro.su .schermo::before{ filter:brightness(1.45) saturate(.85); }
+.portfolio .lavoro.su .schermo::after{ box-shadow:inset 0 0 calc(var(--u) * 3.4) calc(var(--u) * .5) rgba(166,239,11,1); }
+.portfolio .schermo:focus-visible{ outline:none; }
+.portfolio .didascalia{ margin-top:18px; }
+@media (prefers-reduced-motion:reduce){
+  .portfolio .schermo, .portfolio .alone{ transform:none !important; }
+  .portfolio .schermo::before{ animation:none; }
+}
 </style>
 <script>/* aperta dal disco: i caratteri arrivano incorporati (il browser non legge i .woff2 locali) */
 if (location.protocol === 'file:') document.write('<script src="js/caratteri-dati.js"><\/script>');</script>
@@ -252,8 +299,8 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
         <p class="didascalia" data-i="0"><span class="d-in"><span class="num">01</span><span class="nome" data-testo="index-t007">Rain Ink Tattoo</span><span class="desc" data-testo="index-t008">Studio di tatuaggi a Montelupone</span><a class="azione" href="https://nemesimark.github.io/rainInk/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Visita il sito ↗</a></span></p>
       </li>
       <li class="lavoro">
-        <div class="schermo muto" data-i="1"><img data-slot="lavoro-areariservata" src="images/lavori/areariservata.jpg" alt="Area riservata di Rain Ink Tattoo: la scheda Portfolio con lo spazio usato e le foto dei tatuaggi" width="1600" height="900" loading="lazy" decoding="async"></div>
-        <p class="didascalia" data-i="1"><span class="d-in"><span class="num">02</span><span class="nome" data-testo="index-t009">Rain Ink · Area riservata</span><span class="desc" data-testo="index-t010">Foto e testi del sito, gestiti dal titolare</span></span></p>
+        <a class="schermo" data-i="1" href="https://nemesimark.github.io/olimp/" target="_blank" rel="noopener" aria-label="Olimp, album fotografici su misura: visita il sito"><img src="images/lavori/olimp.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
+        <p class="didascalia" data-i="1"><span class="d-in"><span class="num">02</span><span class="nome">Olimp</span><span class="desc">Album fotografici su misura, dal 1969</span><a class="azione" href="https://nemesimark.github.io/olimp/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Visita il sito ↗</a></span></p>
       </li>
     </ul>
   </section>
@@ -311,6 +358,41 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
   hdr.querySelectorAll('.links a').forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && hdr.classList.contains('open')){ setOpen(false); burger.focus(); } });
   document.addEventListener('click', function(e){ if (hdr.classList.contains('open') && !hdr.contains(e.target)) setOpen(false); });
+})();
+/* lastre come nella home (js/lastra.js): misura --u, alone dietro ogni lastra, accensione al passaggio,
+   ondeggiamento lento e inclinazione verso il puntatore (rx -0,045·y, ry 0,06·x radianti, smorzati) */
+(function(){
+  var lav = [].slice.call(document.querySelectorAll('.portfolio .lavoro'));
+  lav.forEach(function(li){
+    var sc = li.querySelector('.schermo'); if (!sc) return;
+    var al = document.createElement('span'); al.className = 'alone'; al.setAttribute('aria-hidden', 'true');
+    li.insertBefore(al, sc); li._s = sc; li._a = al;
+    var su = function(on){ li.classList.toggle('su', on); };
+    sc.addEventListener('mouseenter', function(){ su(true); }); sc.addEventListener('mouseleave', function(){ su(false); });
+    sc.addEventListener('focus', function(){ su(true); }); sc.addEventListener('blur', function(){ su(false); });
+    var az = li.querySelector('.azione');
+    if (az){ az.addEventListener('mouseenter', function(){ su(true); }); az.addEventListener('mouseleave', function(){ su(false); }); }
+  });
+  function misura(){ lav.forEach(function(li){ if (!li._s) return; var w = li._s.offsetWidth;
+    li.style.setProperty('--u', (w / 100).toFixed(3) + 'px'); li._a.style.height = li._s.offsetHeight + 'px'; }); }
+  misura(); addEventListener('resize', misura); if (window.ResizeObserver) new ResizeObserver(misura).observe(document.body);
+  document.querySelectorAll('.portfolio .schermo img').forEach(function(i){ i.addEventListener('load', misura); });
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var ptr = { x:0, y:0 }, ptrS = { x:0, y:0 }, t0 = performance.now(), last = t0, DEG = 180 / Math.PI;
+  if (matchMedia('(hover:hover) and (pointer:fine)').matches)
+    addEventListener('pointermove', function(e){ ptr.x = e.clientX / innerWidth * 2 - 1; ptr.y = e.clientY / innerHeight * 2 - 1; }, { passive:true });
+  function frame(now){
+    var dt = Math.min(.1, (now - last) / 1000), t = (now - t0) / 1000; last = now;
+    var k = 1 - Math.exp(-3 * dt);
+    ptrS.x += (ptr.x - ptrS.x) * k; ptrS.y += (ptr.y - ptrS.y) * k;
+    var rx = .012 * Math.sin(t * .31) - .045 * ptrS.y, ry = .016 * Math.sin(t * .23) + .06 * ptrS.x;
+    var X = (-rx * DEG).toFixed(3) + 'deg', Y = (ry * DEG).toFixed(3) + 'deg';
+    lav.forEach(function(li){ if (!li._s) return; li._s.style.setProperty('--rx', X); li._s.style.setProperty('--ry', Y);
+      li._a.style.setProperty('--rx', X); li._a.style.setProperty('--ry', Y); });
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 })();
 /* contratto di verifica (verify.js della skill sito-film): pagina pronta quando i caratteri sono caricati */
 (document.fonts ? document.fonts.ready : Promise.resolve()).then(function(){ window.__ready = true; });

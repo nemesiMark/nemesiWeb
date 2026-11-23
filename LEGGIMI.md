@@ -362,6 +362,10 @@
 - Barra: Portfolio → `portfolio.html`; Siti, App, Giochi → `portfolio.html#siti`, `#app`, `#giochi` (anche dalla home). Nella pagina Portfolio il logo torna alla home e Studio e Tool portano al punto del film (`index.html#studio`, `index.html#tool`).
 - `scripts/genera_contenuti.py`: con `COPIE` le foto e i testi dei lavori cambiati dall'area riservata vanno sia in `index.html` sia in `portfolio.html`. Titolo e tasti in testa alla pagina Portfolio non si cambiano dall'area.
 
+### 3.25 — 23/11/2026
+- Pagina Portfolio: al posto di «02 Rain Ink · Area riservata» c'è **02 Olimp**, cliccabile (https://nemesimark.github.io/olimp/, «Visita il sito ↗»), con l'anteprima della home di Olimp sulla terza foto della presentazione (l'album sul tavolo). Schermata nuova in `images/lavori/olimp.jpg` (1600×900) e `olimp-d.jpg` (2000×1125), presa dal sito online. Nella home resta l'area riservata di Rain Ink.
+- Pagina Portfolio: ogni lavoro sta sulla **lastra della home**, rifatta in CSS con le misure e le luci di `js/lastra.js` (larghezza della lastra = 100 `--u`): cornice nera laccata, angoli, bordo verde più chiaro dal lato della luce con la luce calda che gli gira intorno in 15 s, lucido obliquo sul vetro, alone tenue dietro. Come nella home la lastra ondeggia piano e guarda il puntatore ovunque sia sulla pagina (stessi angoli e smorzamento). Al passaggio sulla lastra o su «Visita il sito ↗»: alone verde chiaro fuori dalla sagoma (`FS_NEON`), riflesso verde lungo il bordo dello schermo, bordo più acceso; gli aloni si sommano alla luce (`mix-blend-mode: plus-lighter`). Con «riduci movimento» la lastra sta ferma.
+
 ## Area riservata
 
 Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e funzioni); cambiano nome, logo, caratteri del sito (Inter Tight, Geist), barra in alto nera come quella del sito e colore d'accento: il verde scuro del logo `#8ECE05` (più scuro `#79B003`), con il testo scuro `#0B1200` sopra (il bianco non avrebbe contrasto). Prefisso di localStorage `nemesiweb-`.
