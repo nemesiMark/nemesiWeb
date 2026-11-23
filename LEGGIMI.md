@@ -437,3 +437,6 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 
 ### 3.39 — 23/11/2026
 - Olimp: nuova anteprima presa dal sito online dopo il cambio di stile (hero chiara con l'album «Elisa & Andrea» sul piedistallo), senza il banner dei cookie: `olimp-d.jpg` 2000×1125, `olimp.jpg` 1600×900 (Home e Portfolio) e `olimp-m.jpg` 900×1947 (telefono); aggiornata anche in `js/lavori-dati.js`.
+
+### 3.40 — 23/11/2026
+- Olimp: anteprima rifatta dal sito online dopo il nuovo cambio (Inter Tight in tutto il sito, titoli in grassetto): `olimp-d.jpg`, `olimp.jpg`, `olimp-m.jpg` e la copia in `js/lavori-dati.js`.
