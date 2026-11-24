@@ -4,7 +4,7 @@
 Portfolio di Nemesi Web, lo studio di web design di Mark: una pagina unica «scroll-film» in puro codice (skill `sito-film`, Corsia A), concept «Dritto e rovescio» (`BRIEF.md`). Un solo oggetto 3D, la «lastra» nera con il bordo verde, porta tutti i lavori; la camera va solo avanti. Accento `#CDFD67` (nel codice le variabili si chiamano ancora `--arancio*` / `COL.arancio`).
 
 Barra: Portfolio (link semplice a `portfolio.html`, pagina ferma con tutti i lavori), Studio, Tool, Contattaci, lucchetto.
-Capitoli: 1 Apertura (logo 3D, aste che compongono la lastra) · 2 Siti (Rain Ink 01, Olimp 02) · 2b Strumenti `#tool` (giostra di sette lastre) · 3 App (Word 03, Excel 04) · 4 Giochi (Metal Gear 05, Radente 06) · 4b Studio `#studio` (mappa animata, skill `mappa-uni`) · 5 Scrivimi. Niente sezioni nuove senza richiesta.
+Capitoli: 1 Apertura (video del logo che finisce sul grigio della pagina, `js/apertura.js`; aste che compongono la lastra) · 2 Siti (Rain Ink 01, Olimp 02) · 2b Strumenti `#tool` (giostra di sette lastre) · 3 App (Word 03, Excel 04) · 4 Giochi (Metal Gear 05, Radente 06) · 4b Studio `#studio` (mappa animata, skill `mappa-uni`) · 5 Scrivimi. Niente sezioni nuove senza richiesta.
 
 **Prima di toccare il film, `portfolio.html` o il logo leggi `NOTE-TECNICHE.md`** (capitoli in dettaglio, file, copione `K`/`KX`, giostra, mappa, apertura, contratto di verifica).
 
@@ -29,7 +29,7 @@ Verifiche (`~/.claude/skills/sito-film/scripts`), server sempre in background e 
 ## Struttura essenziale
 - `index.html` (film; il markup è anche la versione statica), `portfolio.html` (copia della pagina statica: **se cambia un lavoro in `index.html` va cambiato anche qui**), `area-riservata.html` (skill `area-ris`).
 - `data/testi.json`, `data/immagini.json` + `scripts/genera_contenuti.py`: testi e foto con `data-testo`/`data-slot` si cambiano nei JSON, non nell'HTML.
-- `js/lastra.js` (scena 3D e copione), `js/logo3d.js` + `js/logo-forma.js` (logo dell'apertura), `js/mappa.js` (non riscriverla), `js/cookie.js`, `js/strumenti-icone.js`.
+- `js/lastra.js` (scena 3D e copione), `js/apertura.js` + `video/apertura.mp4` / `apertura-m.mp4` (apertura; `js/logo3d.js` non più caricato), `js/mappa.js` (non riscriverla), `js/cookie.js`, `js/strumenti-icone.js`.
 - `images/logo/`: **mai modificare i PNG del logo**; icone sempre con sfondo trasparente.
 - `worker/`, `.github/workflows/pubblica.yml`, `vendor/`, `fonts/`, `BRIEF.md` (non è testo per il sito), `LEGGIMI.md` (versioni).
 

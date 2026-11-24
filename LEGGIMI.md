@@ -440,3 +440,15 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 
 ### 3.40 — 23/11/2026
 - Olimp: anteprima rifatta dal sito online dopo il nuovo cambio (Inter Tight in tutto il sito, titoli in grassetto): `olimp-d.jpg`, `olimp.jpg`, `olimp-m.jpg` e la copia in `js/lavori-dati.js`.
+
+### 3.41 — 24/11/2026
+- Apertura: al posto del logo 3D c'è un video di 9,2 s, il logo che gira sulla superficie liquida, sprofonda nel vortice con le scie verdi e sfuma nel grigio della pagina (`video/apertura.mp4` 1280×720, 2,6 MB; sul telefono `video/apertura-m.mp4` 960×540, 1,9 MB; senza audio). Ricavati da `Logo_spinning_on_liquid_surface_fc0a59fb_1080p.mp4` (10 s), che resta fuori dal repo con le prove precedenti: il video finiva su un grigio neutro `#7F7F7F` fermo da 8,67 s; in codifica la sfumatura finale è stata portata al grigio del sito (esce esatto `#9AA0A8`) e il grigio fermo è stato accorciato a mezzo secondo.
+- Uscita (`js/apertura.js`): quando manca un secondo alla fine le aste cominciano a cadere dietro il video, così appena il video finisce sparisce in 0,45 s e sotto c'è già la pagina dello stesso grigio con le aste in arrivo; poi scende la barra. Toccare, scorrere o premere un tasto anticipa l'uscita; se il video è bloccato o non parte entro 3 s il nero sfuma direttamente.
+- Il video si scarica dall'`<head>` solo quando c'è l'apertura (non con `?jump`, con un indirizzo `#capitolo` o con «riduci movimento»).
+- `js/logo3d.js` e `js/logo-forma.js` restano nel repo ma la home non li carica più.
+
+### 3.42 — 24/11/2026
+- Apertura: il video gira solo alla prima visita (nella stessa scheda del browser) e quando si ricarica la pagina. Tornando alla home da un'altra pagina del sito (per esempio dal Portfolio) la pagina parte subito, senza video; il video in quel caso non si scarica nemmeno. Si ricorda con `sessionStorage` (`nemesiVisto`) e il tipo di navigazione (`reload`).
+
+### 3.43 — 24/11/2026
+- Apertura: nuovo video del logo Nemesi sul fluido (10 s, con un secondo di colore pieno alla fine già nel file), ricavato da `Nemesi_logo_spinning_on_fluid_045bc653_1080p.mp4` (fuori dal repo): `video/apertura.mp4` 1280×720, 4,5 MB; `video/apertura-m.mp4` 960×540, 2,9 MB; senza audio.
