@@ -1,4 +1,4 @@
-/* Apertura — il video del logo (video/apertura.mp4, sul telefono apertura-m.mp4) a tutto schermo su nero.
+/* Apertura — il video del logo (video/apertura.mp4, con lo schermo in verticale apertura-m.mp4, 720×1280) a tutto schermo su nero.
    Il video finisce sul grigio del sito (#9AA0A8, corretto in codifica): alla fine si toglie con una breve dissolvenza
    e sotto c'è già la pagina dello stesso colore.
    Uso: var L = Apertura.play(contenitore); L.first (il nero è sullo schermo), L.held (manca ANTICIPO alla fine, il video è finito o non è partito),
@@ -17,7 +17,7 @@ function play(box){
     video = document.createElement('video');
     video.muted = true; video.defaultMuted = true; video.playsInline = true;
     video.setAttribute('muted', ''); video.setAttribute('playsinline', ''); video.preload = 'auto';
-    video.src = innerWidth < 760 ? 'video/apertura-m.mp4' : 'video/apertura.mp4';
+    video.src = innerWidth < innerHeight ? 'video/apertura-m.mp4?v=2' : 'video/apertura.mp4';
   }
   video.className = 'pre-video';
   video.setAttribute('aria-hidden', 'true');
