@@ -478,3 +478,9 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 
 ### 3.51 — 24/11/2026
 - Apertura sul telefono: il logo che sfonda il muro era tagliato, perché il video orizzontale veniva ingrandito fino a riempire lo schermo verticale (se ne vedeva solo il 26% centrale). Ora con lo schermo in verticale (telefoni e tablet) parte `video/apertura-m.mp4` rifatto in verticale, 720×1280, 1,1 MB: il video intero al centro a tutta larghezza, sopra e sotto lo stesso video molto sfocato e poco saturo; nell'ultimo secondo lo sfondo torna al grigio della pagina, quindi il finale resta grigio pieno come prima. La scelta del file ora dipende dall'orientamento (`innerWidth < innerHeight`) e non dalla larghezza; `?v=2` evita la vecchia copia in memoria.
+
+### 3.52 — 24/11/2026
+- Apertura: nuovo video fatto in Blender (10,8 s, senza audio): su una parete scura di cemento il logo prende la rincorsa e la colpisce quattro volte (0,8 · 1,9 · 2,9 · 3,8 s), con lampo verde, polvere e crepe che si allargano; al quarto colpo la parete si sfonda, stacco dall'altra parte del muro e rallentatore di 5 s (1/6) con blocchi e schegge che volano e il logo che entra; poi il logo arriva addosso alla camera e la polvere grigia copre lo schermo. Da 9,5 s grigio pieno `#9AA0A8` per 1,3 s (in Chrome esce 154, 160, 168, uguale alla pagina).
+- `video/apertura.mp4` 1280×720, 2,4 MB; `video/apertura-m.mp4` 720×1280, 1,4 MB, inquadrato apposta in verticale (niente più fasce sfocate). `?v=3` su tutti e due in `index.html` e `js/apertura.js`.
+- Scena e script di montaggio in `archivio/apertura-blender/` (fuori dal repo), spiegati in `NOTE-TECNICHE.md`.
+

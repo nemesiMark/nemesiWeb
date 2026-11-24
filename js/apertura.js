@@ -17,7 +17,7 @@ function play(box){
     video = document.createElement('video');
     video.muted = true; video.defaultMuted = true; video.playsInline = true;
     video.setAttribute('muted', ''); video.setAttribute('playsinline', ''); video.preload = 'auto';
-    video.src = innerWidth < innerHeight ? 'video/apertura-m.mp4?v=2' : 'video/apertura.mp4';
+    video.src = innerWidth < innerHeight ? 'video/apertura-m.mp4?v=3' : 'video/apertura.mp4?v=3';
   }
   video.className = 'pre-video';
   video.setAttribute('aria-hidden', 'true');
