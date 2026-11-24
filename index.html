@@ -823,13 +823,13 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     var intro = gsap.timeline({ onComplete: function(){ d.classList.remove('avvio'); inApertura = false; window.__ready = true; } });
     if (!L || !primo) intro.to(pre, { opacity: 0, duration: .8, ease: 'power1.inOut' }, .2);
     /* mentre il nero scende, le file delle aste cadono dall'alto e si accendono quando toccano; poi scende la barra */
-    intro.to(ENT, { v: 1, duration: 1.7, ease: 'none', onUpdate: function(){ S.enter(ENT.v); } }, .75)
-      .to(IGN, { v: 1, duration: 1.7, ease: 'power1.inOut', onUpdate: function(){ S.ignite(IGN.v); } }, .95)
-      .fromTo(hdr, { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', clearProps: 'transform' }, 1.3)
-      .fromTo('.angolo', { opacity: 0 }, { opacity: 1, duration: .8, ease: 'power1.out' }, 1.5)
-      .call(tema, null, .9)
-      .call(function(){ lenis.start(); }, null, 1.6)
-      .set({}, {}, Math.max(L ? L.duration + .1 : 0, 2.7));
+    intro.to(ENT, { v: 1, duration: 1.7, ease: 'none', onUpdate: function(){ S.enter(ENT.v); } }, .3)
+      .to(IGN, { v: 1, duration: 1.7, ease: 'power1.inOut', onUpdate: function(){ S.ignite(IGN.v); } }, .5)
+      .fromTo(hdr, { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', clearProps: 'transform' }, .85)
+      .fromTo('.angolo', { opacity: 0 }, { opacity: 1, duration: .8, ease: 'power1.out' }, 1.0)
+      .call(tema, null, .5)
+      .call(function(){ lenis.start(); }, null, 1.1)
+      .set({}, {}, Math.max(L ? L.duration + .1 : 0, 2.2));
     intro.timeScale(1 / 1.4);                                       // ritmo dell'apertura
     window.__intro = intro;
     });

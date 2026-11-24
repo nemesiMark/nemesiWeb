@@ -8,7 +8,7 @@
 'use strict';
 var ATTESA = 3.0;      // se il video non parte entro questi secondi si va avanti senza
 var FUORI = .45;       // dissolvenza del video sul grigio (s)
-var ANTICIPO = 1.0;    // l'uscita (e la caduta delle aste, dietro il video) parte quando mancano questi secondi alla fine
+var ANTICIPO = .5;     // l'uscita (e la caduta delle aste, dietro il video) parte quando mancano questi secondi alla fine
 
 function play(box){
   if (!box) return null;
@@ -61,17 +61,17 @@ function play(box){
         setTimeout(function(){ stop(); box.style.opacity = ''; box.style.transition = ''; if (fatto) fatto(); }, FUORI * 1600 + 30);
         return;
       }
-      /* vicino alla fine il video arriva da solo al grigio: si toglie appena finisce, intanto dietro le aste cominciano a cadere.
+      /* vicino alla fine il video arriva da solo al grigio: mentre finisce sfuma sopra la pagina, che è dello stesso grigio
+         (così la piccola differenza di colore dovuta alla compressione non si vede); intanto dietro le aste cominciano a cadere.
          Se chi guarda salta prima, si toglie subito. */
-      function via(){
-        box.style.background = 'transparent'; video.style.transition = 'opacity ' + FUORI + 's ease'; video.style.opacity = '0';
-        try { video.pause(); } catch (e){}
-        setTimeout(function(){ stop(); if (fatto) fatto(); }, FUORI * 1000 + 30);
+      function via(dur, ferma){
+        box.style.background = 'transparent'; video.style.transition = 'opacity ' + dur + 's ease'; video.style.opacity = '0';
+        if (ferma){ try { video.pause(); } catch (e){} }
+        setTimeout(function(){ stop(); if (fatto) fatto(); }, dur * 1000 + 30);
       }
       var resto = video.duration ? video.duration - video.currentTime : 0;
-      if (video.ended || resto <= 0 || resto > ANTICIPO + .3) via();
-      else { var fatta = false, una = function(){ if (!fatta){ fatta = true; via(); } };
-        video.addEventListener('ended', una, { once: true }); setTimeout(una, resto * 1000 + 250); }
+      if (video.ended || resto <= 0 || resto > ANTICIPO + .3) via(FUORI, true);
+      else via(Math.max(resto, .2), false);
     }
   };
 }

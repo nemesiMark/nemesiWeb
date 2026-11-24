@@ -452,3 +452,21 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 
 ### 3.43 — 24/11/2026
 - Apertura: nuovo video del logo Nemesi sul fluido (10 s, con un secondo di colore pieno alla fine già nel file), ricavato da `Nemesi_logo_spinning_on_fluid_045bc653_1080p.mp4` (fuori dal repo): `video/apertura.mp4` 1280×720, 4,5 MB; `video/apertura-m.mp4` 960×540, 2,9 MB; senza audio.
+
+### 3.44 — 24/11/2026
+- Apertura: video del logo velocizzato a 2× (da 10 s a 5 s, 48 fotogrammi al secondo): `video/apertura.mp4` 3,6 MB, `video/apertura-m.mp4` 2,3 MB. Il colore pieno finale ora dura mezzo secondo, quindi le aste cominciano a cadere quando mancano 0,5 s alla fine (`ANTICIPO` in `js/apertura.js`, prima 1 s).
+
+### 3.45 — 24/11/2026
+- Apertura: nuovo video, il logo che ruota nel liquido metallico, velocizzato a 1,5× (6,7 s, 36 fotogrammi al secondo), ricavato da `Logo_rotating_in_metallic_liquid_861272f2_1080p.mp4` (fuori dal repo): `video/apertura.mp4` 1280×720; `video/apertura-m.mp4` 960×540; senza audio. Il video finiva su un grigio più scuro della pagina (`#808185`): nell'ultimo secondo e mezzo (da 5 s) i colori passano gradualmente al grigio del sito, così il fermo finale esce `#9BA0A7`, a un punto da `#9AA0A8`.
+
+### 3.46 — 24/11/2026
+- Apertura: nuovo video, il logo che rompe il muro (10 s, velocità normale), ricavato da `Logo_breaking_wall_92fa1b71.mp4` (fuori dal repo): `video/apertura.mp4` 1280×720, 2,7 MB; `video/apertura-m.mp4` 960×540, 1,6 MB; senza audio. Il video finiva sul grigio neutro `#808080`, più scuro della pagina: da 8,5 s i colori passano gradualmente al grigio del sito e il fermo finale esce `#9AA0A7`.
+
+### 3.47 — 24/11/2026
+- Apertura: nuovo video, il logo che rompe il muro grigio (10 s, velocità normale), ricavato da `Logo_breaking_gray_wall_0e950237.mp4` (fuori dal repo): `video/apertura.mp4` 1280×720, 2,2 MB; `video/apertura-m.mp4` 960×540, 1,2 MB; senza audio. Il video finiva sul muro grigio scuro con le crepe (circa `#707272`, non uniforme): da 8,5 s sfuma nel grigio pieno del sito e da 9,4 s resta fermo su `#9BA0A8`.
+
+### 3.48 — 24/11/2026
+- Apertura più rapida tra la fine del video e la pagina: il video ora finisce a 9,4 s (sfuma nel grigio del sito da 8,4 a 9,1 s e resta fermo solo 0,3 s; 2,1 MB e 1,2 MB) e nella timeline `intro` tutto parte prima: aste da 0,75 a 0,3, accensione da 0,95 a 0,5, barra da 1,3 a 0,85, angoli da 1,5 a 1,0, scorrimento libero da 1,6 a 1,1 (tempi della timeline, rallentata di 1,4).
+
+### 3.49 — 24/11/2026
+- Apertura: grigio finale del video uguale a quello della hero. Il video finisce sul grigio della pagina (nel browser esce 155, 160, 168 contro 154, 160, 168: con la compressione dei video non si può avere più preciso di un punto) e nell'ultimo mezzo secondo sfuma sopra la pagina mentre finisce di girare, invece di restare fermo e sparire dopo: così il passaggio dal video al grigio vero della pagina è continuo.
