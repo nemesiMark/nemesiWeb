@@ -189,6 +189,9 @@ ul{ list-style:none; }
 .nome{ font-size:17px; font-weight:550; letter-spacing:-.005em; }
 .desc{ color:var(--fumo-c); font-size:14.5px; }
 .azione{ margin-left:auto; color:var(--arancio-t); font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap; }
+/* sotto «Apri l'app» / «Gioca»: apre l'app con ?installa, che mostra come installarla (installa.js nelle app) */
+.installa{ flex-basis:100%; margin-top:6px; text-align:right; color:var(--fumo-c); font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap; transition:color .25s var(--ease); }
+.installa:hover, .installa:focus-visible{ color:var(--arancio-t); }
 
 /* strumenti: nella pagina ferma un elenco con le icone nei colori delle marche; nel film le didascalie della giostra */
 .strumenti{ list-style:none; display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:22px 28px; margin-top:7vh; }
@@ -258,6 +261,8 @@ html.film::-webkit-scrollbar{ display:none; }
 .film .didascalia{ position:fixed; left:0; top:0; margin:0; flex-wrap:nowrap; will-change:transform; pointer-events:none; }
 .film .d-in{ display:flex; align-items:baseline; column-gap:14px; opacity:0; width:100%; }
 .film .azione{ pointer-events:auto; }
+.film .d-in{ position:relative; }
+.film .installa{ position:absolute; right:0; top:100%; pointer-events:auto; }
 .film .strumenti{ display:block; margin:0; }
 .film .strum{ position:fixed; left:0; top:0; display:flex; flex-direction:column; align-items:center; gap:3px; width:min(460px, 86vw); text-align:center;
   opacity:0; pointer-events:none; will-change:transform, opacity; }
@@ -305,6 +310,7 @@ html.film::-webkit-scrollbar{ display:none; }
   .film .nome{ font-size:15px; } .film .desc{ font-size:13px; }
   .film .d-in{ flex-wrap:wrap; row-gap:2px; column-gap:10px; }
   .film .azione{ display:none; }
+  .film .installa{ position:static; text-align:left; margin-top:4px; }
   .film .fine-in{ width:min(300px, 76vw); }
   .film .fine .titolo{ font-size:30px; }
   .film .scrivimi{ height:48px; padding:0 22px; margin-top:24px; }
@@ -435,11 +441,11 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     <ul class="lavori">
       <li class="lavoro">
         <a class="schermo" data-i="2" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" aria-label="Word, editor di testi: apri l'app"><img data-slot="lavoro-word" src="images/lavori/parola.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="2"><span class="d-in"><span class="num">03</span><span class="nome" data-testo="index-t019">Word</span><span class="desc" data-testo="index-t020">Editor di testi, salva in .docx</span><a class="azione" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
+        <p class="didascalia" data-i="2"><span class="d-in"><span class="num">03</span><span class="nome" data-testo="index-t019">Word</span><span class="desc" data-testo="index-t020">Editor di testi, salva in .docx</span><a class="azione" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a><a class="installa" href="https://nemesimark.github.io/word/?installa" target="_blank" rel="noopener">Installa l'app ↓</a></span></p>
       </li>
       <li class="lavoro">
         <a class="schermo" data-i="3" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" aria-label="Excel, foglio di calcolo: apri l'app"><img data-slot="lavoro-excel" src="images/lavori/foglio.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="3"><span class="d-in"><span class="num">04</span><span class="nome" data-testo="index-t021">Excel</span><span class="desc" data-testo="index-t022">Formule in italiano, file .xlsx</span><a class="azione" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
+        <p class="didascalia" data-i="3"><span class="d-in"><span class="num">04</span><span class="nome" data-testo="index-t021">Excel</span><span class="desc" data-testo="index-t022">Formule in italiano, file .xlsx</span><a class="azione" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a><a class="installa" href="https://nemesimark.github.io/excel/?installa" target="_blank" rel="noopener">Installa l'app ↓</a></span></p>
       </li>
     </ul>
   </section>
@@ -452,11 +458,11 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     <ul class="lavori">
       <li class="lavoro">
         <a class="schermo" data-i="4" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" aria-label="Metal Gear, Operazione Omega, gioco d'azione: gioca"><img data-slot="lavoro-metalgear" src="images/lavori/metalgear.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="4"><span class="d-in"><span class="num">05</span><span class="nome" data-testo="index-t027">Metal Gear</span><span class="desc" data-testo="index-t028">Operazione Omega, azione in sei livelli</span><a class="azione" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
+        <p class="didascalia" data-i="4"><span class="d-in"><span class="num">05</span><span class="nome" data-testo="index-t027">Metal Gear</span><span class="desc" data-testo="index-t028">Operazione Omega, azione in sei livelli</span><a class="azione" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a><a class="installa" href="https://nemesimark.github.io/metalGear/?installa" target="_blank" rel="noopener">Installa il gioco ↓</a></span></p>
       </li>
       <li class="lavoro">
         <a class="schermo" data-i="5" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" aria-label="Radente, gioco di volo in 3D: gioca"><img data-slot="lavoro-radente" src="images/lavori/radente.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="5"><span class="d-in"><span class="num">06</span><span class="nome" data-testo="index-t029">Radente</span><span class="desc" data-testo="index-t030">Volo 3D in cinque mondi</span><a class="azione" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
+        <p class="didascalia" data-i="5"><span class="d-in"><span class="num">06</span><span class="nome" data-testo="index-t029">Radente</span><span class="desc" data-testo="index-t030">Volo 3D in cinque mondi</span><a class="azione" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a><a class="installa" href="https://nemesimark.github.io/radente/?installa" target="_blank" rel="noopener">Installa il gioco ↓</a></span></p>
       </li>
     </ul>
   </section>
@@ -699,8 +705,11 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     a.addEventListener('focus', function(){ S.hover(i, true); if (!a.classList.contains('on')) vai(LAVORO[i]); });
     a.addEventListener('blur', function(){ S.hover(i, false); });
   });
-  caps.forEach(function(c, i){ var az = c.querySelector('.azione'); if (!az) return;
-    az.addEventListener('mouseenter', function(){ S.hover(i, true); }); az.addEventListener('mouseleave', function(){ S.hover(i, false); }); });
+  caps.forEach(function(c, i){ c.querySelectorAll('.azione, .installa').forEach(function(az){
+    az.addEventListener('mouseenter', function(){ S.hover(i, true); }); az.addEventListener('mouseleave', function(){ S.hover(i, false); }); }); });
+  /* «Installa» si raggiunge anche con Tab: come per le lastre, il film va al lavoro */
+  caps.forEach(function(c, i){ var ins = c.querySelector('.installa'); if (!ins) return;
+    ins.addEventListener('focus', function(){ if (anchors[i] && !anchors[i].classList.contains('on')) vai(LAVORO[i]); }); });
   if (matchMedia('(hover:hover) and (pointer:fine)').matches){
     addEventListener('pointermove', function(e){ S.pointer(e.clientX / innerWidth * 2 - 1, e.clientY / innerHeight * 2 - 1); }, { passive: true });
   }

@@ -161,6 +161,9 @@ ul{ list-style:none; }
 .nome{ font-size:17px; font-weight:550; letter-spacing:-.005em; }
 .desc{ color:var(--fumo-c); font-size:14.5px; }
 .azione{ margin-left:auto; color:var(--arancio-t); font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap; }
+/* sotto «Apri l'app» / «Gioca»: apre l'app con ?installa, che mostra come installarla (installa.js nelle app) */
+.installa{ flex-basis:100%; margin-top:6px; text-align:right; color:var(--fumo-c); font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap; transition:color .25s var(--ease); }
+.installa:hover, .installa:focus-visible{ color:var(--arancio-t); }
 
 .fine{ display:flex; align-items:center; justify-content:center; min-height:86vh; padding:12vh var(--m); text-align:center; }
 .fine-in{ display:flex; flex-direction:column; align-items:center; }
@@ -302,11 +305,11 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
       <!-- portfolio-app:inizio -->
       <li class="lavoro">
         <a class="schermo" data-i="2" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" aria-label="Word, editor di testi: apri l'app"><img data-slot="lavoro-word" src="images/lavori/parola.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="2"><span class="d-in"><span class="num">03</span><span class="nome" data-testo="index-t019">Word</span><span class="desc" data-testo="index-t020">Editor di testi, salva in .docx</span><a class="azione" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
+        <p class="didascalia" data-i="2"><span class="d-in"><span class="num">03</span><span class="nome" data-testo="index-t019">Word</span><span class="desc" data-testo="index-t020">Editor di testi, salva in .docx</span><a class="azione" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a><a class="installa" href="https://nemesimark.github.io/word/?installa" target="_blank" rel="noopener">Installa l'app ↓</a></span></p>
       </li>
       <li class="lavoro">
         <a class="schermo" data-i="3" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" aria-label="Excel, foglio di calcolo: apri l'app"><img data-slot="lavoro-excel" src="images/lavori/foglio.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="3"><span class="d-in"><span class="num">04</span><span class="nome" data-testo="index-t021">Excel</span><span class="desc" data-testo="index-t022">Formule in italiano, file .xlsx</span><a class="azione" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a></span></p>
+        <p class="didascalia" data-i="3"><span class="d-in"><span class="num">04</span><span class="nome" data-testo="index-t021">Excel</span><span class="desc" data-testo="index-t022">Formule in italiano, file .xlsx</span><a class="azione" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a><a class="installa" href="https://nemesimark.github.io/excel/?installa" target="_blank" rel="noopener">Installa l'app ↓</a></span></p>
       </li>
       <!-- portfolio-app:fine -->
     </ul>
@@ -321,11 +324,11 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
       <!-- portfolio-giochi:inizio -->
       <li class="lavoro">
         <a class="schermo" data-i="4" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" aria-label="Metal Gear, Operazione Omega, gioco d'azione: gioca"><img data-slot="lavoro-metalgear" src="images/lavori/metalgear.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="4"><span class="d-in"><span class="num">05</span><span class="nome" data-testo="index-t027">Metal Gear</span><span class="desc" data-testo="index-t028">Operazione Omega, azione in sei livelli</span><a class="azione" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
+        <p class="didascalia" data-i="4"><span class="d-in"><span class="num">05</span><span class="nome" data-testo="index-t027">Metal Gear</span><span class="desc" data-testo="index-t028">Operazione Omega, azione in sei livelli</span><a class="azione" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a><a class="installa" href="https://nemesimark.github.io/metalGear/?installa" target="_blank" rel="noopener">Installa il gioco ↓</a></span></p>
       </li>
       <li class="lavoro">
         <a class="schermo" data-i="5" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" aria-label="Radente, gioco di volo in 3D: gioca"><img data-slot="lavoro-radente" src="images/lavori/radente.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="5"><span class="d-in"><span class="num">06</span><span class="nome" data-testo="index-t029">Radente</span><span class="desc" data-testo="index-t030">Volo 3D in cinque mondi</span><a class="azione" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a></span></p>
+        <p class="didascalia" data-i="5"><span class="d-in"><span class="num">06</span><span class="nome" data-testo="index-t029">Radente</span><span class="desc" data-testo="index-t030">Volo 3D in cinque mondi</span><a class="azione" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a><a class="installa" href="https://nemesimark.github.io/radente/?installa" target="_blank" rel="noopener">Installa il gioco ↓</a></span></p>
       </li>
       <!-- portfolio-giochi:fine -->
     </ul>
@@ -362,8 +365,7 @@ if (location.protocol === 'file:') document.write('<script src="js/caratteri-dat
     var su = function(on){ li.classList.toggle('su', on); };
     sc.addEventListener('mouseenter', function(){ su(true); }); sc.addEventListener('mouseleave', function(){ su(false); });
     sc.addEventListener('focus', function(){ su(true); }); sc.addEventListener('blur', function(){ su(false); });
-    var az = li.querySelector('.azione');
-    if (az){ az.addEventListener('mouseenter', function(){ su(true); }); az.addEventListener('mouseleave', function(){ su(false); }); }
+    li.querySelectorAll('.azione, .installa').forEach(function(az){ az.addEventListener('mouseenter', function(){ su(true); }); az.addEventListener('mouseleave', function(){ su(false); }); });
   });
   function misura(){ lav.forEach(function(li){ if (!li._s) return; var w = li._s.offsetWidth;
     li.style.setProperty('--u', (w / 100).toFixed(3) + 'px'); li._a.style.height = li._s.offsetHeight + 'px'; }); }

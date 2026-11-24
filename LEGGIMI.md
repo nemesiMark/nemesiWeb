@@ -470,3 +470,8 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 
 ### 3.49 — 24/11/2026
 - Apertura: grigio finale del video uguale a quello della hero. Il video finisce sul grigio della pagina (nel browser esce 155, 160, 168 contro 154, 160, 168: con la compressione dei video non si può avere più preciso di un punto) e nell'ultimo mezzo secondo sfuma sopra la pagina mentre finisce di girare, invece di restare fermo e sparire dopo: così il passaggio dal video al grigio vero della pagina è continuo.
+
+### 3.50 — 24/11/2026
+- App e giochi installabili: sotto «Apri l'app» / «Gioca» di Word, Excel, Metal Gear e Radente c'è «Installa l'app ↓» / «Installa il gioco ↓» (nel film, nella pagina ferma e in `portfolio.html`). Porta a `nemesimark.github.io/<app>/?installa`: lì l'app mostra un riquadro con il pulsante «Installa» (Chrome, Edge, Android) o i passi per iPhone/iPad e Safari su Mac.
+- Nelle quattro app (cartelle in `~/Desktop/Apps`): `manifest.webmanifest`, `sw.js` (funzionano anche senza rete), `icone/`, `installa.js`. Metal Gear 2.1, Radente 2.1. Turni escluso.
+- Nel film «Installa» si raggiunge anche con Tab (porta al lavoro, come le lastre). Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa, fluidità max 19,6 ms, schermate 1440×900 e 390×844.
