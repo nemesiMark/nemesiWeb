@@ -13,7 +13,7 @@ Lavori: Rain Ink `~/Desktop/Sites/rainInk`, Olimp `~/Desktop/Sites/olimp`, app e
 ## Dove sta online
 - Repo https://github.com/nemesiMark/nemesiWeb (`main`), GitHub Pages su **https://nemesiweb.it/** (solo HTTPS), pubblica a ogni push con GitHub Actions.
 - Area riservata: Worker https://nemesiweb-area-riservata.nemesi-mark.workers.dev, accetta solo origini `https://` in `ORIGINS` (`worker/wrangler.toml`). Se cambia il dominio: aggiungerlo lì e `npx wrangler deploy` da `worker/`.
-- Fuori dal repo (`.git/info/exclude`): `chat-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`, i video `.mp4` di riferimento.
+- Fuori dal repo (`.git/info/exclude`): `chat-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`, i video `.mp4` di riferimento, `video/nemesi-apertura/` (5,6 GB: scena Blender `scena-land/apertura2_land.blend` e fumo già calcolato `fumo_land`, per rifare il render dell'apertura con `archivio/apertura-blender/rendi2.py` senza ricalcolare il fumo).
 
 ## Come si prova in locale
 ```bash

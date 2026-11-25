@@ -485,6 +485,9 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 - Scena e script di montaggio in `archivio/apertura-blender/` (fuori dal repo), spiegati in `NOTE-TECNICHE.md`.
 
 
+### 3.54 — 25/11/2026
+- Cartella di lavoro dell'apertura spostata dalla Scrivania in `video/nemesi-apertura/` (scena Blender e fumo già calcolato, fuori dal repo); percorso scritto nel `CLAUDE.md`.
+
 ### 3.53 — 25/11/2026
 - Apertura: nuovo video fatto in Blender (9 s, senza audio), un'unica ripresa continua senza stacchi. La camera è bassa davanti a un muro di cemento a vista altissimo e guarda un po' in su; scende dall'alto del muro sul punto d'impatto, che sta al centro dello schermo. Il logo, nascosto dietro, colpisce quattro volte (1,0 · 2,3 · 3,6 · 4,9 s): crepe che si allargano con il lampo verde, schegge, calcinacci dall'alto. Il quarto colpo sfonda il muro a velocità vera, poi rallentatore (5,2–6,6 s), con i blocchi che volano verso la camera.
 - Polvere vera: simulazione di fumo (Mantaflow). Sbuffi a ogni colpo, il 3° più contenuto per lasciar vedere lo sfondamento; nuvola piena illuminata da dietro, scie di polvere dietro i pezzi più grossi, il logo esce dalla polvere e la smuove.
