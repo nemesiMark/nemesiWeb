@@ -16,70 +16,6 @@
     "testo": "Portfolio 2026"
   },
   {
-    "id": "index-t003",
-    "pagina": "index.html",
-    "sezione": "Mondi",
-    "descrizione": "Mondo 01: nome",
-    "tipo": "semplice",
-    "testo": "Portfolio"
-  },
-  {
-    "id": "index-t004",
-    "pagina": "index.html",
-    "sezione": "Mondi",
-    "descrizione": "Mondo 01: sotto il nome",
-    "tipo": "semplice",
-    "testo": "Siti, app e giochi"
-  },
-  {
-    "id": "index-t005",
-    "pagina": "index.html",
-    "sezione": "Mondi",
-    "descrizione": "Mondo 02: nome",
-    "tipo": "semplice",
-    "testo": "Studio"
-  },
-  {
-    "id": "index-t006",
-    "pagina": "index.html",
-    "sezione": "Mondi",
-    "descrizione": "Mondo 02: sotto il nome",
-    "tipo": "semplice",
-    "testo": "Dove siamo"
-  },
-  {
-    "id": "index-t007",
-    "pagina": "index.html",
-    "sezione": "Mondi",
-    "descrizione": "Mondo 03: nome",
-    "tipo": "semplice",
-    "testo": "Tool"
-  },
-  {
-    "id": "index-t008",
-    "pagina": "index.html",
-    "sezione": "Mondi",
-    "descrizione": "Mondo 03: sotto il nome",
-    "tipo": "semplice",
-    "testo": "Banco di lavoro"
-  },
-  {
-    "id": "index-t009",
-    "pagina": "index.html",
-    "sezione": "Mondi",
-    "descrizione": "Mondo 04: nome",
-    "tipo": "semplice",
-    "testo": "Contatti"
-  },
-  {
-    "id": "index-t010",
-    "pagina": "index.html",
-    "sezione": "Mondi",
-    "descrizione": "Mondo 04: sotto il nome",
-    "tipo": "semplice",
-    "testo": "Scrivimi"
-  },
-  {
     "id": "index-t011",
     "pagina": "index.html",
     "sezione": "Portfolio",
@@ -319,6 +255,6 @@
     "descrizione": "Pulsante",
     "tipo": "semplice",
     "testo": "Scrivimi",
-    "link": "mailto:ciao@nemesi.studio"
+    "link": "mailto:nemesi.mark@gmail.com"
   }
 ]

@@ -12,12 +12,12 @@
 <meta property="og:title" content="Nemesi Web · Web design">
 <meta property="og:description" content="Nemesi Web progetta e costruisce siti, app e giochi per il web: Rain Ink Tattoo, Olimp, Word, Excel, Metal Gear, Radente. Studio a Bologna.">
 <meta property="og:url" content="https://nemesiweb.it/">
-<meta property="og:image" content="https://nemesiweb.it/images/anteprima.jpg?v=2">
+<meta property="og:image" content="https://nemesiweb.it/images/anteprima.jpg?v=4">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Nemesi Web: il mondo Nemesi, crepato di verde, collegato da aste al neon ai mondi Portfolio, Studio, Tool e Contatti.">
+<meta property="og:image:alt" content="Nemesi Web: il mondo Nemesi, crepato di verde, collegato da aste al neon ai mondi Portfolio, Studio, Tool e Contatti e al pianeta di lava dell'area riservata.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://nemesiweb.it/images/anteprima.jpg?v=2">
+<meta name="twitter:image" content="https://nemesiweb.it/images/anteprima.jpg?v=4">
 <meta name="theme-color" content="#030405">
 <link rel="icon" href="images/logo/icona.svg?v=3.8" type="image/svg+xml">
 <link rel="icon" href="images/logo/icona-32.png?v=3.8" type="image/png" sizes="32x32">
@@ -27,15 +27,16 @@
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
 <script>
 /* Prima del disegno: con WebGL la pagina diventa la scena 3D dei mondi; il video dell'apertura parte subito,
-   tranne con ?salta, con un indirizzo #sezione o con «riduci movimento». Dentro un riquadro (anteprima dell'area
-   riservata) la pagina resta ferma: sezioni una sotto l'altra, come senza WebGL. */
+   tranne con ?salta, con un indirizzo #sezione, con «riduci movimento» o tornando indietro (per esempio dall'area
+   riservata). Dentro un riquadro (anteprima dell'area riservata) la pagina resta ferma: sezioni una sotto l'altra, come senza WebGL. */
 (function(){ var d=document.documentElement, ok=false; d.classList.add('js');
   try { if (window.self !== window.top){ d.classList.add('senza-gl'); return; } } catch(e){ d.classList.add('senza-gl'); return; }
   try { var c=document.createElement('canvas'); ok=!!(c.getContext('webgl2')||c.getContext('webgl')); } catch(e){}
   if (!ok){ d.classList.add('senza-gl'); return; }
   d.classList.add('gl');
-  var rid=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (rid || /[?&](salta|subito)/.test(location.search) || location.hash.length > 1) return;
+  var rid=matchMedia('(prefers-reduced-motion: reduce)').matches, nav=null;
+  try { nav=performance.getEntriesByType('navigation')[0]; } catch(e){}
+  if (rid || /[?&](salta|subito)/.test(location.search) || location.hash.length > 1 || (nav && nav.type === 'back_forward')) return;
   d.classList.add('avvio');
   var v=document.createElement('video'); v.muted=true; v.defaultMuted=true; v.playsInline=true; v.setAttribute('muted',''); v.setAttribute('playsinline','');
   v.preload='auto'; v.src=innerWidth<innerHeight?'video/apertura-m.mp4?v=4':'video/apertura.mp4?v=4'; window.__videoApertura=v; try { v.load(); } catch(e){} })();
@@ -152,16 +153,20 @@ button{ font:inherit; color:inherit; }
   background:none; cursor:pointer; pointer-events:auto; text-align:center; white-space:nowrap; will-change:transform;
   opacity:0; transition:opacity .5s var(--ease); }
 .et.su{ opacity:var(--vis, 1); }   /* --vis: più bassa quando il mondo passa dietro Nemesi o dietro un altro mondo */
-.et .n{ color:var(--arancio-chiaro); font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.18em; text-shadow:0 0 12px rgba(205,253,103,.45); }
 .et .t{ position:relative; font-family:var(--titoli); font-size:19px; font-weight:700; letter-spacing:-.01em; color:var(--bianco); text-shadow:0 1px 2px rgba(0,0,0,.9), 0 0 18px rgba(0,0,0,.8); }
 .et .t::after{ content:""; position:absolute; left:0; right:0; bottom:-3px; height:2px; border-radius:2px; transform:scaleX(0); transform-origin:center;
   background:linear-gradient(90deg, var(--arancio-scuro), var(--arancio-chiaro), var(--arancio-scuro)); box-shadow:0 0 10px rgba(205,253,103,.8);
   transition:transform .45s var(--ease); }
-.et .s{ color:var(--fumo); font-size:13px; text-shadow:0 1px 2px rgba(0,0,0,.9); transition:color .3s; }
 .et.on .t::after, .et:focus-visible .t::after{ transform:scaleX(1); }
-.et.on .s, .et:focus-visible .s{ color:#D8D8DE; }
 .et:focus-visible{ outline:none; }
 .in-sezione .et, .salto .et{ opacity:0 !important; pointer-events:none; }
+/* con i nomi in 3D sopra i mondi (dalla 3.58, li disegna mondi.js) l'etichetta resta come zona cliccabile, per la tastiera e per i lettori di schermo */
+.nomi3d .et{ padding:0; justify-content:center; }
+.nomi3d .et .t{ opacity:0; }
+.nomi3d .et .t::after{ display:none; }
+
+/* velo: entrando nell'area riservata si passa dalla luce del pianeta di lava al colore della sua pagina (lo sceglie mondi.js) */
+.velo{ position:fixed; inset:0; z-index:70; background:#000; opacity:0; pointer-events:none; }
 
 .angoli{ position:fixed; left:0; right:0; bottom:26px; z-index:10; display:flex; justify-content:space-between; padding:0 var(--m); color:var(--fumo-2);
   pointer-events:none; transition:opacity .6s var(--ease); }
@@ -273,13 +278,12 @@ button{ font:inherit; color:inherit; }
   .strum .s-nome small, .strum .s-desc{ display:none; }
   .sede{ margin-top:20px; padding:16px; }
   .et .t{ font-size:16px; }
-  .et .s{ font-size:12px; }
   .et{ padding:6px 8px 8px; }
   .angoli{ display:none; }
 }
 @media (max-height:520px) and (orientation:landscape){
   .angoli{ display:none; }
-  .et .t{ font-size:15px; } .et .s{ display:none; } .et{ padding:4px 8px 6px; }
+  .et .t{ font-size:15px; } .et{ padding:4px 8px 6px; }
   .pannello{ top:76px; max-height:calc(100% - 90px); }
   .lavori{ grid-template-columns:repeat(3, 1fr); }
   .lavoro .desc{ display:none; }
@@ -314,7 +318,7 @@ button{ font:inherit; color:inherit; }
       <li><a href="#contatti" data-vai="contatti">Contattaci</a></li>
     </ul>
     <button class="burger" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
-    <a class="cta" href="area-riservata.html" aria-label="Area riservata" title="Area riservata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></a>
+    <a class="cta" href="area-riservata.html" data-vai="area" aria-label="Area riservata" title="Area riservata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></a>
   </nav>
 </header>
 
@@ -325,12 +329,14 @@ button{ font:inherit; color:inherit; }
 <h1 class="vh">Nemesi Web, web design e soluzioni digitali</h1>
 
 <nav class="etichette" id="etichette" aria-label="Mondi">
-  <button class="et" type="button" data-vai="portfolio"><span class="n">01</span><span class="t" data-testo="index-t003">Portfolio</span><span class="s" data-testo="index-t004">Siti, app e giochi</span></button>
-  <button class="et" type="button" data-vai="studio"><span class="n">02</span><span class="t" data-testo="index-t005">Studio</span><span class="s" data-testo="index-t006">Dove siamo</span></button>
-  <button class="et" type="button" data-vai="tool"><span class="n">03</span><span class="t" data-testo="index-t007">Tool</span><span class="s" data-testo="index-t008">Banco di lavoro</span></button>
-  <button class="et" type="button" data-vai="contatti"><span class="n">04</span><span class="t" data-testo="index-t009">Contatti</span><span class="s" data-testo="index-t010">Scrivimi</span></button>
+  <button class="et" type="button" data-vai="portfolio"><span class="t">Portfolio</span></button>
+  <button class="et" type="button" data-vai="studio"><span class="t">Studio</span></button>
+  <button class="et" type="button" data-vai="tool"><span class="t">Tool</span></button>
+  <button class="et" type="button" data-vai="contatti"><span class="t">Contatti</span></button>
+  <button class="et" type="button" data-vai="area"><span class="t">Area riservata</span></button>
 </nav>
 <div class="segno" id="segno-bologna" aria-hidden="true"><span class="mono">Bologna</span></div>
+<div class="velo" id="velo" aria-hidden="true"></div>
 <div class="angoli" aria-hidden="true"><p class="mono" data-testo="index-t001">Design e sviluppo</p><p class="mono" data-testo="index-t002">Portfolio 2026</p></div>
 
 <main>
@@ -370,8 +376,8 @@ button{ font:inherit; color:inherit; }
     <button class="indietro" type="button" data-vai="centro" style="--i:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Indietro</button>
     <p class="kicker mono" style="--i:1" data-testo="index-t037"><b data-testo="index-t036">Contatti</b> Bologna e ovunque</p>
     <h2 class="titolo" id="t-contatti" tabindex="-1" style="--i:2"><span data-testo="index-t038">Manca solo</span> <em data-testo="index-t039">il tuo progetto.</em></h2>
-    <a class="bottone" style="--i:3" data-testo="index-t040" href="mailto:ciao@nemesi.studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.5 8.2 6.2 8.2-6.2"/></svg>Scrivimi</a>
-    <br><a class="email" style="--i:4" href="mailto:ciao@nemesi.studio">ciao@nemesi.studio</a>
+    <a class="bottone" style="--i:3" data-testo="index-t040" href="mailto:nemesi.mark@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.5 8.2 6.2 8.2-6.2"/></svg>Scrivimi</a>
+    <br><a class="email" style="--i:4" href="mailto:nemesi.mark@gmail.com">nemesi.mark@gmail.com</a>
     <p class="firma mono" style="--i:5">© 2026 Nemesi Web</p>
   </section>
 </main>
@@ -380,6 +386,6 @@ button{ font:inherit; color:inherit; }
 <script src="vendor/three/three.min.js"></script>
 <script src="js/strumenti-icone.js"></script>
 <script src="js/apertura.js"></script>
-<script src="mondi/mondi.js?v=3"></script>
+<script src="mondi/mondi.js?v=5"></script>
 </body>
 </html>

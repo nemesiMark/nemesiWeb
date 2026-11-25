@@ -176,6 +176,59 @@ def ghiaccio():
     salva_png(px, os.path.join(OUT, 'ghiaccio-colore.png'), srgb=True)
 
 
+# ───────────────────────── Area riservata: pianeta di lava (dalla 3.58), crosta di basalto a placche, fratture e laghi accesi ─────────────────────────
+def lava():
+    ob, N = nuovo('lava')
+    p = N.p
+    q = deformata(N, p, 1.5, 0.5)
+    q2 = deformata(N, q, 4.6, 0.12)
+    hM = N.rumore(q, 2.2, dett=7, rug=0.55).outputs['Fac']
+    # placche di crosta: tre ordini di fratture (distanza dal bordo delle celle), le piccole solo in certe zone
+    v1 = N.voronoi(q, 2.8, 'DISTANCE_TO_EDGE').outputs['Distance']
+    v2 = N.voronoi(q2, 7.5, 'DISTANCE_TO_EDGE').outputs['Distance']
+    v3 = N.voronoi(deformata(N, q2, 12.0, 0.04), 19.0, 'DISTANCE_TO_EDGE').outputs['Distance']
+    z2 = N.smooth(0.42, 0.60, N.rumore(N.v('ADD', p, (4.1, 7.3, 2.9)), 2.6, dett=3).outputs['Fac'])
+    z3 = N.smooth(0.50, 0.66, N.rumore(N.v('ADD', p, (8.2, 1.9, 6.4)), 4.2, dett=3).outputs['Fac'])
+    c1 = N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.030, v1))
+    c2 = N.m('MULTIPLY', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.040, v2)), N.m('MULTIPLY', z2, 0.8))
+    c3 = N.m('MULTIPLY', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.050, v3)), N.m('MULTIPLY', z3, 0.5))
+    crepe = N.m('MAXIMUM', c1, N.m('MAXIMUM', c2, c3))
+    vari = N.m('ADD', 0.55, N.m('MULTIPLY', 0.45, N.rumore(p, 14.0, dett=2).outputs['Fac']))
+    crepe = N.m('MULTIPLY', crepe, vari, clamp=True)
+    # laghi di lava: dove il rumore grande supera la soglia; ai bordi croste che galleggiano, al centro tutto acceso
+    nl = N.rumore(deformata(N, p, 1.8, 0.35), 1.25, dett=6, rug=0.55).outputs['Fac']
+    lago = N.smooth(0.585, 0.63, nl)
+    cuore = N.smooth(0.625, 0.68, nl)
+    vs = N.voronoi(q2, 15.0, 'DISTANCE_TO_EDGE').outputs['Distance']
+    zattere = N.smooth(0.03, 0.09, vs)
+    lagoE = N.m('MAXIMUM', N.m('MULTIPLY', lago, N.m('SUBTRACT', 1.0, N.m('MULTIPLY', zattere, 0.5))), cuore)
+    lagoE = N.m('MULTIPLY', lagoE, N.m('ADD', 0.6, N.m('MULTIPLY', 0.4, N.rumore(q2, 9.0, dett=3).outputs['Fac'])), clamp=True)
+    # vulcani: punti caldi con un piccolo alone
+    vo = N.voronoi(p, 6.0, 'F1')
+    _, _, b3 = N.xyz(vo.outputs['Color'])
+    vulc = N.m('MULTIPLY', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.07, vo.outputs['Distance'])), N.m('GREATER_THAN', b3, 0.82))
+    E = N.m('MAXIMUM', crepe, N.m('MAXIMUM', lagoE, vulc))
+    # colore: basalto quasi nero, cenere più chiara a chiazze, crosta bruciata vicino alle fratture, lava rosso scuro
+    fine = N.rumore(p, 30.0, dett=3).outputs['Fac']
+    tono = N.m('ADD', N.m('MULTIPLY', hM, 0.75), N.m('MULTIPLY', fine, 0.25))
+    col = N.rampa(tono, [(0.30, '#120E0C'), (0.45, '#1D1714'), (0.58, '#29211C'), (0.72, '#352B24')])
+    cenere = N.smooth(0.52, 0.72, N.rumore(N.v('ADD', p, (2.0, 6.0, 3.0)), 3.4, dett=6, rug=0.6).outputs['Fac'])
+    col = N.mix(N.m('MULTIPLY', cenere, 0.45), col, hex_lin('#4A4440'))
+    alone = N.m('MAXIMUM', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.10, v1)), N.m('MULTIPLY', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.09, v2)), z2))
+    col = N.mix(N.m('MULTIPLY', alone, 0.75), col, hex_lin('#2A110A'))
+    col = N.mix(N.m('MAXIMUM', lago, crepe), col, hex_lin('#6A1E08'))
+    # rilievo: placche in alto, fratture e laghi in basso
+    alt = N.m('ADD', N.m('MULTIPLY', hM, 0.5), N.m('MULTIPLY', N.rumore(p, 16.0, dett=5).outputs['Fac'], 0.2))
+    alt = N.m('SUBTRACT', alt, N.m('MULTIPLY', N.m('MAXIMUM', c1, N.m('MULTIPLY', c2, 0.8)), 0.2))
+    alt = N.m('SUBTRACT', alt, N.m('MULTIPLY', lago, 0.18))
+    px = cuoci(ob, N, 'EMIT', W, H, N.emissione(col))
+    salva_png(px, os.path.join(OUT, 'lava-colore.png'), srgb=True)
+    px = cuoci(ob, N, 'EMIT', W, H, N.emissione(E))
+    salva_png(px, os.path.join(OUT, 'lava-luce.png'), grigio=True)
+    px = cuoci(ob, N, 'NORMAL', W, H, N.rilievo(alt, forza=0.65, distanza=0.05))
+    salva_png(px, os.path.join(OUT, 'lava-normale.png'))
+
+
 # ───────────────────────── Terra: nuvole procedurali (le mappe di giorno e di notte sono della NASA) ─────────────────────────
 def nuvole():
     ob, N = nuovo('nuvole')
@@ -283,7 +336,7 @@ def anelli():
     print('salvato anelli.png')
 
 
-FUNZ = {'nemesi': nemesi, 'gigante': gigante, 'luna': luna, 'ghiaccio': ghiaccio, 'nuvole': nuvole, 'cielo': cielo, 'anelli': anelli}
+FUNZ = {'nemesi': nemesi, 'gigante': gigante, 'luna': luna, 'ghiaccio': ghiaccio, 'lava': lava, 'nuvole': nuvole, 'cielo': cielo, 'anelli': anelli}
 import time
 for q in QUALI:
     t0 = time.time()

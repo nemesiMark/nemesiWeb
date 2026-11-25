@@ -5,6 +5,8 @@
 # A lato pieno servono solo le texture che il computer grande carica intere (quelle fuori da PICCOLE in mondi/mondi.js):
 # se cambia PICCOLE, cambiare anche GRANDI.
 GRANDI=(cielo nemesi-colore nemesi-luce terra-luci)
+# Queste in m/ a un quarto del lato cotto invece che a metà (dalla 3.58: il rilievo della lava non ha bisogno di più)
+QUARTO=(lava-normale)
 set -e
 cd "$(dirname "$0")/../tex"
 mkdir -p m
@@ -14,7 +16,8 @@ for f in png/*.png; do
   q=76; [[ "$n" == *normale* ]] && q=82
   w=$(sips -g pixelWidth "$f" | awk '/pixelWidth/{print $2}')
   if (( ${GRANDI[(Ie)$n]} )); then sips -s format jpeg -s formatOptions $q "$f" --out "$n.jpg" >/dev/null; else rm -f "$n.jpg"; fi
-  h=$((w / 4)); sips -s format jpeg -s formatOptions $q -z $h $((w / 2)) "$f" --out "m/$n.jpg" >/dev/null
+  d=2; (( ${QUARTO[(Ie)$n]} )) && d=4
+  sips -s format jpeg -s formatOptions $q -z $((w / d / 2)) $((w / d)) "$f" --out "m/$n.jpg" >/dev/null
 done
 # Terra di giorno: direttamente dalla mappa NASA ridotta
 src=../sorgenti/terra-giorno-4096.jpg
