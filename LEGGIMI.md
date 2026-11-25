@@ -484,3 +484,11 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 - `video/apertura.mp4` 1280×720, 2,4 MB; `video/apertura-m.mp4` 720×1280, 1,4 MB, inquadrato apposta in verticale (niente più fasce sfocate). `?v=3` su tutti e due in `index.html` e `js/apertura.js`.
 - Scena e script di montaggio in `archivio/apertura-blender/` (fuori dal repo), spiegati in `NOTE-TECNICHE.md`.
 
+
+### 3.53 — 25/11/2026
+- Apertura: nuovo video fatto in Blender (9 s, senza audio), un'unica ripresa continua senza stacchi. La camera è bassa davanti a un muro di cemento a vista altissimo e guarda un po' in su; scende dall'alto del muro sul punto d'impatto, che sta al centro dello schermo. Il logo, nascosto dietro, colpisce quattro volte (1,0 · 2,3 · 3,6 · 4,9 s): crepe che si allargano con il lampo verde, schegge, calcinacci dall'alto. Il quarto colpo sfonda il muro a velocità vera, poi rallentatore (5,2–6,6 s), con i blocchi che volano verso la camera.
+- Polvere vera: simulazione di fumo (Mantaflow). Sbuffi a ogni colpo, il 3° più contenuto per lasciar vedere lo sfondamento; nuvola piena illuminata da dietro, scie di polvere dietro i pezzi più grossi, il logo esce dalla polvere e la smuove.
+- Finale: il logo si ferma davanti alla camera, che entra nella striscia verde luminosa sotto l'arco (7,7–8,5 s) finché lo schermo è tutto `#CDFD67` (fino a 9,0 s).
+- Passaggio alla hero («taglio di luce», `js/apertura.js`): il verde si stringe in una linea luminosa orizzontale che si accorcia verso il centro e si spegne in 0,8 s; sotto le aste cadono già. Se si salta prima, il video sfuma come prima.
+- `video/apertura.mp4` 1920×1080, 6,4 MB; `video/apertura-m.mp4` 1080×1920, 4,8 MB: stessa ripresa vista in verticale (più muro sopra, pavimento sotto). Render Eevee a 64 campioni, nebbia a 2 px, grana fine. `?v=4` su tutti e due in `index.html` e `js/apertura.js`.
+- Scena e script in `archivio/apertura-blender/` (fuori dal repo): `scena2.py`, `rendi2.py`, `monta5.sh`, spiegati in `NOTE-TECNICHE.md`.

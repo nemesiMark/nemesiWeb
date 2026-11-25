@@ -4,7 +4,7 @@
 Portfolio di Nemesi Web, lo studio di web design di Mark: una pagina unica «scroll-film» in puro codice (skill `sito-film`, Corsia A), concept «Dritto e rovescio» (`BRIEF.md`). Un solo oggetto 3D, la «lastra» nera con il bordo verde, porta tutti i lavori; la camera va solo avanti. Accento `#CDFD67` (nel codice le variabili si chiamano ancora `--arancio*` / `COL.arancio`).
 
 Barra: Portfolio (link semplice a `portfolio.html`, pagina ferma con tutti i lavori), Studio, Tool, Contattaci, lucchetto.
-Capitoli: 1 Apertura (video del logo che finisce sul grigio della pagina, `js/apertura.js`; aste che compongono la lastra) · 2 Siti (Rain Ink 01, Olimp 02) · 2b Strumenti `#tool` (giostra di sette lastre) · 3 App (Word 03, Excel 04) · 4 Giochi (Metal Gear 05, Radente 06) · 4b Studio `#studio` (mappa animata, skill `mappa-uni`) · 5 Scrivimi. Niente sezioni nuove senza richiesta.
+Capitoli: 1 Apertura (video Blender del logo che sfonda il muro e finisce nel verde, poi «taglio di luce», `js/apertura.js`; aste che compongono la lastra) · 2 Siti (Rain Ink 01, Olimp 02) · 2b Strumenti `#tool` (giostra di sette lastre) · 3 App (Word 03, Excel 04) · 4 Giochi (Metal Gear 05, Radente 06) · 4b Studio `#studio` (mappa animata, skill `mappa-uni`) · 5 Scrivimi. Niente sezioni nuove senza richiesta.
 
 **Prima di toccare il film, `portfolio.html` o il logo leggi `NOTE-TECNICHE.md`** (capitoli in dettaglio, file, copione `K`/`KX`, giostra, mappa, apertura, contratto di verifica).
 
