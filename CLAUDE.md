@@ -8,7 +8,7 @@ Capitoli: 1 Apertura (video Blender del logo che sfonda il muro e finisce nel ve
 
 **Prima di toccare il film, `portfolio.html` o il logo leggi `NOTE-TECNICHE.md`** (capitoli in dettaglio, file, copione `K`/`KX`, giostra, mappa, apertura, contratto di verifica).
 
-Lavori: Rain Ink `~/Desktop/Sites/rainInk`, Olimp `~/Desktop/Sites/olimp`, app e giochi `~/Desktop/Apps`; online su `nemesimark.github.io/<repo>/`.
+Lavori: Rain Ink `~/Documents/work/Sites/rainInk`, Olimp `~/Documents/work/Sites/olimp`, app e giochi `~/Documents/work/Apps`; online su `nemesimark.github.io/<repo>/`.
 
 ## Dove sta online
 - Repo https://github.com/nemesiMark/nemesiWeb (`main`), GitHub Pages su **https://nemesiweb.it/** (solo HTTPS), pubblica a ogni push con GitHub Actions.
@@ -17,12 +17,12 @@ Lavori: Rain Ink `~/Desktop/Sites/rainInk`, Olimp `~/Desktop/Sites/olimp`, app e
 
 ## Come si prova in locale
 ```bash
-cd ~/Desktop/Sites/nemesiWeb && python3 -m http.server 8765   # poi http://localhost:8765
+cd ~/Documents/work/Sites/nemesiWeb && python3 -m http.server 8765   # poi http://localhost:8765
 ```
 Funziona anche da `file://` (immagini e caratteri incorporati in `js/lavori-dati.js` e `js/caratteri-dati.js`).
 
 Verifiche (`~/.claude/skills/sito-film/scripts`), server sempre in background e poi chiuso:
-- `node copy-gate.js ~/Desktop/Sites/nemesiWeb/index.html` → deve uscire 0.
+- `node copy-gate.js ~/Documents/work/Sites/nemesiWeb/index.html` → deve uscire 0.
 - `node verify.js shot "http://localhost:8765/?jump=<y>" out.png 1440 900` (e `390 844`). A 1440×900: fondo 16560 (`?jump=99999`), mappa 13185–16065, giostra 4252–7043.
 - `node verify.js jank http://localhost:8765/` → massimo sotto 50 ms.
 
