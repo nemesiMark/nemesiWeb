@@ -256,6 +256,16 @@ button{ font:inherit; color:inherit; }
 .p-contatti{ --larg:560px; }
 .p-contatti .titolo{ font-size:clamp(40px, 4.4vw, 70px); }
 .p-contatti .titolo em{ display:block; }
+/* modulo dei contatti (3.61): per ora non è collegato a nessun servizio, il pulsante non invia nulla */
+.modulo{ display:flex; flex-direction:column; gap:12px; margin-top:26px; padding:18px; border-radius:16px; }
+.modulo .campi{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.campo{ display:flex; flex-direction:column; gap:7px; }
+.campo span{ color:var(--fumo); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; }
+.campo input, .campo textarea{ width:100%; padding:12px 14px; border-radius:11px; border:1px solid rgba(255,255,255,.1); background:rgba(0,0,0,.35);
+  color:var(--bianco); font:inherit; font-size:15px; line-height:1.4; transition:border-color .25s, box-shadow .25s, background .25s; }
+.campo textarea{ resize:vertical; min-height:104px; max-height:260px; }
+.campo input:focus, .campo textarea:focus{ outline:none; border-color:rgba(205,253,103,.55); background:rgba(0,0,0,.5); box-shadow:0 0 0 3px rgba(205,253,103,.12), 0 0 16px rgba(205,253,103,.15); }
+.modulo .bottone{ align-self:flex-start; margin-top:6px; border:0; cursor:pointer; font-family:inherit; }
 .email{ display:inline-block; margin-top:18px; color:#C9C9D1; font-family:var(--mono); font-size:13px; letter-spacing:.04em; }
 .email:hover, .email:focus-visible{ color:var(--bianco); }
 .firma{ margin-top:46px; color:var(--fumo-2); }
@@ -265,6 +275,10 @@ button{ font:inherit; color:inherit; }
   .pannello{ left:16px; right:16px; width:auto; top:calc(max(8px, env(safe-area-inset-top)) + 62px); max-height:calc(100% - 62px - max(8px, env(safe-area-inset-top)) - 22vh); }
   .titolo{ font-size:clamp(28px, 8vw, 38px); }
   .p-contatti .titolo{ font-size:clamp(34px, 10vw, 46px); }
+  .modulo{ margin-top:18px; padding:14px; gap:10px; }
+  .modulo .campi{ grid-template-columns:1fr; gap:10px; }
+  .campo input, .campo textarea{ font-size:16px; padding:11px 12px; }
+  .campo textarea{ min-height:88px; }
   .kicker{ margin-top:18px; }
   .lavori{ grid-template-columns:1fr 1fr; gap:8px; margin-top:18px; }
   .lavoro a{ padding:6px 6px 9px; border-radius:12px; }
@@ -376,7 +390,14 @@ button{ font:inherit; color:inherit; }
     <button class="indietro" type="button" data-vai="centro" style="--i:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Indietro</button>
     <p class="kicker mono" style="--i:1" data-testo="index-t037"><b data-testo="index-t036">Contatti</b> Bologna e ovunque</p>
     <h2 class="titolo" id="t-contatti" tabindex="-1" style="--i:2"><span data-testo="index-t038">Manca solo</span> <em data-testo="index-t039">il tuo progetto.</em></h2>
-    <a class="bottone" style="--i:3" data-testo="index-t040" href="mailto:nemesi.mark@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.5 8.2 6.2 8.2-6.2"/></svg>Scrivimi</a>
+    <form class="modulo vetro" style="--i:3" action="#" method="post" novalidate onsubmit="return false">
+      <div class="campi">
+        <label class="campo"><span class="mono" data-testo="index-t041">Nome</span><input type="text" name="nome" autocomplete="name" required></label>
+        <label class="campo"><span class="mono" data-testo="index-t042">Email</span><input type="email" name="email" autocomplete="email" inputmode="email" required></label>
+      </div>
+      <label class="campo"><span class="mono" data-testo="index-t043">Messaggio</span><textarea name="messaggio" rows="4" required></textarea></label>
+      <button class="bottone" type="button" data-testo="index-t040"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 10 14"/><path d="m21 3-7 18-4-7-7-4 18-7Z"/></svg>Invia richiesta</button>
+    </form>
     <br><a class="email" style="--i:4" href="mailto:nemesi.mark@gmail.com">nemesi.mark@gmail.com</a>
     <p class="firma mono" style="--i:5">© 2026 Nemesi Web</p>
   </section>
@@ -386,6 +407,6 @@ button{ font:inherit; color:inherit; }
 <script src="vendor/three/three.min.js"></script>
 <script src="js/strumenti-icone.js"></script>
 <script src="js/apertura.js"></script>
-<script src="mondi/mondi.js?v=5"></script>
+<script src="mondi/mondi.js?v=6"></script>
 </body>
 </html>

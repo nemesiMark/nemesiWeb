@@ -603,7 +603,7 @@ function U(v){ return { value: v }; }
 /* cielo */
 var cielo = new THREE.Mesh(new THREE.SphereGeometry(900, 64, 32), new THREE.ShaderMaterial({
   /* il cielo di Blender, più acceso, su un fondo blu notte appena sollevato dal nero */
-  uniforms: { tCielo: U(vuota), uLuce: U(1.3), uFondo: U(new V3(0.0032, 0.0042, 0.0062)) },
+  uniforms: { tCielo: U(vuota), uLuce: U(1.6), uFondo: U(new V3(0.0075, 0.0095, 0.014)) },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
   fragmentShader: 'uniform sampler2D tCielo; uniform float uLuce; uniform vec3 uFondo; varying vec2 vUv; void main(){ gl_FragColor = vec4(pow(texture2D(tCielo, vUv).rgb, vec3(2.2)) * uLuce + uFondo, 1.0); }',
   side: THREE.BackSide, depthWrite: false, depthTest: false
@@ -819,7 +819,7 @@ function geoLastra(w, h, t, rc, rb){   // = slabGeometry() del vecchio lastra.js
   return g;
 }
 var ICONE = (function(){
-  var STR = window.STRUMENTI || [], tool = MONDI.tool, lista = [];
+  var STR = (window.STRUMENTI || []).filter(function(s){ return s.id !== 'figma'; }), tool = MONDI.tool, lista = [];   // Figma resta nel pannello, non intorno alla luna (3.60)
   if (!STR.length) return lista;
   function colore(h){ return new THREE.Color(h).convertSRGBToLinear(); }
   /* lo studio di luci del vecchio sito: stanza scura con pannelli chiari (in alto il più forte), riflessi nella lacca */

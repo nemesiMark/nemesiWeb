@@ -538,3 +538,14 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 - **Accensione dei mondi**: tolti l'onda che correva sul mondo e l'anello che si allargava intorno quando arriva la luce; resta la luce verde sulla faccia rivolta a Nemesi.
 - `mondi.js?v=5`; anteprima dei link rifatta con le icone e i nomi nuovi (`images/anteprima.jpg?v=4`).
 - Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa, nessun errore né avviso in console; orologio di GSAP a passi uguali (prima da 12 a 18 ms), nessun salto della camera all'arrivo con il mouse in un angolo; circa 3 ms di lavoro per fotogramma a 1440×900 a 2×; schermate della sezione Tool a 1280×800, 1440×900 (anche a 2×), 1920×1080 e 390×844, del centro su computer e telefono, viaggio verso Tool, entrata, accensioni, «riduci movimento», pagina senza WebGL.
+
+### 3.60 — 26/11/2026
+- **Tool senza Figma**: intorno alla luna di Tool girano sei icone (Claude, VS Code, GitHub, Cloudflare, Netlify, Supabase). Figma resta nella lista degli strumenti del pannello.
+- **Sfondo più chiaro**: il cielo dietro i mondi è un po' più luminoso (circa un quinto in più; luce del cielo 1,6 invece di 1,3, fondo blu notte più alto).
+- `mondi.js?v=6`.
+- Verifiche: schermate del centro (1440×900 e 390×844) e della sezione Tool, nessun errore in console.
+
+### 3.61 — 26/11/2026
+- **Modulo nel pannello Contatti**: sotto «Manca solo il tuo progetto.» ci sono i campi Nome, Email e Messaggio e il pulsante «Invia richiesta», al posto del pulsante Scrivimi (l'indirizzo email resta scritto sotto e si può cliccare). Sul computer nome ed email stanno affiancati, sul telefono uno sotto l'altro. **Per ora il modulo non è collegato a nessun servizio: il pulsante non invia nulla.**
+- Area riservata: 35 testi. Le etichette dei campi (`t041`–`t043`) e il pulsante (`t040`, ora «Invia richiesta», senza link) si cambiano da lì. Nella guida l'esempio di pulsante è diventato «Apri in Google Maps».
+- Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa, schermate del pannello Contatti a 1440×900, 1280×720 e 390×844, clic sul pulsante senza effetti, nessun errore in console.

@@ -249,12 +249,35 @@
     "testo": "il tuo progetto."
   },
   {
+    "id": "index-t041",
+    "pagina": "index.html",
+    "sezione": "Contatti",
+    "descrizione": "Modulo: nome del primo campo",
+    "tipo": "semplice",
+    "testo": "Nome"
+  },
+  {
+    "id": "index-t042",
+    "pagina": "index.html",
+    "sezione": "Contatti",
+    "descrizione": "Modulo: nome del secondo campo",
+    "tipo": "semplice",
+    "testo": "Email"
+  },
+  {
+    "id": "index-t043",
+    "pagina": "index.html",
+    "sezione": "Contatti",
+    "descrizione": "Modulo: nome del campo del testo",
+    "tipo": "semplice",
+    "testo": "Messaggio"
+  },
+  {
     "id": "index-t040",
     "pagina": "index.html",
     "sezione": "Contatti",
-    "descrizione": "Pulsante",
+    "descrizione": "Modulo: pulsante",
     "tipo": "semplice",
-    "testo": "Scrivimi",
-    "link": "mailto:nemesi.mark@gmail.com"
+    "testo": "Invia richiesta"
   }
 ]
