@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Nemesi Web: scrive in index.html le foto dei lavori e i testi che si cambiano dall'area riservata
-(copiato da Olimp, skill area-ris).
+"""Nemesi Web: scrive in index.html (la pagina dei mondi, dalla 3.57) le foto dei lavori e i testi che si
+cambiano dall'area riservata (copiato da Olimp, skill area-ris).
 
 - data/gallerie.json: i lavori aggiunti dall'area riservata al Portfolio (dalla 3.36), uno per
   capitolo: portfolio-siti, portfolio-app, portfolio-giochi, ognuno un elenco di
@@ -26,16 +26,14 @@ import html, json, os, re, sys
 RADICE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # galleria → (pagina, id del capitolo, scritta del link). Le stesse gallerie sono in area-riservata.html (PAGINE).
-GALLERIE = {
-    "portfolio-siti": ("portfolio.html", "siti", "Visita il sito"),
-    "portfolio-app": ("portfolio.html", "app", "Apri l'app"),
-    "portfolio-giochi": ("portfolio.html", "giochi", "Gioca"),
-}
+# Dalla 3.57 nessuna: portfolio.html (con i lavori aggiunti dall'area) è andata con il vecchio sito
+# (~/Documents/work/Sites/nemesiWeb-film); data/gallerie.json resta vuoto ({}).
+GALLERIE = {}
 LINK_LAVORO = re.compile(r"^https?://[^\s<>\"']+$")
 
-# pagine che ripetono una parte di un'altra (dalla 3.24 portfolio.html ripete i lavori di index.html):
+# pagine che ripetono una parte di un'altra (dalla 3.24 alla 3.56 portfolio.html ripeteva i lavori di index.html):
 # ricevono le stesse foto e gli stessi testi, quelli che non hanno si saltano senza avviso
-COPIE = {"index.html": ["portfolio.html"]}
+COPIE = {}
 
 
 def att(t): return html.escape(t, quote=True)

@@ -4,21 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nemesi Web · Web design</title>
-<meta name="description" content="Nemesi Web progetta e costruisce siti, app e giochi per il web: Rain Ink Tattoo, Olimp, Word, Excel, Metal Gear, Radente.">
+<meta name="description" content="Nemesi Web progetta e costruisce siti, app e giochi per il web: Rain Ink Tattoo, Olimp, Word, Excel, Metal Gear, Radente. Studio a Bologna.">
 <link rel="canonical" href="https://nemesiweb.it/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Nemesi Web">
 <meta property="og:locale" content="it_IT">
 <meta property="og:title" content="Nemesi Web · Web design">
-<meta property="og:description" content="Nemesi Web progetta e costruisce siti, app e giochi per il web: Rain Ink Tattoo, Olimp, Word, Excel, Metal Gear, Radente.">
+<meta property="og:description" content="Nemesi Web progetta e costruisce siti, app e giochi per il web: Rain Ink Tattoo, Olimp, Word, Excel, Metal Gear, Radente. Studio a Bologna.">
 <meta property="og:url" content="https://nemesiweb.it/">
-<meta property="og:image" content="https://nemesiweb.it/images/anteprima.jpg">
+<meta property="og:image" content="https://nemesiweb.it/images/anteprima.jpg?v=2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Nemesi Web: siti, app e giochi per il web. Una lastra nera con il bordo verde mostra il sito di Rain Ink.">
+<meta property="og:image:alt" content="Nemesi Web: il mondo Nemesi, crepato di verde, collegato da aste al neon ai mondi Portfolio, Studio, Tool e Contatti.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://nemesiweb.it/images/anteprima.jpg">
-<meta name="theme-color" content="#9AA0A8">
+<meta name="twitter:image" content="https://nemesiweb.it/images/anteprima.jpg?v=2">
+<meta name="theme-color" content="#030405">
 <link rel="icon" href="images/logo/icona.svg?v=3.8" type="image/svg+xml">
 <link rel="icon" href="images/logo/icona-32.png?v=3.8" type="image/png" sizes="32x32">
 <link rel="icon" href="images/logo/icona-16.png?v=3.8" type="image/png" sizes="16x16">
@@ -26,65 +26,51 @@
 <link rel="preload" href="fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
 <script>
-/* Prima del disegno: con WebGL e senza «riduci movimento» la pagina diventa il film (classe film). */
+/* Prima del disegno: con WebGL la pagina diventa la scena 3D dei mondi; il video dell'apertura parte subito,
+   tranne con ?salta, con un indirizzo #sezione o con «riduci movimento». Dentro un riquadro (anteprima dell'area
+   riservata) la pagina resta ferma: sezioni una sotto l'altra, come senza WebGL. */
 (function(){ var d=document.documentElement, ok=false; d.classList.add('js');
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  try { if (window.self !== window.top) return; } catch(e){ return; }   /* dentro un riquadro (anteprima dell'area riservata) la pagina resta ferma */
+  try { if (window.self !== window.top){ d.classList.add('senza-gl'); return; } } catch(e){ d.classList.add('senza-gl'); return; }
   try { var c=document.createElement('canvas'); ok=!!(c.getContext('webgl2')||c.getContext('webgl')); } catch(e){}
-  if (ok){ d.classList.add('film');
-    /* il video dell'apertura gira alla prima visita della sessione e quando si ricarica la pagina; tornando da un'altra pagina del sito no */
-    var nuovo=true; try { var nav=(performance.getEntriesByType&&performance.getEntriesByType('navigation')[0])||{}, ric=nav.type==='reload'||(performance.navigation&&performance.navigation.type===1);
-      nuovo=ric||!sessionStorage.getItem('nemesiVisto'); sessionStorage.setItem('nemesiVisto','1'); } catch(e){}
-    if (nuovo && location.search.indexOf('jump=')<0 && !location.hash){ d.classList.add('avvio');
-      var tc=document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute('content','#050506');
-      /* il video dell'apertura si scarica subito (lo prende js/apertura.js) */
-      var v=document.createElement('video'); v.muted=true; v.defaultMuted=true; v.playsInline=true; v.setAttribute('muted',''); v.setAttribute('playsinline','');
-      v.preload='auto'; v.src=innerWidth<innerHeight?'video/apertura-m.mp4?v=4':'video/apertura.mp4?v=4'; window.__videoApertura=v; try { v.load(); } catch(e){} } } })();
+  if (!ok){ d.classList.add('senza-gl'); return; }
+  d.classList.add('gl');
+  var rid=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (rid || /[?&](salta|subito)/.test(location.search) || location.hash.length > 1) return;
+  d.classList.add('avvio');
+  var v=document.createElement('video'); v.muted=true; v.defaultMuted=true; v.playsInline=true; v.setAttribute('muted',''); v.setAttribute('playsinline','');
+  v.preload='auto'; v.src=innerWidth<innerHeight?'video/apertura-m.mp4?v=4':'video/apertura.mp4?v=4'; window.__videoApertura=v; try { v.load(); } catch(e){} })();
 </script>
 <style>
-/* ═════════ caratteri (copie locali, nessuna richiesta a terzi) ═════════ */
 @font-face{ font-family:"Inter Tight"; src:url(fonts/inter-tight.woff2) format("woff2"); font-weight:500 900; font-style:normal; font-display:swap; }
 @font-face{ font-family:"Geist"; src:url(fonts/geist.woff2) format("woff2"); font-weight:100 900; font-style:normal; font-display:swap; }
 @font-face{ font-family:"Geist Mono"; src:url(fonts/geist-mono.woff2) format("woff2"); font-weight:100 900; font-style:normal; font-display:swap; }
 
-/* ═════════ colori presi dal logo (misurati sui pixel del PNG su nero) ═════════ */
 :root{
-  --nero:#17171C; --nero-2:#1D1D22; --grafite:#24242A; --grafite-2:#2D2D33;   /* fondo: grafite scuro (2.3), prima quasi nero #08080A */
-  --fondo:#9AA0A8;             /* sfondo delle pagine: grigio cemento (2.8) */
-  --inchiostro:#15161A;        /* testo sul cemento */
-  --fumo-c:#383C44;            /* testo secondario sul cemento */
-  --arancio-t:#2F5600;         /* arancio leggibile sul cemento */
-  --bianco:#F4F3F1;            /* «nemesi» */
-  --fumo:#A4A4AE;              /* faccia del nastro, schiarita per il testo */
-  --fumo-2:#85858F;
-  --linea:rgba(255,255,255,.09);
-  --arancio:#A6EF0B;           /* «web», tono centrale */
-  --arancio-chiaro:#CDFD67;    /* «web», luce */
-  --oro:#CFF977;               /* riflesso sul marchio */
-  --arancio-scuro:#8ECE05;     /* «web», ombra */
-  --brace:#79B003;             /* fondo del marchio */
-  --titoli:"Inter Tight", "Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;   /* come la scritta RAIN INK */
+  --spazio:#030405;
+  --bianco:#F4F3F1; --fumo:#A4A4AE; --fumo-2:#85858F; --linea:rgba(255,255,255,.09);
+  --arancio:#A6EF0B; --arancio-chiaro:#CDFD67; --arancio-scuro:#8ECE05;
+  --titoli:"Inter Tight", "Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;
   --sans:"Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;
   --mono:"Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --m:clamp(20px, 5.2vw, 76px);
   --ease:cubic-bezier(.2,.7,.1,1);
   --ease-io:cubic-bezier(.65,0,.35,1);
 }
-
 *{ box-sizing:border-box; margin:0; padding:0; }
-html{ -webkit-text-size-adjust:100%; background:var(--fondo); }
-body{ background:var(--fondo); color:var(--inchiostro); font-family:var(--sans); font-size:16px; line-height:1.5;
-  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility; }
+html, body{ height:100%; overflow:hidden; overscroll-behavior:none; background:var(--spazio); }
+body{ color:var(--bianco); font-family:var(--sans); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  -webkit-tap-highlight-color:transparent; }
 img{ display:block; max-width:100%; height:auto; }
 a{ color:inherit; text-decoration:none; }
 ul{ list-style:none; }
+button{ font:inherit; color:inherit; }
 ::selection{ background:var(--arancio); color:#030B1F; }
-.mono{ font-family:var(--mono); font-size:12.5px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; }
+.mono{ font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; }
 .vh{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
-:focus-visible{ outline:2px solid var(--arancio-chiaro); outline-offset:3px; border-radius:4px; }
+:focus-visible{ outline:2px solid var(--arancio-chiaro); outline-offset:3px; border-radius:6px; }
 
-/* ═════════ barra di navigazione: lastra scura sospesa (come Rain Ink), sfumatura verde ferma su tutti i lati ═════════ */
-.hdr{ position:fixed; top:14px; left:0; right:0; z-index:60; perspective:1200px; pointer-events:none; }
+/* ═════════ barra (uguale al sito) ═════════ */
+.hdr{ position:fixed; top:14px; left:0; right:0; z-index:60; perspective:1200px; pointer-events:none; transition:opacity .6s var(--ease); }
 .slab{ pointer-events:auto; position:relative; width:min(960px, calc(100% - 2 * var(--m) + 24px)); margin-inline:auto;
   display:flex; align-items:center; gap:18px; padding:6px 7px 6px 14px; border-radius:16px;
   background:linear-gradient(180deg, rgba(14,14,16,.94), rgba(0,0,0,.94));
@@ -94,12 +80,10 @@ ul{ list-style:none; }
     0 4px 0 #040405, 0 0 14px 1px rgba(205,253,103,.30), 0 0 34px 4px rgba(205,253,103,.12), 0 24px 48px -16px rgba(0,0,0,.8);
   transform-style:preserve-3d; }
 .logo{ position:relative; display:block; flex:none; width:173px; height:34px; transform:translateZ(20px); }
-/* il PNG ha aria trasparente sotto la scritta: lo si allinea sul disegno, non sul riquadro */
 .logo img{ position:absolute; left:0; top:-1.5px; height:31px; width:auto; max-width:none; }
 .links{ display:flex; gap:4px; margin-left:auto; transform-style:preserve-3d; }
 .links a{ position:relative; display:block; padding:9px 14px; font-size:14px; font-weight:500; color:#C9C9D1; white-space:nowrap;
   border-radius:11px; transform:translateZ(8px);
-  /* tasti in rilievo come il lucchetto: luce sul bordo alto, spessore sotto */
   background:linear-gradient(180deg, #2A2B31 0%, #1C1D22 48%, #121317 100%);
   box-shadow:0 1px 0 rgba(255,255,255,.14) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 3px 0 #050506, 0 10px 18px -10px rgba(0,0,0,.9);
   transition:transform 220ms var(--ease), color 150ms ease, box-shadow 220ms var(--ease); }
@@ -109,14 +93,12 @@ ul{ list-style:none; }
   background:linear-gradient(90deg, var(--arancio-chiaro), var(--arancio-scuro)); }
 .links a:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 1px 0 #050506; }
 @media (hover:hover) and (pointer:fine){
-  /* al passaggio: zoom e alone verde sfumato su tutti i lati, senza linea di contorno */
-  .links a:hover{ z-index:2; color:#F4F3F1; transform:translateZ(14px) translateY(-2px) scale(1.1);   /* più avanti dei vicini: l'alone passa sopra */
+  .links a:hover{ z-index:2; color:#F4F3F1; transform:translateZ(14px) translateY(-2px) scale(1.1);
     box-shadow:0 1px 0 rgba(255,255,255,.18) inset, 0 -1px 0 rgba(0,0,0,.5) inset, 0 4px 0 #050506,
       0 0 12px 2px rgba(205,253,103,.62), 0 0 26px 6px rgba(205,253,103,.3), 0 0 48px 10px rgba(166,239,11,.13); }
   .links a:active{ transform:translateZ(8px) translateY(2px); box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 1px 0 #050506; }
 }
-.cta{ flex:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; width:40px; height:40px; padding:0; border-radius:11px;
-  color:#030B1F; font-size:14px; font-weight:600; letter-spacing:.005em;
+.cta{ flex:none; display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:11px; color:#030B1F;
   background:linear-gradient(180deg, #DCFF8E 0%, #CDFD67 48%, #B4EA4A 100%);
   box-shadow:0 1px 0 rgba(237,254,201,.55) inset, 0 3px 0 #537903, 0 10px 22px -10px rgba(166,239,11,.7);
   transform:translateZ(8px); transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
@@ -139,7 +121,6 @@ ul{ list-style:none; }
   .logo{ width:150px; height:32px; }
   .logo img{ height:27px; left:0; top:-1px; }
   .burger{ display:block; }
-  .cta{ width:40px; padding:0; } .cta span{ display:none; }
   .links{ position:absolute; top:calc(100% + 10px); left:0; right:0; flex-direction:column; gap:6px; padding:10px;
     border-radius:16px; background:rgba(4,4,5,.97); border:1px solid rgba(255,255,255,.07); box-shadow:0 30px 60px -10px rgba(0,0,0,.8);
     visibility:hidden; opacity:0; transform:rotateX(-12deg) scale(.97); transform-origin:top right;
@@ -149,701 +130,256 @@ ul{ list-style:none; }
   .hdr.open .links li{ transform:none; opacity:1; }
   .hdr.open .links li:nth-child(2){ transition-delay:30ms; }
   .hdr.open .links li:nth-child(3){ transition-delay:60ms; }
-  .links a{ padding:13px 14px; font-size:16px; }
   .hdr.open .links li:nth-child(4){ transition-delay:90ms; }
+  .links a{ padding:13px 14px; font-size:16px; }
 }
 
-/* ═════════ pagina statica (senza WebGL o con «riduci movimento»): tutto il contenuto, in ordine ═════════ */
-.apertura{ position:relative; min-height:100vh; min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  padding:120px var(--m) 110px; overflow:hidden; }
-.apertura::before{ content:""; position:absolute; left:50%; top:52%; width:min(1100px, 140vw); height:min(640px, 90vw); transform:translate(-50%, -50%);
-  background:radial-gradient(closest-side, rgba(166,239,11,.13), rgba(166,239,11,0)); pointer-events:none; }
-.marchio{ position:relative; width:min(760px, 86vw); }
-.marchio img{ width:100%; height:auto; }
-.riga{ display:block; position:relative; width:min(42vw, 640px); height:3px; margin-top:12vh; border-radius:3px;
-  background:linear-gradient(90deg, rgba(121,176,3,0), #8ECE05 10%, #CDFD67 38%, #CFF977 50%, #CDFD67 62%, #8ECE05 90%, rgba(121,176,3,0));
-  box-shadow:0 0 14px rgba(166,239,11,.75), 0 0 46px rgba(166,239,11,.4), 0 0 120px rgba(166,239,11,.22); }
-.angolo{ position:absolute; bottom:28px; color:var(--fumo-c); }
-.angolo.sx{ left:var(--m); } .angolo.dx{ right:var(--m); }
+/* ═════════ scena ═════════ */
+.gl-canvas{ position:fixed; inset:0; width:100%; height:100%; display:block; z-index:0; touch-action:none; outline:none; }
+.senza-gl .gl-canvas{ display:none; }
+.pre{ display:none; }
+.avvio .pre{ display:block; position:fixed; inset:0; z-index:40; pointer-events:none; background:#000; }
+.pre .pre-video{ position:absolute; inset:0; width:100%; height:100%; display:block; object-fit:cover; }
+.avvio .hdr, .gl:not(.pronto) .hdr{ opacity:0; pointer-events:none; }
+.gl:not(.pronto) .etichette, .gl:not(.pronto) .angoli{ visibility:hidden; }
+/* velo di grana sopra tutto, come nel sito */
+.grana{ position:fixed; inset:0; z-index:30; pointer-events:none; opacity:.045; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
-.capitolo{ position:relative; max-width:1320px; margin:0 auto; padding:16vh var(--m) 6vh; }
-.kicker{ display:flex; align-items:center; gap:12px; color:var(--fumo-c); }
+/* ═════════ etichette dei mondi (seguono i pianeti) ═════════ */
+.etichette{ position:fixed; inset:0; z-index:10; pointer-events:none; }
+.et{ position:absolute; left:0; top:0; display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 12px 10px; border:0; border-radius:12px;
+  background:none; cursor:pointer; pointer-events:auto; text-align:center; white-space:nowrap; will-change:transform;
+  opacity:0; transition:opacity .5s var(--ease); }
+.et.su{ opacity:var(--vis, 1); }   /* --vis: più bassa quando il mondo passa dietro Nemesi o dietro un altro mondo */
+.et .n{ color:var(--arancio-chiaro); font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.18em; text-shadow:0 0 12px rgba(205,253,103,.45); }
+.et .t{ position:relative; font-family:var(--titoli); font-size:19px; font-weight:700; letter-spacing:-.01em; color:var(--bianco); text-shadow:0 1px 2px rgba(0,0,0,.9), 0 0 18px rgba(0,0,0,.8); }
+.et .t::after{ content:""; position:absolute; left:0; right:0; bottom:-3px; height:2px; border-radius:2px; transform:scaleX(0); transform-origin:center;
+  background:linear-gradient(90deg, var(--arancio-scuro), var(--arancio-chiaro), var(--arancio-scuro)); box-shadow:0 0 10px rgba(205,253,103,.8);
+  transition:transform .45s var(--ease); }
+.et .s{ color:var(--fumo); font-size:13px; text-shadow:0 1px 2px rgba(0,0,0,.9); transition:color .3s; }
+.et.on .t::after, .et:focus-visible .t::after{ transform:scaleX(1); }
+.et.on .s, .et:focus-visible .s{ color:#D8D8DE; }
+.et:focus-visible{ outline:none; }
+.in-sezione .et, .salto .et{ opacity:0 !important; pointer-events:none; }
+
+.angoli{ position:fixed; left:0; right:0; bottom:26px; z-index:10; display:flex; justify-content:space-between; padding:0 var(--m); color:var(--fumo-2);
+  pointer-events:none; transition:opacity .6s var(--ease); }
+.in-sezione .angoli, .salto .angoli{ opacity:0; }
+
+/* segno «Bologna» agganciato al puntino sulla Terra */
+.segno{ position:fixed; left:0; top:0; z-index:12; pointer-events:none; opacity:0; transition:opacity .6s var(--ease); will-change:transform; }
+.segno.su{ opacity:1; }
+.segno::before{ content:""; position:absolute; left:0; bottom:0; width:56px; height:1px; transform-origin:0 0; transform:rotate(-38deg);
+  background:linear-gradient(90deg, rgba(205,253,103,.0), rgba(205,253,103,.85)); }
+.segno span{ position:absolute; left:42px; bottom:30px; padding:5px 9px; border-radius:7px; white-space:nowrap; color:var(--arancio-chiaro); font-size:11px;
+  background:rgba(6,8,6,.62); border:1px solid rgba(205,253,103,.35); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); text-shadow:0 0 10px rgba(205,253,103,.4); }
+
+/* ═════════ sezioni: si aprono all'arrivo, sopra il loro mondo ═════════ */
+.pannello{ position:fixed; z-index:20; left:var(--m); top:clamp(98px, 13vh, 132px); width:min(var(--larg, 600px), 54vw);
+  max-height:calc(100% - clamp(98px, 13vh, 132px) - 32px); overflow:auto; scrollbar-width:none; overscroll-behavior:contain;
+  visibility:hidden; pointer-events:none; }
+.pannello::-webkit-scrollbar{ display:none; }
+.pannello.on{ visibility:visible; pointer-events:auto; }
+.pannello > *{ opacity:0; }
+.pannello.on > *{ animation:entra .9s var(--ease) both; animation-delay:calc(var(--i, 0) * 70ms + 40ms); }
+.pannello.via{ visibility:visible; }
+.pannello.via > *{ animation:esce .28s ease-in both; }
+@keyframes entra{ from{ opacity:0; transform:translateY(22px); filter:blur(8px); } to{ opacity:1; transform:none; filter:none; } }
+@keyframes esce{ from{ opacity:1; } to{ opacity:0; transform:translateY(-10px); } }
+.indietro{ display:inline-flex; align-items:center; gap:10px; height:36px; padding:0 14px 0 10px; border-radius:10px; border:1px solid rgba(255,255,255,.09); cursor:pointer;
+  background:rgba(12,13,16,.55); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); color:#C9C9D1;
+  font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; transition:color .25s, border-color .25s, box-shadow .25s; }
+.indietro svg{ width:16px; height:16px; }
+.indietro:hover, .indietro:focus-visible{ color:var(--bianco); border-color:rgba(205,253,103,.5); box-shadow:0 0 14px rgba(205,253,103,.25); outline:none; }
+.kicker{ display:flex; align-items:center; gap:12px; margin-top:26px; color:var(--fumo); }
 .kicker::before{ content:""; width:30px; height:1px; background:linear-gradient(90deg, var(--arancio-scuro), var(--arancio-chiaro)); }
-.kicker b{ color:var(--arancio-t); font-weight:500; }
-.titolo{ margin-top:18px; max-width:17ch; font-family:var(--titoli); font-weight:800; font-size:clamp(38px, 4.6vw, 74px); line-height:1.02;
-  letter-spacing:-.02em; text-wrap:balance; }
-.titolo em{ font-style:normal; color:var(--arancio-chiaro); text-shadow:0 1px 0 rgba(3,11,31,.55), 0 2px 10px rgba(3,11,31,.35); }   /* lime come il bottone, staccato dal cemento da un'ombra */
-.lavori{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(22px, 3vw, 46px); margin-top:7vh; }
-.schermo{ position:relative; display:block; border-radius:10px; }
-.schermo img{ width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:10px; border:1px solid var(--linea); background:var(--grafite); }
-/* contorno arancio al neon al passaggio del mouse (richiesto da Mark nella 1.23) */
-.schermo::after{ content:""; position:absolute; inset:-6px; border:1.5px solid #E0FEA2; border-radius:14px; pointer-events:none;
-  box-shadow:0 0 2px #CDFD68, 0 0 8px rgba(166,239,11,.95), 0 0 20px rgba(166,239,11,.6), 0 0 42px rgba(142,206,5,.4),
-    inset 0 0 6px rgba(166,239,11,.75), inset 0 0 16px rgba(166,239,11,.3);
-  opacity:0; transform:scale(.985); transition:opacity .45s var(--ease), transform .45s var(--ease); }
-.schermo:hover::after, .schermo:focus-visible::after{ opacity:1; transform:none; }
-.schermo:focus-visible{ outline:none; }
-.didascalia{ display:flex; flex-wrap:wrap; align-items:baseline; column-gap:14px; row-gap:2px; margin-top:16px; line-height:1.3; }
-.d-in{ display:contents; }
-.num{ color:var(--arancio-t); font-family:var(--mono); font-size:12.5px; font-weight:500; letter-spacing:.08em; }
-.nome{ font-size:17px; font-weight:550; letter-spacing:-.005em; }
-.desc{ color:var(--fumo-c); font-size:14.5px; }
-.azione{ margin-left:auto; color:var(--arancio-t); font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap; }
-/* sotto «Apri l'app» / «Gioca»: apre l'app con ?installa, che mostra come installarla (installa.js nelle app) */
-.installa{ flex-basis:100%; margin-top:6px; text-align:right; color:var(--fumo-c); font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap; transition:color .25s var(--ease); }
-.installa:hover, .installa:focus-visible{ color:var(--arancio-t); }
+.kicker b{ color:var(--arancio-chiaro); font-weight:500; }
+.titolo{ margin-top:14px; font-family:var(--titoli); font-weight:800; font-size:clamp(34px, 3.4vw, 56px); line-height:1.02; letter-spacing:-.02em; text-wrap:balance;
+  text-shadow:0 2px 24px rgba(0,0,0,.6); }
+.titolo em{ font-style:normal; color:var(--arancio-chiaro); }
+.titolo:focus{ outline:none; }
+.vetro{ background:linear-gradient(180deg, rgba(20,21,26,.62), rgba(8,9,11,.62)); -webkit-backdrop-filter:blur(14px) saturate(1.2); backdrop-filter:blur(14px) saturate(1.2);
+  border:1px solid rgba(255,255,255,.075); box-shadow:0 1px 0 rgba(255,255,255,.06) inset, 0 24px 48px -20px rgba(0,0,0,.8); }
 
-/* strumenti: nella pagina ferma un elenco con le icone nei colori delle marche; nel film le didascalie della giostra */
-.strumenti{ list-style:none; display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:22px 28px; margin-top:7vh; }
-.strum{ display:grid; grid-template-columns:58px 1fr; column-gap:16px; align-items:center; }
-.strum .ico{ grid-row:span 3; width:58px; height:58px; border-radius:13px; background:var(--corpo); display:grid; place-items:center;
-  box-shadow:0 1px 0 rgba(255,255,255,.22) inset, 0 4px 0 rgba(0,0,0,.28), 0 14px 24px -12px rgba(0,0,0,.6); }
-.strum .ico svg{ width:54%; height:54%; }
-.s-casa{ color:var(--arancio-t); font-size:11.5px; }
-.s-nome{ font-size:17px; font-weight:550; letter-spacing:-.005em; }
-a.s-nome:hover{ color:var(--arancio-t); }
-.s-desc{ color:var(--fumo-c); font-size:14px; }
-.fine{ display:flex; align-items:center; justify-content:center; min-height:86vh; padding:12vh var(--m); text-align:center; }
-.fine-in{ display:flex; flex-direction:column; align-items:center; }
-.fine .titolo{ max-width:13ch; margin-top:0; }
-.scrivimi{ display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 26px; margin-top:34px; border-radius:13px;
-  color:#030B1F; font-size:16px; font-weight:600; background:linear-gradient(180deg, #DCFF8E 0%, #CDFD67 48%, #B4EA4A 100%);
+/* Portfolio */
+.p-portfolio{ --larg:820px; }
+.lavori{ display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:28px; }
+.lavoro a{ position:relative; display:block; padding:8px 8px 12px; border-radius:14px; transition:transform .45s var(--ease), border-color .3s; }
+.lavoro img{ width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; background:#15161a; }
+.lavoro .r{ display:flex; align-items:baseline; gap:10px; margin-top:10px; padding:0 4px; }
+.lavoro .num{ color:var(--arancio-chiaro); font-family:var(--mono); font-size:11px; letter-spacing:.1em; }
+.lavoro .nome{ font-size:15px; font-weight:600; letter-spacing:-.005em; }
+.lavoro .desc{ display:block; padding:0 4px; margin-top:2px; color:var(--fumo); font-size:12.5px; line-height:1.35; }
+.lavoro a::after{ content:""; position:absolute; inset:-1px; border-radius:15px; pointer-events:none; border:1.5px solid #E0FEA2; opacity:0; transform:scale(.985);
+  box-shadow:0 0 2px #CDFD68, 0 0 8px rgba(166,239,11,.95), 0 0 20px rgba(166,239,11,.5), inset 0 0 10px rgba(166,239,11,.35);
+  transition:opacity .4s var(--ease), transform .4s var(--ease); }
+.lavoro a:hover, .lavoro a:focus-visible{ transform:translateY(-3px); outline:none; }
+.lavoro a:hover::after, .lavoro a:focus-visible::after{ opacity:1; transform:none; }
+
+/* Studio */
+.p-studio{ --larg:540px; }
+.sede{ display:flex; gap:18px; align-items:flex-start; margin-top:30px; padding:20px 22px; border-radius:16px; }
+.sede .pin{ flex:none; width:42px; height:42px; border-radius:12px; display:grid; place-items:center; color:#030B1F;
+  background:linear-gradient(180deg, #DCFF8E 0%, #CDFD67 48%, #B4EA4A 100%); box-shadow:0 0 18px rgba(205,253,103,.45); }
+.sede .pin svg{ width:20px; height:20px; }
+.sede .nome{ font-family:var(--titoli); font-size:20px; font-weight:700; letter-spacing:-.01em; }
+.sede .ind{ margin-top:4px; color:#C9C9D1; font-size:15px; line-height:1.45; }
+.sede .coord{ margin-top:10px; color:var(--fumo-2); font-size:11px; }
+.bottone{ display:inline-flex; align-items:center; gap:10px; height:50px; padding:0 24px; margin-top:22px; border-radius:13px; color:#030B1F; font-size:15.5px; font-weight:600;
+  background:linear-gradient(180deg, #DCFF8E 0%, #CDFD67 48%, #B4EA4A 100%);
   box-shadow:0 1px 0 rgba(237,254,201,.55) inset, 0 4px 0 #537903, 0 18px 40px -14px rgba(166,239,11,.8);
   transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
-.scrivimi svg{ width:18px; height:18px; }
-@media (hover:hover) and (pointer:fine){ .scrivimi:hover{ transform:translateY(-3px) scale(1.04);
+.bottone svg{ width:18px; height:18px; }
+@media (hover:hover) and (pointer:fine){ .bottone:hover{ transform:translateY(-3px) scale(1.04);
   box-shadow:0 1px 0 rgba(237,254,201,.6) inset, 0 6px 0 #537903, 0 22px 46px -12px rgba(166,239,11,.85); } }
-.scrivimi:active{ transform:translateY(2px); box-shadow:0 1px 0 rgba(237,254,201,.5) inset, 0 1px 0 #537903; }
-.email{ margin-top:18px; color:var(--fumo-c); font-family:var(--mono); font-size:13px; letter-spacing:.04em; }
-.email:hover{ color:var(--inchiostro); }
-.piede{ display:block; padding:0 var(--m) 28px; color:var(--fumo-c); text-align:center; }
-.rail, .pre, .gl, .velo, .taglio, .film-spazio{ display:none; }
+.bottone:active{ transform:translateY(2px); box-shadow:0 1px 0 rgba(237,254,201,.5) inset, 0 1px 0 #537903; }
 
+/* Tool */
+.p-tool{ --larg:660px; }
+.strumenti{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:28px; }
+.strum a{ display:grid; grid-template-columns:44px 1fr; column-gap:14px; align-items:center; padding:12px 14px; border-radius:14px; transition:transform .4s var(--ease), border-color .3s, box-shadow .3s; }
+.strum .ico{ grid-row:span 2; width:44px; height:44px; border-radius:11px; display:grid; place-items:center; background:var(--corpo);
+  box-shadow:0 1px 0 rgba(255,255,255,.22) inset, 0 3px 0 rgba(0,0,0,.35), 0 0 18px -4px var(--alone, transparent); }
+.strum .ico svg{ width:56%; height:56%; }
+.strum .s-nome{ font-size:15.5px; font-weight:600; }
+.strum .s-nome small{ margin-left:8px; color:var(--fumo-2); font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; }
+.strum .s-desc{ color:var(--fumo); font-size:13px; line-height:1.35; }
+.strum a:hover, .strum a:focus-visible{ transform:translateY(-2px); border-color:rgba(205,253,103,.45); box-shadow:0 0 18px rgba(205,253,103,.18), 0 24px 48px -20px rgba(0,0,0,.8); outline:none; }
+
+/* Contatti */
+.p-contatti{ --larg:560px; }
+.p-contatti .titolo{ font-size:clamp(40px, 4.4vw, 70px); }
+.p-contatti .titolo em{ display:block; }
+.email{ display:inline-block; margin-top:18px; color:#C9C9D1; font-family:var(--mono); font-size:13px; letter-spacing:.04em; }
+.email:hover, .email:focus-visible{ color:var(--bianco); }
+.firma{ margin-top:46px; color:var(--fumo-2); }
+
+/* ═════════ telefono ═════════ */
 @media (max-width:760px){
-  .lavori{ grid-template-columns:1fr; }
-  .angolo{ bottom:20px; font-size:11px; }
-  .riga{ width:76vw; }
+  .pannello{ left:16px; right:16px; width:auto; top:calc(max(8px, env(safe-area-inset-top)) + 62px); max-height:calc(100% - 62px - max(8px, env(safe-area-inset-top)) - 22vh); }
+  .titolo{ font-size:clamp(28px, 8vw, 38px); }
+  .p-contatti .titolo{ font-size:clamp(34px, 10vw, 46px); }
+  .kicker{ margin-top:18px; }
+  .lavori{ grid-template-columns:1fr 1fr; gap:8px; margin-top:18px; }
+  .lavoro a{ padding:6px 6px 9px; border-radius:12px; }
+  .lavoro .r{ margin-top:7px; gap:7px; }
+  .lavoro .nome{ font-size:13.5px; }
+  .lavoro .desc{ display:none; }
+  .strumenti{ grid-template-columns:1fr 1fr; gap:7px; margin-top:18px; }
+  .strum a{ grid-template-columns:32px 1fr; padding:8px 10px; column-gap:10px; }
+  .strum .ico{ grid-row:auto; width:32px; height:32px; border-radius:8px; }
+  .strum .s-nome{ font-size:14px; }
+  .strum .s-nome small, .strum .s-desc{ display:none; }
+  .sede{ margin-top:20px; padding:16px; }
+  .et .t{ font-size:16px; }
+  .et .s{ font-size:12px; }
+  .et{ padding:6px 8px 8px; }
+  .angoli{ display:none; }
+}
+@media (max-height:520px) and (orientation:landscape){
+  .angoli{ display:none; }
+  .et .t{ font-size:15px; } .et .s{ display:none; } .et{ padding:4px 8px 6px; }
+  .pannello{ top:76px; max-height:calc(100% - 90px); }
+  .lavori{ grid-template-columns:repeat(3, 1fr); }
+  .lavoro .desc{ display:none; }
 }
 
-/* ═════════ film: una scena fissata, la pagina scorre su uno spazio vuoto ═════════ */
-html.film{ scrollbar-width:none; }
-html.film::-webkit-scrollbar{ display:none; }
-.film .gl{ display:block; position:fixed; left:0; top:0; width:100%; height:100vh; z-index:0; }
-.film .velo{ display:block; position:fixed; inset:0; z-index:1; pointer-events:none;
-  background:radial-gradient(ellipse 120% 90% at 50% 46%, rgba(10,10,13,0) 58%, rgba(10,10,13,.22) 100%); }
-.film .velo::after{ content:""; position:absolute; inset:0; opacity:.05;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-.film .film-spazio{ display:block; }
-/* salti lunghi dal menu: un attimo di nero, poi si arriva alla tappa scorrendo piano */
-.film .taglio{ display:block; position:fixed; inset:0; z-index:15; background:var(--fondo); opacity:0; pointer-events:none; }
-.film main{ position:fixed; inset:0; z-index:10; pointer-events:none; opacity:0; }
-.film.pronto main{ opacity:1; }
-.film main > section{ position:absolute; inset:0; padding:0; margin:0; max-width:none; min-height:0; }
-.film .apertura{ display:block; overflow:visible; }
-.film .apertura::before, .film .riga{ display:none; }
-/* nel film l'apertura è fatta dalle aste 3D: il logo grande resta solo per chi usa la sintesi vocale */
-.film .marchio{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
-.film .angolo{ bottom:30px; }
-.film .testa{ position:absolute; left:var(--m); top:clamp(98px, 13vh, 150px); width:min(64vw, 940px); }
-.film .titolo{ max-width:none; font-size:clamp(36px, 3.7vw, 60px); }
-.film .kicker{ opacity:0; }
-.film .titolo .w{ display:inline-block; overflow:hidden; vertical-align:top; padding:0 .12em .1em 0; margin:0 -.12em -.1em 0; }
-.film .titolo .wi{ display:inline-block; will-change:transform; }
-.film .lavori{ display:block; margin:0; }
-/* il collegamento è un velo trasparente deformato esattamente sulla faccia della lastra */
-.film .schermo{ position:fixed; left:0; top:0; width:800px; height:450px; transform-origin:0 0; border-radius:0; pointer-events:none; }
-.film .schermo.on{ pointer-events:auto; }
-/* anteprima senza collegamento (area riservata di Rain Ink): si illumina al passaggio come le altre, ma non porta da nessuna parte */
-.schermo.muto{ cursor:default; }
-.film .schermo:not(.on):focus-visible{ outline:none; }
-.film .schermo img, .film .schermo::after{ display:none; }
-.film .schermo:focus-visible{ outline:2px solid rgba(197,252,80,.9); outline-offset:4px; }
-.film .didascalia{ position:fixed; left:0; top:0; margin:0; flex-wrap:nowrap; will-change:transform; pointer-events:none; }
-.film .d-in{ display:flex; align-items:baseline; column-gap:14px; opacity:0; width:100%; }
-.film .azione{ pointer-events:auto; }
-.film .d-in{ position:relative; }
-.film .installa{ position:absolute; right:0; top:100%; pointer-events:auto; }
-.film .strumenti{ display:block; margin:0; }
-.film .strum{ position:fixed; left:0; top:0; display:flex; flex-direction:column; align-items:center; gap:3px; width:min(460px, 86vw); text-align:center;
-  opacity:0; pointer-events:none; will-change:transform, opacity; }
-.film .strum .ico{ display:none; }
-/* la lastra davanti della giostra porta al sito ufficiale: velo trasparente deformato sulla sua faccia */
-.strum-link{ display:none; }
-.film .strum-link{ display:block; position:fixed; left:0; top:0; width:800px; height:450px; transform-origin:0 0; border-radius:68px; pointer-events:none;
-  transition:box-shadow .35s var(--ease); }
-.film .strum-link.on{ pointer-events:auto; }
-@media (hover:hover) and (pointer:fine){
-  .film .strum-link.on:hover{ box-shadow:0 0 0 4px #E0FEA2, 0 0 18px 4px rgba(166,239,11,.9), 0 0 60px 10px rgba(166,239,11,.45); }
+/* ═════════ senza WebGL (e nell'anteprima dell'area riservata): le sezioni una sotto l'altra, la pagina scorre;
+   le etichette dei mondi fanno da indice in cima, gli angoli da piede ═════════ */
+.senza-gl, .senza-gl body{ height:auto; overflow:auto; }
+.senza-gl body{ display:flex; flex-direction:column; }
+.senza-gl .indietro{ display:none; }
+.senza-gl .etichette{ order:1; position:static; display:flex; flex-wrap:wrap; gap:10px; padding:110px var(--m) 0; pointer-events:auto; }
+.senza-gl .et{ position:static; opacity:1; transform:none !important; align-items:flex-start; text-align:left; border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.03); }
+.senza-gl main{ order:2; padding:70px var(--m) 60px; display:flex; flex-direction:column; gap:90px; }
+.senza-gl .angoli{ order:3; position:static; padding:0 var(--m) 40px; }
+.senza-gl .pannello{ position:static; visibility:visible; pointer-events:auto; width:auto; max-width:900px; max-height:none; overflow:visible; scroll-margin-top:96px; }
+.senza-gl .pannello > *{ opacity:1; }
+@media (prefers-reduced-motion: reduce){
+  .pannello.on > *{ animation-duration:.01s; }
+  .et .t::after{ transition:none; }
 }
-.film .strum-link:focus-visible{ outline:none; box-shadow:0 0 0 4px #E0FEA2, 0 0 18px 4px rgba(166,239,11,.9); }
-.film .fine{ display:block; min-height:0; padding:0; }
-.film .fine-in{ position:fixed; left:0; top:0; width:min(560px, 80vw); opacity:0; pointer-events:none; will-change:transform, opacity; }
-.film .fine-in.on{ pointer-events:auto; }
-.film .fine .titolo{ font-size:clamp(34px, 3.6vw, 58px); }
-/* nel film il finale sta sulla faccia nera della lastra: lì i testi restano chiari */
-.film .fine-in{ color:var(--bianco); }
-.film .fine .titolo em{ color:var(--arancio-chiaro); text-shadow:none; }
-.film .fine .email{ color:var(--fumo); }
-.film .fine .email:hover{ color:var(--bianco); }
-.fine .titolo em{ display:block; }
-.film .piede{ position:fixed; left:0; right:0; bottom:0; z-index:10; opacity:0; padding-bottom:22px; }
-.film .rail{ display:block; position:fixed; right:22px; top:50%; z-index:20; width:12px; height:30vh; transform:translateY(-50%); pointer-events:auto; }
-.film .rail::before{ content:""; position:absolute; left:5.5px; top:0; bottom:0; width:1px; background:rgba(0,0,0,.18); }
-.film .rail .fill{ position:absolute; left:5px; top:0; width:2px; height:100%; transform-origin:top; transform:scaleY(0);
-  background:linear-gradient(180deg, var(--arancio-chiaro), var(--arancio-scuro)); border-radius:2px; }
-.film .rail button{ position:absolute; left:0; width:12px; height:12px; margin-top:-6px; border:0; background:none; cursor:pointer; }
-.film .rail button::before{ content:""; position:absolute; left:3.5px; top:3.5px; width:5px; height:5px; border-radius:50%; background:#4C4C55; transition:background .3s, box-shadow .3s; }
-.film .rail button.on::before{ background:var(--arancio-chiaro); box-shadow:0 0 8px rgba(166,239,11,.9); }
-.film .rail button span{ position:absolute; right:20px; top:-3px; color:var(--fumo); white-space:nowrap; opacity:0; transform:translateX(6px);
-  transition:opacity .25s, transform .25s var(--ease); pointer-events:none; }
-.film .rail button:hover span, .film .rail button:focus-visible span{ opacity:1; transform:none; }
-.film .pre{ display:none; }
-.film.avvio .pre{ display:block; position:fixed; inset:0; z-index:40; pointer-events:none; background:radial-gradient(circle at 50% 46%, #0C0D0F 0, #040405 50vmax); }
-.pre .pre-video{ position:absolute; inset:0; width:100%; height:100%; display:block; object-fit:cover; }
-.pre canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
-.film.avvio .hdr, .film.avvio .angolo{ opacity:0; }
-@media (max-width:900px){ .film .rail{ display:none; } }
-@media (max-width:760px){
-  .film .testa{ top:86px; width:auto; right:var(--m); }
-  .film .titolo{ font-size:clamp(30px, 8.4vw, 40px); line-height:1.04; }
-  .film .didascalia{ font-size:13px; }
-  .film .nome{ font-size:15px; } .film .desc{ font-size:13px; }
-  .film .d-in{ flex-wrap:wrap; row-gap:2px; column-gap:10px; }
-  .film .azione{ display:none; }
-  .film .installa{ position:static; text-align:left; margin-top:4px; }
-  .film .fine-in{ width:min(300px, 76vw); }
-  .film .fine .titolo{ font-size:30px; }
-  .film .scrivimi{ height:48px; padding:0 22px; margin-top:24px; }
-}
-/* ═════════ Studio: mappa animata dallo spazio a via dello Scalo (js/mappa.js, copiata da Rain Ink 6.26 con la skill mappa-uni) ═════════ */
-.studio .map{ margin-top:40px; }
-.map{ position:relative; display:block; width:100%; height:600px; border-radius:18px; overflow:hidden; }
-.map-anim{ background:#03060c; box-shadow:0 0 0 1px var(--linea), 0 30px 70px -20px rgba(0,0,0,.8); }
-.map-anim .map-canvas{ position:absolute; inset:0; }
-.map-anim .maplibregl-ctrl-attrib{ font-size:10px; }
-.map-ok{ position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.9rem; padding:2rem; text-align:center; color:#e9edf3;
-  background:radial-gradient(ellipse at 50% 40%, #1a1a20 0%, #050507 70%); }
-.map-ok svg{ color:var(--arancio-chiaro); filter:drop-shadow(0 0 10px rgba(205,253,103,.7)); }
-.map-ok h3{ font:700 clamp(1.4rem, 2.4vw, 2rem)/1.15 var(--titoli); color:#fff; }
-.map-ok p{ max-width:42ch; font-size:.95rem; }
-.map-ok-btn{ margin-top:.4rem; height:48px; padding:0 24px; border:0; border-radius:13px; cursor:pointer; color:#030B1F; font:600 15px var(--sans);
-  background:linear-gradient(180deg, #DCFF8E 0%, #CDFD67 48%, #B4EA4A 100%); box-shadow:0 1px 0 rgba(237,254,201,.55) inset, 0 3px 0 #537903, 0 10px 22px -10px rgba(166,239,11,.7);
-  transition:transform 220ms var(--ease), box-shadow 220ms var(--ease); }
-@media (hover:hover) and (pointer:fine){ .map-ok-btn:hover{ transform:translateY(-2px) scale(1.05);
-  box-shadow:0 1px 0 rgba(237,254,201,.6) inset, 0 4px 0 #537903, 0 0 12px 2px rgba(205,253,103,.6), 0 0 28px 6px rgba(205,253,103,.28); } }
-.map-anim.is-ok .map-ok{ opacity:0; visibility:hidden; transition:opacity .6s, visibility 0s .6s; }
-.map-replay{ position:absolute; right:16px; top:16px; z-index:2; font:600 13px var(--sans); color:var(--bianco); background:rgba(18,18,22,.9); border:1px solid var(--linea); border-radius:999px; padding:9px 15px; cursor:pointer; }
-.map-anim:not(.is-ok) .map-replay{ display:none; }
-.map-anim::before{ content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
-  background:radial-gradient(ellipse 80% 85% at 50% 50%, transparent 58%, rgba(3,4,8,.45) 100%); }
-.map-nome{ position:absolute; left:50%; top:50%; z-index:2; pointer-events:none; opacity:0; visibility:hidden;
-  display:flex; flex-direction:column; align-items:center; gap:.3rem; text-align:center; white-space:nowrap;
-  transform:translate(-50%, -50%); will-change:transform, opacity; }
-.map-liv{ font:600 14px/1.2 var(--sans); color:var(--arancio-chiaro); letter-spacing:.01em;
-  text-shadow:0 1px 2px rgba(0,0,0,.95), 0 0 12px rgba(0,0,0,.85); }
-.map-tit{ font:700 36px/1 var(--titoli); color:var(--bianco); letter-spacing:-.02em;
-  text-shadow:0 1px 2px rgba(0,0,0,.9), 0 0 20px rgba(0,0,0,.7), 0 0 44px rgba(0,0,0,.45); }
-@media (max-width:640px){ .map-liv{ font-size:12px; } .map-tit{ font-size:26px; } }
-.map-pin{ position:relative; width:22px; height:22px; }
-.map-pin-in{ position:absolute; inset:0; opacity:0; transition:opacity .5s; }
-.map-pin.is-on .map-pin-in{ opacity:1; }
-.map-pin .dot{ position:absolute; inset:0; border-radius:50%; background:var(--arancio); border:3px solid #fff; box-shadow:0 0 12px var(--arancio), 0 2px 8px rgba(0,0,0,.4); }
-.map-pin .ring{ position:absolute; inset:-14px; border-radius:50%; border:3px solid var(--arancio); opacity:0; animation:mapRing 2s ease-out infinite; }
-.map-pin .label{ position:absolute; left:50%; bottom:34px; transform:translateX(-50%); white-space:nowrap; display:flex; flex-direction:column; align-items:center; text-align:center;
-  background:rgba(12,12,15,.82); color:#fff; font:700 20px/1.1 var(--titoli); letter-spacing:-.02em;
-  padding:12px 18px; border-radius:14px; border:1px solid rgba(255,255,255,.14); text-decoration:none;
-  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
-  box-shadow:0 18px 40px -10px rgba(0,0,0,.8); cursor:pointer; transition:background-color .25s, border-color .25s; }
-.map-pin .label .ind{ margin-top:5px; font:500 12.5px/1.4 var(--sans); letter-spacing:0; color:#c9c9cf; }
-.map-pin .label:hover, .map-pin .label:focus-visible{ background:rgba(20,20,24,.92); border-color:var(--arancio-chiaro); }
-.map-pin .label::before, .map-pin .label::after{ content:''; position:absolute; left:50%; top:100%; border:solid transparent; }
-.map-pin .label::before{ margin-left:-8px; border-width:8px; border-top-color:rgba(255,255,255,.14); }
-.map-pin .label::after{ margin-left:-7px; border-width:7px; border-top-color:rgba(12,12,15,.82); }
-.map-pin .label:hover::after, .map-pin .label:focus-visible::after{ border-top-color:rgba(20,20,24,.92); }
-.map-pin.is-far .map-pin-in{ opacity:0; }
-.map-pin.is-far .label, .map-pin:not(.is-on) .label{ pointer-events:none; }
-@keyframes mapRing{ 0%{ transform:scale(.4); opacity:.9; } 100%{ transform:scale(1.4); opacity:0; } }
-@media (max-width:1020px){ .map{ height:500px; } }
-@media (max-width:900px){ .map{ height:440px; } }
-/* nel film la mappa è a tutto schermo, ritagliata sulla faccia della lastra finché la faccia non riempie lo schermo */
-.film .studio .map{ position:fixed; inset:0; width:100%; height:100%; margin:0; border-radius:0; box-shadow:none; visibility:hidden; opacity:0; pointer-events:none; }
-.film .studio .map.on{ visibility:visible; }
-.film .studio .map.pieno{ pointer-events:auto; }
-.film .studio .testa{ z-index:2; }
-/* sopra la mappa (e sulla faccia scura che si apre) titolo e occhiello diventano chiari */
-.film .studio .titolo, .film .studio .kicker, .film .studio .kicker b{ transition:color .4s var(--ease), text-shadow .4s var(--ease); }
-.film .studio.su-mappa .titolo{ color:var(--bianco); text-shadow:0 1px 2px rgba(0,0,0,.7), 0 0 24px rgba(0,0,0,.45); }
-.film .studio.su-mappa .kicker{ color:#D8D8DE; text-shadow:0 1px 2px rgba(0,0,0,.8); }
-.film .studio.su-mappa .kicker b{ color:var(--arancio-chiaro); }
-.film .map-replay{ top:auto; right:auto; left:var(--m); bottom:26px; }
 </style>
-<script>/* aperta dal disco: i caratteri arrivano incorporati (il browser non legge i .woff2 locali) */
-if (location.protocol === 'file:') document.write('<script src="js/caratteri-dati.js"><\/script>');</script>
+<script>if (location.protocol === 'file:') document.write('<script src="js/caratteri-dati.js"><\/script>');</script>
 </head>
 <body>
 <header class="hdr" id="hdr">
   <nav class="slab" aria-label="Principale">
-    <a class="logo" href="#top" aria-label="Nemesi Web, torna all'inizio"><img id="logo-nav" src="images/logo/nemesi-web-barra.svg" alt="" width="1997" height="343"></a>
+    <a class="logo" href="#" data-vai="centro" aria-label="Nemesi Web, torna al mondo centrale"><img src="images/logo/nemesi-web-barra.svg" alt="" width="1997" height="343"></a>
     <ul class="links" id="links">
-      <li><a href="portfolio.html" data-s="portfolio">Portfolio</a></li>
-      <li><a href="#studio" data-s="studio">Studio</a></li>
-      <li><a href="#tool" data-s="strumenti">Tool</a></li>
-      <li><a href="mailto:ciao@nemesi.studio">Contattaci</a></li>
+      <li><a href="#portfolio" data-vai="portfolio">Portfolio</a></li>
+      <li><a href="#studio" data-vai="studio">Studio</a></li>
+      <li><a href="#tool" data-vai="tool">Tool</a></li>
+      <li><a href="#contatti" data-vai="contatti">Contattaci</a></li>
     </ul>
     <button class="burger" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
     <a class="cta" href="area-riservata.html" aria-label="Area riservata" title="Area riservata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></a>
   </nav>
 </header>
 
-<canvas class="gl" id="gl" aria-hidden="true"></canvas>
-<div class="velo" aria-hidden="true"></div>
-<div class="taglio" id="taglio" aria-hidden="true"></div>
+<canvas class="gl-canvas" id="gl" aria-hidden="true"></canvas>
+<div class="grana" aria-hidden="true"></div>
 <div class="pre" id="pre" aria-hidden="true"></div>
 
+<h1 class="vh">Nemesi Web, web design e soluzioni digitali</h1>
+
+<nav class="etichette" id="etichette" aria-label="Mondi">
+  <button class="et" type="button" data-vai="portfolio"><span class="n">01</span><span class="t" data-testo="index-t003">Portfolio</span><span class="s" data-testo="index-t004">Siti, app e giochi</span></button>
+  <button class="et" type="button" data-vai="studio"><span class="n">02</span><span class="t" data-testo="index-t005">Studio</span><span class="s" data-testo="index-t006">Dove siamo</span></button>
+  <button class="et" type="button" data-vai="tool"><span class="n">03</span><span class="t" data-testo="index-t007">Tool</span><span class="s" data-testo="index-t008">Banco di lavoro</span></button>
+  <button class="et" type="button" data-vai="contatti"><span class="n">04</span><span class="t" data-testo="index-t009">Contatti</span><span class="s" data-testo="index-t010">Scrivimi</span></button>
+</nav>
+<div class="segno" id="segno-bologna" aria-hidden="true"><span class="mono">Bologna</span></div>
+<div class="angoli" aria-hidden="true"><p class="mono" data-testo="index-t001">Design e sviluppo</p><p class="mono" data-testo="index-t002">Portfolio 2026</p></div>
+
 <main>
-  <section class="apertura" id="top" aria-label="Nemesi Web">
-    <h1 class="marchio" id="marchio"><img src="images/logo/nemesi-web.svg" alt="Nemesi Web, web design e soluzioni digitali" width="1997" height="343" fetchpriority="high"></h1>
-    <span class="riga" aria-hidden="true"></span>
-    <div class="angoli"><p class="angolo sx mono" data-testo="index-t001">Design e sviluppo</p><p class="angolo dx mono" data-testo="index-t002">Portfolio 2026</p></div>
-  </section>
-
-  <section class="capitolo" id="siti" aria-labelledby="siti-t">
-    <div class="testa">
-      <p class="kicker mono" data-testo="index-t004"><b data-testo="index-t003">Siti</b> Pelle e carta</p>
-      <h2 class="titolo" id="siti-t"><span data-testo="index-t005">Siti chiari, intuitivi,</span> <em data-testo="index-t006">costruiti per durare.</em></h2>
-    </div>
-    <ul class="lavori">
-      <li class="lavoro">
-        <a class="schermo" data-i="0" href="https://nemesimark.github.io/rainInk/" target="_blank" rel="noopener" aria-label="Rain Ink Tattoo, studio di tatuaggi a Montelupone: visita il sito"><img data-slot="lavoro-rainink" src="images/lavori/rainink.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="0"><span class="d-in"><span class="num">01</span><span class="nome" data-testo="index-t007">Rain Ink Tattoo</span><span class="desc" data-testo="index-t008">Studio di tatuaggi a Montelupone</span><a class="azione" href="https://nemesimark.github.io/rainInk/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Visita il sito ↗</a></span></p>
-      </li>
-      <li class="lavoro">
-        <a class="schermo" data-i="1" href="https://nemesimark.github.io/olimp/" target="_blank" rel="noopener" aria-label="Olimp, album fotografici su misura: visita il sito"><img data-slot="lavoro-olimp" src="images/lavori/olimp.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="1"><span class="d-in"><span class="num">02</span><span class="nome" data-testo="index-t009">Olimp</span><span class="desc" data-testo="index-t010">Album fotografici su misura, dal 1969</span><a class="azione" href="https://nemesimark.github.io/olimp/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Visita il sito ↗</a></span></p>
-      </li>
+  <section class="pannello p-portfolio" id="p-portfolio" aria-labelledby="t-portfolio" hidden>
+    <button class="indietro" type="button" data-vai="centro" style="--i:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Indietro</button>
+    <p class="kicker mono" style="--i:1" data-testo="index-t012"><b data-testo="index-t011">Portfolio</b> Lavori 2026</p>
+    <h2 class="titolo" id="t-portfolio" tabindex="-1" style="--i:2"><span data-testo="index-t013">Siti, app e giochi,</span> <em data-testo="index-t014">tutti qui.</em></h2>
+    <ul class="lavori" style="--i:3">
+      <li class="lavoro"><a class="vetro" href="https://nemesimark.github.io/rainInk/" target="_blank" rel="noopener"><img data-slot="lavoro-rainink" src="images/lavori/rainink.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"><span class="r"><span class="num">01</span><span class="nome" data-testo="index-t015">Rain Ink Tattoo</span></span><span class="desc" data-testo="index-t016">Studio di tatuaggi a Montelupone</span></a></li>
+      <li class="lavoro"><a class="vetro" href="https://nemesimark.github.io/olimp/" target="_blank" rel="noopener"><img data-slot="lavoro-olimp" src="images/lavori/olimp.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"><span class="r"><span class="num">02</span><span class="nome" data-testo="index-t017">Olimp</span></span><span class="desc" data-testo="index-t018">Album fotografici su misura, dal 1969</span></a></li>
+      <li class="lavoro"><a class="vetro" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener"><img data-slot="lavoro-word" src="images/lavori/parola.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"><span class="r"><span class="num">03</span><span class="nome" data-testo="index-t019">Word</span></span><span class="desc" data-testo="index-t020">Editor di testi, salva in .docx</span></a></li>
+      <li class="lavoro"><a class="vetro" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener"><img data-slot="lavoro-excel" src="images/lavori/foglio.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"><span class="r"><span class="num">04</span><span class="nome" data-testo="index-t021">Excel</span></span><span class="desc" data-testo="index-t022">Formule in italiano, file .xlsx</span></a></li>
+      <li class="lavoro"><a class="vetro" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener"><img data-slot="lavoro-metalgear" src="images/lavori/metalgear.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"><span class="r"><span class="num">05</span><span class="nome" data-testo="index-t023">Metal Gear</span></span><span class="desc" data-testo="index-t024">Operazione Omega, azione in sei livelli</span></a></li>
+      <li class="lavoro"><a class="vetro" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener"><img data-slot="lavoro-radente" src="images/lavori/radente.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"><span class="r"><span class="num">06</span><span class="nome" data-testo="index-t025">Radente</span></span><span class="desc" data-testo="index-t026">Volo 3D in cinque mondi</span></a></li>
     </ul>
   </section>
 
-  <section class="capitolo" id="strumenti" aria-labelledby="strumenti-t">
-    <div class="testa">
-      <p class="kicker mono" data-testo="index-t012"><b data-testo="index-t011">Strumenti</b> Banco di lavoro</p>
-      <h2 class="titolo" id="strumenti-t"><span data-testo="index-t013">Con cosa lavoro</span> <em data-testo="index-t014">ogni giorno.</em></h2>
+  <section class="pannello p-studio" id="p-studio" aria-labelledby="t-studio" hidden>
+    <button class="indietro" type="button" data-vai="centro" style="--i:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Indietro</button>
+    <p class="kicker mono" style="--i:1" data-testo="index-t028"><b data-testo="index-t027">Studio</b> Bologna</p>
+    <h2 class="titolo" id="t-studio" tabindex="-1" style="--i:2"><span data-testo="index-t029">Lo studio è a Bologna,</span> <em data-testo="index-t030">i progetti ovunque.</em></h2>
+    <div class="sede vetro" style="--i:3">
+      <span class="pin" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+      <div><p class="nome">Nemesi Web</p><p class="ind">Via dello Scalo, 12<br>40131 Bologna (BO)</p><p class="coord mono">44,4949° N · 11,3426° E</p></div>
     </div>
-    <ul class="strumenti" id="strumenti-lista"></ul>
-    <a class="strum-link" id="strum-link" href="#" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
+    <a class="bottone" style="--i:4" data-testo="index-t031" href="https://www.google.com/maps/search/?api=1&amp;query=Via+dello+Scalo+12+40131+Bologna+BO" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14M15 6v14"/></svg>Apri in Google Maps</a>
   </section>
 
-  <section class="capitolo" id="app" aria-labelledby="app-t">
-    <div class="testa">
-      <p class="kicker mono" data-testo="index-t016"><b data-testo="index-t015">App</b> Lettere e numeri</p>
-      <h2 class="titolo" id="app-t"><span data-testo="index-t017">Scrivere e calcolare,</span> <em data-testo="index-t018">dal browser al Mac.</em></h2>
-    </div>
-    <ul class="lavori">
-      <li class="lavoro">
-        <a class="schermo" data-i="2" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" aria-label="Word, editor di testi: apri l'app"><img data-slot="lavoro-word" src="images/lavori/parola.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="2"><span class="d-in"><span class="num">03</span><span class="nome" data-testo="index-t019">Word</span><span class="desc" data-testo="index-t020">Editor di testi, salva in .docx</span><a class="azione" href="https://nemesimark.github.io/word/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a><a class="installa" href="https://nemesimark.github.io/word/?installa" target="_blank" rel="noopener">Installa l'app ↓</a></span></p>
-      </li>
-      <li class="lavoro">
-        <a class="schermo" data-i="3" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" aria-label="Excel, foglio di calcolo: apri l'app"><img data-slot="lavoro-excel" src="images/lavori/foglio.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="3"><span class="d-in"><span class="num">04</span><span class="nome" data-testo="index-t021">Excel</span><span class="desc" data-testo="index-t022">Formule in italiano, file .xlsx</span><a class="azione" href="https://nemesimark.github.io/excel/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Apri l'app ↗</a><a class="installa" href="https://nemesimark.github.io/excel/?installa" target="_blank" rel="noopener">Installa l'app ↓</a></span></p>
-      </li>
-    </ul>
+  <section class="pannello p-tool" id="p-tool" aria-labelledby="t-tool" hidden>
+    <button class="indietro" type="button" data-vai="centro" style="--i:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Indietro</button>
+    <p class="kicker mono" style="--i:1" data-testo="index-t033"><b data-testo="index-t032">Tool</b> Banco di lavoro</p>
+    <h2 class="titolo" id="t-tool" tabindex="-1" style="--i:2"><span data-testo="index-t034">Con cosa lavoro</span> <em data-testo="index-t035">ogni giorno.</em></h2>
+    <ul class="strumenti" id="strumenti" style="--i:3"></ul>
   </section>
 
-  <section class="capitolo" id="giochi" aria-labelledby="giochi-t">
-    <div class="testa">
-      <p class="kicker mono" data-testo="index-t024"><b data-testo="index-t023">Giochi</b> Piano e profondità</p>
-      <h2 class="titolo" id="giochi-t"><span data-testo="index-t025">Mondi interi,</span> <em data-testo="index-t026">dentro una pagina web.</em></h2>
-    </div>
-    <ul class="lavori">
-      <li class="lavoro">
-        <a class="schermo" data-i="4" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" aria-label="Metal Gear, Operazione Omega, gioco d'azione: gioca"><img data-slot="lavoro-metalgear" src="images/lavori/metalgear.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="4"><span class="d-in"><span class="num">05</span><span class="nome" data-testo="index-t027">Metal Gear</span><span class="desc" data-testo="index-t028">Operazione Omega, azione in sei livelli</span><a class="azione" href="https://nemesimark.github.io/metalGear/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a><a class="installa" href="https://nemesimark.github.io/metalGear/?installa" target="_blank" rel="noopener">Installa il gioco ↓</a></span></p>
-      </li>
-      <li class="lavoro">
-        <a class="schermo" data-i="5" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" aria-label="Radente, gioco di volo in 3D: gioca"><img data-slot="lavoro-radente" src="images/lavori/radente.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async"></a>
-        <p class="didascalia" data-i="5"><span class="d-in"><span class="num">06</span><span class="nome" data-testo="index-t029">Radente</span><span class="desc" data-testo="index-t030">Volo 3D in cinque mondi</span><a class="azione" href="https://nemesimark.github.io/radente/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Gioca ↗</a><a class="installa" href="https://nemesimark.github.io/radente/?installa" target="_blank" rel="noopener">Installa il gioco ↓</a></span></p>
-      </li>
-    </ul>
-  </section>
-
-  <section class="capitolo studio" id="studio" aria-labelledby="studio-t">
-    <div class="testa">
-      <p class="kicker mono" data-testo="index-t032"><b data-testo="index-t031">Studio</b> Bologna</p>
-      <h2 class="titolo" id="studio-t"><span data-testo="index-t033">Lo studio è a Bologna,</span> <em data-testo="index-t034">i progetti ovunque.</em></h2>
-    </div>
-    <div class="map map-anim" role="region" aria-label="Mappa animata: dallo spazio fino allo studio Nemesi Web in via dello Scalo 12, 40131 Bologna">
-      <div class="map-canvas"></div>
-      <div class="map-ok">
-        <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 12h19M12 2.5c2.8 3 2.8 16 0 19M12 2.5c-2.8 3-2.8 16 0 19" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
-        <h3 data-testo="index-t035">Dallo spazio fino allo studio</h3>
-        <p data-testo="index-t036">La mappa animata carica le foto satellitari da un servizio esterno (Esri).</p>
-        <button type="button" class="map-ok-btn" data-testo="index-t037">Mostra la mappa</button>
-      </div>
-      <button type="button" class="map-replay">↻ Rivedi</button>
-    </div>
-  </section>
-
-  <section class="fine" id="scrivimi" aria-labelledby="fine-t">
-    <div class="fine-in" id="fine-in">
-      <h2 class="titolo" id="fine-t"><span data-testo="index-t038">Manca solo</span> <em data-testo="index-t039">il tuo progetto.</em></h2>
-      <a class="scrivimi" data-testo="index-t040" href="mailto:ciao@nemesi.studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.5 8.2 6.2 8.2-6.2"/></svg>Scrivimi</a>
-      <a class="email" href="mailto:ciao@nemesi.studio">ciao@nemesi.studio</a>
-    </div>
+  <section class="pannello p-contatti" id="p-contatti" aria-labelledby="t-contatti" hidden>
+    <button class="indietro" type="button" data-vai="centro" style="--i:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Indietro</button>
+    <p class="kicker mono" style="--i:1" data-testo="index-t037"><b data-testo="index-t036">Contatti</b> Bologna e ovunque</p>
+    <h2 class="titolo" id="t-contatti" tabindex="-1" style="--i:2"><span data-testo="index-t038">Manca solo</span> <em data-testo="index-t039">il tuo progetto.</em></h2>
+    <a class="bottone" style="--i:3" data-testo="index-t040" href="mailto:ciao@nemesi.studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.5 8.2 6.2 8.2-6.2"/></svg>Scrivimi</a>
+    <br><a class="email" style="--i:4" href="mailto:ciao@nemesi.studio">ciao@nemesi.studio</a>
+    <p class="firma mono" style="--i:5">© 2026 Nemesi Web</p>
   </section>
 </main>
-<p class="piede mono" id="piede">© 2026 Nemesi Web</p>
-
-<div class="rail" id="rail" aria-hidden="true"><i class="fill"></i></div>
-<div class="film-spazio" id="film" aria-hidden="true"></div>
 
 <script src="vendor/gsap.min.js"></script>
-<script src="vendor/ScrollTrigger.min.js"></script>
-<script src="vendor/lenis.min.js"></script>
 <script src="vendor/three/three.min.js"></script>
 <script src="js/strumenti-icone.js"></script>
-<script src="js/lastra.js"></script>
 <script src="js/apertura.js"></script>
-<script src="js/mappa.js"></script>
-<script src="js/cookie.js"></script>
-<script>
-(function(){
-  'use strict';
-  var d = document.documentElement, hdr = document.getElementById('hdr');
-  var FILM = d.classList.contains('film');
-  var Q = new URLSearchParams(location.search), JUMP = Q.get('jump');
-
-  /* ── menu del telefono ── */
-  (function(){
-    var burger = hdr.querySelector('.burger');
-    function setOpen(o){ hdr.classList.toggle('open', o); burger.setAttribute('aria-expanded', String(o)); burger.setAttribute('aria-label', o ? 'Chiudi il menu' : 'Apri il menu'); }
-    burger.addEventListener('click', function(){ setOpen(!hdr.classList.contains('open')); });
-    hdr.querySelectorAll('.links a').forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
-    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && hdr.classList.contains('open')){ setOpen(false); burger.focus(); } });
-    document.addEventListener('click', function(e){ if (hdr.classList.contains('open') && !hdr.contains(e.target)) setOpen(false); });
-  })();
-
-  /* ── strumenti: l'elenco (pagina ferma) e le didascalie della giostra (film) vengono dagli stessi dati ── */
-  var FIGMA = '<svg viewBox="0 0 38 57" aria-hidden="true"><path fill="#F24E1E" d="M19 0H9.5A9.5 9.5 0 0 0 9.5 19H19Z"/><path fill="#FF7262" d="M19 0H28.5A9.5 9.5 0 0 1 28.5 19H19Z"/><path fill="#A259FF" d="M19 19H9.5A9.5 9.5 0 0 0 9.5 38H19Z"/><circle fill="#1ABCFE" cx="28.5" cy="28.5" r="9.5"/><path fill="#0ACF83" d="M9.5 38H19V47.5A9.5 9.5 0 1 1 9.5 38Z"/></svg>';
-  var lista = document.getElementById('strumenti-lista');
-  (window.STRUMENTI || []).forEach(function(t){
-    var li = document.createElement('li'); li.className = 'strum'; li.style.setProperty('--corpo', t.corpo);
-    li.innerHTML = '<span class="ico">' + (t.logo === 'figma' ? FIGMA : '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="' + t.logo + '" d="' + t.d + '"/></svg>') + '</span>' +
-      '<span class="s-casa mono">' + t.casa + '</span><a class="s-nome" href="' + t.url + '" target="_blank" rel="noopener">' + t.nome + ' ↗</a><span class="s-desc">' + t.testo + '</span>';
-    lista.appendChild(li);
-  });
-
-  function fontsReady(){ return document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve(); }
-  function tema(){ var tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute('content', '#9AA0A8'); }
-  function statica(){ d.classList.remove('film', 'avvio', 'pronto'); tema(); fontsReady().then(function(){ window.__ready = true; }); }
-  if (!FILM || !window.Lastra || !window.gsap){ statica(); return; }
-
-  var S;
-  try { S = Lastra.create(document.getElementById('gl')); }
-  catch (err){ statica(); return; }
-  var K = S.K;
-
-  gsap.registerPlugin(ScrollTrigger);
-  ScrollTrigger.config({ ignoreMobileResize: true });
-  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-
-  var spacer = document.getElementById('film'), VH = innerHeight;
-  function setSpacer(){ VH = innerHeight; spacer.style.height = Math.round(K.end * VH + VH) + 'px'; }
-  setSpacer();
-
-  /* ── titoli: parole in maschere, con il testo intero lasciato a chi legge con la sintesi vocale ── */
-  document.querySelectorAll('.titolo').forEach(function(h){
-    var full = h.textContent.replace(/\s+/g, ' ').trim(), vis = document.createElement('span');
-    vis.setAttribute('aria-hidden', 'true');
-    Array.prototype.slice.call(h.childNodes).forEach(function(n){
-      var host = vis;
-      if (n.nodeType === 1){ host = document.createElement(n.nodeName.toLowerCase()); vis.appendChild(host); }
-      n.textContent.split(/(\s+)/).forEach(function(w){
-        if (!w) return;
-        if (/^\s+$/.test(w)){ host.appendChild(document.createTextNode(' ')); return; }
-        var o = document.createElement('span'), i = document.createElement('span');
-        o.className = 'w'; i.className = 'wi'; i.textContent = w; o.appendChild(i); host.appendChild(o);
-      });
-    });
-    var sr = document.createElement('span'); sr.className = 'vh'; sr.textContent = full;
-    h.textContent = ''; h.appendChild(sr); h.appendChild(vis);
-  });
-
-  /* ── scorrimento morbido ── */
-  var lenis = new Lenis({ lerp: .07, smoothWheel: true });
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add(function(t){ lenis.raf(t * 1000); });
-  gsap.ticker.lagSmoothing(0);
-
-  /* ── timeline madre: la sua durata è il film in «vh» (1 = un'altezza di finestra di scorrimento).
-     Le aste dell'apertura occupano i primi O vh: tutti i tempi dopo sono «O + tempo del film» ── */
-  var O = K.o;
-  /* la giostra degli strumenti allunga il film: i tempi scritti prima della 3.9 che vengono dopo il suo inizio slittano di K.gd */
-  /* dalla 3.17 anche la mappa dello studio (a K.mw0, la faccia vuota) allunga il film di K.md */
-  function X(v){ return (v > K.gw0 ? v + K.gd : v) + (v > K.mw0 ? K.md : 0); }
-  var F = { p: 0 };
-  var master = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
-  master.to(F, { p: K.end, duration: K.end }, 0);
-  master.fromTo('.angoli', { opacity: 1 }, { opacity: 0, duration: .3 }, .45);
-
-  function capitolo(sel, tin, tout){
-    var words = document.querySelectorAll(sel + ' .wi'), kick = document.querySelector(sel + ' .kicker');
-    master.fromTo(kick, { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: .22, ease: 'power2.out' }, tin);
-    master.fromTo(words, { yPercent: 112 }, { yPercent: 0, duration: .3, stagger: .022, ease: 'power3.out' }, tin + .04);
-    if (tout != null){
-      master.to(kick, { opacity: 0, x: -8, duration: .16, ease: 'power2.in' }, tout);
-      master.to(words, { yPercent: -112, duration: .2, stagger: .012, ease: 'power2.in' }, tout);
-    }
-  }
-  capitolo('#siti', O + X(.82), O + X(3.28));
-  capitolo('#strumenti', O + 3.5, O + K.gw0 + 2.68);
-  capitolo('#app', O + X(3.92), O + X(5.38));
-  capitolo('#giochi', O + X(5.98), O + X(9.32));
-  capitolo('#studio', O + X(9.7), K.map0 + .62);
-
-  function didascalia(i, tin, tout){
-    var el = document.querySelector('.didascalia[data-i="' + i + '"] .d-in');
-    master.fromTo(el, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .18, ease: 'power2.out' }, tin);
-    master.to(el, { opacity: 0, y: -10, duration: .12, ease: 'power2.in' }, tout);
-  }
-  didascalia(0, O + X(1.16), O + X(1.9)); didascalia(1, O + X(2.62), O + X(3.24));
-  didascalia(2, O + X(4.4), O + X(5.34)); didascalia(3, O + X(4.5), O + X(5.36));
-  didascalia(4, O + X(6.42), O + X(7.06)); didascalia(5, O + X(8.62), O + X(9.36));
-
-  var fineIn = document.getElementById('fine-in');
-  master.fromTo(fineIn, { opacity: 0 }, { opacity: 1, duration: .3, ease: 'power2.out' }, O + X(10.5));
-  master.fromTo(fineIn.querySelectorAll('.wi'), { yPercent: 112 }, { yPercent: 0, duration: .3, stagger: .025, ease: 'power3.out' }, O + X(10.5));
-  master.fromTo(fineIn.querySelectorAll('.scrivimi, .email'), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .22, stagger: .06, ease: 'power2.out' }, O + X(10.62));
-  master.fromTo('#piede', { opacity: 0 }, { opacity: 1, duration: .2 }, O + X(10.72));
-
-  var st = ScrollTrigger.create({ trigger: spacer, start: 'top top', end: 'bottom bottom', scrub: 1, animation: master, invalidateOnRefresh: true });
-  /* dopo ogni ricalcolo la timeline perde gli stati iniziali dei fromTo che non sono ancora partiti: la si fa passare dalla fine e la si riporta dov'era */
-  function ridisegna(){ var pr = master.progress(); master.progress(1).progress(pr); }
-  ridisegna();
-  ScrollTrigger.addEventListener('refresh', ridisegna);
-
-  /* ── collegamenti cliccabili deformati sulle facce, didascalie sotto le facce ── */
-  var anchors = [], caps = [], capW = [];
-  document.querySelectorAll('.schermo').forEach(function(a){ anchors[+a.dataset.i] = a; });
-  document.querySelectorAll('.didascalia').forEach(function(c){ caps[+c.dataset.i] = c; });
-  function sq2quad(q){
-    var x0 = q[0], y0 = q[1], x1 = q[2], y1 = q[3], x2 = q[4], y2 = q[5], x3 = q[6], y3 = q[7];
-    var dx1 = x1 - x2, dx2 = x3 - x2, dx3 = x0 - x1 + x2 - x3, dy1 = y1 - y2, dy2 = y3 - y2, dy3 = y0 - y1 + y2 - y3;
-    var det = dx1 * dy2 - dx2 * dy1; if (Math.abs(det) < 1e-6) return null;
-    var g = (dx3 * dy2 - dx2 * dy3) / det, h = (dx1 * dy3 - dx3 * dy1) / det;
-    var a = x1 - x0 + g * x1, b = x3 - x0 + h * x3, c = x0, dd = y1 - y0 + g * y1, e = y3 - y0 + h * y3, f = y0, BW = 800, BH = 450;
-    return 'matrix3d(' + [a / BW, dd / BW, 0, g / BW, b / BH, e / BH, 0, h / BH, 0, 0, 1, 0, c, f, 0, 1].map(function(v){ return +v.toFixed(6); }).join(',') + ')';
-  }
-  /* didascalia della giostra: sotto la lastra davanti, sfuma mentre la successiva arriva */
-  var strumEl = Array.prototype.slice.call(document.querySelectorAll('.strum')), strumW = [];
-  var strumLink = document.getElementById('strum-link'), strumCur = -2, DATI = window.STRUMENTI || [];
-  function placeStrum(){
-    var g = S.giostra ? S.giostra() : null;
-    /* collegamento al sito ufficiale sulla lastra davanti */
-    var fi = g && g.q ? g.front : -1, m = fi >= 0 ? sq2quad(g.q) : null;
-    if (m){
-      strumLink.style.transform = m;
-      if (strumCur !== fi){
-        strumCur = fi; strumLink.href = DATI[fi].url; strumLink.setAttribute('aria-label', DATI[fi].nome + ': sito ufficiale');
-        strumLink.classList.add('on'); strumLink.tabIndex = 0; strumLink.removeAttribute('aria-hidden');
-      }
-    } else if (strumCur !== -2){
-      strumCur = -2; strumLink.classList.remove('on'); strumLink.tabIndex = -1; strumLink.setAttribute('aria-hidden', 'true');
-    }
-    for (var i = 0; i < strumEl.length; i++){
-      var el = strumEl[i], op = g && g.on > .01 ? g.on * Math.max(0, Math.min(1, 1 - Math.abs(g.idx - i) * 2.6)) : 0;
-      if (op < .005){ if (el._v){ el.style.opacity = '0'; el._v = false; } continue; }
-      if (!strumW[i]) strumW[i] = el.offsetWidth;
-      el._v = true; el.style.opacity = op.toFixed(3);
-      el.style.transform = 'translate3d(' + Math.round(g.x - strumW[i] / 2) + 'px,' + Math.round(g.y + 14 + (1 - op) * 10) + 'px,0)';
-    }
-  }
-  /* mappa dello studio: ritagliata sulla faccia della lastra mentre avanza; a faccia oltre lo schermo è a tutto schermo */
-  var mappaEl = document.querySelector('#studio .map'), studioEl = document.getElementById('studio'), mappaStato = '';
-  function placeMappa(){
-    var m = S.mappa(), stato;
-    if (m.a <= 0){ stato = 'off'; }
-    else if (m.a >= .999 || !m.q){ stato = 'pieno'; }
-    else stato = 'faccia';
-    if (stato === 'faccia'){
-      var q = m.q, c = [];
-      for (var k = 0; k < 4; k++) c.push(q[2 * k].toFixed(1) + 'px ' + q[2 * k + 1].toFixed(1) + 'px');
-      mappaEl.style.clipPath = 'polygon(' + c.join(',') + ')';
-      mappaEl.style.opacity = Math.min(1, m.a / .12).toFixed(3);
-    }
-    if (stato === mappaStato) return;
-    mappaStato = stato;
-    mappaEl.classList.toggle('on', stato !== 'off');
-    mappaEl.classList.toggle('pieno', stato === 'pieno');
-    studioEl.classList.toggle('su-mappa', stato !== 'off');
-    if (stato === 'pieno'){ mappaEl.style.clipPath = 'none'; mappaEl.style.opacity = '1'; }
-    if (stato === 'off') mappaEl.style.opacity = '0';
-    if (stato === 'pieno' && window.nemesiMappaVista) window.nemesiMappaVista();
-  }
-  var fineQ = null, fineSize = [0, 0], FINE_T = O + X(10.5);
-  function place(){
-    var hs = S.hits(), seen = {};
-    for (var k = 0; k < hs.length; k++){
-      var h = hs[k], a = anchors[h.i], m = sq2quad(h.q); if (!m) continue;
-      seen[h.i] = 1; a.style.transform = m; if (!a.classList.contains('on')) a.classList.add('on');
-      var c = caps[h.i], w = Math.round(Math.hypot(h.q[4] - h.q[6], h.q[5] - h.q[7]));
-      c.style.transform = 'translate3d(' + Math.round(h.q[6]) + 'px,' + Math.round(h.q[7] + 16) + 'px,0)';
-      if (capW[h.i] !== w){ capW[h.i] = w; c.style.width = w + 'px'; }
-    }
-    for (var i = 0; i < anchors.length; i++) if (!seen[i] && anchors[i].classList.contains('on')){ anchors[i].classList.remove('on'); S.hover(i, false); }
-    var q = F.p >= FINE_T ? S.emptyFace() : null;                   // prima che compaia la frase (e durante la mappa) non si clicca
-    if (q){
-      if (!fineSize[0]){ fineSize = [fineIn.offsetWidth, fineIn.offsetHeight]; }
-      var cx = (q[0] + q[2] + q[4] + q[6]) / 4, cy = (q[1] + q[3] + q[5] + q[7]) / 4;
-      fineIn.style.transform = 'translate3d(' + Math.round(cx - fineSize[0] / 2) + 'px,' + Math.round(cy - fineSize[1] / 2) + 'px,0)';
-      fineIn.classList.add('on');
-    } else fineIn.classList.remove('on');
-  }
-  anchors.forEach(function(a, i){
-    a.addEventListener('mouseenter', function(){ S.hover(i, true); });
-    a.addEventListener('mouseleave', function(){ S.hover(i, false); });
-    a.addEventListener('focus', function(){ S.hover(i, true); if (!a.classList.contains('on')) vai(LAVORO[i]); });
-    a.addEventListener('blur', function(){ S.hover(i, false); });
-  });
-  caps.forEach(function(c, i){ c.querySelectorAll('.azione, .installa').forEach(function(az){
-    az.addEventListener('mouseenter', function(){ S.hover(i, true); }); az.addEventListener('mouseleave', function(){ S.hover(i, false); }); }); });
-  /* «Installa» si raggiunge anche con Tab: come per le lastre, il film va al lavoro */
-  caps.forEach(function(c, i){ var ins = c.querySelector('.installa'); if (!ins) return;
-    ins.addEventListener('focus', function(){ if (anchors[i] && !anchors[i].classList.contains('on')) vai(LAVORO[i]); }); });
-  if (matchMedia('(hover:hover) and (pointer:fine)').matches){
-    addEventListener('pointermove', function(e){ S.pointer(e.clientX / innerWidth * 2 - 1, e.clientY / innerHeight * 2 - 1); }, { passive: true });
-  }
-
-  /* ── navigazione: ogni voce porta al momento giusto del film ──
-     Un salto lungo non fa correre il film (giri e aste a tutta velocità sembrano a scatti):
-     un attimo di nero, si riparte poco prima della tappa e ci si arriva scorrendo piano. */
-  var LAVORO = [1.55, 2.95, 4.85, 4.85, 6.7, 9.05].map(function(v){ return O + X(v); });
-  var TAPPE = { top: 0, siti: O + X(1.55), strumenti: O + K.gw0 + .75, tool: O + K.gw0 + .75, app: O + X(4.85), giochi: O + X(6.7), studio: K.map0 + K.md * .5, scrivimi: K.end };
-  var taglio = document.getElementById('taglio'), viaggio = null, GLIDE = .55;
-  function easeIO(t){ return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
-  function easeOut(t){ return 1 - Math.pow(1 - t, 3); }
-  function vai(p){
-    var y = p * VH, dist = Math.abs(y - lenis.scroll) / VH;
-    if (viaggio){ viaggio.p = p; return; }                        // durante il nero vale l'ultima voce scelta
-    if (dist < 1.4){ lenis.scrollTo(y, { duration: 1 + dist * .5, easing: easeIO, force: true }); return; }
-    viaggio = { p: p };
-    gsap.to(taglio, { opacity: 1, duration: .34, ease: 'power2.in', overwrite: true, onComplete: function(){
-      var dest = viaggio.p, from = Math.max(0, dest - GLIDE); viaggio = null;
-      salta(from * VH);
-      if (dest > from) lenis.scrollTo(dest * VH, { duration: 1.4, easing: easeOut, force: true });
-      gsap.to(taglio, { opacity: 0, duration: .8, ease: 'power2.out', delay: .05, overwrite: true });
-    } });
-  }
-  document.querySelectorAll('a[href^="#"]').forEach(function(a){
-    var id = a.getAttribute('href').slice(1);
-    if (!(id in TAPPE)) return;
-    a.addEventListener('click', function(e){ e.preventDefault(); vai(TAPPE[id]); });
-  });
-  var navLinks = hdr.querySelectorAll('.links a');
-  var GFINE = O + K.gw0 + K.gd + .1;
-  var CAP = [['siti', O + X(.9), O + 3.5], ['strumenti', O + 3.5, GFINE], ['app', GFINE, O + X(5.65)], ['giochi', O + X(5.65), O + X(9.5)], ['studio', O + X(9.5), K.map1]], current = '';
-  function navState(p){
-    var cur = '';
-    for (var i = 0; i < CAP.length; i++) if (p >= CAP[i][1] && p < CAP[i][2]) cur = CAP[i][0];
-    if (cur === current) return; current = cur;
-    var port = cur === 'siti' || cur === 'app' || cur === 'giochi';           // dentro Siti, App o Giochi resta acceso anche Portfolio
-    navLinks.forEach(function(a){ if (a.dataset.s === cur || (port && a.dataset.s === 'portfolio')) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
-  }
-
-  /* ── filo di avanzamento a destra ── */
-  var rail = document.getElementById('rail'), fill = rail.querySelector('.fill'), ticks = [];
-  [['Siti', TAPPE.siti], ['Tool', TAPPE.tool], ['App', TAPPE.app], ['Giochi', TAPPE.giochi], ['Studio', TAPPE.studio], ['Contattaci', K.end]].forEach(function(t){
-    var b = document.createElement('button'); b.type = 'button'; b.tabIndex = -1; b.style.top = (t[1] / K.end * 100) + '%';
-    b.innerHTML = '<span class="mono">' + t[0] + '</span>'; b.addEventListener('click', function(){ vai(t[1]); });
-    rail.appendChild(b); ticks.push([b, t[1]]);
-  });
-
-  /* ── ogni fotogramma: scena, collegamenti, barra ── */
-  /* durante l'apertura la scena non adatta la risoluzione (il logo pesa per qualche secondo);
-     quieto: il nero copre ancora tutto, basta un fotogramma su tre */
-  var renderOn = true, quieto = false, nq = 0, inApertura = d.classList.contains('avvio');
-  gsap.ticker.add(function(){
-    if (!renderOn || (quieto && nq++ % 3)) return;
-    S.set(F.p);
-    S.frame(gsap.ticker.time, quieto || inApertura);
-    place();
-    placeStrum();
-    placeMappa();
-    navState(F.p);
-    fill.style.transform = 'scaleY(' + (F.p / K.end).toFixed(4) + ')';
-    for (var i = 0; i < ticks.length; i++) ticks[i][0].classList.toggle('on', F.p >= ticks[i][1] - .35);
-  });
-  document.addEventListener('visibilitychange', function(){ renderOn = !document.hidden; });
-
-  var rz;
-  addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(function(){
-    setSpacer(); S.resize(); fineSize = [0, 0]; capW = []; strumW = []; ScrollTrigger.refresh();
-  }, 160); });
-
-  /* ── atterraggio diretto (?jump=y, o un indirizzo con #capitolo) e contratto di verifica ── */
-  function salta(y){
-    lenis.scrollTo(y, { immediate: true, force: true });
-    ScrollTrigger.update();
-    var tw = st.getTween && st.getTween(); if (tw) tw.progress(1);
-    master.progress(st.progress);
-  }
-  window.__S = S; window.__go = function(y){ salta(y); return new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); }); };
-
-  /* immagini: da file locale (doppio clic) le texture vengono dai dati incorporati, altrimenti dai JPG */
-  var NOMI = ['rainink', 'olimp', 'parola', 'foglio', 'metalgear', 'radente'];
-  /* dalla 3.20 la foto di ogni lavoro è quella scritta nella pagina (data-slot, si cambia dall'area riservata) */
-  function urls(){
-    return NOMI.map(function(n, i){
-      var img = document.querySelector('[data-i="' + i + '"] img[data-slot]'), src = img ? img.getAttribute('src') : 'images/lavori/' + n + '.jpg';
-      var m = src.match(/^images\/lavori\/([a-z]+)\.jpg$/);
-      if (location.protocol === 'file:' && window.LAVORI_DATI && m && window.LAVORI_DATI[m[1]]) return window.LAVORI_DATI[m[1]];
-      return src;
-    });
-  }
-  function datiLocali(){
-    return new Promise(function(res){
-      if (location.protocol !== 'file:') return res();
-      var s = document.createElement('script'); s.src = 'js/lavori-dati.js'; s.onload = s.onerror = function(){ res(); }; document.head.appendChild(s);
-    });
-  }
-  var pre = document.getElementById('pre');
-  var avvio = d.classList.contains('avvio') && !location.hash;
-  /* apertura: il video del logo (js/apertura.js) gira mentre il sito carica e finisce sul grigio della pagina;
-     sparisce in dissolvenza e sul grigio le file delle aste cadono al loro posto */
-  var L = null, primo = false, salto, saltaLogo = new Promise(function(r){ salto = r; });
-  if (avvio){
-    S.ignite(0); S.enter(0); lenis.stop(); quieto = true;
-    try { if (window.Apertura) L = Apertura.play(pre); } catch (err){ L = null; }
-    if (L) L.first.then(function(){ primo = true; });
-    ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(function(ev){ addEventListener(ev, function(){ salto(); }, { once: true, passive: true }); });
-  } else { d.classList.remove('avvio'); inApertura = false; tema(); }
-  datiLocali().then(function(){
-    return Promise.all([S.load(urls()), fontsReady()]);
-  }).then(function(){
-    ScrollTrigger.refresh();
-    d.classList.add('pronto');
-    if (JUMP !== null){ salta(+JUMP || 0); }
-    else if (location.hash && (location.hash.slice(1) in TAPPE)){ salta(TAPPE[location.hash.slice(1)] * VH); }
-    if (!avvio){ if (L) L.stop(); requestAnimationFrame(function(){ requestAnimationFrame(function(){ window.__ready = true; }); }); return; }
-    return Promise.race([L ? L.held : Promise.resolve(), saltaLogo]).then(function(){
-    var IGN = { v: 0 }, ENT = { v: 0 };
-    quieto = false;
-    if (L) L.exit(function(){});
-    var intro = gsap.timeline({ onComplete: function(){ d.classList.remove('avvio'); inApertura = false; window.__ready = true; } });
-    if (!L || !primo) intro.to(pre, { opacity: 0, duration: .8, ease: 'power1.inOut' }, .2);
-    /* mentre il nero scende, le file delle aste cadono dall'alto e si accendono quando toccano; poi scende la barra */
-    intro.to(ENT, { v: 1, duration: 1.7, ease: 'none', onUpdate: function(){ S.enter(ENT.v); } }, .3)
-      .to(IGN, { v: 1, duration: 1.7, ease: 'power1.inOut', onUpdate: function(){ S.ignite(IGN.v); } }, .5)
-      .fromTo(hdr, { opacity: 0, y: -18 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', clearProps: 'transform' }, .85)
-      .fromTo('.angolo', { opacity: 0 }, { opacity: 1, duration: .8, ease: 'power1.out' }, 1.0)
-      .call(tema, null, .5)
-      .call(function(){ lenis.start(); }, null, 1.1)
-      .set({}, {}, Math.max(L ? L.duration + .1 : 0, 2.2));
-    intro.timeScale(1 / 1.4);                                       // ritmo dell'apertura
-    window.__intro = intro;
-    });
-  });
-})();
-</script>
+<script src="mondi/mondi.js?v=3"></script>
 </body>
 </html>

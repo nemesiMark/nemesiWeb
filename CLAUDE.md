@@ -1,48 +1,47 @@
 # Nemesi — sito personale di Mark (web designer)
 
 ## Cos'è
-Portfolio di Nemesi Web, lo studio di web design di Mark: una pagina unica «scroll-film» in puro codice (skill `sito-film`, Corsia A), concept «Dritto e rovescio» (`BRIEF.md`). Un solo oggetto 3D, la «lastra» nera con il bordo verde, porta tutti i lavori; la camera va solo avanti. Accento `#CDFD67` (nel codice le variabili si chiamano ancora `--arancio*` / `COL.arancio`).
+Portfolio di Nemesi Web, lo studio di web design di Mark: dalla 3.57 è **una pagina sola che non scorre, i «mondi»** (`index.html` + `mondi/mondi.js`, Three.js r147). Dopo il video dell'apertura (logo che sfonda il muro, finale nel verde, «taglio di luce», `js/apertura.js`) c'è il mondo centrale Nemesi (cemento crepato di verde, anello al neon) collegato da aste al neon ai quattro mondi delle sezioni: 01 Portfolio (gigante con anelli, i sei lavori), 02 Studio (la Terra con Bologna, sede e Google Maps), 03 Tool (luna con sette satelliti, gli strumenti), 04 Contatti (gigante di ghiaccio, Scrivimi). Clic su un mondo, sull'etichetta o sulla barra → salto nell'iperspazio e pannello della sezione; «Indietro», Esc o il logo riportano al centro. Il blocco gira piano e si gira con la «manina». Accento `#CDFD67` (nel codice le variabili si chiamano ancora `--arancio*`). Niente sezioni nuove senza richiesta.
 
-Barra: Portfolio (link semplice a `portfolio.html`, pagina ferma con tutti i lavori), Studio, Tool, Contattaci, lucchetto.
-Capitoli: 1 Apertura (video Blender del logo che sfonda il muro e finisce nel verde, poi «taglio di luce», `js/apertura.js`; aste che compongono la lastra) · 2 Siti (Rain Ink 01, Olimp 02) · 2b Strumenti `#tool` (giostra di sette lastre) · 3 App (Word 03, Excel 04) · 4 Giochi (Metal Gear 05, Radente 06) · 4b Studio `#studio` (mappa animata, skill `mappa-uni`) · 5 Scrivimi. Niente sezioni nuove senza richiesta.
+Il vecchio sito «film» a scorrimento (fino alla 3.54, con `portfolio.html`) è archiviato **solo in locale** in `~/Documents/work/Sites/nemesiWeb-film` (niente git, non è online; nel repo resta la storia fino al commit `46d3836`).
 
-**Prima di toccare il film, `portfolio.html` o il logo leggi `NOTE-TECNICHE.md`** (capitoli in dettaglio, file, copione `K`/`KX`, giostra, mappa, apertura, contratto di verifica).
+**Prima di toccare i mondi, l'apertura o il logo leggi `NOTE-TECNICHE.md`** (file, costanti, sistema rigido, salti, texture, contratto di verifica).
 
 Lavori: Rain Ink `~/Documents/work/Sites/rainInk`, Olimp `~/Documents/work/Sites/olimp`, app e giochi `~/Documents/work/Apps`; online su `nemesimark.github.io/<repo>/`.
 
 ## Dove sta online
-- Repo https://github.com/nemesiMark/nemesiWeb (`main`), GitHub Pages su **https://nemesiweb.it/** (solo HTTPS), pubblica a ogni push con GitHub Actions.
+- Repo https://github.com/nemesiMark/nemesiWeb (`main`), GitHub Pages su **https://nemesiweb.it/** (solo HTTPS), pubblica a ogni push con GitHub Actions (non pubblica `scripts/`, `data/`, `worker/`, `mondi/blender/` e i file `.md`).
 - Area riservata: Worker https://nemesiweb-area-riservata.nemesi-mark.workers.dev, accetta solo origini `https://` in `ORIGINS` (`worker/wrangler.toml`). Se cambia il dominio: aggiungerlo lì e `npx wrangler deploy` da `worker/`.
-- Fuori dal repo (`.git/info/exclude`): `chat-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`, i video `.mp4` di riferimento, `video/nemesi-apertura/` (5,6 GB: scena Blender `scena-land/apertura2_land.blend` e fumo già calcolato `fumo_land`, per rifare il render dell'apertura con `archivio/apertura-blender/rendi2.py` senza ricalcolare il fumo).
+- Fuori dal repo (`.git/info/exclude`): `chat-*.txt`, `archivio/`, `graphify-out/`, `.DS_Store`, i video `.mp4` di riferimento, `video/nemesi-apertura/` (5,6 GB: scena Blender e fumo già calcolato per rifare il render dell'apertura con `archivio/apertura-blender/rendi2.py`), `mondi/tex/png/` (uscita di Blender, 45 MB) e `mondi/sorgenti/` (mappe NASA grandi).
 
 ## Come si prova in locale
 ```bash
 cd ~/Documents/work/Sites/nemesiWeb && python3 -m http.server 8765   # poi http://localhost:8765
 ```
-Funziona anche da `file://` (immagini e caratteri incorporati in `js/lavori-dati.js` e `js/caratteri-dati.js`).
+Serve il server: da `file://` le texture dei mondi non si caricano.
 
-Verifiche (`~/.claude/skills/sito-film/scripts`), server sempre in background e poi chiuso:
-- `node copy-gate.js ~/Documents/work/Sites/nemesiWeb/index.html` → deve uscire 0.
-- `node verify.js shot "http://localhost:8765/?jump=<y>" out.png 1440 900` (e `390 844`). A 1440×900: fondo 16560 (`?jump=99999`), mappa 13185–16065, giostra 4252–7043.
-- `node verify.js jank http://localhost:8765/` → massimo sotto 50 ms.
+Verifiche (server sempre in background e poi chiuso; Node in `~/.local/lib/node/bin`, puppeteer-core in `~/.claude/skills/sito-film/scripts/node_modules`):
+- `node ~/.claude/skills/sito-film/scripts/copy-gate.js index.html` → deve uscire 0.
+- Schermate con Chrome a 1440×900 e 390×844: `?subito` (niente video né entrata) o `?salta`, `#portfolio|studio|tool|contatti`; aspettare `window.__ready`; `window.__mondi` (`vai`, `prova`, `giostra`, `stato`, `misure`). Nessun errore in console, 60 fotogrammi al secondo.
+- Senza WebGL e dentro un riquadro (anteprima dell'area riservata) la pagina è ferma: sezioni una sotto l'altra.
 
 ## Struttura essenziale
-- `index.html` (film; il markup è anche la versione statica), `portfolio.html` (copia della pagina statica: **se cambia un lavoro in `index.html` va cambiato anche qui**), `area-riservata.html` (skill `area-ris`).
-- `data/testi.json`, `data/immagini.json` + `scripts/genera_contenuti.py`: testi e foto con `data-testo`/`data-slot` si cambiano nei JSON, non nell'HTML.
-- `js/lastra.js` (scena 3D e copione), `js/apertura.js` + `video/apertura.mp4` / `apertura-m.mp4` (apertura; `js/logo3d.js` non più caricato), `js/mappa.js` (non riscriverla), `js/cookie.js`, `js/strumenti-icone.js`.
-- `images/logo/`: **mai modificare i PNG del logo**; icone sempre con sfondo trasparente.
-- `worker/`, `.github/workflows/pubblica.yml`, `vendor/`, `fonts/`, `BRIEF.md` (non è testo per il sito), `LEGGIMI.md` (versioni).
+- `index.html` (barra, etichette dei mondi, quattro pannelli, CSS), `mondi/mondi.js` (scena, salti, manina), `mondi/tex/` (texture; `m/` a metà lato), `mondi/blender/` (script per rifarle), `area-riservata.html` (skill `area-ris`).
+- `data/testi.json`, `data/immagini.json` + `scripts/genera_contenuti.py`: testi e foto con `data-testo`/`data-slot` si cambiano nei JSON, non nell'HTML. `data/gallerie.json` è vuoto (le gallerie erano di `portfolio.html`).
+- `js/apertura.js` + `video/apertura.mp4` / `apertura-m.mp4`, `js/strumenti-icone.js`, `js/caratteri-dati.js` (caratteri per `file://`), `vendor/gsap.min.js`, `vendor/three/three.min.js`.
+- `images/logo/`: **mai modificare i PNG del logo**; icone sempre con sfondo trasparente. `images/lavori/` (foto dei lavori 1600×900), `images/anteprima.jpg` (anteprima dei link, `?v=2`).
+- `worker/`, `.github/workflows/pubblica.yml`, `fonts/`, `LEGGIMI.md` (versioni).
 
 ## Regole di lavoro
-- Testi in italiano. Il copy non descrive mai lo scorrimento o il meccanismo (copy-gate); niente «non X, ma Y», niente lineette nei testi brevi.
+- Testi in italiano. Il copy non descrive mai il meccanismo della pagina (copy-gate); niente «non X, ma Y», niente lineette nei testi brevi.
 - Ogni modifica → nuova versione in `LEGGIMI.md`.
 - Commit solo su richiesta; «g» = commit e push su `origin main`. Prima: `python3 scripts/genera_contenuti.py --check` (deve passare) e niente file di prova `_*.html`.
 - **Ogni pagina HTML nuova va resa modificabile nell'area riservata, subito**: scheda in `PAGINE` e `ORDINE_PRIMA` di `area-riservata.html`, `data-testo`/`data-slot`, voci in `data/testi.json` e `data/immagini.json` (pagina = nome del file), video se ne ha.
-- Rispettare `prefers-reduced-motion` (già gestito con la pagina statica).
+- Rispettare `prefers-reduced-motion` (niente video né salti, solo stacchi).
 
 ## In sospeso
-- Google: Search Console verificata (TXT su Aruba), sitemap inviata e indicizzazione chiesta (23/11/2026): controllare che le due pagine risultino indicizzate.
-- Area riservata: provare dal vero accesso, salvataggio su GitHub e cambio password (Node in `~/.local/lib/node/bin`).
+- Mark deve ancora dire se vanno bene velocità della giostra, luce dello sfondo e forza del tunnel (3.56).
+- Google: la home è cambiata (3.57) e `portfolio.html` non c'è più; sitemap con la sola home. Controllare in Search Console che la home risulti indicizzata ed eventualmente chiedere di nuovo l'indicizzazione.
+- Area riservata: provare dal vero accesso, salvataggio su GitHub e cambio password.
 - Email `ciao@nemesi.studio`: da sostituire con quella vera.
-- Pagina privacy che citi Esri (foto satellitari della mappa).
-- Partita IVA nel finale accanto a «© 2026 Nemesi Web».
+- Partita IVA accanto a «© 2026 Nemesi Web» (pannello Contatti).
