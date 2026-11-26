@@ -1,7 +1,7 @@
 # Mondi (pagina di prova) — texture dei pianeti e del cielo, cotte in Blender (Cycles) da materiali procedurali.
 # Uso:
 #   /Applications/Blender.app/Contents/MacOS/Blender -b --factory-startup --python pianeti.py -- \
-#       quali=nemesi,gigante,luna,ghiaccio,lava,bio,nuvole,cielo,anelli res=2048 out=../tex/png
+#       quali=nemesi,gigante,ossidiana,lava,bio,nuvole,cielo,anelli res=2048 out=../tex/png
 # Ogni pianeta esce in PNG (poi convertiti in JPG da prepara.sh):
 #   <nome>-colore.png (sRGB), <nome>-normale.png (normale in spazio oggetto Blender), <nome>-luce.png (emissione, grigio)
 import bpy, math, os, sys
@@ -115,7 +115,7 @@ def gigante():
     salva_png(px, os.path.join(OUT, 'gigante-colore.png'), srgb=True)
 
 
-# ───────────────────────── Tool: luna di roccia con crateri e piccole luci verdi (le officine) ─────────────────────────
+# ───────────────────────── Tool fino alla 3.67: luna di roccia con crateri e piccole luci verdi (le officine); non si usa più ─────────────────────────
 def luna():
     ob, N = nuovo('luna')
     p = N.p
@@ -154,6 +154,43 @@ def luna():
     salva_png(px, os.path.join(OUT, 'luna-luce.png'), grigio=True)
     px = cuoci(ob, N, 'NORMAL', W, H, N.rilievo(alt, forza=0.7, distanza=0.05))
     salva_png(px, os.path.join(OUT, 'luna-normale.png'))
+
+
+# ───────────────────────── Tool (dalla 3.68): ossidiana, vetro nero tagliato a faccette, giunti accesi di verde da dentro ─────────────────────────
+# Escono ossidiana-colore (sRGB), ossidiana-luce (grigio: i giunti) e ossidiana-normale: la normale di ogni faccetta, già in spazio oggetto
+# di Blender (si scrive direttamente, non si cuoce con il rilievo: le faccette devono restare piatte e i bordi netti).
+def ossidiana():
+    ob, N = nuovo('ossidiana')
+    p = N.p
+    pn = N.v('NORMALIZE', p)
+    v1 = N.voronoi(p, 4.2, 'F1', casuale=1.0)
+    e1 = N.voronoi(p, 4.2, 'DISTANCE_TO_EDGE', casuale=1.0).outputs['Distance']
+    v2 = N.voronoi(p, 10.0, 'F1', casuale=1.0)
+    e2 = N.voronoi(p, 10.0, 'DISTANCE_TO_EDGE', casuale=1.0).outputs['Distance']
+    zona2 = N.smooth(0.48, 0.56, N.rumore(N.v('ADD', p, (5.0, 3.0, 1.0)), 1.4, dett=2).outputs['Fac'])
+    # faccette: la normale della sfera inclinata a caso, una volta per cella (le piccole solo in certe zone)
+    c1 = N.v('SUBTRACT', v1.outputs['Color'], (0.5, 0.5, 0.5))
+    c2 = N.v('SUBTRACT', v2.outputs['Color'], (0.5, 0.5, 0.5))
+    n = N.v('ADD', pn, N.v('SCALE', c1, scala=0.62))
+    n = N.v('ADD', n, N.v('SCALE', N.v('MULTIPLY', c2, N.vettore(zona2, zona2, zona2)), scala=0.4))
+    n = N.v('NORMALIZE', n)
+    normale = N.v('ADD', N.v('SCALE', n, scala=0.5), (0.5, 0.5, 0.5))
+    # giunti sottili, accesi solo a tratti
+    g1 = N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.009, e1))
+    g2 = N.m('MULTIPLY', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.008, e2)), N.m('MULTIPLY', zona2, 0.45))
+    vari = N.m('POWER', N.smooth(0.3, 0.75, N.rumore(p, 2.6, dett=2).outputs['Fac']), 1.6)
+    vari = N.m('ADD', 0.12, N.m('MULTIPLY', vari, 0.88))
+    E = N.m('MULTIPLY', N.m('MAXIMUM', g1, g2), vari, clamp=True)
+    # colore: nero, ogni faccetta appena diversa, un velo verde profondo in alcune
+    r1, _, b1 = N.xyz(v1.outputs['Color'])
+    col = N.rampa(r1, [(0.0, '#07080A'), (0.6, '#0D0F12'), (1.0, '#14171B')])
+    col = N.mix(N.m('MULTIPLY', N.m('GREATER_THAN', b1, 0.72), 0.7), col, hex_lin('#0C1A12'))
+    px = cuoci(ob, N, 'EMIT', W, H, N.emissione(col))
+    salva_png(px, os.path.join(OUT, 'ossidiana-colore.png'), srgb=True)
+    px = cuoci(ob, N, 'EMIT', W, H, N.emissione(E))
+    salva_png(px, os.path.join(OUT, 'ossidiana-luce.png'), grigio=True)
+    px = cuoci(ob, N, 'EMIT', W, H, N.emissione(normale))
+    salva_png(px, os.path.join(OUT, 'ossidiana-normale.png'))
 
 
 # ───────────────────────── Contatti: gigante di ghiaccio, fasce tenui color acqua ─────────────────────────
@@ -401,7 +438,7 @@ def anelli():
     print('salvato anelli.png')
 
 
-FUNZ = {'nemesi': nemesi, 'gigante': gigante, 'luna': luna, 'ghiaccio': ghiaccio, 'lava': lava, 'bio': bio, 'nuvole': nuvole, 'cielo': cielo, 'anelli': anelli}
+FUNZ = {'nemesi': nemesi, 'gigante': gigante, 'luna': luna, 'ossidiana': ossidiana, 'ghiaccio': ghiaccio, 'lava': lava, 'bio': bio, 'nuvole': nuvole, 'cielo': cielo, 'anelli': anelli}
 import time
 for q in QUALI:
     t0 = time.time()

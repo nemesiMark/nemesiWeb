@@ -588,3 +588,13 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 - Texture nuove `crepe-colore` e `crepe-luce` (2048×1024 in `mondi/tex/m/`) da `mondi/blender/crepe.py`, che non usa Blender ma numpy e stampa le bocche dei geyser (`BOCCHE` in `mondi.js`). Tolta `ghiaccio-colore.jpg` (il PNG cotto è in `archivio/texture-vecchie/`).
 - Anteprima dei link rifatta (`anteprima.jpg?v=6`). `mondi.js?v=11`.
 - Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa; schermate a 1440×900 e 390×844 del centro e della sezione Contatti, «riduci movimento», pagina ferma senza WebGL; nessun errore in console.
+
+### 3.68 — 26/11/2026
+- **Tool cambia pianeta**: al posto della luna di roccia un pianeta di ossidiana, vetro nero tagliato a faccette. Ogni faccetta riflette il cielo vero e il verde di Nemesi e lampeggia quando prende il sole; alcuni giunti fra le faccette sono accesi di verde da dentro, con un respiro lento (più pieni sul lato in ombra). Atmosfera appena verde, giro su se stesso in 70 s.
+- **Scie delle icone**: si vede l'orbita intera come un filo sottilissimo e, dietro ogni icona, un arco acceso più fine di prima, con l'anima bianca vicino all'icona che sfuma nel colore del marchio.
+- **Rotazioni delle icone**: guardano chi guarda ma girate un poco verso l'esterno dell'orbita, come su una giostra: ai lati del pianeta mostrano il fianco laccato. Ondeggiare più leggero.
+- L'orbita di Netlify è più inclinata: nella sezione Tool si vedeva di taglio, una riga azzurra dritta sopra il pianeta.
+- Scelta di Mark fra tre proposte provate nel sito (titanio lavorato, circuito, ossidiana): la terza, con scie e rotazioni della stessa proposta. Gli script delle prove sono in `archivio/prova-tool/` (fuori da git).
+- Texture nuove `ossidiana-colore`, `ossidiana-luce`, `ossidiana-normale` (2048×1024 in `mondi/tex/m/`) da `ossidiana()` in `mondi/blender/pianeti.py`: la normale di ogni faccetta si scrive direttamente, senza rilievo, così i bordi restano netti. Tolte le texture della luna (`luna-*.jpg`; i PNG cotti sono in `archivio/texture-vecchie/`); `luna()` resta in `pianeti.py` ma non si usa più.
+- Anteprima dei link rifatta (`anteprima.jpg?v=7`). `mondi.js?v=12`.
+- Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa; schermate a 1440×900 e 390×844 del centro e della sezione Tool, «riduci movimento»; nessun errore in console.

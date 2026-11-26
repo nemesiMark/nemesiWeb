@@ -1,8 +1,8 @@
 /* Mondi — la home di Nemesi Web (index.html, dalla 3.57; prima pagina di prova mondi.html, 3.55–3.56).
    Dopo il video dell'apertura e il «taglio di luce», la luce entra nel mondo Nemesi (cemento crepato di verde, come il muro del video),
    che gira al centro dello spazio. Linee al neon lo collegano ai mondi; ogni tanto una linea si accende da Nemesi fino al suo mondo e lo illumina:
-   Portfolio (gigante ad anelli), Studio (la Terra, Bologna accesa), Tool (luna con le officine; dalla 3.59 le sette icone degli strumenti
-   del vecchio sito le girano intorno, ognuna con la sua scia), Contatti (pianeta che manda segnali; dalla 3.67 ghiaccio crepato
+   Portfolio (gigante ad anelli), Studio (la Terra, Bologna accesa), Tool (dalla 3.68 ossidiana a faccette con i giunti accesi; dalla 3.59
+   le icone degli strumenti del vecchio sito le girano intorno, dalla 3.68 con l'orbita intera e l'arco acceso dietro ognuna), Contatti (pianeta che manda segnali; dalla 3.67 ghiaccio crepato
    con le crepe accese e piccoli geyser) e, dalla 3.58, l'Area
    riservata (pianeta di lava) e, dalla 3.66, Bio (pianeta vivo, blu notte e viola, con venature di luce che pulsano sul lato in ombra).
    Sopra ogni mondo il suo nome in 3D (lettere fatte in Blender, mondi/nomi.bin; dalla 3.59 in marmo bianco).
@@ -102,11 +102,11 @@ var CARTELLA = 'mondi/tex/';
 var FILE = {
   cielo: 'cielo.jpg', nemesiC: 'nemesi-colore.jpg', nemesiN: 'nemesi-normale.jpg', nemesiL: 'nemesi-luce.jpg',
   terraG: 'terra-giorno.jpg', terraL: 'terra-luci.jpg', terraM: 'terra-mare.jpg', terraN: 'terra-nuvole.jpg',
-  gigante: 'gigante-colore.jpg', lunaC: 'luna-colore.jpg', lunaN: 'luna-normale.jpg', lunaL: 'luna-luce.jpg', crepeC: 'crepe-colore.jpg', crepeL: 'crepe-luce.jpg',
+  gigante: 'gigante-colore.jpg', ossC: 'ossidiana-colore.jpg', ossN: 'ossidiana-normale.jpg', ossL: 'ossidiana-luce.jpg', crepeC: 'crepe-colore.jpg', crepeL: 'crepe-luce.jpg',
   lavaC: 'lava-colore.jpg', lavaN: 'lava-normale.jpg', lavaL: 'lava-luce.jpg',
   bioC: 'bio-colore.jpg', bioN: 'bio-normale.jpg', bioL: 'bio-luce.jpg', bioF: 'bio-fase.jpg'
 };
-var PICCOLE = { gigante: 1, crepeC: 1, crepeL: 1, lunaC: 1, lunaN: 1, lunaL: 1, nemesiN: 1, terraM: 1, terraN: 1, lavaC: 1, lavaN: 1, lavaL: 1, bioC: 1, bioN: 1, bioL: 1, bioF: 1 };   // bastano a metà lato anche sul computer
+var PICCOLE = { gigante: 1, crepeC: 1, crepeL: 1, ossC: 1, ossN: 1, ossL: 1, nemesiN: 1, terraM: 1, terraN: 1, lavaC: 1, lavaN: 1, lavaL: 1, bioC: 1, bioN: 1, bioL: 1, bioF: 1 };   // bastano a metà lato anche sul computer
 var T = {};
 var vuota = new THREE.DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1); vuota.needsUpdate = true;
 function caricaTexture(){
@@ -170,6 +170,19 @@ var FS_PIANETA = [
   'uniform vec3 uCentro; uniform vec3 uAnN; uniform vec2 uAnR; uniform float uAcc; uniform vec3 uAccP; uniform float uImp; uniform float uSel; uniform float uAlb; uniform float uPunto;',
   'uniform float uTempo; uniform float uLampo; uniform vec3 uLampoP; uniform vec3 uLampoCol;',
   'varying vec2 vUv; varying vec3 vPw; varying vec3 vNw;',
+  '#ifdef OSSIDIANA',
+  /* riflesso dell'ambiente (dalla 3.68, per l'ossidiana di Tool): il cielo vero, con la stessa mappatura della sfera del cielo,
+     un poco di luce diffusa e il verde di Nemesi (al centro della scena, cioè dalla parte di -uCentro) */
+  'uniform sampler2D tCielo;',
+  'vec3 ambiente(vec3 R){',
+  '  vec2 uv = vec2(fract(atan(R.z, -R.x) / 6.2831853), 1.0 - acos(clamp(R.y, -1.0, 1.0)) / 3.14159265);',
+  '  vec3 c = pow(texture2D(tCielo, uv).rgb, vec3(2.2)) * 1.6 + vec3(0.0075, 0.0095, 0.014);',
+  '  c += vec3(0.030, 0.034, 0.040) * (0.55 + 0.45 * R.y);',
+  '  float n = max(dot(R, normalize(-uCentro)), 0.0);',
+  '  c += vec3(0.62, 0.98, 0.14) * (pow(n, 14.0) * 0.55 + pow(n, 3.0) * 0.05);',
+  '  return c;',
+  '}',
+  '#endif',
   'void main(){',
   '  vec3 V = normalize(cameraPosition - vPw);',
   '  vec3 Ng = normalize(vNw);',
@@ -177,6 +190,9 @@ var FS_PIANETA = [
   '#ifdef NORMALE',
   '  vec3 nb = texture2D(tNormale, vUv).xyz * 2.0 - 1.0;',
   '  N = normalize(mix(Ng, normalize(uRot * vec3(nb.x, nb.z, -nb.y)), 0.9));',
+  '  #ifdef OSSIDIANA',
+  '  N = normalize(uRot * vec3(nb.x, nb.z, -nb.y));',   // le faccette: la normale intera, niente sfera sotto
+  '  #endif',
   '#endif',
   '  vec3 L = uSole;',
   '  float ndlG = dot(Ng, L);',
@@ -191,7 +207,18 @@ var FS_PIANETA = [
   '  if (abs(den) > 0.001){ float tt = dot(uCentro - vPw, uAnN) / den; if (tt > 0.0){ vec3 hp = vPw + L * tt; float rr = length(hp - uCentro);',
   '    float u = (rr - uAnR.x) / (uAnR.y - uAnR.x); if (u > 0.0 && u < 1.0) ombraAn = 1.0 - texture2D(tAnelli, vec2(u, 0.5)).a * 0.85; } }',
   '#endif',
-  '#ifdef TERRA',
+  '#if defined(OSSIDIANA)',
+  /* Tool (dalla 3.68): vetro nero a faccette, ognuna riflette il cielo a modo suo e lampeggia quando incontra il sole;
+     i giunti sono accesi di verde da dentro, con un respiro lento */
+  '  float e = texture2D(tLuce, vUv).r;',
+  '  vec3 R = reflect(-V, N); float fres = 0.05 + 0.95 * pow(1.0 - max(dot(N, V), 0.0), 5.0);',
+  '  col += alb * dif * uSoleCol * 0.6;',
+  '  col += ambiente(R) * fres * 1.6;',
+  '  vec3 Hh = normalize(L + V); float nh = max(dot(N, Hh), 0.0);',
+  '  col += uSoleCol * (pow(nh, 700.0) * 7.0 + pow(nh, 90.0) * 0.12) * term * uSoleF;',
+  '  float resp = 0.75 + 0.25 * sin(uTempo * 0.9 + vUv.x * 22.0 + vUv.y * 9.0);',
+  '  col += uLuceCol * (e * e * 1.6 + e * 0.06) * resp * (0.3 + notte * 0.7) * uLuceF;',
+  '#elif defined(TERRA)',
   '  vec2 uvN = vec2(vUv.x + uNuvOff, vUv.y);',
   '  float nuv = texture2D(tNuvole, uvN).r;',
   '  float omb = texture2D(tNuvole, uvN + vec2(-0.0025, 0.0012)).r;',
@@ -503,45 +530,46 @@ var FS_NOME = [
   '  gl_FragColor = vec4(col, uLuce);',
   '}'
 ].join('\n');
-/* scie delle icone degli strumenti (dalla 3.59): nastro lungo l'orbita dietro l'icona, sempre rivolto alla camera.
-   L'orbita è un cerchio (centro uC, raggio uR, piano uE1–uE2), uA = angolo dell'icona, uArco = quanto è lunga la scia (radianti);
-   aS = 0 all'icona, 1 in fondo alla scia. Largo uLarg nel mondo, mai meno di uPx pixel (da lontano resta una scia sottile) */
+/* scie delle icone degli strumenti (dalla 3.59; dalla 3.68 l'orbita intera): nastro lungo l'orbita, sempre rivolto alla camera.
+   L'orbita è un cerchio (centro uC, raggio uR, piano uE1–uE2), uA = angolo dell'icona, uArco = quanto è lungo il nastro (radianti: dalla 3.68
+   il giro intero), aS = 0 all'icona, 1 in fondo; vAng = di quanti radianti si è dietro l'icona. Largo uLarg nel mondo, mai meno di uPx pixel.
+   Su tutto il giro un filo sottilissimo (si vede l'orbita); dietro l'icona, per 1,9 radianti, l'arco acceso: anima bianca vicino all'icona
+   che sfuma nel colore del marchio, con un alone tenue, sempre più sottile */
 var VS_SCIA = [
   'attribute float aS; attribute float aLato;',
   'uniform vec3 uC; uniform vec3 uE1; uniform vec3 uE2; uniform float uR; uniform float uA; uniform float uArco;',
   'uniform float uLarg; uniform float uPx; uniform vec2 uRis;',
-  'varying float vS; varying float vX;',
+  'varying float vAng; varying float vX;',
   'void main(){',
   '  float th = uA - uArco * aS;',
   '  vec3 p = uC + (uE1 * cos(th) + uE2 * sin(th)) * uR;',
   '  vec3 tg = uE2 * cos(th) - uE1 * sin(th);',
   '  vec4 c = projectionMatrix * viewMatrix * vec4(p, 1.0);',
   '  vec4 c2 = projectionMatrix * viewMatrix * vec4(p + tg * 0.02, 1.0);',
-  '  vS = aS; vX = aLato;',
+  '  vAng = uArco * aS; vX = aLato;',
   '  if (c.w < 0.05 || c2.w < 0.05){ gl_Position = vec4(2.0, 2.0, 2.0, 1.0); return; }',
   '  vec2 d = (c2.xy / c2.w - c.xy / c.w) * uRis;',
   '  vec2 dir = length(d) > 0.0001 ? normalize(d) : vec2(1.0, 0.0);',
-  '  float px = max(uPx, uLarg * projectionMatrix[1][1] * uRis.y * 0.5 / c.w) * (1.0 - 0.7 * aS);',
+  '  float px = max(uPx, uLarg * projectionMatrix[1][1] * uRis.y * 0.5 / c.w) * (1.0 - 0.6 * clamp(vAng / 1.9, 0.0, 1.0));',
   '  c.xy += vec2(-dir.y, dir.x) * aLato * px / (uRis * 0.5) * c.w;',
   '  gl_Position = c;',
   '}'
 ].join('\n');
 var FS_SCIA = [
-  'uniform vec3 uCol; uniform vec3 uFig[5]; uniform float uMulti; uniform float uLuce; uniform vec4 uEt[' + N_MONDI + '];',
-  'varying float vS; varying float vX;',
+  'uniform vec3 uCol; uniform float uLuce; uniform vec4 uEt[' + N_MONDI + '];',
+  'varying float vAng; varying float vX;',
   'void main(){',
   '  float dietroNome = 1.0;',
   '  for (int k = 0; k < ' + N_MONDI + '; k++){ vec2 q = max(uEt[k].xy - gl_FragCoord.xy, gl_FragCoord.xy - uEt[k].zw); dietroNome = min(dietroNome, smoothstep(-1.0, 7.0, max(q.x, q.y))); }',
   '  if (dietroNome < 0.002) discard;',
-  /* Figma ha un marchio a cinque colori: la sua scia li attraversa tutti */
-  '  vec3 col = uCol;',
-  '  if (uMulti > 0.5){ float t = clamp(vS, 0.0, 1.0) * 4.0; col = uFig[0]; for (int k = 0; k < 4; k++) col = mix(col, uFig[k + 1], clamp(t - float(k), 0.0, 1.0)); }',
   '  float x = abs(vX);',
-  '  float core = exp(-x * x * 10.0); float alone = exp(-x * x * 2.5) * 0.3;',
-  /* la scia nasce da dietro l'icona (quando l'icona si allontana la scia le passa davanti: lì resta tenue, così il marchio si legge);
-     clamp: in fondo alla scia vS può superare 1 di un soffio, e pow di un numero negativo dà NaN, che il bloom allarga in un puntino bianco */
-  '  float coda = pow(clamp(1.0 - vS, 0.0, 1.0), 1.6) * smoothstep(0.03, 0.17, vS);',
-  '  vec3 c = col * (core + alone) * coda * 1.7 + vec3(1.0, 1.0, 0.95) * pow(core, 4.0) * coda * coda * 0.5;',
+  '  float core = exp(-x * x * 120.0); float alone = exp(-x * x * 6.0);',
+  /* l'arco nasce da dietro l'icona (quando l'icona si allontana le passa davanti: lì resta tenue, così il marchio si legge); il filo
+     si ferma poco prima di tornare all'icona */
+  '  float arco = pow(clamp(1.0 - vAng / 1.9, 0.0, 1.0), 1.7) * smoothstep(0.03, 0.16, vAng);',
+  '  float filo = 0.022 * smoothstep(6.27, 6.0, vAng) * smoothstep(0.1, 0.3, vAng);',
+  '  vec3 testa = mix(vec3(1.0, 1.0, 0.95) * 1.3, uCol, smoothstep(0.05, 0.6, vAng));',
+  '  vec3 c = mix(uCol, testa, step(0.0001, arco)) * core * (arco * 2.6 + filo) + uCol * alone * arco * 0.36;',
   '  gl_FragColor = vec4(c * uLuce * dietroNome, 1.0);',
   '}'
 ].join('\n');
@@ -678,11 +706,11 @@ var polvere = (function(){
 /* zone dei nomi sullo schermo (pixel veri, y dal basso): linee, anelli e onde si interrompono lì dietro; fuori schermo quando il nome è spento */
 var ZONE_NOMI = MONDI_ID.map(function(){ return new THREE.Vector4(-1e5, -1e5, -1e5, -1e5); });
 function matPianeta(o){
-  var defs = {}; ['NORMALE', 'LUCE', 'TERRA', 'ANELLI', 'GAS', 'ACCENDI', 'LAVA', 'BIO', 'GHIACCIO'].forEach(function(k){ if (o[k]) defs[k] = ''; });
+  var defs = {}; ['NORMALE', 'LUCE', 'TERRA', 'ANELLI', 'GAS', 'ACCENDI', 'LAVA', 'BIO', 'GHIACCIO', 'OSSIDIANA'].forEach(function(k){ if (o[k]) defs[k] = ''; });
   return new THREE.ShaderMaterial({
     defines: defs,
     uniforms: {
-      tColore: U(vuota), tNormale: U(vuota), tLuce: U(vuota), tNuvole: U(vuota), tMare: U(vuota), tAnelli: U(vuota),
+      tColore: U(vuota), tNormale: U(vuota), tLuce: U(vuota), tNuvole: U(vuota), tMare: U(vuota), tAnelli: U(vuota), tCielo: U(vuota),
       uRot: U(new THREE.Matrix3()), uSole: U(SOLE), uSoleCol: U(SOLE_COL), uSoleF: U(1), uAmb: U(o.amb || new V3(0.012, 0.013, 0.016)),
       uAtmo: U(o.atmo || new V3()), uAtmoF: U(o.atmoF || 0), uLuceCol: U(o.luceCol || new V3(1, 1, 1)), uLuceF: U(o.luceF || 0), uNuvOff: U(0),
       uCentro: U(new V3()), uAnN: U(new V3(0, 1, 0)), uAnR: U(new THREE.Vector2(1, 2)), uAcc: U(1), uAccP: U(new V3(0, 0, 1)), uImp: U(-1), uSel: U(0), uAlb: U(o.alb || 1), uPunto: U(0),
@@ -815,8 +843,10 @@ function nuovoMondo(id, r, matOpz, atmoCol, atmoF, atmoSpess, rotAsse, vel){
   t.pin = punto(VERDE.clone().multiplyScalar(2.0), 26); scene.add(t.pin);
   t.raggio = linea(VERDE.clone().multiplyScalar(1.4), 1.6, 0.0); scene.add(t.raggio);
 
-  /* Tool: luna di roccia con le officine accese; intorno le girano le icone degli strumenti (ICONE, più sotto) */
-  nuovoMondo('tool', 0.36, { NORMALE: 1, LUCE: 1, luceCol: VERDE.clone().multiplyScalar(4.0), luceF: 1, amb: new V3(0.01, 0.01, 0.011), atmo: lin('#9FB0A0', 0.3), atmoF: 0.25 }, lin('#A9C2A0', 0.18), 1, 0.05, [0.2, -0.3], 2 * Math.PI / 90);
+  /* Tool: dalla 3.68 ossidiana, vetro nero a faccette con i giunti accesi di verde (prima una luna di roccia con le officine);
+     intorno le girano le icone degli strumenti (ICONE, più sotto) */
+  nuovoMondo('tool', 0.36, { NORMALE: 1, OSSIDIANA: 1, alb: 1.0, luceCol: VERDE.clone().multiplyScalar(3.4), luceF: 1, amb: new V3(0.004, 0.004, 0.005), atmo: lin('#B9D7A8', 0.2), atmoF: 0.2 },
+    lin('#B9D7A8', 0.12), 1, 0.05, [0.2, -0.3], 2 * Math.PI / 70);
 
   /* Contatti: pianeta che manda segnali; dalla 3.67 di ghiaccio crepato, con le crepe accese e piccoli geyser (prima un gigante di ghiaccio liscio) */
   var c = nuovoMondo('contatti', 0.46, { GHIACCIO: 1, alb: 1.0, luceCol: lin('#4FF0E4', 3.4), luceF: 1, amb: new V3(0.012, 0.014, 0.016), atmo: lin('#9EF0F2', 0.7), atmoF: 0.6 },
@@ -863,8 +893,9 @@ function nuovoMondo(id, r, matOpz, atmoCol, atmoF, atmoSpess, rotAsse, vel){
 /* ── icone degli strumenti (dalla 3.59) ──
    Le sette lastre laccate della giostra dei Tool del vecchio sito (nemesiWeb-film, js/lastra.js, dalla 3.9): stessa forma (lastra a bordo
    arrotondato 1,3 × 1,04 × 0,2), corpo nel colore della marca, marchio disegnato sulla faccia, lacca con vernice trasparente e lo stesso
-   studio di luci riflesso. Qui girano intorno alla luna di Tool su orbite inclinate, tutte nello stesso verso, rivolte a chi guarda con
-   un lento ondeggiare che mostra lo spessore; ognuna si lascia dietro una scia del colore del suo marchio (Figma: i suoi cinque colori) */
+   studio di luci riflesso. Qui girano intorno al pianeta di Tool su orbite inclinate, tutte nello stesso verso; dalla 3.68 la faccia guarda
+   un poco verso l'esterno dell'orbita (ai lati del pianeta mostrano il fianco laccato) e si vede l'orbita intera, con l'arco dietro l'icona
+   acceso nel colore del suo marchio */
 function geoLastra(w, h, t, rc, rb){   // = slabGeometry() del vecchio lastra.js: lastra a bordo arrotondato con normali morbide
   var cs = 10, ps = 4, pts = [], prof = [], i, j, PI = Math.PI;
   var hw = w / 2, hh = h / 2;
@@ -904,7 +935,7 @@ function geoLastra(w, h, t, rc, rb){   // = slabGeometry() del vecchio lastra.js
   return g;
 }
 var ICONE = (function(){
-  var STR = (window.STRUMENTI || []).filter(function(s){ return s.id !== 'figma'; }), tool = MONDI.tool, lista = [];   // Figma resta nel pannello, non intorno alla luna (3.60)
+  var STR = (window.STRUMENTI || []).filter(function(s){ return s.id !== 'figma'; }), tool = MONDI.tool, lista = [];   // Figma resta nel pannello, non intorno al pianeta (3.60)
   if (!STR.length) return lista;
   function colore(h){ return new THREE.Color(h).convertSRGBToLinear(); }
   /* lo studio di luci del vecchio sito: stanza scura con pannelli chiari (in alto il più forte), riflessi nella lacca */
@@ -924,7 +955,7 @@ var ICONE = (function(){
   })();
   var GSW = 1.3, GSH = 1.04, GST = 0.2, TWG = 1024, THG = Math.round(TWG * GSH / GSW);
   var geo = geoLastra(GSW, GSH, GST, 0.11, 0.03), geoLogo = new THREE.PlaneGeometry(GSW - 0.03, GSH - 0.03);
-  var SCALA = tool.r * 0.27;   // l'icona è larga 1,3 · SCALA, un terzo abbondante del raggio della luna
+  var SCALA = tool.r * 0.27;   // l'icona è larga 1,3 · SCALA, un terzo abbondante del raggio del pianeta
   /* il marchio di Figma ha cinque colori: si disegna a parte */
   var FIG = [['#F24E1E', 'M19 0H9.5A9.5 9.5 0 0 0 9.5 19H19Z'], ['#FF7262', 'M19 0H28.5A9.5 9.5 0 0 1 28.5 19H19Z'],
     ['#A259FF', 'M19 19H9.5A9.5 9.5 0 0 0 9.5 38H19Z'], ['#1ABCFE', 'M38 28.5A9.5 9.5 0 1 1 19 28.5A9.5 9.5 0 0 1 38 28.5Z'],
@@ -934,9 +965,9 @@ var ICONE = (function(){
     FIG.forEach(function(f){ g.fillStyle = f[0]; g.fill(new Path2D(f[1])); });
     g.restore();
   }
-  /* scia: striscia di 64 tratti lungo l'orbita (la forma la fa VS_SCIA) */
+  /* scia: striscia di 256 tratti lungo tutta l'orbita (la forma la fa VS_SCIA) */
   var geoScia = (function(){
-    var N = 64, s = [], l = [], p = [], ix = [];
+    var N = 256, s = [], l = [], p = [], ix = [];
     for (var k = 0; k <= N; k++){ s.push(k / N, k / N); l.push(-1, 1); p.push(0, 0, 0, 0, 0, 0); }
     for (k = 0; k < N; k++){ var a = k * 2; ix.push(a, a + 2, a + 1, a + 1, a + 2, a + 3); }
     var g = new THREE.BufferGeometry();
@@ -944,13 +975,13 @@ var ICONE = (function(){
     g.setAttribute('aS', new THREE.Float32BufferAttribute(s, 1)); g.setAttribute('aLato', new THREE.Float32BufferAttribute(l, 1));
     g.setIndex(ix); return g;
   })();
-  /* colore della scia = colore del marchio (Figma: i cinque colori in fila), tutti con la stessa forza */
+  /* colore della scia = colore del marchio, tutti con la stessa forza */
   var SCIA = { claude: '#D97757', vscode: '#1F9CF0', github: '#E8ECF2', figma: '#A259FF', cloudflare: '#F38020', netlify: '#32E6E2', supabase: '#3ECF8E' };
   function forte(h, k){ var c = lin(h); return c.multiplyScalar(k / Math.max(c.x, c.y, c.z)); }
-  var FIG_COL = FIG.map(function(f){ return forte(f[0], 1.9); });
-  /* orbite: inclinazione sull'orizzontale e verso dove si inclina (radianti), raggio (in raggi della luna), velocità (radianti al secondo) */
+  /* orbite: inclinazione sull'orizzontale e verso dove si inclina (radianti), raggio (in raggi del pianeta), velocità (radianti al secondo) */
+  /* la quinta (Netlify) dalla 3.68 più inclinata: a 0,18 nella sezione si vedeva di taglio, una riga dritta sopra il pianeta */
   var ORB = [[0.30, 0.2, 1.36, 0.40], [0.80, 1.9, 1.56, 0.33], [0.52, 3.4, 1.46, 0.37], [0.98, 4.6, 1.62, 0.30],
-             [0.18, 5.5, 1.30, 0.43], [0.66, 0.9, 1.60, 0.35], [0.42, 2.7, 1.50, 0.32]];
+             [0.62, 5.5, 1.30, 0.43], [0.66, 0.9, 1.60, 0.35], [0.42, 2.7, 1.50, 0.32]];
   STR.forEach(function(s, i){
     var c = document.createElement('canvas'); c.width = TWG; c.height = THG;
     var g = c.getContext('2d'), lato = THG * 0.46;
@@ -959,7 +990,7 @@ var ICONE = (function(){
     var tx = new THREE.CanvasTexture(c); tx.encoding = THREE.sRGBEncoding; tx.anisotropy = ANISO;
     var base = colore(s.corpo);
     /* la lastra si disegna dopo le scie (fra gli oggetti trasparenti, ma piena): quando un'icona si allontana la sua scia le passa
-       davanti, e senza questo il marchio si vedrebbe attraverso la luce; la luna invece la copre sempre */
+       davanti, e senza questo il marchio si vedrebbe attraverso la luce; il pianeta invece la copre sempre */
     var mat = new THREE.MeshPhysicalMaterial({ color: base, roughness: s.chiaro ? 0.32 : 0.22, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.06,
       envMap: studio, envMapIntensity: 1, emissive: base.clone().multiplyScalar(0.16), transparent: true, depthWrite: true });
     var lastra = new THREE.Mesh(geo, mat); lastra.renderOrder = 7;
@@ -971,10 +1002,10 @@ var ICONE = (function(){
     var q = ORB[i % ORB.length], inc = q[0], az = q[1];
     var n = new V3(Math.sin(inc) * Math.cos(az), Math.cos(inc), Math.sin(inc) * Math.sin(az));
     var e1 = new V3(-Math.sin(az), 0, Math.cos(az)), e2 = new V3().crossVectors(n, e1).normalize();
-    var R = tool.r * q[2], multi = s.logo === 'figma';
+    var R = tool.r * q[2];
     var scia = new THREE.Mesh(geoScia, new THREE.ShaderMaterial({
-      uniforms: { uC: U(tool.g.position), uE1: U(e1), uE2: U(e2), uR: U(R), uA: U(0), uArco: U(1.3), uLarg: U(GSH * SCALA * 0.2), uPx: U(1.1), uRis: U(RIS),
-        uCol: U(forte(SCIA[s.id] || s.corpo, 1.9)), uFig: U(FIG_COL), uMulti: U(multi ? 1 : 0), uLuce: U(1), uEt: U(ZONE_NOMI) },
+      uniforms: { uC: U(tool.g.position), uE1: U(e1), uE2: U(e2), uR: U(R), uA: U(0), uArco: U(Math.PI * 2), uLarg: U(GSH * SCALA * 0.34), uPx: U(5), uRis: U(RIS),
+        uCol: U(forte(SCIA[s.id] || s.corpo, 1.9)), uLuce: U(1), uEt: U(ZONE_NOMI) },
       vertexShader: VS_SCIA, fragmentShader: FS_SCIA, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, side: THREE.DoubleSide
     }));
     scia.frustumCulled = false; scia.renderOrder = 6; scene.add(scia);
@@ -988,7 +1019,7 @@ function assegnaTexture(){
   var u = NEMESI.mat.uniforms; u.tColore.value = T.nemesiC; u.tNormale.value = T.nemesiN; u.tLuce.value = T.nemesiL;
   u = MONDI.portfolio.mat.uniforms; u.tColore.value = T.gigante; u.tAnelli.value = T.anelli; MONDI.portfolio.anelli.material.uniforms.tAnelli.value = T.anelli;
   u = MONDI.studio.mat.uniforms; u.tColore.value = T.terraG; u.tLuce.value = T.terraL; u.tMare.value = T.terraM; u.tNuvole.value = T.terraN;
-  u = MONDI.tool.mat.uniforms; u.tColore.value = T.lunaC; u.tNormale.value = T.lunaN; u.tLuce.value = T.lunaL;
+  u = MONDI.tool.mat.uniforms; u.tColore.value = T.ossC; u.tNormale.value = T.ossN; u.tLuce.value = T.ossL; u.tCielo.value = T.cielo;
   u = MONDI.contatti.mat.uniforms; u.tColore.value = T.crepeC; u.tLuce.value = T.crepeL;
   u = MONDI.area.mat.uniforms; u.tColore.value = T.lavaC; u.tNormale.value = T.lavaN; u.tLuce.value = T.lavaL;
   u = MONDI.bio.mat.uniforms; u.tColore.value = T.bioC; u.tNormale.value = T.bioN; u.tLuce.value = T.bioL; u.tMare.value = T.bioF;
@@ -1079,7 +1110,7 @@ var DISP = {
 var INQ = {
   portfolio: { l: { x: 0.8, y: 0.56, r: 0.16 }, p: { x: 0.5, y: 0.9, r: 0.24 }, dir: [0.55, 0.55, 0.42] },
   studio:    { l: { x: 0.77, y: 0.56, r: 0.36 }, p: { x: 0.5, y: 0.95, r: 0.46 }, dir: [0.75, 0.05, 0.12] },
-  /* Tool (dalla 3.59): luna un poco più piccola, così le icone che le girano intorno restano nello schermo e fuori dal pannello */
+  /* Tool (dalla 3.59): pianeta un poco più piccolo, così le icone che le girano intorno restano nello schermo e fuori dal pannello */
   tool:      { l: { x: 0.76, y: 0.54, r: 0.21 }, p: { x: 0.5, y: 0.84, r: 0.3 }, dir: [0.8, 0.12, 0.18] },
   contatti:  { l: { x: 0.76, y: 0.56, r: 0.22 }, p: { x: 0.5, y: 0.98, r: 0.44 }, dir: [0.7, 0.45, 0.1] },
   /* Bio (dalla 3.66): lo si guarda un poco dalla parte della notte, dove le venature si accendono */
@@ -1254,7 +1285,7 @@ function dimensiona(){
   }
   var fpx = (ph / 2) / Math.tan(30 * Math.PI / 360);
   polvere.material.uniforms.uScala.value = fpx;
-  ICONE.forEach(function(ic){ ic.scia.material.uniforms.uPx.value = 1.1 * DPR; });
+  ICONE.forEach(function(ic){ ic.scia.material.uniforms.uPx.value = 5 * DPR; });
   stelle.material.uniforms.uPx.value = DPR;
   pulv.mesh.material.uniforms.uPx.value = 1.1 * DPR;
   /* le linee dei mondi: nastro largo 3 volte (12 px), così la luce che corre ha il suo alone */
@@ -1331,7 +1362,7 @@ function aggiorna(dt){
     aggiornaAccensione(m, dt);
     var mu = m.mat.uniforms;
     mu.uSoleF.value = 0.06 + 0.94 * acceso; mu.uSel.value = m.sel; mu.uTempo.value = tempo;
-    if (id === 'area' || id === 'bio' || id === 'contatti') mu.uLuceF.value = 0.25 + 0.75 * acceso;   // lava, venature di Bio e crepe di Contatti si accendono con il loro mondo
+    if (id === 'area' || id === 'bio' || id === 'contatti' || id === 'tool') mu.uLuceF.value = 0.25 + 0.75 * acceso;   // lava, venature di Bio, crepe di Contatti e giunti di Tool si accendono con il loro mondo
     if (m.geyser){ var gu = m.geyser.material.uniforms; gu.uTempo.value = tempo * (RIDOTTO ? 0.2 : 1); gu.uLuce.value = acceso; }
     mu.uPunto.value = Math.max(0, Math.min(1, (INTRO.linee[i] - 0.97) / 0.03)) * (m.sfarfallio !== undefined ? m.sfarfallio : 1);
     mu.uLampo.value = m.lampo * acceso; mu.uLampoP.value.copy(m.g.position).negate().normalize();
@@ -1378,16 +1409,22 @@ function aggiorna(dt){
   pu.uF.value = FX.pulv; pu.uScatto.value = Math.max(0.35, Math.min(2.5, (1 / 60) / Math.max(dt, 0.001)));
   pulv.mesh.visible = FX.pulv > 0.002;
 }
-/* icone degli strumenti: al loro posto sull'orbita, rivolte alla camera (già mossa in questo fotogramma) con un lento ondeggiare;
-   si accendono con la loro luna all'entrata */
+/* icone degli strumenti: al loro posto sull'orbita, rivolte alla camera (già mossa in questo fotogramma) ma girate un poco verso l'esterno
+   dell'orbita (dalla 3.68: come su una giostra, ai lati del pianeta mostrano il fianco), con un ondeggiare leggero; si accendono con il loro
+   mondo all'entrata */
 var iconaE = new THREE.Euler(), iconaQ = new THREE.Quaternion(), PROVA_ICONE = {};
+var iconaV = new V3(), iconaR = new V3(), iconaSu = new V3(), iconaZero = new V3(), iconaM = new THREE.Matrix4();
 function aggiornaIcone(){
   var acceso = INTRO.mondi[MONDI_ID.indexOf('tool')], C = MONDI.tool.g.position, k = RIDOTTO ? 0.3 : 1;
   ICONE.forEach(function(ic){
     ic.o.visible = acceso > 0.01 && PROVA_ICONE.lastre !== false; ic.scia.visible = PROVA_ICONE.scie !== false;
     ic.o.position.copy(C).addScaledVector(ic.e1, Math.cos(ic.ang) * ic.R).addScaledVector(ic.e2, Math.sin(ic.ang) * ic.R);
-    iconaE.set(0.15 * k * Math.sin(tempo * 0.47 + ic.ph), 0.55 * k * Math.sin(tempo * 0.61 + ic.ph * 1.3), 0.06 * k * Math.sin(tempo * 0.39 + ic.ph * 0.7));
-    ic.o.quaternion.copy(camera.quaternion).multiply(iconaQ.setFromEuler(iconaE));
+    iconaR.copy(ic.o.position).sub(C).normalize();
+    iconaV.copy(camera.position).sub(ic.o.position).normalize().addScaledVector(iconaR, 0.65 * k).normalize();
+    iconaM.lookAt(iconaV, iconaZero, iconaSu.set(0, 1, 0).applyQuaternion(camera.quaternion));
+    ic.o.quaternion.setFromRotationMatrix(iconaM);
+    iconaE.set(0.05 * k * Math.sin(tempo * 0.47 + ic.ph), 0.08 * k * Math.sin(tempo * 0.61 + ic.ph * 1.3), 0.03 * k * Math.sin(tempo * 0.39 + ic.ph));
+    ic.o.quaternion.multiply(iconaQ.setFromEuler(iconaE));
     ic.mat.envMapIntensity = acceso; ic.mat.emissiveIntensity = acceso; ic.logo.material.opacity = acceso;
     var u = ic.scia.material.uniforms; u.uA.value = ic.ang; u.uLuce.value = acceso;
   });
