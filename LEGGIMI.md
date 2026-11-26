@@ -580,3 +580,11 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 - Blender: `bio()` in `mondi/blender/pianeti.py` (texture `bio-colore`, `bio-luce`, `bio-normale`, `bio-fase`: rosso = fase della pulsazione, verde = mare), «BIO» in `nomi.py`; `prepara.sh` mette rilievo e fase di Bio a un quarto del lato.
 - Anteprima dei link rifatta con Bio (`anteprima.jpg?v=5`). `mondi.js?v=10`, `nomi.bin?v=2`.
 - Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa; schermate a 1440×900 e 390×844 del centro e della sezione Bio, viaggio a metà, nome rosso col mouse sopra, pulsante verso Contatti, entrata con `?salta`, pagina ferma senza WebGL, barra a 761, 780 e 900 px; nessun errore in console.
+
+### 3.67 — 26/11/2026
+- **Contatti cambia pianeta**: al posto del gigante di ghiaccio liscio un pianeta di ghiaccio crepato, sempre turchese. Crosta chiara con macchie di ghiaccio più vecchio, una rete di crepe accese di turchese (piene sul lato in ombra, ancora visibili di giorno, con un respiro lento) e quattro «strisce» più larghe intorno al polo sud, accese quasi di bianco.
+- **Piccoli geyser**: da 14 bocche sulle crepe (quattro sulle strisce del polo sud, un poco più alte) escono getti brevi di cristalli di ghiaccio, a intervalli e ognuno per conto suo; sono più chiari dalla parte del sole. Con «riduci movimento» vanno piano.
+- Scelta di Mark fra tre proposte provate nel sito (tempesta, aurore, geyser): la terza, con i geyser piccoli. Restano le onde del segnale, l'atmosfera turchese e l'accensione `#8FE6EE`.
+- Texture nuove `crepe-colore` e `crepe-luce` (2048×1024 in `mondi/tex/m/`) da `mondi/blender/crepe.py`, che non usa Blender ma numpy e stampa le bocche dei geyser (`BOCCHE` in `mondi.js`). Tolta `ghiaccio-colore.jpg` (il PNG cotto è in `archivio/texture-vecchie/`).
+- Anteprima dei link rifatta (`anteprima.jpg?v=6`). `mondi.js?v=11`.
+- Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa; schermate a 1440×900 e 390×844 del centro e della sezione Contatti, «riduci movimento», pagina ferma senza WebGL; nessun errore in console.

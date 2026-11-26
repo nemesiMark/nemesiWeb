@@ -2,13 +2,14 @@
    Dopo il video dell'apertura e il «taglio di luce», la luce entra nel mondo Nemesi (cemento crepato di verde, come il muro del video),
    che gira al centro dello spazio. Linee al neon lo collegano ai mondi; ogni tanto una linea si accende da Nemesi fino al suo mondo e lo illumina:
    Portfolio (gigante ad anelli), Studio (la Terra, Bologna accesa), Tool (luna con le officine; dalla 3.59 le sette icone degli strumenti
-   del vecchio sito le girano intorno, ognuna con la sua scia), Contatti (gigante di ghiaccio che manda segnali) e, dalla 3.58, l'Area
+   del vecchio sito le girano intorno, ognuna con la sua scia), Contatti (pianeta che manda segnali; dalla 3.67 ghiaccio crepato
+   con le crepe accese e piccoli geyser) e, dalla 3.58, l'Area
    riservata (pianeta di lava) e, dalla 3.66, Bio (pianeta vivo, blu notte e viola, con venature di luce che pulsano sul lato in ombra).
    Sopra ogni mondo il suo nome in 3D (lettere fatte in Blender, mondi/nomi.bin; dalla 3.59 in marmo bianco).
    Nemesi, le aste e i mondi sono un solo blocco rigido: gira piano intorno alla verticale e con la «manina» (trascinando) si gira in ogni direzione.
    Clic su un mondo, sul suo nome o sulla barra: la camera vola fino al mondo (dalla 3.58 un viaggio vero: si gira, accelera, rallenta ed entra
    in orbita), poi i contenuti della sezione; il pianeta di lava porta all'area riservata. Esc o «Indietro»: la camera torna al centro.
-   Texture cotte in Blender (mondi/blender/*.py), Terra dalle mappe NASA (pubblico dominio). Three.js r147 classico, post-produzione propria (bloom HDR,
+   Texture cotte in Blender (mondi/blender/*.py; quelle di Contatti con numpy, crepe.py), Terra dalle mappe NASA (pubblico dominio). Three.js r147 classico, post-produzione propria (bloom HDR,
    sfocatura di movimento, aberrazione, grana). Contratto di verifica: ?subito (niente video né entrata), window.__ready, window.__mondi. */
 (function(){
 'use strict';
@@ -101,11 +102,11 @@ var CARTELLA = 'mondi/tex/';
 var FILE = {
   cielo: 'cielo.jpg', nemesiC: 'nemesi-colore.jpg', nemesiN: 'nemesi-normale.jpg', nemesiL: 'nemesi-luce.jpg',
   terraG: 'terra-giorno.jpg', terraL: 'terra-luci.jpg', terraM: 'terra-mare.jpg', terraN: 'terra-nuvole.jpg',
-  gigante: 'gigante-colore.jpg', lunaC: 'luna-colore.jpg', lunaN: 'luna-normale.jpg', lunaL: 'luna-luce.jpg', ghiaccio: 'ghiaccio-colore.jpg',
+  gigante: 'gigante-colore.jpg', lunaC: 'luna-colore.jpg', lunaN: 'luna-normale.jpg', lunaL: 'luna-luce.jpg', crepeC: 'crepe-colore.jpg', crepeL: 'crepe-luce.jpg',
   lavaC: 'lava-colore.jpg', lavaN: 'lava-normale.jpg', lavaL: 'lava-luce.jpg',
   bioC: 'bio-colore.jpg', bioN: 'bio-normale.jpg', bioL: 'bio-luce.jpg', bioF: 'bio-fase.jpg'
 };
-var PICCOLE = { gigante: 1, ghiaccio: 1, lunaC: 1, lunaN: 1, lunaL: 1, nemesiN: 1, terraM: 1, terraN: 1, lavaC: 1, lavaN: 1, lavaL: 1, bioC: 1, bioN: 1, bioL: 1, bioF: 1 };   // bastano a metà lato anche sul computer
+var PICCOLE = { gigante: 1, crepeC: 1, crepeL: 1, lunaC: 1, lunaN: 1, lunaL: 1, nemesiN: 1, terraM: 1, terraN: 1, lavaC: 1, lavaN: 1, lavaL: 1, bioC: 1, bioN: 1, bioL: 1, bioF: 1 };   // bastano a metà lato anche sul computer
 var T = {};
 var vuota = new THREE.DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1); vuota.needsUpdate = true;
 function caricaTexture(){
@@ -230,6 +231,16 @@ var FS_PIANETA = [
   '  col += em * uLuceF;',
   '  vec3 Hb = normalize(L + V); float nhb = max(dot(Ng, Hb), 0.0);',
   '  col += uSoleCol * vec3(0.55, 0.7, 1.0) * pow(nhb, 22.0) * 0.045 * fm.g * term * uSoleF;',
+  '  #elif defined(GHIACCIO)',
+  /* Contatti (dalla 3.67): crepe accese di turchese, piene sul lato in ombra e ancora visibili di giorno, con un respiro lento
+     che cambia da punto a punto; dove sono più larghe (le strisce del polo sud) il centro è quasi bianco. Riflesso del sole largo sul ghiaccio */
+  '  float e = texture2D(tLuce, vUv).r;',
+  '  float pul = 0.72 + 0.28 * sin(uTempo * 1.3 + vUv.x * 50.0 + vUv.y * 31.0);',
+  '  vec3 em = uLuceCol * (e * e * 1.4 + e * 0.16) * pul * (0.28 + notte * 0.72);',
+  '  em += vec3(0.85, 1.0, 1.0) * smoothstep(0.7, 1.0, e) * pul * (0.12 + notte * 0.7);',
+  '  col += em * uLuceF;',
+  '  vec3 Hg = normalize(L + V); float nhg = max(dot(Ng, Hg), 0.0);',
+  '  col += uSoleCol * vec3(0.8, 0.95, 1.0) * pow(nhg, 50.0) * 0.06 * term * uSoleF;',
   '  #elif defined(LUCE)',
   '  float e = texture2D(tLuce, vUv).r;',
   '  float acc = 1.0; float onda = 0.0;',
@@ -667,7 +678,7 @@ var polvere = (function(){
 /* zone dei nomi sullo schermo (pixel veri, y dal basso): linee, anelli e onde si interrompono lì dietro; fuori schermo quando il nome è spento */
 var ZONE_NOMI = MONDI_ID.map(function(){ return new THREE.Vector4(-1e5, -1e5, -1e5, -1e5); });
 function matPianeta(o){
-  var defs = {}; ['NORMALE', 'LUCE', 'TERRA', 'ANELLI', 'GAS', 'ACCENDI', 'LAVA', 'BIO'].forEach(function(k){ if (o[k]) defs[k] = ''; });
+  var defs = {}; ['NORMALE', 'LUCE', 'TERRA', 'ANELLI', 'GAS', 'ACCENDI', 'LAVA', 'BIO', 'GHIACCIO'].forEach(function(k){ if (o[k]) defs[k] = ''; });
   return new THREE.ShaderMaterial({
     defines: defs,
     uniforms: {
@@ -745,6 +756,30 @@ var NEMESI = (function(){
   return { g: g, asse: asse, gira: gira, sfera: sfera, mat: mat, atmo: atmo, neon: neon, neon2: neon2, r: R0, vel: 2 * Math.PI / 55 };
 })();
 
+/* geyser di Contatti (dalla 3.67): granelli di ghiaccio che escono dalle bocche (BOCCHE, sulla sfera di raggio 1, da mondi/blender/crepe.py)
+   e salgono in un cono stretto, sempre più larghi e più spenti. Ogni bocca sputa a intervalli (aFase): un granello conta solo se è partito
+   mentre la sua bocca era attiva, così quando si ferma i getti già partiti finiscono la salita. Più chiari dalla parte del sole */
+var BOCCHE = [[0.458, -0.812, 0.362], [-0.019, -0.998, 0.053], [0.288, -0.95, 0.123], [-0.23, -0.951, -0.206], [-0.63, -0.563, -0.536], [0.604, 0.74, 0.295], [0.26, 0.03, 0.965], [0.541, 0.569, -0.62], [-0.726, -0.342, 0.597], [-0.433, 0.108, 0.895], [-0.673, 0.612, 0.414], [-0.07, 0.469, -0.88], [0.221, -0.457, 0.862], [0.885, -0.448, -0.126]];
+var VS_GETTO = [
+  'uniform float uTempo; uniform float uR; uniform float uScala; uniform float uLuce; uniform vec3 uSole;',
+  'attribute vec3 aB; attribute vec3 aJ; attribute float aS; attribute float aV; attribute float aFase; attribute float aAlto; varying float vA;',
+  'void main(){',
+  '  float c = uTempo * aV + aS; float t = fract(c);',
+  '  float parte = (floor(c) - aS) / aV;',
+  '  float f = fract(parte * 0.055 + aFase); float attiva = smoothstep(0.0, 0.08, f) * (1.0 - smoothstep(0.42, 0.55, f));',
+  '  vec3 n = normalize(aB); vec3 d = normalize(n + aJ * (0.06 + 0.22 * t));',
+  '  float h = t * aAlto * (0.75 + 0.5 * fract(aS * 7.31));',
+  '  vec3 p = (n * 1.002 + d * h) * uR;',
+  '  vec4 mv = modelViewMatrix * vec4(p, 1.0); gl_Position = projectionMatrix * mv;',
+  '  gl_PointSize = clamp(uScala * (0.45 + t * 1.1) / max(-mv.z, 0.1), 1.0, 32.0);',
+  '  vec3 nw = normalize(mat3(modelMatrix) * normalize(p));',
+  '  float sole = 0.3 + 0.7 * smoothstep(-0.35, 0.35, dot(nw, uSole));',
+  '  vA = pow(1.0 - t, 1.5) * smoothstep(0.0, 0.06, t) * sole * attiva * uLuce;',
+  '  if (vA < 0.002) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);',
+  '}'
+].join('\n');
+var FS_GETTO = 'varying float vA; void main(){ vec2 q = gl_PointCoord - 0.5; float a = exp(-dot(q, q) * 14.0); gl_FragColor = vec4(vec3(0.72, 0.98, 1.0) * a * vA * 0.8, 1.0); }';
+
 /* ── i mondi delle sezioni ── */
 var MONDI = {};
 function nuovoMondo(id, r, matOpz, atmoCol, atmoF, atmoSpess, rotAsse, vel){
@@ -783,10 +818,27 @@ function nuovoMondo(id, r, matOpz, atmoCol, atmoF, atmoSpess, rotAsse, vel){
   /* Tool: luna di roccia con le officine accese; intorno le girano le icone degli strumenti (ICONE, più sotto) */
   nuovoMondo('tool', 0.36, { NORMALE: 1, LUCE: 1, luceCol: VERDE.clone().multiplyScalar(4.0), luceF: 1, amb: new V3(0.01, 0.01, 0.011), atmo: lin('#9FB0A0', 0.3), atmoF: 0.25 }, lin('#A9C2A0', 0.18), 1, 0.05, [0.2, -0.3], 2 * Math.PI / 90);
 
-  /* Contatti: gigante di ghiaccio che manda segnali */
-  var c = nuovoMondo('contatti', 0.46, { GAS: 1, amb: new V3(0.01, 0.012, 0.014), atmo: lin('#9EF0F2', 0.9), atmoF: 0.8 }, lin('#8FE6EE', 0.8), 1, 0.09, [0.1, -0.5], 2 * Math.PI / 50);
+  /* Contatti: pianeta che manda segnali; dalla 3.67 di ghiaccio crepato, con le crepe accese e piccoli geyser (prima un gigante di ghiaccio liscio) */
+  var c = nuovoMondo('contatti', 0.46, { GHIACCIO: 1, alb: 1.0, luceCol: lin('#4FF0E4', 3.4), luceF: 1, amb: new V3(0.012, 0.014, 0.016), atmo: lin('#9EF0F2', 0.7), atmoF: 0.6 },
+    lin('#8FE6EE', 0.55), 1, 0.07, [0.1, -0.5], 2 * Math.PI / 50);
   c.alone.material.uniforms.uSegnale.value = 1; c.alone.material.uniforms.uSize.value = c.r * 2.5;
   c.alone.material.uniforms.uCol.value = lin('#BDF6F0', 1.2);
+  /* geyser: le prime quattro bocche (strisce del polo sud) un poco più alte; girano con il pianeta */
+  var nb = BOCCHE.length, n = (MOBILE ? 60 : 120) * nb;
+  var aB = new Float32Array(n * 3), aJ = new Float32Array(n * 3), aS = new Float32Array(n), aV = new Float32Array(n), aF = new Float32Array(n), aA = new Float32Array(n);
+  var fasi = BOCCHE.map(function(){ return Math.random(); }), j = new V3();
+  for (var k = 0; k < n; k++){
+    var b = k % nb; aB.set(BOCCHE[b], k * 3); aF[k] = fasi[b]; aA[k] = b < 4 ? 0.42 : 0.28;
+    do { j.set(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1); } while (j.lengthSq() > 1);
+    aJ.set([j.x, j.y, j.z], k * 3); aS[k] = Math.random(); aV[k] = 0.22 + Math.random() * 0.14;
+  }
+  var gg = new THREE.BufferGeometry();
+  gg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+  [['aB', aB, 3], ['aJ', aJ, 3], ['aS', aS, 1], ['aV', aV, 1], ['aFase', aF, 1], ['aAlto', aA, 1]].forEach(function(a){ gg.setAttribute(a[0], new THREE.BufferAttribute(a[1], a[2])); });
+  c.geyser = new THREE.Points(gg, new THREE.ShaderMaterial({
+    uniforms: { uTempo: U(0), uR: U(c.r), uLuce: U(1), uScala: U(15 * Math.min(devicePixelRatio || 1, 2)), uSole: U(SOLE) },
+    vertexShader: VS_GETTO, fragmentShader: FS_GETTO, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true }));
+  c.geyser.frustumCulled = false; c.geyser.renderOrder = 5; c.gira.add(c.geyser);
 
   /* Area riservata (dalla 3.58): pianeta di lava, crosta di basalto quasi nera rotta da fratture e laghi accesi, foschia arancione */
   var lv = nuovoMondo('area', 0.36, { NORMALE: 1, LUCE: 1, LAVA: 1, alb: 1.6, luceCol: new V3(1.0, 0.26, 0.04).multiplyScalar(4.2), luceF: 1,
@@ -937,7 +989,7 @@ function assegnaTexture(){
   u = MONDI.portfolio.mat.uniforms; u.tColore.value = T.gigante; u.tAnelli.value = T.anelli; MONDI.portfolio.anelli.material.uniforms.tAnelli.value = T.anelli;
   u = MONDI.studio.mat.uniforms; u.tColore.value = T.terraG; u.tLuce.value = T.terraL; u.tMare.value = T.terraM; u.tNuvole.value = T.terraN;
   u = MONDI.tool.mat.uniforms; u.tColore.value = T.lunaC; u.tNormale.value = T.lunaN; u.tLuce.value = T.lunaL;
-  u = MONDI.contatti.mat.uniforms; u.tColore.value = T.ghiaccio;
+  u = MONDI.contatti.mat.uniforms; u.tColore.value = T.crepeC; u.tLuce.value = T.crepeL;
   u = MONDI.area.mat.uniforms; u.tColore.value = T.lavaC; u.tNormale.value = T.lavaN; u.tLuce.value = T.lavaL;
   u = MONDI.bio.mat.uniforms; u.tColore.value = T.bioC; u.tNormale.value = T.bioN; u.tLuce.value = T.bioL; u.tMare.value = T.bioF;
 }
@@ -1279,7 +1331,8 @@ function aggiorna(dt){
     aggiornaAccensione(m, dt);
     var mu = m.mat.uniforms;
     mu.uSoleF.value = 0.06 + 0.94 * acceso; mu.uSel.value = m.sel; mu.uTempo.value = tempo;
-    if (id === 'area' || id === 'bio') mu.uLuceF.value = 0.25 + 0.75 * acceso;   // la lava e le venature di Bio si accendono con il loro mondo
+    if (id === 'area' || id === 'bio' || id === 'contatti') mu.uLuceF.value = 0.25 + 0.75 * acceso;   // lava, venature di Bio e crepe di Contatti si accendono con il loro mondo
+    if (m.geyser){ var gu = m.geyser.material.uniforms; gu.uTempo.value = tempo * (RIDOTTO ? 0.2 : 1); gu.uLuce.value = acceso; }
     mu.uPunto.value = Math.max(0, Math.min(1, (INTRO.linee[i] - 0.97) / 0.03)) * (m.sfarfallio !== undefined ? m.sfarfallio : 1);
     mu.uLampo.value = m.lampo * acceso; mu.uLampoP.value.copy(m.g.position).negate().normalize();
     if (m.atmo){ var at = m.atmo.material.uniforms; at.uF.value = acceso; at.uSel.value = m.sel; at.uLampo.value = m.lampo * acceso; }
