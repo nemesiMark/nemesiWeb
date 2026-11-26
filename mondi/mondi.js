@@ -161,7 +161,7 @@ var FS_PIANETA = [
   'uniform sampler2D tColore; uniform sampler2D tNormale; uniform sampler2D tLuce; uniform sampler2D tNuvole; uniform sampler2D tMare; uniform sampler2D tAnelli;',
   'uniform mat3 uRot; uniform vec3 uSole; uniform vec3 uSoleCol; uniform float uSoleF; uniform vec3 uAmb;',
   'uniform vec3 uAtmo; uniform float uAtmoF; uniform vec3 uLuceCol; uniform float uLuceF; uniform float uNuvOff;',
-  'uniform vec3 uCentro; uniform vec3 uAnN; uniform vec2 uAnR; uniform float uAcc; uniform vec3 uAccP; uniform float uImp; uniform float uSel; uniform float uAlb;',
+  'uniform vec3 uCentro; uniform vec3 uAnN; uniform vec2 uAnR; uniform float uAcc; uniform vec3 uAccP; uniform float uImp; uniform float uSel; uniform float uAlb; uniform float uPunto;',
   'uniform float uTempo; uniform float uLampo; uniform vec3 uLampoP; uniform vec3 uLampoCol;',
   'varying vec2 vUv; varying vec3 vPw; varying vec3 vNw;',
   'void main(){',
@@ -233,6 +233,8 @@ var FS_PIANETA = [
   '  col += uAtmo * fr * smoothstep(-0.45, 0.65, ndlG) * uAtmoF * max(uSoleF, 0.15);',
   '  col += uAtmo * fr * uSel * 0.8;',
   /* accensione: la luce arrivata dalla linea illumina la faccia rivolta a Nemesi (dalla 3.59 senza l'onda che correva sul mondo) */
+  /* dalla 3.65 dove la linea tocca il mondo resta un punto verde acceso: anche sul lato in ombra si vede che la linea arriva */
+  '  if (uPunto > 0.001){ float cp = max(dot(Ng, uLampoP), 0.0); col += vec3(0.62, 0.98, 0.14) * uPunto * (pow(cp, 1400.0) * 2.2 + pow(cp, 160.0) * 0.22); }',
   '  if (uLampo > 0.001){',
   '    float faccia = smoothstep(-0.25, 1.0, dot(Ng, uLampoP));',
   '    col += uLampoCol * uLampo * (alb * faccia * 1.1 + fr * 0.55);',
@@ -654,7 +656,7 @@ function matPianeta(o){
       tColore: U(vuota), tNormale: U(vuota), tLuce: U(vuota), tNuvole: U(vuota), tMare: U(vuota), tAnelli: U(vuota),
       uRot: U(new THREE.Matrix3()), uSole: U(SOLE), uSoleCol: U(SOLE_COL), uSoleF: U(1), uAmb: U(o.amb || new V3(0.012, 0.013, 0.016)),
       uAtmo: U(o.atmo || new V3()), uAtmoF: U(o.atmoF || 0), uLuceCol: U(o.luceCol || new V3(1, 1, 1)), uLuceF: U(o.luceF || 0), uNuvOff: U(0),
-      uCentro: U(new V3()), uAnN: U(new V3(0, 1, 0)), uAnR: U(new THREE.Vector2(1, 2)), uAcc: U(1), uAccP: U(new V3(0, 0, 1)), uImp: U(-1), uSel: U(0), uAlb: U(o.alb || 1),
+      uCentro: U(new V3()), uAnN: U(new V3(0, 1, 0)), uAnR: U(new THREE.Vector2(1, 2)), uAcc: U(1), uAccP: U(new V3(0, 0, 1)), uImp: U(-1), uSel: U(0), uAlb: U(o.alb || 1), uPunto: U(0),
       uTempo: U(0), uLampo: U(0), uLampoP: U(new V3(0, 0, 1)), uLampoCol: U(VERDE.clone().multiplyScalar(1.6))
     },
     vertexShader: VS_PIANETA, fragmentShader: FS_PIANETA
@@ -1051,7 +1053,7 @@ function posizionaMondi(){
     m.g.position.copy(m.base).applyQuaternion(SIS.q);
     var dirN = tmp.copy(m.g.position).normalize();
     m.lineaA.copy(dirN).multiplyScalar(R0);
-    m.lineaB.copy(m.g.position).addScaledVector(dirN, -m.r * 1.16);
+    m.lineaB.copy(m.g.position).addScaledVector(dirN, -m.r * 0.99);   // dalla 3.65 arriva sulla superficie (prima si fermava a 1,16 raggi: da vicino restava staccata)
     m.linea.material.uniforms.uA.value.copy(m.lineaA); m.linea.material.uniforms.uB.value.copy(m.lineaB);
     m.alone.material.uniforms.uPos.value.copy(m.g.position);
     if (m.atmo) m.atmo.material.uniforms.uCentro.value.copy(m.g.position);
@@ -1249,6 +1251,7 @@ function aggiorna(dt){
     var mu = m.mat.uniforms;
     mu.uSoleF.value = 0.06 + 0.94 * acceso; mu.uSel.value = m.sel; mu.uTempo.value = tempo;
     if (id === 'area') mu.uLuceF.value = 0.25 + 0.75 * acceso;   // la lava si accende con il suo mondo
+    mu.uPunto.value = Math.max(0, Math.min(1, (INTRO.linee[i] - 0.97) / 0.03)) * (m.sfarfallio !== undefined ? m.sfarfallio : 1);
     mu.uLampo.value = m.lampo * acceso; mu.uLampoP.value.copy(m.g.position).negate().normalize();
     if (m.atmo){ var at = m.atmo.material.uniforms; at.uF.value = acceso; at.uSel.value = m.sel; at.uLampo.value = m.lampo * acceso; }
     if (m.anelli) m.anelli.material.uniforms.uF.value = 0.06 + 0.94 * acceso;

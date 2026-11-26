@@ -559,3 +559,14 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 - **Accensione del colore del mondo**: quando la luce che corre lungo la linea arriva al mondo, la faccia rivolta a Nemesi si accende del colore del mondo e non più di verde: Portfolio crema, Studio azzurro, Tool grigio chiaro, Contatti azzurro ghiaccio, Area riservata arancio lava. La linea e la luce che corre restano verdi.
 - `mondi.js?v=8`.
 - Verifiche: schermata a 1440×900 con tutti i mondi accesi insieme, nessun errore in console.
+
+### 3.64 — 26/11/2026
+- **Barra rivista**: è una lastra di vetro trasparente (si vede il cielo sotto, sfocato) con un filo di bordo; niente più fondo nero, alone verde e tasti grigi in rilievo.
+- **Voci in marmo**: Portfolio, Studio, Tool, Contattaci in maiuscolo spaziato, bianco marmo con venature grigio azzurre come i nomi dei mondi. Col mouse sopra (o con la tastiera) il colore scorre sul rosso acceso con un alone rosso e sotto si allunga un filo rosso, come i nomi in 3D. La sezione aperta ha il filo rosso sotto.
+- Lucchetto e menu del telefono in vetro: il lucchetto chiaro diventa rosso col mouse sopra; il menu a tendina del telefono è vetro scuro sfocato.
+- Verifiche: schermate a 1440×900 (anche a 2×) con e senza mouse sopra, telefono 390×844 col menu aperto, nessun errore in console.
+
+### 3.65 — 26/11/2026
+- **Linee fino ai mondi**: le linee verdi arrivano fino alla superficie del mondo. Prima si fermavano un po' prima (a 1,16 raggi dal centro) e, guardando da vicino o dal lato in ombra, restavano staccate, come su Portfolio. Dove toccano resta un piccolo punto verde acceso.
+- `mondi.js?v=9`.
+- Verifiche: schermate a 1440×900 del centro e delle sezioni Portfolio, Studio, Tool e Contatti; la linea tocca il bordo del mondo, nessun errore in console.
