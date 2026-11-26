@@ -103,16 +103,17 @@ var FILE = {
   cielo: 'cielo.jpg', nemesiC: 'nemesi-colore.jpg', nemesiN: 'nemesi-normale.jpg', nemesiL: 'nemesi-luce.jpg',
   terraG: 'terra-giorno.jpg', terraL: 'terra-luci.jpg', terraM: 'terra-mare.jpg', terraN: 'terra-nuvole.jpg',
   gigante: 'gigante-colore.jpg', ossC: 'ossidiana-colore.jpg', ossN: 'ossidiana-normale.jpg', ossL: 'ossidiana-luce.jpg', crepeC: 'crepe-colore.jpg', crepeL: 'crepe-luce.jpg',
-  lavaC: 'lava-colore.jpg', lavaN: 'lava-normale.jpg', lavaL: 'lava-luce.jpg',
+  lavaC: 'lava-colore.jpg', lavaN: 'lava-normale.jpg', lavaL: 'lava-luce.jpg', lavaF: 'lava-colate.jpg', lavaA: 'lava-alto.jpg',
   bioC: 'bio-colore.jpg', bioN: 'bio-normale.jpg', bioL: 'bio-luce.jpg', bioF: 'bio-fase.jpg'
 };
-var PICCOLE = { gigante: 1, crepeC: 1, crepeL: 1, ossC: 1, ossN: 1, ossL: 1, nemesiN: 1, terraM: 1, terraN: 1, lavaC: 1, lavaN: 1, lavaL: 1, bioC: 1, bioN: 1, bioL: 1, bioF: 1 };   // bastano a metà lato anche sul computer
+var PICCOLE = { gigante: 1, crepeC: 1, crepeL: 1, ossC: 1, ossN: 1, ossL: 1, nemesiN: 1, terraM: 1, terraN: 1, lavaC: 1, lavaN: 1, lavaL: 1, lavaF: 1, lavaA: 1, bioC: 1, bioN: 1, bioL: 1, bioF: 1 };   // bastano a metà lato anche sul computer
+var VER = { lavaC: 3, lavaN: 3, lavaL: 3, lavaF: 3, lavaA: 3 };   // ?v= delle texture rifatte (le altre 2): dalla 3.69 la lava con i vulcani
 var T = {};
 var vuota = new THREE.DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1); vuota.needsUpdate = true;
 function caricaTexture(){
   var loader = new THREE.TextureLoader();
   var lista = Object.keys(FILE).map(function(k){
-    var url = CARTELLA + (GRANDE && !PICCOLE[k] ? '' : 'm/') + FILE[k] + '?v=2';
+    var url = CARTELLA + (GRANDE && !PICCOLE[k] ? '' : 'm/') + FILE[k] + '?v=' + (VER[k] || 2);
     return new Promise(function(res){
       loader.load(url, function(t){
         t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.ClampToEdgeWrapping; t.anisotropy = ANISO;
@@ -159,7 +160,14 @@ function caricaNomi(){
 /* ════════════════════════════ shader ════════════════════════════ */
 var VS_PIANETA = [
   'varying vec2 vUv; varying vec3 vPw; varying vec3 vNw;',
-  'void main(){ vUv = uv; vec4 pw = modelMatrix * vec4(position, 1.0); vPw = pw.xyz; vNw = normalize(mat3(modelMatrix) * normal);',
+  '#ifdef ALTO',
+  'uniform sampler2D tAlto; uniform float uAlto;',   // dalla 3.69 i vulcani della lava sporgono davvero (lava-alto: 0 = piano, 1 = cima del cono più alto)
+  '#endif',
+  'void main(){ vUv = uv; vec3 pos = position;',
+  '#ifdef ALTO',
+  '  pos += normal * texture2D(tAlto, uv).r * uAlto;',
+  '#endif',
+  '  vec4 pw = modelMatrix * vec4(pos, 1.0); vPw = pw.xyz; vNw = normalize(mat3(modelMatrix) * normal);',
   '  gl_Position = projectionMatrix * viewMatrix * pw; }'
 ].join('\n');
 
@@ -170,6 +178,9 @@ var FS_PIANETA = [
   'uniform vec3 uCentro; uniform vec3 uAnN; uniform vec2 uAnR; uniform float uAcc; uniform vec3 uAccP; uniform float uImp; uniform float uSel; uniform float uAlb; uniform float uPunto;',
   'uniform float uTempo; uniform float uLampo; uniform vec3 uLampoP; uniform vec3 uLampoCol;',
   'varying vec2 vUv; varying vec3 vPw; varying vec3 vNw;',
+  '#ifdef LAVA',
+  'uniform vec4 uBocche[6]; uniform vec4 uEruz[6]; uniform vec4 uConi[6];',   // uConi: raggio e altezza del cono   // vulcani: bocca (sfera di raggio 1) e raggio del cratere; fronte, lava fresca, attività
+  '#endif',
   '#ifdef OSSIDIANA',
   /* riflesso dell'ambiente (dalla 3.68, per l'ossidiana di Tool): il cielo vero, con la stessa mappatura della sfera del cielo,
      un poco di luce diffusa e il verde di Nemesi (al centro della scena, cioè dalla parte di -uCentro) */
@@ -193,6 +204,22 @@ var FS_PIANETA = [
   '  #ifdef OSSIDIANA',
   '  N = normalize(uRot * vec3(nb.x, nb.z, -nb.y));',   // le faccette: la normale intera, niente sfera sotto
   '  #endif',
+  '#endif',
+  '#ifdef ALTO',
+  /* vulcani della lava (dalla 3.69): i fianchi del cono più vicino hanno la normale del profilo (un poco esagerata), così un lato prende
+     il sole e l'altro resta in ombra e il cono si legge anche visto dall'alto; dentro il cratere la parete scende verso la bocca */
+  'float gCono = 0.0; vec3 gNc = Ng;',
+  '  { float th0 = (1.0 - vUv.y) * 3.14159265, ph0 = vUv.x * 6.2831853;',
+  '    vec3 p0 = vec3(-cos(ph0) * sin(th0), cos(th0), sin(ph0) * sin(th0));',
+  '    float m0 = -2.0; vec3 c0 = vec3(0.0, 1.0, 0.0); vec3 k0 = vec3(1.0);',
+  '    for (int k = 0; k < 6; k++){ float d = dot(p0, uBocche[k].xyz); if (d > m0){ m0 = d; c0 = uBocche[k].xyz; k0 = vec3(uConi[k].xy, uBocche[k].w); } }',
+  '    float r0 = acos(clamp(m0, -1.0, 1.0));',
+  '    gCono = 1.0 - smoothstep(k0.x * 0.75, k0.x * 1.05, r0);',
+  '    float pend = k0.y / k0.x * 1.1 * gCono * smoothstep(k0.z * 0.85, k0.z * 1.1, r0);',
+  '    pend -= k0.y / k0.z * 0.6 * smoothstep(k0.z * 0.45, k0.z * 0.7, r0) * (1.0 - smoothstep(k0.z * 0.8, k0.z, r0));',
+  '    vec3 tg = p0 - c0 * m0; float lt = length(tg);',
+  '    if (lt > 1e-5 && abs(pend) > 1e-4){ gNc = normalize(uRot * normalize(p0 + tg / lt * pend)); N = normalize(N + gNc - Ng); }',
+  '  }',
   '#endif',
   '  vec3 L = uSole;',
   '  float ndlG = dot(Ng, L);',
@@ -244,6 +271,26 @@ var FS_PIANETA = [
   '  float tremo = 0.8 + 0.2 * sin(uTempo * 1.6 + e * 9.0 + vUv.x * 70.0) * sin(uTempo * 0.85 + vUv.y * 45.0);',
   '  vec3 em = uLuceCol * (e * e * 1.25 + e * 0.1) * tremo * (0.6 + notte * 0.4);',
   '  em += vec3(1.0, 0.72, 0.36) * smoothstep(0.62, 1.0, e) * 1.4 * tremo;',
+  /* vulcani (dalla 3.69): il punto della sfera da vUv, il vulcano più vicino (le colate di uno non arrivano a metà strada da un altro);
+     sulle colate (tMare) la lava scorre a onde verso il basso; quando la bocca erutta il cratere si accende e la lava fresca
+     scende per le colate fino al fronte (uEruz.x, radianti dal cratere), con la testa più chiara, poi si spegne piano (uEruz.y) */
+  '  float th = (1.0 - vUv.y) * 3.14159265, ph = vUv.x * 6.2831853;',
+  '  vec3 pl = vec3(-cos(ph) * sin(th), cos(th), sin(ph) * sin(th));',
+  '  float mx = -2.0; vec4 bz = vec4(0.0, 0.0, 0.0, 0.25); float rc = 0.05;',
+  '  for (int k = 0; k < 6; k++){ float d = dot(pl, uBocche[k].xyz); if (d > mx){ mx = d; bz = uEruz[k]; rc = uBocche[k].w; } }',
+  '  float r = acos(clamp(mx, -1.0, 1.0));',
+  '  float colata = texture2D(tMare, vUv).r;',
+  '  em *= mix(1.0, 0.75 + 0.4 * sin(r * 70.0 - uTempo * 1.8), colata * 0.8);',
+  '  em += uLuceCol * colata * (0.1 + 0.55 * e) * (0.7 + 0.3 * sin(r * 70.0 - uTempo * 1.8)) * (1.0 - 0.45 * smoothstep(rc, 0.45, r));',   // colate sempre accese
+  '  float cono = 1.0 - smoothstep(rc, bz.w, r);',
+  '  em += vec3(1.0, 0.3, 0.06) * cono * cono * (0.05 + 0.4 * bz.z) * (0.5 + 0.5 * notte);',   // il cratere illumina i fianchi del cono
+  '  col += alb * uSoleCol * (max(dot(gNc, L), 0.0) * 0.85 + 0.06) * gCono * (0.3 + 0.7 * term);',   // fianchi: un lato al sole, uno in ombra (anche di notte, più tenue)
+  '  float bocca = 1.0 - smoothstep(rc * 0.3, rc * 1.5, r);',
+  '  em += vec3(1.0, 0.5, 0.16) * bocca * bocca * (0.6 + 3.6 * bz.z) * tremo;',   // il lago del cratere è sempre acceso, eruttando di più
+  '  float fresca = colata * bz.y * (1.0 - smoothstep(bz.x - 0.05, bz.x, r));',
+  '  float testa = colata * bz.y * exp(-pow((r - bz.x) / 0.03, 2.0));',
+  '  em += uLuceCol * fresca * (0.12 + 0.8 * e * e) * (0.75 + 0.25 * sin(r * 90.0 - uTempo * 5.0));',
+  '  em += vec3(1.0, 0.62, 0.26) * testa * (0.3 + 0.9 * e);',
   '  col += em * uLuceF;',
   '  #elif defined(BIO)',
   /* Bio (dalla 3.66): venature e macchie di luce, acqua dove la fase è bassa e viola dove è alta, che pulsano piano a onde
@@ -706,11 +753,11 @@ var polvere = (function(){
 /* zone dei nomi sullo schermo (pixel veri, y dal basso): linee, anelli e onde si interrompono lì dietro; fuori schermo quando il nome è spento */
 var ZONE_NOMI = MONDI_ID.map(function(){ return new THREE.Vector4(-1e5, -1e5, -1e5, -1e5); });
 function matPianeta(o){
-  var defs = {}; ['NORMALE', 'LUCE', 'TERRA', 'ANELLI', 'GAS', 'ACCENDI', 'LAVA', 'BIO', 'GHIACCIO', 'OSSIDIANA'].forEach(function(k){ if (o[k]) defs[k] = ''; });
+  var defs = {}; ['NORMALE', 'LUCE', 'TERRA', 'ANELLI', 'GAS', 'ACCENDI', 'LAVA', 'BIO', 'GHIACCIO', 'OSSIDIANA', 'ALTO'].forEach(function(k){ if (o[k]) defs[k] = ''; });
   return new THREE.ShaderMaterial({
     defines: defs,
     uniforms: {
-      tColore: U(vuota), tNormale: U(vuota), tLuce: U(vuota), tNuvole: U(vuota), tMare: U(vuota), tAnelli: U(vuota), tCielo: U(vuota),
+      tColore: U(vuota), tNormale: U(vuota), tLuce: U(vuota), tNuvole: U(vuota), tMare: U(vuota), tAnelli: U(vuota), tCielo: U(vuota), tAlto: U(vuota), uAlto: U(o.alto || 0),
       uRot: U(new THREE.Matrix3()), uSole: U(SOLE), uSoleCol: U(SOLE_COL), uSoleF: U(1), uAmb: U(o.amb || new V3(0.012, 0.013, 0.016)),
       uAtmo: U(o.atmo || new V3()), uAtmoF: U(o.atmoF || 0), uLuceCol: U(o.luceCol || new V3(1, 1, 1)), uLuceF: U(o.luceF || 0), uNuvOff: U(0),
       uCentro: U(new V3()), uAnN: U(new V3(0, 1, 0)), uAnR: U(new THREE.Vector2(1, 2)), uAcc: U(1), uAccP: U(new V3(0, 0, 1)), uImp: U(-1), uSel: U(0), uAlb: U(o.alb || 1), uPunto: U(0),
@@ -808,6 +855,66 @@ var VS_GETTO = [
 ].join('\n');
 var FS_GETTO = 'varying float vA; void main(){ vec2 q = gl_PointCoord - 0.5; float a = exp(-dot(q, q) * 14.0); gl_FragColor = vec4(vec3(0.72, 0.98, 1.0) * a * vA * 0.8, 1.0); }';
 
+/* vulcani del pianeta di lava (dalla 3.69): bocca sulla sfera di raggio 1 (spazio di Three), raggio del cratere, del cono e della
+   colata più lunga (radianti) e altezza del cono rispetto al più alto, da mondi/blender/pianeti.py (VULCANI, che li stampa alla fine della lava). Ogni bocca erutta a
+   intervalli (ciclo di 9-12,5 s, attiva per poco più della metà) e a spinte: gli schizzi sono granelli che salgono e ricadono (parabola con
+   la gravità verso il centro), da bianchi e gialli a rossi e spenti; ognuno lascia una breve scia (gli stessi granelli un attimo
+   prima). Un granello conta solo se è partito mentre la sua bocca era attiva: quando si ferma, quelli in volo finiscono la caduta.
+   attivitaBocca() in JS e attivita() nello shader devono restare uguali. I granelli partono dal fondo del cratere, in cima al cono */
+var VULCANI = [[-0.9133, 0.3090, 0.2653, 0.050, 0.190, 0.460, 1.000], [-0.2560, -0.3971, 0.8813, 0.040, 0.150, 0.360, 0.733], [0.4527, -0.7290, 0.5135, 0.042, 0.155, 0.380, 0.800], [0.7782, 0.5621, -0.2802, 0.048, 0.185, 0.460, 1.000], [0.2075, -0.3090, -0.9282, 0.040, 0.150, 0.360, 0.733], [-0.6398, 0.4258, -0.6398, 0.046, 0.180, 0.440, 0.933]];
+var ERUZ_G = 1.3, ERUZ_CODA = 6;   // gravità (raggi al secondo²), granelli della scia
+var ALTO_VULC = 0.2;   // altezza del cono più alto (raggi del pianeta): i vulcani sporgono anche dal profilo
+var VS_ERUZ = [
+  'uniform float uTempo; uniform float uR; uniform float uScala; uniform float uLuce; uniform float uTutte;',
+  'attribute vec3 aB; attribute vec3 aJ; attribute float aS; attribute float aV; attribute float aAp; attribute float aK; attribute vec3 aCiclo; attribute float aH;',
+  'varying float vA; varying float vT;',
+  'float attivita(float t){',
+  '  float x = fract(t / aCiclo.x + aCiclo.y);',
+  '  float a = smoothstep(0.0, 0.03, x) * (1.0 - smoothstep(aCiclo.z - 0.04, aCiclo.z, x));',
+  '  float sp = 0.5 + 0.5 * sin(t * 2.9 + aCiclo.y * 37.0);',
+  '  return max(a, uTutte) * (0.35 + 0.65 * sp * sp);',
+  '}',
+  'void main(){',
+  '  vec3 n = normalize(aB);',
+  '  if (aK < -0.5){',   // il bagliore della bocca: grande e morbido, si accende con l'attività
+  '    vec4 mb = modelViewMatrix * vec4(n * (1.01 + aH * 0.7) * uR, 1.0); gl_Position = projectionMatrix * mb;',
+  '    vT = 1.0; vA = attivita(uTempo) * uLuce * 0.55;',
+  '    gl_PointSize = clamp(uScala * aV / max(-mb.z, 0.1), 2.0, 90.0);',
+  '    if (vA < 0.002) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);',
+  '    return;',
+  '  }',
+  '  vec3 d = normalize(n + aJ * aAp);',
+  '  float vn = aV * dot(d, n), T = 2.0 * vn / ' + ERUZ_G.toFixed(2) + ';',   // tempo di volo: sale e ricade sulla superficie
+  '  float per = T * (1.04 + 0.3 * aS);',
+  '  float c = uTempo / per + aS * 13.0, giro = floor(c);',
+  '  float lancio = (giro - aS * 13.0) * per;',
+  '  float tau = fract(c) * per - aK * 0.014;',   // la scia: lo stesso granello un attimo prima
+  '  float caso = fract(sin(giro * 12.9898 + aS * 78.233) * 43758.5453);',
+  '  float vivo = step(caso, attivita(lancio)) * step(0.0, tau) * step(tau, T);',
+  '  vec3 p = n * (1.0 + aH * 0.55) + d * (aV * tau) - n * (0.5 * ' + ERUZ_G.toFixed(2) + ' * tau * tau);',   // dal fondo del cratere
+  '  vT = clamp(1.0 - 0.9 * tau / max(T, 0.01), 0.0, 1.0);',   // si raffredda in volo: bianco e giallo alla bocca, rosso in cima, spento ricadendo
+  '  vA = vivo * (1.0 - aK / ' + (ERUZ_CODA + 0.5).toFixed(1) + ') * smoothstep(0.0, 0.04, tau) * uLuce;',
+  '  vec4 mv = modelViewMatrix * vec4(p * uR, 1.0); gl_Position = projectionMatrix * mv;',
+  '  gl_PointSize = clamp(uScala * (0.4 + 0.9 * vT * vT) * (1.0 - aK * 0.09) / max(-mv.z, 0.1), 1.0, 30.0);',
+  '  if (vA < 0.002) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);',
+  '}'
+].join('\n');
+var FS_ERUZ = [
+  'varying float vA; varying float vT;',
+  'void main(){',
+  '  vec2 q = gl_PointCoord - 0.5; float a = exp(-dot(q, q) * 16.0);',
+  '  vec3 c = mix(vec3(0.45, 0.035, 0.0), vec3(1.0, 0.3, 0.035), smoothstep(0.15, 0.6, vT));',
+  '  c = mix(c, vec3(1.0, 0.8, 0.42), smoothstep(0.62, 0.97, vT));',
+  '  gl_FragColor = vec4(c * a * vA * (0.7 + 2.3 * vT * vT), 1.0);',
+  '}'
+].join('\n');
+function attivitaBocca(t, b){
+  var x = t / b.P + b.f; x -= Math.floor(x);
+  var a = ss(0, 0.03, x) * (1 - ss(b.A - 0.04, b.A, x)), sp = 0.5 + 0.5 * Math.sin(t * 2.9 + b.f * 37);
+  return { x: x, a: a * (0.35 + 0.65 * sp * sp) };
+}
+function ss(a, b, x){ var t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); }
+
 /* ── i mondi delle sezioni ── */
 var MONDI = {};
 function nuovoMondo(id, r, matOpz, atmoCol, atmoF, atmoSpess, rotAsse, vel){
@@ -871,9 +978,44 @@ function nuovoMondo(id, r, matOpz, atmoCol, atmoF, atmoSpess, rotAsse, vel){
   c.geyser.frustumCulled = false; c.geyser.renderOrder = 5; c.gira.add(c.geyser);
 
   /* Area riservata (dalla 3.58): pianeta di lava, crosta di basalto quasi nera rotta da fratture e laghi accesi, foschia arancione */
-  var lv = nuovoMondo('area', 0.36, { NORMALE: 1, LUCE: 1, LAVA: 1, alb: 1.6, luceCol: new V3(1.0, 0.26, 0.04).multiplyScalar(4.2), luceF: 1,
+  var lv = nuovoMondo('area', 0.36, { NORMALE: 1, LUCE: 1, LAVA: 1, ALTO: 1, alto: ALTO_VULC, alb: 1.6, luceCol: new V3(1.0, 0.26, 0.04).multiplyScalar(4.2), luceF: 1,
     amb: new V3(0.012, 0.009, 0.008), atmo: lin('#FF8A4A', 0.55), atmoF: 0.45 }, lin('#FF6A2A', 0.5), 1, 0.07, [0.14, 0.32], 2 * Math.PI / 64);
   lv.atmo.material.uniforms.uBasso.value = 0.45;
+  lv.sfera.geometry = new THREE.SphereGeometry(1, MOBILE ? 288 : 384, MOBILE ? 144 : 192);   // più fitta: i coni sporgono (ALTO)
+  /* vulcani (dalla 3.69): le bocche con il loro ciclo; i tre grandi (0, 3, 5) spingono più in alto e con più granelli */
+  var CICLI = [[10, 0.93, 0.58], [11.5, 0.35, 0.52], [9, 0.6, 0.55], [12.5, 0.05, 0.6], [9.5, 0.75, 0.52], [11, 0.48, 0.56]];   // durata, fase, parte attiva (dalla prima prova: più frequenti)
+  lv.bocche = VULCANI.map(function(v, i){ var c = CICLI[i]; return { P: c[0], f: c[1], A: c[2], rc: v[3], L: v[5], grande: v[3] >= 0.048 }; });
+  lv.mat.uniforms.uBocche = U(VULCANI.map(function(v){ return new THREE.Vector4(v[0], v[1], v[2], v[3]); }));
+  lv.mat.uniforms.uEruz = U(VULCANI.map(function(){ return new THREE.Vector4(); }));
+  lv.mat.uniforms.uConi = U(VULCANI.map(function(v){ return new THREE.Vector4(v[4], v[6] * ALTO_VULC, 0, 0); }));
+  (function(){
+    var per = [], j = new V3(), t1 = new V3(), t2 = new V3(), n = new V3();
+    VULCANI.forEach(function(v, i){
+      var b = lv.bocche[i], k = b.grande ? 1 : 0.78, quanti = Math.round((b.grande ? 260 : 160) * (MOBILE ? 0.6 : 1));
+      n.set(v[0], v[1], v[2]).normalize();
+      t1.set(0, 1, 0).cross(n).normalize(); t2.crossVectors(n, t1);
+      for (var q = 0; q < quanti; q++){
+        var bomba = Math.random() < 0.2, a = Math.random() * Math.PI * 2, rr = Math.sqrt(Math.random()) * v[3] * 0.55;
+        var bx = n.x + (t1.x * Math.cos(a) + t2.x * Math.sin(a)) * rr, by = n.y + (t1.y * Math.cos(a) + t2.y * Math.sin(a)) * rr, bz = n.z + (t1.z * Math.cos(a) + t2.z * Math.sin(a)) * rr;
+        do { j.set(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1); } while (j.lengthSq() > 1 || j.lengthSq() < 0.05);
+        j.normalize();
+        var vel = (bomba ? 0.6 + Math.random() * 0.65 : 0.85 + Math.random() * 0.45) * k, ap = bomba ? 0.3 + Math.random() * 0.35 : 0.04 + Math.random() * 0.1;
+        var seme = Math.random();
+        for (var c = 0; c < ERUZ_CODA; c++) per.push([bx, by, bz, j.x, j.y, j.z, seme, vel, ap, c, b.P, b.f, b.A, v[6] * ALTO_VULC]);
+      }
+      per.push([n.x, n.y, n.z, 0, 0, 0, 0, v[3] * (b.grande ? 260 : 230), 0, -1, b.P, b.f, b.A, v[6] * ALTO_VULC]);   // bagliore della bocca (aV = grandezza, circa 6 crateri)
+    });
+    var N = per.length, aB = new Float32Array(N * 3), aJ = new Float32Array(N * 3), aS = new Float32Array(N), aV = new Float32Array(N),
+      aAp = new Float32Array(N), aK = new Float32Array(N), aC = new Float32Array(N * 3), aH = new Float32Array(N);
+    per.forEach(function(e, i){ aB.set(e.slice(0, 3), i * 3); aJ.set(e.slice(3, 6), i * 3); aS[i] = e[6]; aV[i] = e[7]; aAp[i] = e[8]; aK[i] = e[9]; aC.set(e.slice(10, 13), i * 3); aH[i] = e[13]; });
+    var g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(N * 3), 3));
+    [['aB', aB, 3], ['aJ', aJ, 3], ['aS', aS, 1], ['aV', aV, 1], ['aAp', aAp, 1], ['aK', aK, 1], ['aCiclo', aC, 3], ['aH', aH, 1]].forEach(function(a){ g.setAttribute(a[0], new THREE.BufferAttribute(a[1], a[2])); });
+    lv.eruz = new THREE.Points(g, new THREE.ShaderMaterial({
+      uniforms: { uTempo: U(0), uR: U(lv.r), uLuce: U(1), uTutte: U(0), uScala: U(15 * Math.min(devicePixelRatio || 1, 2)) },
+      vertexShader: VS_ERUZ, fragmentShader: FS_ERUZ, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true }));
+    lv.eruz.frustumCulled = false; lv.eruz.renderOrder = 5; lv.gira.add(lv.eruz);
+  })();
 
   /* Bio (dalla 3.66): pianeta vivo e bioluminescente, blu notte e viola; foschia viola che si vede anche dalla parte della notte */
   var bi = nuovoMondo('bio', 0.4, { NORMALE: 1, BIO: 1, alb: 1.7, luceF: 1, amb: new V3(0.01, 0.01, 0.016), atmo: lin('#A68BFF', 0.6), atmoF: 0.45 },
@@ -1021,7 +1163,7 @@ function assegnaTexture(){
   u = MONDI.studio.mat.uniforms; u.tColore.value = T.terraG; u.tLuce.value = T.terraL; u.tMare.value = T.terraM; u.tNuvole.value = T.terraN;
   u = MONDI.tool.mat.uniforms; u.tColore.value = T.ossC; u.tNormale.value = T.ossN; u.tLuce.value = T.ossL; u.tCielo.value = T.cielo;
   u = MONDI.contatti.mat.uniforms; u.tColore.value = T.crepeC; u.tLuce.value = T.crepeL;
-  u = MONDI.area.mat.uniforms; u.tColore.value = T.lavaC; u.tNormale.value = T.lavaN; u.tLuce.value = T.lavaL;
+  u = MONDI.area.mat.uniforms; u.tColore.value = T.lavaC; u.tNormale.value = T.lavaN; u.tLuce.value = T.lavaL; u.tMare.value = T.lavaF; u.tAlto.value = T.lavaA;
   u = MONDI.bio.mat.uniforms; u.tColore.value = T.bioC; u.tNormale.value = T.bioN; u.tLuce.value = T.bioL; u.tMare.value = T.bioF;
 }
 
@@ -1329,6 +1471,20 @@ function aggiornaAccensione(m, dt){
   }
 }
 
+/* vulcani della lava (dalla 3.69): per ogni bocca l'attività di adesso (il cratere si accende), il fronte della lava fresca che scende
+   per le colate (arriva in fondo poco dopo la fine dell'eruzione) e quanto è ancora calda (si spegne in qualche secondo) */
+var VULC_PROVA = 0;   // __mondi.vulcani(true): tutte le bocche attive (per le foto)
+function aggiornaVulcani(m, t, acceso){
+  var eu = m.mat.uniforms.uEruz.value, pu = m.eruz.material.uniforms;
+  pu.uTempo.value = t; pu.uLuce.value = acceso; pu.uTutte.value = VULC_PROVA;
+  m.bocche.forEach(function(b, i){
+    var st = attivitaBocca(t, b), s = st.x * b.P, dura = b.A * b.P, vel = (b.L - b.rc) / (dura + 1.5);
+    if (VULC_PROVA){ eu[i].set(b.L * 0.75, 1, Math.max(st.a, 0.35 + 0.65 * Math.pow(0.5 + 0.5 * Math.sin(t * 2.9 + b.f * 37), 2)), VULCANI[i][4]); return; }
+    var fresca = s < dura ? ss(0, 0.04, st.x) : Math.exp(-(s - dura) / 2.5);
+    eu[i].set(Math.min(b.L * 1.05, b.rc + s * vel), fresca * (1 - ss(0.9, 1, st.x)), st.a, VULCANI[i][4]);
+  });
+}
+
 function aggiorna(dt){
   tempo += dt;
   /* rotazioni: Nemesi gira con tutto il sistema (aste e mondi), i mondi girano anche su se stessi */
@@ -1364,6 +1520,7 @@ function aggiorna(dt){
     mu.uSoleF.value = 0.06 + 0.94 * acceso; mu.uSel.value = m.sel; mu.uTempo.value = tempo;
     if (id === 'area' || id === 'bio' || id === 'contatti' || id === 'tool') mu.uLuceF.value = 0.25 + 0.75 * acceso;   // lava, venature di Bio, crepe di Contatti e giunti di Tool si accendono con il loro mondo
     if (m.geyser){ var gu = m.geyser.material.uniforms; gu.uTempo.value = tempo * (RIDOTTO ? 0.2 : 1); gu.uLuce.value = acceso; }
+    if (m.eruz) aggiornaVulcani(m, tempo * (RIDOTTO ? 0.2 : 1), acceso);
     mu.uPunto.value = Math.max(0, Math.min(1, (INTRO.linee[i] - 0.97) / 0.03)) * (m.sfarfallio !== undefined ? m.sfarfallio : 1);
     mu.uLampo.value = m.lampo * acceso; mu.uLampoP.value.copy(m.g.position).negate().normalize();
     if (m.atmo){ var at = m.atmo.material.uniforms; at.uF.value = acceso; at.uSel.value = m.sel; at.uLampo.value = m.lampo * acceso; }
@@ -1929,8 +2086,10 @@ function passoOrologio(ts){
   if (Math.abs(dt - k * o.periodo) < o.periodo * 0.2) dt = k * o.periodo;
   return Math.min(0.05, Math.max(0, dt));
 }
+var PASSO = false;   // __mondi.passo(): l'orologio lo muovono le prove
 function giro(ts){
   requestAnimationFrame(giro);
+  if (PASSO){ OROLOGIO.ultimo = ts; return; }
   var dt = passoOrologio(ts);
   OROLOGIO.t += dt;
   gsap.updateRoot(OROLOGIO.t);
@@ -2096,6 +2255,11 @@ window.__mondi = {
   giostra: function(gradi, ferma){ SIS.q.setFromAxisAngle(SU, (gradi || 0) * Math.PI / 180); SIS.w.set(0, 0, 0); SIS.prova = ferma !== false; return true; },
   sistema: function(){ return { q: SIS.q.toArray().map(function(x){ return +x.toFixed(4); }), w: SIS.w.toArray().map(function(x){ return +x.toFixed(3); }), k: +SIS.k.toFixed(3), presa: !!SIS.presa }; },
   fx: function(o){ Object.assign(FX, o); return true; },
+  /* vulcani della lava: __mondi.vulcani(true) tutte le bocche attive (foto), (false) di nuovo a intervalli */
+  vulcani: function(si){ VULC_PROVA = si ? 1 : 0; return true; },
+  /* filmati a passo fisso: __mondi.passo(1 / 30) ferma l'orologio e va avanti di un passo (la risoluzione non si abbassa più);
+     __mondi.passo(0) fa ripartire l'orologio */
+  passo: function(dt){ if (!dt){ PASSO = false; return true; } PASSO = true; abbassata = 2; OROLOGIO.t += dt; gsap.updateRoot(OROLOGIO.t); ciclo(dt); return true; },
   misure: function(){ var o = { W: W, H: H, fov: camera.fov, camFov: CAM.fov, vert: verticale(), dispFov: disposizione().fov, dove: DOVE, cam: camera.position.toArray().map(function(x){ return +x.toFixed(2); }), centro: [centroS.x, centroS.y] };
     MONDI_ID.forEach(function(id){ var q = SCHERMO[id]; o[id] = [Math.round(q.x), Math.round(q.y), Math.round(q.r), +q.cop.toFixed(2)]; }); o.nemesi = [Math.round(centroS.x), Math.round(centroS.y), Math.round(centroS.r)]; return o; }
 };

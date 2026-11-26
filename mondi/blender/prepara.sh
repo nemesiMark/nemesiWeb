@@ -6,8 +6,9 @@
 # se cambia PICCOLE, cambiare anche GRANDI.
 GRANDI=(cielo nemesi-colore nemesi-luce terra-luci)
 # Queste in m/ a un quarto del lato cotto invece che a metà (dalla 3.58: il rilievo della lava non ha bisogno di più;
-# dalla 3.66 anche rilievo e fase di Bio, che sono lenti)
-QUARTO=(lava-normale bio-normale bio-fase)
+# dalla 3.66 anche rilievo e fase di Bio, che sono lenti; dalla 3.69 la maschera delle colate e il rilievo dei coni della lava, che servono solo a farci
+# correre la lava fresca e a sollevare i vulcani)
+QUARTO=(lava-normale lava-colate lava-alto bio-normale bio-fase)
 set -e
 cd "$(dirname "$0")/../tex"
 mkdir -p m
