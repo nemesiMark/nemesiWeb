@@ -549,3 +549,13 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 - **Modulo nel pannello Contatti**: sotto «Manca solo il tuo progetto.» ci sono i campi Nome, Email e Messaggio e il pulsante «Invia richiesta», al posto del pulsante Scrivimi (l'indirizzo email resta scritto sotto e si può cliccare). Sul computer nome ed email stanno affiancati, sul telefono uno sotto l'altro. **Per ora il modulo non è collegato a nessun servizio: il pulsante non invia nulla.**
 - Area riservata: 35 testi. Le etichette dei campi (`t041`–`t043`) e il pulsante (`t040`, ora «Invia richiesta», senza link) si cambiano da lì. Nella guida l'esempio di pulsante è diventato «Apri in Google Maps».
 - Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa, schermate del pannello Contatti a 1440×900, 1280×720 e 390×844, clic sul pulsante senza effetti, nessun errore in console.
+
+### 3.62 — 26/11/2026
+- **Passaggio del mouse sui mondi**: tolto il cerchio verde con le tacche che girava intorno al mondo. Al suo posto il nome in 3D sopra il mondo si illumina di rosso, con un alone (prima lo spigolo diventava verde). Vale per tutti e cinque i mondi, anche passando sul nome o arrivandoci con la tastiera. La linea verde verso il mondo continua ad accendersi.
+- `mondi.js?v=7`.
+- Verifiche: schermate a 1440×900 col mouse su Portfolio e su Contatti, nessun errore in console.
+
+### 3.63 — 26/11/2026
+- **Accensione del colore del mondo**: quando la luce che corre lungo la linea arriva al mondo, la faccia rivolta a Nemesi si accende del colore del mondo e non più di verde: Portfolio crema, Studio azzurro, Tool grigio chiaro, Contatti azzurro ghiaccio, Area riservata arancio lava. La linea e la luce che corre restano verdi.
+- `mondi.js?v=8`.
+- Verifiche: schermata a 1440×900 con tutti i mondi accesi insieme, nessun errore in console.

@@ -380,12 +380,10 @@ var FS_ALONE = [
   '  float dietroNome = 1.0;',
   '  for (int k = 0; k < 5; k++){ vec2 q = max(uEt[k].xy - gl_FragCoord.xy, gl_FragCoord.xy - uEt[k].zw); dietroNome = min(dietroNome, smoothstep(-1.0, 7.0, max(q.x, q.y))); }',
   '  if (dietroNome < 0.002) discard;',
-  '  float a = atan(vQ.y, vQ.x);',
-  '  float anello = exp(-pow((r - uR) * 140.0, 2.0)) * uSel * (0.55 + 0.45 * step(0.0, sin(a * 24.0 + uTempo * 1.5)));',
-  '  float tacche = exp(-pow((r - uR - 0.05) * 90.0, 2.0)) * uSel * step(0.985, cos(a * 4.0 - uTempo * 0.6));',
+  /* dalla 3.62 niente più cerchio con le tacche col mouse sopra: si accende di rosso il nome in 3D */
   '  float s = 0.0;',
   '  for (int k = 0; k < 3; k++){ float o = fract(uTempo * 0.22 + float(k) / 3.0); float rr = mix(uR * 0.72, 1.0, o); s += exp(-pow((r - rr) * 60.0, 2.0)) * pow(1.0 - o, 1.6); }',
-  '  vec3 c = uCol * (anello * 1.4 + tacche * 2.0 + s * uSegnale * 0.32);',
+  '  vec3 c = uCol * (s * uSegnale * 0.32);',
   '  gl_FragColor = vec4(c * uLuce * dietroNome, 1.0);',
   '}'
 ].join('\n');
@@ -429,14 +427,14 @@ var VS_PULV = [
 var FS_PULV = 'varying float vA; varying vec2 vQ; void main(){ float a = exp(-vQ.y * vQ.y * 2.6) * vA; gl_FragColor = vec4(vec3(0.86, 0.88, 0.84) * a, 1.0); }';
 /* nomi dei mondi in 3D (dalla 3.59 in marmo bianco): fondo bianco caldo appena nuvoloso con venature grigie leggere (nello spazio
    della scritta, così restano ferme sulle lettere), luce morbida che avvolge anche il lato in ombra, lucido sullo smusso e sulla facciata,
-   fianchi un poco più scuri; col mouse sopra lo spigolo si accende di verde. Facciata = normale dell'oggetto verso +Z, maiuscole alte 1 */
+   fianchi un poco più scuri; col mouse sopra (dalla 3.62) la scritta si illumina di rosso. Facciata = normale dell'oggetto verso +Z, maiuscole alte 1 */
 var VS_NOME = [
   'varying vec3 vNo; varying vec3 vNw; varying vec3 vPw; varying vec3 vPo;',
   'void main(){ vNo = normal; vPo = position; vec4 pw = modelMatrix * vec4(position, 1.0); vPw = pw.xyz; vNw = normalize(mat3(modelMatrix) * normal);',
   '  gl_Position = projectionMatrix * viewMatrix * pw; }'
 ].join('\n');
 var FS_NOME = [
-  'uniform vec3 uSole; uniform vec3 uSoleCol; uniform vec3 uVerde; uniform float uSel; uniform float uLuce; uniform float uSeme;',
+  'uniform vec3 uSole; uniform vec3 uSoleCol; uniform vec3 uRosso; uniform float uSel; uniform float uLuce; uniform float uSeme;',
   'varying vec3 vNo; varying vec3 vNw; varying vec3 vPw; varying vec3 vPo;',
   'float h3(vec3 p){ p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }',
   'float rumore(vec3 x){ vec3 i = floor(x); vec3 f = fract(x); f = f * f * (3.0 - 2.0 * f);',
@@ -469,7 +467,8 @@ var FS_NOME = [
   '  vec3 env = mix(vec3(0.02, 0.022, 0.03), vec3(0.42, 0.43, 0.46), smoothstep(-0.2, 0.9, R.y));',
   '  col += sole * (pow(nh, 160.0) * 1.2 + pow(nh, 30.0) * 0.06) * (fronte + smusso * 1.4) + env * fr * 0.8;',
   '  col *= 1.0 - 0.32 * fianco;',
-  '  col = mix(col, col * vec3(0.82, 1.0, 0.62) + uVerde * (fronte * 0.1 + smusso * 1.8 + fianco * 0.45), uSel);',
+  /* col mouse sopra (dalla 3.62) la scritta si illumina di rosso: facciata tinta, smusso e fianchi accesi (il bloom fa l'alone) */
+  '  col = mix(col, col * vec3(0.85, 0.16, 0.12) + uRosso * (fronte * 0.75 + smusso * 2.4 + fianco * 1.0), uSel);',
   '  gl_FragColor = vec4(col, uLuce);',
   '}'
 ].join('\n');
@@ -774,6 +773,15 @@ function nuovoMondo(id, r, matOpz, atmoCol, atmoF, atmoSpess, rotAsse, vel){
     amb: new V3(0.012, 0.009, 0.008), atmo: lin('#FF8A4A', 0.55), atmoF: 0.45 }, lin('#FF6A2A', 0.5), 1, 0.07, [0.14, 0.32], 2 * Math.PI / 64);
   lv.atmo.material.uniforms.uBasso.value = 0.45;
 })();
+/* dalla 3.63 la luce che arriva dalla linea accende il mondo del suo colore (prima tutti di verde); la linea e la luce che corre restano verdi */
+(function(){
+  var COL = { portfolio: '#F2DFB4', studio: '#6CA4FF', tool: '#C9CED6', contatti: '#8FE6EE', area: '#FF6A1A' };
+  Object.keys(COL).forEach(function(id){
+    var m = MONDI[id], c = lin(COL[id]); c.multiplyScalar(1.6 / Math.max(c.x, c.y, c.z));
+    m.mat.uniforms.uLampoCol.value = c;
+    if (m.atmo) m.atmo.material.uniforms.uLampoCol.value = c.clone();
+  });
+})();
 
 /* ── icone degli strumenti (dalla 3.59) ──
    Le sette lastre laccate della giostra dei Tool del vecchio sito (nemesiWeb-film, js/lastra.js, dalla 3.9): stessa forma (lastra a bordo
@@ -928,7 +936,7 @@ var vpPrima = new THREE.Matrix4(), vpPronta = false;
 
 /* ── nomi dei mondi in 3D (da nomi.bin): stanno sopra il loro mondo, paralleli allo schermo e appena inclinati ── */
 var matNome = new THREE.ShaderMaterial({
-  uniforms: { uSole: U(SOLE), uSoleCol: U(SOLE_COL), uVerde: U(VERDE.clone().multiplyScalar(1.5)), uSel: U(0), uLuce: U(0), uSeme: U(0) },
+  uniforms: { uSole: U(SOLE), uSoleCol: U(SOLE_COL), uRosso: U(new V3(1.0, 0.045, 0.03).multiplyScalar(1.6)), uSel: U(0), uLuce: U(0), uSeme: U(0) },
   vertexShader: VS_NOME, fragmentShader: FS_NOME, transparent: true, depthWrite: true
 });
 function creaNomi(){
