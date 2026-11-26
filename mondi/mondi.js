@@ -3,7 +3,8 @@
    che gira al centro dello spazio. Linee al neon lo collegano ai mondi; ogni tanto una linea si accende da Nemesi fino al suo mondo e lo illumina:
    Portfolio (gigante ad anelli), Studio (la Terra, Bologna accesa), Tool (luna con le officine; dalla 3.59 le sette icone degli strumenti
    del vecchio sito le girano intorno, ognuna con la sua scia), Contatti (gigante di ghiaccio che manda segnali) e, dalla 3.58, l'Area
-   riservata (pianeta di lava). Sopra ogni mondo il suo nome in 3D (lettere fatte in Blender, mondi/nomi.bin; dalla 3.59 in marmo bianco).
+   riservata (pianeta di lava) e, dalla 3.66, Bio (pianeta vivo, blu notte e viola, con venature di luce che pulsano sul lato in ombra).
+   Sopra ogni mondo il suo nome in 3D (lettere fatte in Blender, mondi/nomi.bin; dalla 3.59 in marmo bianco).
    Nemesi, le aste e i mondi sono un solo blocco rigido: gira piano intorno alla verticale e con la «manina» (trascinando) si gira in ogni direzione.
    Clic su un mondo, sul suo nome o sulla barra: la camera vola fino al mondo (dalla 3.58 un viaggio vero: si gira, accelera, rallenta ed entra
    in orbita), poi i contenuti della sezione; il pianeta di lava porta all'area riservata. Esc o «Indietro»: la camera torna al centro.
@@ -18,8 +19,11 @@ var MOBILE = matchMedia('(pointer: coarse)').matches;
 var hdr = document.getElementById('hdr');
 var pre = document.getElementById('pre');
 var canvas = document.getElementById('gl');
-var SEZIONI = ['portfolio', 'studio', 'tool', 'contatti'];        // i mondi con un pannello
-var MONDI_ID = SEZIONI.concat(['area']);                          // tutti i mondi: le sezioni e l'area riservata (pianeta di lava)
+var SEZIONI = ['bio', 'portfolio', 'studio', 'tool', 'contatti']; // i mondi con un pannello (Bio dalla 3.66)
+/* tutti i mondi: le sezioni e l'area riservata (pianeta di lava). L'ordine conta (posto nelle tabelle INTRO e ZONE_NOMI, venature
+   dei nomi, ordine delle linee all'entrata): Bio, arrivato per ultimo, sta in fondo, così gli altri restano com'erano */
+var MONDI_ID = ['portfolio', 'studio', 'tool', 'contatti', 'area', 'bio'];
+var N_MONDI = MONDI_ID.length;
 var AREA = 'area-riservata.html';
 var pannelli = {};
 SEZIONI.forEach(function(id){ pannelli[id] = document.getElementById('p-' + id); });
@@ -98,9 +102,10 @@ var FILE = {
   cielo: 'cielo.jpg', nemesiC: 'nemesi-colore.jpg', nemesiN: 'nemesi-normale.jpg', nemesiL: 'nemesi-luce.jpg',
   terraG: 'terra-giorno.jpg', terraL: 'terra-luci.jpg', terraM: 'terra-mare.jpg', terraN: 'terra-nuvole.jpg',
   gigante: 'gigante-colore.jpg', lunaC: 'luna-colore.jpg', lunaN: 'luna-normale.jpg', lunaL: 'luna-luce.jpg', ghiaccio: 'ghiaccio-colore.jpg',
-  lavaC: 'lava-colore.jpg', lavaN: 'lava-normale.jpg', lavaL: 'lava-luce.jpg'
+  lavaC: 'lava-colore.jpg', lavaN: 'lava-normale.jpg', lavaL: 'lava-luce.jpg',
+  bioC: 'bio-colore.jpg', bioN: 'bio-normale.jpg', bioL: 'bio-luce.jpg', bioF: 'bio-fase.jpg'
 };
-var PICCOLE = { gigante: 1, ghiaccio: 1, lunaC: 1, lunaN: 1, lunaL: 1, nemesiN: 1, terraM: 1, terraN: 1, lavaC: 1, lavaN: 1, lavaL: 1 };   // bastano a metà lato anche sul computer
+var PICCOLE = { gigante: 1, ghiaccio: 1, lunaC: 1, lunaN: 1, lunaL: 1, nemesiN: 1, terraM: 1, terraN: 1, lavaC: 1, lavaN: 1, lavaL: 1, bioC: 1, bioN: 1, bioL: 1, bioF: 1 };   // bastano a metà lato anche sul computer
 var T = {};
 var vuota = new THREE.DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1); vuota.needsUpdate = true;
 function caricaTexture(){
@@ -125,7 +130,7 @@ function caricaTexture(){
 var NOMI = {};
 function caricaNomi(){
   if (!window.fetch) return Promise.resolve();
-  return fetch('mondi/nomi.bin?v=1').then(function(r){ if (!r.ok) throw new Error('nomi ' + r.status); return r.arrayBuffer(); }).then(function(buf){
+  return fetch('mondi/nomi.bin?v=2').then(function(r){ if (!r.ok) throw new Error('nomi ' + r.status); return r.arrayBuffer(); }).then(function(buf){
     var dv = new DataView(buf), o = 12, i;
     var pad = function(){ o = (o + 3) & ~3; };
     if (String.fromCharCode(dv.getUint8(0), dv.getUint8(1), dv.getUint8(2), dv.getUint8(3)) !== 'NOMI') throw new Error('nomi: formato');
@@ -212,6 +217,19 @@ var FS_PIANETA = [
   '  vec3 em = uLuceCol * (e * e * 1.25 + e * 0.1) * tremo * (0.6 + notte * 0.4);',
   '  em += vec3(1.0, 0.72, 0.36) * smoothstep(0.62, 1.0, e) * 1.4 * tremo;',
   '  col += em * uLuceF;',
+  '  #elif defined(BIO)',
+  /* Bio (dalla 3.66): venature e macchie di luce, acqua dove la fase è bassa e viola dove è alta, che pulsano piano a onde
+     (tMare: r = fase della pulsazione, g = mare); sul lato in ombra sono piene, di giorno appena accese. Sul mare un riflesso del sole largo e tenue (uno stretto faceva una macchia bianca lungo le coste) */
+  '  vec2 fm = texture2D(tMare, vUv).rg;',
+  '  float e = texture2D(tLuce, vUv).r;',
+  '  float onda = 0.5 + 0.5 * sin(uTempo * 0.7 - fm.r * 18.85);',
+  '  float pulso = 0.3 + 0.7 * onda * onda;',
+  '  vec3 tinta = mix(vec3(0.16, 1.0, 0.86), vec3(0.62, 0.34, 1.0), smoothstep(0.3, 0.72, fm.r));',
+  '  vec3 em = tinta * (e * e * 1.6 + e * 0.12) * pulso * (0.1 + notte * 0.95);',
+  '  em += vec3(0.86, 1.0, 0.98) * smoothstep(0.55, 0.78, e) * pulso * (0.05 + notte * 0.6);',
+  '  col += em * uLuceF;',
+  '  vec3 Hb = normalize(L + V); float nhb = max(dot(Ng, Hb), 0.0);',
+  '  col += uSoleCol * vec3(0.55, 0.7, 1.0) * pow(nhb, 22.0) * 0.045 * fm.g * term * uSoleF;',
   '  #elif defined(LUCE)',
   '  float e = texture2D(tLuce, vUv).r;',
   '  float acc = 1.0; float onda = 0.0;',
@@ -328,13 +346,13 @@ var VS_LINEA = [
   '}'
 ].join('\n');
 var FS_LINEA = [
-  'uniform vec3 uCol; uniform float uLuce; uniform float uDis; uniform float uAccT; uniform float uAccF; uniform vec4 uEt[5]; uniform float uLarga;',
+  'uniform vec3 uCol; uniform float uLuce; uniform float uDis; uniform float uAccT; uniform float uAccF; uniform vec4 uEt[' + N_MONDI + ']; uniform float uLarga;',
   'varying float vT; varying float vX;',
   'void main(){',
   '  if (vT > uDis) discard;',
   /* dietro i nomi dei mondi la linea si interrompe (uEt: zone dei nomi in pixel, dal basso) */
   '  float dietroNome = 1.0;',
-  '  for (int k = 0; k < 5; k++){ vec2 q = max(uEt[k].xy - gl_FragCoord.xy, gl_FragCoord.xy - uEt[k].zw); dietroNome = min(dietroNome, smoothstep(-1.0, 7.0, max(q.x, q.y))); }',
+  '  for (int k = 0; k < ' + N_MONDI + '; k++){ vec2 q = max(uEt[k].xy - gl_FragCoord.xy, gl_FragCoord.xy - uEt[k].zw); dietroNome = min(dietroNome, smoothstep(-1.0, 7.0, max(q.x, q.y))); }',
   '  if (dietroNome < 0.002) discard;',
   '  float x = abs(vX) * uLarga;',   /* uLarga: il nastro è largo uLarga volte la linea, per l'alone della luce che corre */
   '  float core = exp(-x * x * 34.0); float alone = exp(-x * x * 4.0) * 0.12;',
@@ -374,13 +392,13 @@ var VS_ALONE = [
   '  vQ = position.xy; gl_Position = projectionMatrix * viewMatrix * vec4(uPos + (rx * position.x + ry * position.y) * uSize, 1.0); }'
 ].join('\n');
 var FS_ALONE = [
-  'uniform vec3 uCol; uniform float uTempo; uniform float uSel; uniform float uSegnale; uniform float uR; uniform float uLuce; uniform vec4 uEt[5];',
+  'uniform vec3 uCol; uniform float uTempo; uniform float uSel; uniform float uSegnale; uniform float uR; uniform float uLuce; uniform vec4 uEt[' + N_MONDI + '];',
   'varying vec2 vQ;',
   'void main(){',
   '  float r = length(vQ); if (r > 1.0) discard;',
   /* come le linee, anelli e onde passano dietro i nomi dei mondi senza attraversarli */
   '  float dietroNome = 1.0;',
-  '  for (int k = 0; k < 5; k++){ vec2 q = max(uEt[k].xy - gl_FragCoord.xy, gl_FragCoord.xy - uEt[k].zw); dietroNome = min(dietroNome, smoothstep(-1.0, 7.0, max(q.x, q.y))); }',
+  '  for (int k = 0; k < ' + N_MONDI + '; k++){ vec2 q = max(uEt[k].xy - gl_FragCoord.xy, gl_FragCoord.xy - uEt[k].zw); dietroNome = min(dietroNome, smoothstep(-1.0, 7.0, max(q.x, q.y))); }',
   '  if (dietroNome < 0.002) discard;',
   /* dalla 3.62 niente più cerchio con le tacche col mouse sopra: si accende di rosso il nome in 3D */
   '  float s = 0.0;',
@@ -498,11 +516,11 @@ var VS_SCIA = [
   '}'
 ].join('\n');
 var FS_SCIA = [
-  'uniform vec3 uCol; uniform vec3 uFig[5]; uniform float uMulti; uniform float uLuce; uniform vec4 uEt[5];',
+  'uniform vec3 uCol; uniform vec3 uFig[5]; uniform float uMulti; uniform float uLuce; uniform vec4 uEt[' + N_MONDI + '];',
   'varying float vS; varying float vX;',
   'void main(){',
   '  float dietroNome = 1.0;',
-  '  for (int k = 0; k < 5; k++){ vec2 q = max(uEt[k].xy - gl_FragCoord.xy, gl_FragCoord.xy - uEt[k].zw); dietroNome = min(dietroNome, smoothstep(-1.0, 7.0, max(q.x, q.y))); }',
+  '  for (int k = 0; k < ' + N_MONDI + '; k++){ vec2 q = max(uEt[k].xy - gl_FragCoord.xy, gl_FragCoord.xy - uEt[k].zw); dietroNome = min(dietroNome, smoothstep(-1.0, 7.0, max(q.x, q.y))); }',
   '  if (dietroNome < 0.002) discard;',
   /* Figma ha un marchio a cinque colori: la sua scia li attraversa tutti */
   '  vec3 col = uCol;',
@@ -647,9 +665,9 @@ var polvere = (function(){
 })();
 
 /* zone dei nomi sullo schermo (pixel veri, y dal basso): linee, anelli e onde si interrompono lì dietro; fuori schermo quando il nome è spento */
-var ZONE_NOMI = [0, 1, 2, 3, 4].map(function(){ return new THREE.Vector4(-1e5, -1e5, -1e5, -1e5); });
+var ZONE_NOMI = MONDI_ID.map(function(){ return new THREE.Vector4(-1e5, -1e5, -1e5, -1e5); });
 function matPianeta(o){
-  var defs = {}; ['NORMALE', 'LUCE', 'TERRA', 'ANELLI', 'GAS', 'ACCENDI', 'LAVA'].forEach(function(k){ if (o[k]) defs[k] = ''; });
+  var defs = {}; ['NORMALE', 'LUCE', 'TERRA', 'ANELLI', 'GAS', 'ACCENDI', 'LAVA', 'BIO'].forEach(function(k){ if (o[k]) defs[k] = ''; });
   return new THREE.ShaderMaterial({
     defines: defs,
     uniforms: {
@@ -774,10 +792,15 @@ function nuovoMondo(id, r, matOpz, atmoCol, atmoF, atmoSpess, rotAsse, vel){
   var lv = nuovoMondo('area', 0.36, { NORMALE: 1, LUCE: 1, LAVA: 1, alb: 1.6, luceCol: new V3(1.0, 0.26, 0.04).multiplyScalar(4.2), luceF: 1,
     amb: new V3(0.012, 0.009, 0.008), atmo: lin('#FF8A4A', 0.55), atmoF: 0.45 }, lin('#FF6A2A', 0.5), 1, 0.07, [0.14, 0.32], 2 * Math.PI / 64);
   lv.atmo.material.uniforms.uBasso.value = 0.45;
+
+  /* Bio (dalla 3.66): pianeta vivo e bioluminescente, blu notte e viola; foschia viola che si vede anche dalla parte della notte */
+  var bi = nuovoMondo('bio', 0.4, { NORMALE: 1, BIO: 1, alb: 1.7, luceF: 1, amb: new V3(0.01, 0.01, 0.016), atmo: lin('#A68BFF', 0.6), atmoF: 0.45 },
+    lin('#9A82FF', 0.65), 1, 0.08, [0.12, -0.22], 2 * Math.PI / 70);
+  bi.atmo.material.uniforms.uBasso.value = 0.22;
 })();
 /* dalla 3.63 la luce che arriva dalla linea accende il mondo del suo colore (prima tutti di verde); la linea e la luce che corre restano verdi */
 (function(){
-  var COL = { portfolio: '#F2DFB4', studio: '#6CA4FF', tool: '#C9CED6', contatti: '#8FE6EE', area: '#FF6A1A' };
+  var COL = { portfolio: '#F2DFB4', studio: '#6CA4FF', tool: '#C9CED6', contatti: '#8FE6EE', area: '#FF6A1A', bio: '#B98CFF' };
   Object.keys(COL).forEach(function(id){
     var m = MONDI[id], c = lin(COL[id]); c.multiplyScalar(1.6 / Math.max(c.x, c.y, c.z));
     m.mat.uniforms.uLampoCol.value = c;
@@ -916,6 +939,7 @@ function assegnaTexture(){
   u = MONDI.tool.mat.uniforms; u.tColore.value = T.lunaC; u.tNormale.value = T.lunaN; u.tLuce.value = T.lunaL;
   u = MONDI.contatti.mat.uniforms; u.tColore.value = T.ghiaccio;
   u = MONDI.area.mat.uniforms; u.tColore.value = T.lavaC; u.tNormale.value = T.lavaN; u.tLuce.value = T.lavaL;
+  u = MONDI.bio.mat.uniforms; u.tColore.value = T.bioC; u.tNormale.value = T.bioN; u.tLuce.value = T.bioL; u.tMare.value = T.bioF;
 }
 
 /* ── pulviscolo del viaggio: si semina lungo la rotta a ogni salto ── */
@@ -993,9 +1017,11 @@ function disegna(){
 /* posizioni dei mondi: orizzontale (computer) e verticale (telefono); la camera si allontana se lo schermo è stretto */
 var DISP = {
   l: { cam: [0, 0.3, 14.6], tgt: [0, -0.1, 0], fov: 30,
-       portfolio: [-4.55, 1.75, -1.3], studio: [-3.6, -2.05, 1.4], tool: [4.1, 1.95, 0.4], contatti: [4.65, -1.75, -1.2], area: [0.35, -3.0, 2.2] },
+       portfolio: [-4.55, 1.75, -1.3], studio: [-3.6, -2.05, 1.4], tool: [4.1, 1.95, 0.4], contatti: [4.65, -1.75, -1.2], area: [0.35, -3.0, 2.2],
+       bio: [1.6, 2.0, -3.0] },   // Bio (3.66): dietro, in alto a destra, dalla parte opposta a Studio; scelto in modo che la camera non arretri
   p: { cam: [0, 0.1, 17.5], tgt: [0, 0.1, 0], fov: 40,
-       portfolio: [-1.5, 3.55, -0.8], tool: [1.55, 3.4, 0.5], studio: [-1.45, -3.1, 0.7], contatti: [1.5, -3.3, -0.6], area: [0.05, -5.0, 0.7] }
+       portfolio: [-1.5, 3.55, -0.8], tool: [1.55, 3.4, 0.5], studio: [-1.45, -3.1, 0.7], contatti: [1.5, -3.3, -0.6], area: [0.05, -5.0, 0.7],
+       bio: [0, 4.4, 0.3] }   // Bio (3.66): in cima, al centro, fra Portfolio e Tool
 };
 /* inquadratura di ogni sezione: dove sta il pianeta (frazioni dello schermo), quanto è grande, da che parte lo si guarda (verso il centro, verso il sole, in alto) */
 var INQ = {
@@ -1004,6 +1030,8 @@ var INQ = {
   /* Tool (dalla 3.59): luna un poco più piccola, così le icone che le girano intorno restano nello schermo e fuori dal pannello */
   tool:      { l: { x: 0.76, y: 0.54, r: 0.21 }, p: { x: 0.5, y: 0.84, r: 0.3 }, dir: [0.8, 0.12, 0.18] },
   contatti:  { l: { x: 0.76, y: 0.56, r: 0.22 }, p: { x: 0.5, y: 0.98, r: 0.44 }, dir: [0.7, 0.45, 0.1] },
+  /* Bio (dalla 3.66): lo si guarda un poco dalla parte della notte, dove le venature si accendono */
+  bio:       { l: { x: 0.77, y: 0.55, r: 0.3 }, p: { x: 0.5, y: 0.95, r: 0.44 }, dir: [0.7, -0.3, 0.14] },
   /* l'area riservata non ha pannello: il pianeta arriva al centro, grande, poi ci si tuffa dentro */
   area:      { l: { x: 0.5, y: 0.5, r: 0.3 }, p: { x: 0.5, y: 0.5, r: 0.36 }, dir: [0.75, 0.3, 0.2] }
 };
@@ -1186,7 +1214,8 @@ function dimensiona(){
 /* ════════════════════════════ stato e animazione ════════════════════════════ */
 var DOVE = 'centro', salto = null, prossimo = null, pronto = false, hover = null, sottoMouse = null;   // sottoMouse: il mondo sotto il mouse (ferma la giostra)
 var META = 'centro';   // dove si sta andando (= DOVE da fermi): le luci che cambiano fra centro e sezione la seguono piano
-var INTRO = { acc: 1, sole: 1, neon: 1, linee: [1, 1, 1, 1, 1], mondi: [1, 1, 1, 1, 1], atmo: 1 };
+function tutti(v){ return MONDI_ID.map(function(){ return v; }); }   // una voce per mondo, nell'ordine di MONDI_ID
+var INTRO = { acc: 1, sole: 1, neon: 1, linee: tutti(1), mondi: tutti(1), atmo: 1 };
 var bolognaW = new V3();
 
 /* ── accensione: la luce parte da Nemesi, corre lungo la linea (ACC_T secondi), arriva al mondo e lo illumina ── */
@@ -1250,7 +1279,7 @@ function aggiorna(dt){
     aggiornaAccensione(m, dt);
     var mu = m.mat.uniforms;
     mu.uSoleF.value = 0.06 + 0.94 * acceso; mu.uSel.value = m.sel; mu.uTempo.value = tempo;
-    if (id === 'area') mu.uLuceF.value = 0.25 + 0.75 * acceso;   // la lava si accende con il suo mondo
+    if (id === 'area' || id === 'bio') mu.uLuceF.value = 0.25 + 0.75 * acceso;   // la lava e le venature di Bio si accendono con il loro mondo
     mu.uPunto.value = Math.max(0, Math.min(1, (INTRO.linee[i] - 0.97) / 0.03)) * (m.sfarfallio !== undefined ? m.sfarfallio : 1);
     mu.uLampo.value = m.lampo * acceso; mu.uLampoP.value.copy(m.g.position).negate().normalize();
     if (m.atmo){ var at = m.atmo.material.uniforms; at.uF.value = acceso; at.uSel.value = m.sel; at.uLampo.value = m.lampo * acceso; }
@@ -1850,7 +1879,7 @@ function ciclo(dt){
 
 /* ════════════════════════════ entrata ════════════════════════════ */
 function statoFinale(){
-  INTRO.acc = 1; INTRO.sole = 1; INTRO.neon = 1; INTRO.atmo = 1; INTRO.linee = [1, 1, 1, 1, 1]; INTRO.mondi = [1, 1, 1, 1, 1];
+  INTRO.acc = 1; INTRO.sole = 1; INTRO.neon = 1; INTRO.atmo = 1; INTRO.linee = tutti(1); INTRO.mondi = tutti(1);
   MONDI_ID.forEach(function(id){ MONDI[id].sfarfallio = 1; });
 }
 function mostraInterfaccia(subito){
@@ -1865,7 +1894,7 @@ function entrata(){
   var fin = posaCentro();
   var vicino = { pos: fin.tgt.clone().add(fin.pos.clone().sub(fin.tgt).normalize().multiplyScalar(R0 * (verticale() ? 5.6 : 4.3))), tgt: fin.tgt.clone(), fov: fin.fov, ox: 0, oy: 0 };
   camDa(vicino);
-  INTRO.acc = 0; INTRO.sole = 0; INTRO.neon = 0; INTRO.atmo = 0; INTRO.linee = [0, 0, 0, 0, 0]; INTRO.mondi = [0, 0, 0, 0, 0];
+  INTRO.acc = 0; INTRO.sole = 0; INTRO.neon = 0; INTRO.atmo = 0; INTRO.linee = tutti(0); INTRO.mondi = tutti(0);
   NEMESI.mat.uniforms.uAccP.value.copy(vicino.pos).normalize();
   MONDI_ID.forEach(function(id){ MONDI[id].sfarfallio = 1; });
   var tl = gsap.timeline({ onComplete: function(){ statoFinale(); pronto = true; window.__ready = true; } });

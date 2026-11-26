@@ -570,3 +570,13 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 - **Linee fino ai mondi**: le linee verdi arrivano fino alla superficie del mondo. Prima si fermavano un po' prima (a 1,16 raggi dal centro) e, guardando da vicino o dal lato in ombra, restavano staccate, come su Portfolio. Dove toccano resta un piccolo punto verde acceso.
 - `mondi.js?v=9`.
 - Verifiche: schermate a 1440×900 del centro e delle sezioni Portfolio, Studio, Tool e Contatti; la linea tocca il bordo del mondo, nessun errore in console.
+
+### 3.66 — 26/11/2026
+- **Nuovo mondo Bio** (la biografia di Mark): pianeta vivo e bioluminescente, scuro, blu notte e viola, con oceani e foreste appena accennati; sulla parte in ombra una rete di venature color acqua e viola, macchie di luce e un filo di luce lungo le coste, che pulsano piano a onde. Atmosfera viola, si accende nel suo colore `#B98CFF`, nome «BIO» in 3D in marmo, rosso col mouse sopra.
+- Posizione: sul computer dietro, in alto a destra, dalla parte opposta a Studio; sul telefono in cima, al centro, fra Portfolio e Tool. Scelta provando tutti i posti possibili perché la camera non si allontani: i mondi restano grandi come prima (computer, telefono e telefono in orizzontale).
+- **Pannello Bio**: occhiello, titolo in due parti, foto (ritratto 4:5, 800×1000) con un testo accanto, percorso in quattro tappe e pulsante «Parliamo del tuo progetto» che porta a Contatti. **Testi e foto sono provvisori** (la foto è una sagoma): si cambiano dall'area riservata.
+- Barra: voce «Bio» prima di Portfolio; fra 761 e 900 px le voci sono un poco più strette, così cinque voci stanno accanto al logo.
+- Area riservata: in Home la foto della Bio (scheda «Bio», forma verticale 4:5, 800×1000) e 14 testi nuovi nella sezione Bio (`index-t044`…`t057`, 49 testi in tutto); guida aggiornata (sezioni, tabella delle misure).
+- Blender: `bio()` in `mondi/blender/pianeti.py` (texture `bio-colore`, `bio-luce`, `bio-normale`, `bio-fase`: rosso = fase della pulsazione, verde = mare), «BIO» in `nomi.py`; `prepara.sh` mette rilievo e fase di Bio a un quarto del lato.
+- Anteprima dei link rifatta con Bio (`anteprima.jpg?v=5`). `mondi.js?v=10`, `nomi.bin?v=2`.
+- Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa; schermate a 1440×900 e 390×844 del centro e della sezione Bio, viaggio a metà, nome rosso col mouse sopra, pulsante verso Contatti, entrata con `?salta`, pagina ferma senza WebGL, barra a 761, 780 e 900 px; nessun errore in console.

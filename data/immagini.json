@@ -1,5 +1,17 @@
 [
   {
+    "id": "bio-foto",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "La tua foto, accanto al testo",
+    "foto": "images/bio/ritratto.jpg",
+    "alt": "Ritratto di Mark",
+    "testi": [
+      "index-t048"
+    ],
+    "decorativa": false
+  },
+  {
     "id": "lavoro-rainink",
     "pagina": "index.html",
     "sezione": "Rain Ink Tattoo",

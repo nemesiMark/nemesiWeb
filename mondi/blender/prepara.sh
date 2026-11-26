@@ -5,8 +5,9 @@
 # A lato pieno servono solo le texture che il computer grande carica intere (quelle fuori da PICCOLE in mondi/mondi.js):
 # se cambia PICCOLE, cambiare anche GRANDI.
 GRANDI=(cielo nemesi-colore nemesi-luce terra-luci)
-# Queste in m/ a un quarto del lato cotto invece che a metà (dalla 3.58: il rilievo della lava non ha bisogno di più)
-QUARTO=(lava-normale)
+# Queste in m/ a un quarto del lato cotto invece che a metà (dalla 3.58: il rilievo della lava non ha bisogno di più;
+# dalla 3.66 anche rilievo e fase di Bio, che sono lenti)
+QUARTO=(lava-normale bio-normale bio-fase)
 set -e
 cd "$(dirname "$0")/../tex"
 mkdir -p m

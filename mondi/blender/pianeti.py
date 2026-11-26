@@ -1,7 +1,7 @@
 # Mondi (pagina di prova) — texture dei pianeti e del cielo, cotte in Blender (Cycles) da materiali procedurali.
 # Uso:
 #   /Applications/Blender.app/Contents/MacOS/Blender -b --factory-startup --python pianeti.py -- \
-#       quali=nemesi,gigante,luna,ghiaccio,nuvole,cielo,anelli res=2048 out=../tex/png
+#       quali=nemesi,gigante,luna,ghiaccio,lava,bio,nuvole,cielo,anelli res=2048 out=../tex/png
 # Ogni pianeta esce in PNG (poi convertiti in JPG da prepara.sh):
 #   <nome>-colore.png (sRGB), <nome>-normale.png (normale in spazio oggetto Blender), <nome>-luce.png (emissione, grigio)
 import bpy, math, os, sys
@@ -229,6 +229,71 @@ def lava():
     salva_png(px, os.path.join(OUT, 'lava-normale.png'))
 
 
+# ───────────────────────── Bio (dalla 3.66): pianeta vivo e bioluminescente ─────────────────────────
+# Scuro, blu notte e viola: oceani profondi e terre coperte da una foresta scura, appena accennate. Sulla parte in ombra
+# si accendono una rete di venature (come radici o miceli), macchie di luce sparse e una luce leggera lungo le coste.
+# Escono bio-colore (sRGB), bio-luce (grigio: venature e macchie), bio-normale e bio-fase: R = fase della pulsazione
+# (rumore lento: in pagina la luce pulsa a onde che attraversano il pianeta), G = mare (riflesso del sole sull'acqua).
+def bio():
+    ob, N = nuovo('bio')
+    p = N.p
+    q = deformata(N, p, 1.4, 0.45)
+    q2 = deformata(N, q, 4.2, 0.16)
+    # terre e mari: poco meno di metà terra, coste frastagliate
+    nl = N.rumore(deformata(N, p, 1.7, 0.4), 1.35, dett=7, rug=0.56).outputs['Fac']
+    terra = N.smooth(0.495, 0.525, nl)
+    mare = N.m('SUBTRACT', 1.0, terra)
+    prof = N.mappa(nl, 0.30, 0.50)                      # profondità del mare: 0 al largo, 1 sotto costa
+    costa = N.m('MULTIPLY', N.smooth(0.455, 0.495, nl), mare)
+    # venature: bordi di celle su uno spazio molto deformato (curve morbide, come radici), due ordini, accese solo in certe zone
+    v1 = N.voronoi(deformata(N, q2, 3.0, 0.22), 3.2, 'DISTANCE_TO_EDGE').outputs['Distance']
+    v2 = N.voronoi(deformata(N, q2, 7.0, 0.10), 8.5, 'DISTANCE_TO_EDGE').outputs['Distance']
+    z1 = N.smooth(0.38, 0.58, N.rumore(N.v('ADD', p, (3.1, 8.2, 5.7)), 1.9, dett=3).outputs['Fac'])
+    z2 = N.smooth(0.46, 0.64, N.rumore(N.v('ADD', p, (9.4, 2.6, 7.3)), 3.4, dett=3).outputs['Fac'])
+    vena1 = N.m('MULTIPLY', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.026, v1)), z1)
+    vena2 = N.m('MULTIPLY', N.m('MULTIPLY', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.038, v2)), z2), 0.7)
+    vene = N.m('MULTIPLY', N.m('MAXIMUM', vena1, vena2), N.m('ADD', 0.25, N.m('MULTIPLY', terra, 0.75)))   # in mare restano deboli
+    vene = N.m('MULTIPLY', vene, N.m('ADD', 0.55, N.m('MULTIPLY', 0.45, N.rumore(p, 16.0, dett=2).outputs['Fac'])), clamp=True)
+    vene = N.m('MULTIPLY', vene, 0.78)
+    # macchie di luce: punti piccoli a gruppi e qualche chiazza più larga e morbida (fioriture)
+    vo = N.voronoi(p, 26.0, 'F1')
+    _, _, b1 = N.xyz(vo.outputs['Color'])
+    gruppi = N.smooth(0.50, 0.62, N.rumore(N.v('ADD', p, (5.0, 1.0, 3.0)), 2.6, dett=2).outputs['Fac'])
+    punti = N.m('MULTIPLY', N.m('MULTIPLY', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.15, vo.outputs['Distance'])), N.m('GREATER_THAN', b1, 0.62)), gruppi)
+    vo2 = N.voronoi(q, 7.5, 'F1')
+    _, g2, _ = N.xyz(vo2.outputs['Color'])
+    chiazze = N.m('MULTIPLY', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.2, vo2.outputs['Distance'])), N.m('GREATER_THAN', g2, 0.8))
+    chiazze = N.m('MULTIPLY', N.m('POWER', chiazze, 1.6), 0.62)
+    # luce leggera lungo le coste (plancton), solo in certi tratti
+    zc = N.smooth(0.45, 0.62, N.rumore(N.v('ADD', p, (2.4, 6.6, 1.2)), 3.0, dett=3).outputs['Fac'])
+    costaE = N.m('MULTIPLY', N.m('MULTIPLY', costa, zc), 0.42)
+    E = N.m('MAXIMUM', vene, N.m('MAXIMUM', punti, N.m('MAXIMUM', chiazze, costaE)))
+    # colore: mari blu notte (più chiari sotto costa), terre di foresta scura fra il verde petrolio e il viola
+    tono = N.m('ADD', N.m('MULTIPLY', N.rumore(q, 4.5, dett=6, rug=0.58).outputs['Fac'], 0.8), N.m('MULTIPLY', N.rumore(p, 28.0, dett=3).outputs['Fac'], 0.2))
+    colT = N.rampa(tono, [(0.30, '#0E1D21'), (0.44, '#142629'), (0.56, '#1E2136'), (0.70, '#2A2244'), (0.82, '#33294F')])
+    colM = N.rampa(prof, [(0.0, '#060A1C'), (0.6, '#0A1433'), (0.92, '#0F2650'), (1.0, '#143A60')])
+    col = N.mix(terra, colM, colT)
+    # vicino alle venature la foresta tende al viola
+    alone = N.m('MULTIPLY', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.12, v1)), N.m('MULTIPLY', z1, terra))
+    col = N.mix(N.m('MULTIPLY', alone, 0.55), col, hex_lin('#3A2A60'))
+    # rilievo: solo sulle terre, i mari restano lisci
+    alt = N.m('MULTIPLY', N.m('ADD', N.m('MULTIPLY', N.rumore(q, 6.0, dett=6).outputs['Fac'], 0.6), N.m('MULTIPLY', N.rumore(p, 22.0, dett=4).outputs['Fac'], 0.25)), terra)
+    alt = N.m('ADD', alt, N.m('MULTIPLY', terra, 0.08))
+    fase = N.mappa(N.rumore(N.v('ADD', p, (7.7, 3.3, 9.9)), 1.15, dett=2).outputs['Fac'], 0.32, 0.68)
+    px = cuoci(ob, N, 'EMIT', W, H, N.emissione(col))
+    salva_png(px, os.path.join(OUT, 'bio-colore.png'), srgb=True)
+    px = cuoci(ob, N, 'EMIT', W, H, N.emissione(E))
+    salva_png(px, os.path.join(OUT, 'bio-luce.png'), grigio=True)
+    pf = cuoci(ob, N, 'EMIT', W, H, N.emissione(fase))
+    pm = cuoci(ob, N, 'EMIT', W, H, N.emissione(mare))
+    fm = np.zeros((H, W, 3), np.float32)
+    fm[..., 0] = pf[..., 0]
+    fm[..., 1] = pm[..., 0]
+    salva_png(fm, os.path.join(OUT, 'bio-fase.png'))
+    px = cuoci(ob, N, 'NORMAL', W, H, N.rilievo(alt, forza=0.5, distanza=0.05))
+    salva_png(px, os.path.join(OUT, 'bio-normale.png'))
+
+
 # ───────────────────────── Terra: nuvole procedurali (le mappe di giorno e di notte sono della NASA) ─────────────────────────
 def nuvole():
     ob, N = nuovo('nuvole')
@@ -336,7 +401,7 @@ def anelli():
     print('salvato anelli.png')
 
 
-FUNZ = {'nemesi': nemesi, 'gigante': gigante, 'luna': luna, 'ghiaccio': ghiaccio, 'lava': lava, 'nuvole': nuvole, 'cielo': cielo, 'anelli': anelli}
+FUNZ = {'nemesi': nemesi, 'gigante': gigante, 'luna': luna, 'ghiaccio': ghiaccio, 'lava': lava, 'bio': bio, 'nuvole': nuvole, 'cielo': cielo, 'anelli': anelli}
 import time
 for q in QUALI:
     t0 = time.time()

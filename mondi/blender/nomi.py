@@ -26,7 +26,7 @@ A = argomenti()
 OUT = os.path.abspath(A.get('out', os.path.join(QUI, '..', 'nomi.bin')))
 FONT = os.path.abspath(A.get('font', os.path.join(QUI, '..', 'sorgenti', 'inter-tight-800.ttf')))
 
-NOMI = [('portfolio', 'PORTFOLIO'), ('studio', 'STUDIO'), ('tool', 'TOOL'), ('contatti', 'CONTATTI'), ('area', 'AREA RISERVATA')]
+NOMI = [('portfolio', 'PORTFOLIO'), ('studio', 'STUDIO'), ('tool', 'TOOL'), ('contatti', 'CONTATTI'), ('area', 'AREA RISERVATA'), ('bio', 'BIO')]
 SPAZIO = 1.07        # spaziatura fra le lettere (1 = quella del carattere)
 PROF = 0.085         # metà dello spessore delle lettere (dimensione del carattere = 1)
 SMUSSO = 0.026       # spigolo smussato

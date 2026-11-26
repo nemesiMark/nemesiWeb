@@ -16,6 +16,118 @@
     "testo": "Portfolio 2026"
   },
   {
+    "id": "index-t044",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Occhiello: nome della sezione",
+    "tipo": "semplice",
+    "testo": "Bio"
+  },
+  {
+    "id": "index-t045",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Occhiello: accanto al nome",
+    "tipo": "semplice",
+    "testo": "Chi sono"
+  },
+  {
+    "id": "index-t046",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Titolo, prima parte (chiara)",
+    "tipo": "semplice",
+    "testo": "Piacere, sono Mark,"
+  },
+  {
+    "id": "index-t047",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Titolo, seconda parte (verde)",
+    "tipo": "semplice",
+    "testo": "web designer."
+  },
+  {
+    "id": "index-t048",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Testo accanto alla foto",
+    "tipo": "testo",
+    "testo": "Con Nemesi Web progetto e costruisco siti, app e giochi per il web, dall'idea fino al giorno in cui vanno online. Lavoro da Bologna con chi ha un progetto in mente e vuole vederlo funzionare."
+  },
+  {
+    "id": "index-t049",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Percorso, tappa 1: anno o titolo (verde)",
+    "tipo": "semplice",
+    "testo": "Gli inizi"
+  },
+  {
+    "id": "index-t050",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Percorso, tappa 1: la riga sotto",
+    "tipo": "semplice",
+    "testo": "Il disegno incontra il codice."
+  },
+  {
+    "id": "index-t051",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Percorso, tappa 2: anno o titolo (verde)",
+    "tipo": "semplice",
+    "testo": "I siti"
+  },
+  {
+    "id": "index-t052",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Percorso, tappa 2: la riga sotto",
+    "tipo": "semplice",
+    "testo": "Rain Ink Tattoo e Olimp."
+  },
+  {
+    "id": "index-t053",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Percorso, tappa 3: anno o titolo (verde)",
+    "tipo": "semplice",
+    "testo": "App e giochi"
+  },
+  {
+    "id": "index-t054",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Percorso, tappa 3: la riga sotto",
+    "tipo": "semplice",
+    "testo": "Word, Excel, Metal Gear e Radente."
+  },
+  {
+    "id": "index-t055",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Percorso, tappa 4: anno o titolo (verde)",
+    "tipo": "semplice",
+    "testo": "Oggi"
+  },
+  {
+    "id": "index-t056",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Percorso, tappa 4: la riga sotto",
+    "tipo": "semplice",
+    "testo": "Nemesi Web, a Bologna."
+  },
+  {
+    "id": "index-t057",
+    "pagina": "index.html",
+    "sezione": "Bio",
+    "descrizione": "Pulsante che porta a Contatti",
+    "tipo": "semplice",
+    "testo": "Parliamo del tuo progetto"
+  },
+  {
     "id": "index-t011",
     "pagina": "index.html",
     "sezione": "Portfolio",
