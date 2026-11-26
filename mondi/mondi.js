@@ -532,7 +532,7 @@ var VS_PULV = [
 var FS_PULV = 'varying float vA; varying vec2 vQ; void main(){ float a = exp(-vQ.y * vQ.y * 2.6) * vA; gl_FragColor = vec4(vec3(0.86, 0.88, 0.84) * a, 1.0); }';
 /* nomi dei mondi in 3D (dalla 3.59 in marmo bianco): fondo bianco caldo appena nuvoloso con venature grigie leggere (nello spazio
    della scritta, così restano ferme sulle lettere), luce morbida che avvolge anche il lato in ombra, lucido sullo smusso e sulla facciata,
-   fianchi un poco più scuri; col mouse sopra (dalla 3.62) la scritta si illumina di rosso. Facciata = normale dell'oggetto verso +Z, maiuscole alte 1 */
+   fianchi un poco più scuri; col mouse sopra (dalla 3.62) la scritta si illumina, dalla 3.70 del colore del suo pianeta. Facciata = normale dell'oggetto verso +Z, maiuscole alte 1 */
 var VS_NOME = [
   'varying vec3 vNo; varying vec3 vNw; varying vec3 vPw; varying vec3 vPo;',
   'void main(){ vNo = normal; vPo = position; vec4 pw = modelMatrix * vec4(position, 1.0); vPw = pw.xyz; vNw = normalize(mat3(modelMatrix) * normal);',
@@ -572,8 +572,9 @@ var FS_NOME = [
   '  vec3 env = mix(vec3(0.02, 0.022, 0.03), vec3(0.42, 0.43, 0.46), smoothstep(-0.2, 0.9, R.y));',
   '  col += sole * (pow(nh, 160.0) * 1.2 + pow(nh, 30.0) * 0.06) * (fronte + smusso * 1.4) + env * fr * 0.8;',
   '  col *= 1.0 - 0.32 * fianco;',
-  /* col mouse sopra (dalla 3.62) la scritta si illumina di rosso: facciata tinta, smusso e fianchi accesi (il bloom fa l'alone) */
-  '  col = mix(col, col * vec3(0.85, 0.16, 0.12) + uRosso * (fronte * 0.75 + smusso * 2.4 + fianco * 1.0), uSel);',
+  /* col mouse sopra (dalla 3.62) la scritta si illumina (dalla 3.70 del colore del suo pianeta, uRosso): facciata tinta, smusso e fianchi accesi (il bloom fa l'alone) */
+  '  vec3 tinta = uRosso / max(max(uRosso.r, uRosso.g), max(uRosso.b, 0.001));',
+  '  col = mix(col, col * (0.12 + 0.73 * tinta) + uRosso * (fronte * 0.75 + smusso * 2.4 + fianco * 1.0), uSel);',
   '  gl_FragColor = vec4(col, uLuce);',
   '}'
 ].join('\n');
@@ -1023,8 +1024,10 @@ function nuovoMondo(id, r, matOpz, atmoCol, atmoF, atmoSpess, rotAsse, vel){
   bi.atmo.material.uniforms.uBasso.value = 0.22;
 })();
 /* dalla 3.63 la luce che arriva dalla linea accende il mondo del suo colore (prima tutti di verde); la linea e la luce che corre restano verdi */
+/* dalla 3.70 anche il nome in 3D, col mouse sopra, si accende di questo colore */
+var COL_MONDI = { portfolio: '#F2DFB4', studio: '#6CA4FF', tool: '#C9CED6', contatti: '#8FE6EE', area: '#FF6A1A', bio: '#B98CFF' };
 (function(){
-  var COL = { portfolio: '#F2DFB4', studio: '#6CA4FF', tool: '#C9CED6', contatti: '#8FE6EE', area: '#FF6A1A', bio: '#B98CFF' };
+  var COL = COL_MONDI;
   Object.keys(COL).forEach(function(id){
     var m = MONDI[id], c = lin(COL[id]); c.multiplyScalar(1.6 / Math.max(c.x, c.y, c.z));
     m.mat.uniforms.uLampoCol.value = c;
@@ -1195,6 +1198,7 @@ function creaNomi(){
   MONDI_ID.forEach(function(id, i){
     var n = NOMI[id], m = MONDI[id]; if (!n || m.nome) return;
     var mat = matNome.clone(); mat.uniforms.uSole.value = SOLE; mat.uniforms.uSoleCol.value = SOLE_COL; mat.uniforms.uSeme.value = i * 3.7;   // venature diverse per ogni nome
+    if (COL_MONDI[id]){ var cn = lin(COL_MONDI[id]); mat.uniforms.uRosso.value = cn.multiplyScalar(1.6 / Math.max(cn.x, cn.y, cn.z)); }   // dalla 3.70 si accende del colore del suo pianeta
     m.nome = new THREE.Mesh(n.geo, mat); m.nome.renderOrder = 7; m.nome.frustumCulled = false; m.nome.visible = false;
     m.nomeW = n.w; m.nomeFase = i * 1.7;
     scene.add(m.nome); ci = true;

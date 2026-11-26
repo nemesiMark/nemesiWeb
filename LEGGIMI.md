@@ -607,3 +607,8 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 - Con «riduci movimento» le eruzioni vanno piano (come i geyser di Contatti).
 - Texture rifatte `lava-colore`, `lava-luce`, `lava-normale` e nuove `lava-colate` (maschera delle colate) e `lava-alto` (rilievo dei coni, sposta la superficie), tutte e due 1024×512, da `lava()` in `mondi/blender/pianeti.py` con `vulcani()` e la tabella `VULCANI`; le texture della lava passano a `?v=3` (`VER` in `mondi.js`). Il pianeta di lava ha una sfera più fitta (384×192, sul telefono 288×144). Nuove prove `__mondi.vulcani(true)` (tutte le bocche attive) e `__mondi.passo(dt)` (filmati a passo fisso). `mondi.js?v=13`.
 - Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa; foto e filmati da vicino e dal centro (computer a 1× e 2×), telefono 390×844, «riduci movimento»; 60 fotogrammi al secondo; nessun errore in console.
+
+### 3.70 — 26/11/2026
+- **Nomi accesi del colore del loro pianeta**: col mouse sopra un mondo (o sul suo nome) la scritta in marmo non si accende più di rosso ma del colore del suo pianeta, lo stesso della luce che arriva dalla linea: Portfolio oro chiaro, Studio blu, Tool grigio acciaio, Contatti azzurro ghiaccio, Area riservata arancio lava, Bio viola. Le voci della barra restano rosse.
+- In `mondi.js` i colori stanno in `COL_MONDI` (usati sia per la luce della linea sia per i nomi); nello shader dei nomi la tinta della facciata si ricava dal colore. `mondi.js?v=14`.
+- Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa; schermate a 1440×900 con il mouse su Studio, Area e Bio; nessun errore in console.
