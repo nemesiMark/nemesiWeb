@@ -1,7 +1,7 @@
 /* Mondi — la home di Nemesi Web (index.html, dalla 3.57; prima pagina di prova mondi.html, 3.55–3.56).
    Dopo il video dell'apertura e il «taglio di luce», la luce entra nel mondo Nemesi (cemento crepato di verde, come il muro del video),
    che gira al centro dello spazio. Linee al neon lo collegano ai mondi; ogni tanto una linea si accende da Nemesi fino al suo mondo e lo illumina:
-   Portfolio (gigante ad anelli), Studio (la Terra, Bologna accesa), Tool (dalla 3.68 ossidiana a faccette con i giunti accesi; dalla 3.59
+   Portfolio (gigante ad anelli, dalla 3.72 color rame con il vortice), Studio (la Terra, Bologna accesa), Tool (dalla 3.68 ossidiana a faccette con i giunti accesi; dalla 3.59
    le icone degli strumenti del vecchio sito le girano intorno, dalla 3.68 con l'orbita intera e l'arco acceso dietro ognuna), Contatti (pianeta che manda segnali; dalla 3.67 ghiaccio crepato
    con le crepe accese e piccoli geyser) e, dalla 3.58, l'Area
    riservata (pianeta di lava) e, dalla 3.66, Bio (pianeta vivo, blu notte e viola, con venature di luce che pulsano sul lato in ombra).
@@ -102,7 +102,7 @@ var CARTELLA = 'mondi/tex/';
 var FILE = {
   cielo: 'cielo.jpg', nemesiC: 'nemesi-colore.jpg', nemesiN: 'nemesi-normale.jpg', nemesiL: 'nemesi-luce.jpg',
   terraG: 'terra-giorno.jpg', terraL: 'terra-luci.jpg', terraM: 'terra-mare.jpg', terraN: 'terra-nuvole.jpg',
-  gigante: 'gigante-colore.jpg', ossC: 'ossidiana-colore.jpg', ossN: 'ossidiana-normale.jpg', ossL: 'ossidiana-luce.jpg', crepeC: 'crepe-colore.jpg', crepeL: 'crepe-luce.jpg',
+  gigante: 'rame-colore.jpg', ossC: 'ossidiana-colore.jpg', ossN: 'ossidiana-normale.jpg', ossL: 'ossidiana-luce.jpg', crepeC: 'crepe-colore.jpg', crepeL: 'crepe-luce.jpg',
   lavaC: 'lava-colore.jpg', lavaN: 'lava-normale.jpg', lavaL: 'lava-luce.jpg', lavaF: 'lava-colate.jpg', lavaA: 'lava-alto.jpg',
   bioC: 'bio-colore.jpg', bioN: 'bio-normale.jpg', bioL: 'bio-luce.jpg', bioF: 'bio-fase.jpg'
 };
@@ -369,14 +369,14 @@ var FS_ATMO = [
 /* anelli del Portfolio: profilo radiale da Blender, ombra del pianeta, luce che passa da dietro */
 var VS_ANELLI = 'varying vec3 vPl; varying vec3 vPw; void main(){ vPl = position; vec4 pw = modelMatrix * vec4(position, 1.0); vPw = pw.xyz; gl_Position = projectionMatrix * viewMatrix * pw; }';
 var FS_ANELLI = [
-  'uniform sampler2D tAnelli; uniform vec2 uR; uniform vec3 uSole; uniform vec3 uSoleCol; uniform vec3 uCentro; uniform vec3 uN; uniform float uRp; uniform float uF;',
+  'uniform sampler2D tAnelli; uniform vec3 uTinta; uniform vec2 uR; uniform vec3 uSole; uniform vec3 uSoleCol; uniform vec3 uCentro; uniform vec3 uN; uniform float uRp; uniform float uF;',
   'varying vec3 vPl; varying vec3 vPw;',
   'void main(){',
   '  float r = length(vPl.xy);',
   '  float u = (r - uR.x) / (uR.y - uR.x);',
   '  if (u < 0.0 || u > 1.0) discard;',
   '  vec4 tx = texture2D(tAnelli, vec2(u, 0.5));',
-  '  vec3 c = pow(tx.rgb, vec3(2.2)); float a = tx.a;',
+  '  vec3 c = pow(tx.rgb, vec3(2.2)) * uTinta; float a = tx.a;',
   '  vec3 V = normalize(cameraPosition - vPw);',
   '  float sl = dot(uN, uSole), sv = dot(uN, V);',
   '  float el = abs(sl);',
@@ -934,10 +934,10 @@ function nuovoMondo(id, r, matOpz, atmoCol, atmoF, atmoSpess, rotAsse, vel){
   MONDI[id] = m; return m;
 }
 (function(){
-  /* Portfolio: gigante gassoso color sabbia con anelli */
-  var p = nuovoMondo('portfolio', 0.5, { GAS: 1, ANELLI: 1, amb: new V3(0.01, 0.01, 0.012), atmo: lin('#E8DCC0', 0.5), atmoF: 0.5 }, lin('#E9D9B6', 0.4), 1, 0.07, [0.08, 0.46], 2 * Math.PI / 38);
+  /* Portfolio: dalla 3.71 gigante a fasce rame, ruggine e crema con un grande vortice a spirale (prima color sabbia); anelli tinti di rame */
+  var p = nuovoMondo('portfolio', 0.5, { GAS: 1, ANELLI: 1, amb: new V3(0.012, 0.009, 0.008), atmo: lin('#F0B488', 0.5), atmoF: 0.5 }, lin('#E9A878', 0.4), 1, 0.07, [0.08, 0.46], 2 * Math.PI / 38);
   var an = new THREE.Mesh(new THREE.RingGeometry(p.r * 1.28, p.r * 2.35, 256, 1), new THREE.ShaderMaterial({
-    uniforms: { tAnelli: U(vuota), uR: U(new THREE.Vector2(p.r * 1.28, p.r * 2.35)), uSole: U(SOLE), uSoleCol: U(SOLE_COL), uCentro: U(p.g.position), uN: U(new V3()), uRp: U(p.r), uF: U(1) },
+    uniforms: { tAnelli: U(vuota), uTinta: U(new V3(1.05, 0.8, 0.64)), uR: U(new THREE.Vector2(p.r * 1.28, p.r * 2.35)), uSole: U(SOLE), uSoleCol: U(SOLE_COL), uCentro: U(p.g.position), uN: U(new V3()), uRp: U(p.r), uF: U(1) },
     vertexShader: VS_ANELLI, fragmentShader: FS_ANELLI, transparent: true, depthWrite: false, side: THREE.DoubleSide
   }));
   an.rotation.x = -Math.PI / 2; an.renderOrder = 1; p.asse.add(an); p.anelli = an;
@@ -1025,7 +1025,7 @@ function nuovoMondo(id, r, matOpz, atmoCol, atmoF, atmoSpess, rotAsse, vel){
 })();
 /* dalla 3.63 la luce che arriva dalla linea accende il mondo del suo colore (prima tutti di verde); la linea e la luce che corre restano verdi */
 /* dalla 3.70 anche il nome in 3D, col mouse sopra, si accende di questo colore */
-var COL_MONDI = { portfolio: '#F2DFB4', studio: '#6CA4FF', tool: '#C9CED6', contatti: '#8FE6EE', area: '#FF6A1A', bio: '#B98CFF' };
+var COL_MONDI = { portfolio: '#F0A070', studio: '#6CA4FF', tool: '#C9CED6', contatti: '#8FE6EE', area: '#FF6A1A', bio: '#B98CFF' };
 (function(){
   var COL = COL_MONDI;
   Object.keys(COL).forEach(function(id){

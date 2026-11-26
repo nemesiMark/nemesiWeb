@@ -1,7 +1,7 @@
 # Mondi (pagina di prova) — texture dei pianeti e del cielo, cotte in Blender (Cycles) da materiali procedurali.
 # Uso:
 #   /Applications/Blender.app/Contents/MacOS/Blender -b --factory-startup --python pianeti.py -- \
-#       quali=nemesi,gigante,ossidiana,lava,bio,nuvole,cielo,anelli res=2048 out=../tex/png
+#       quali=nemesi,rame,ossidiana,lava,bio,nuvole,cielo,anelli res=2048 out=../tex/png
 # Ogni pianeta esce in PNG (poi convertiti in JPG da prepara.sh):
 #   <nome>-colore.png (sRGB), <nome>-normale.png (normale in spazio oggetto Blender), <nome>-luce.png (emissione, grigio)
 import bpy, math, os, sys
@@ -78,7 +78,7 @@ def nemesi():
     salva_png(px, os.path.join(OUT, 'nemesi-normale.png'))
 
 
-# ───────────────────────── Portfolio: gigante gassoso a fasce, color sabbia (gli anelli a parte) ─────────────────────────
+# ───────────────────────── Portfolio fino alla 3.71: gigante gassoso a fasce, color sabbia (gli anelli a parte); non si usa più ─────────────────────────
 def gigante():
     ob, N = nuovo('gigante')
     p = N.p
@@ -550,6 +550,55 @@ def cielo():
     salva_png(px, os.path.join(OUT, 'cielo.png'), srgb=True)
 
 
+# ───────────────────────── Portfolio dalla 3.72: rame (scelto fra tre alternative della 3.71; le altre, mosaico d'oro e opale, sono nella storia git) ─────────────────────────
+def gira_intorno(N, p, centro, raggio, giri):
+    """p ruotato intorno all'asse che passa per il centro del vortice: di più vicino al centro (spirale)."""
+    d = N.v('LENGTH', N.v('SUBTRACT', p, centro))
+    ang = N.m('MULTIPLY', N.m('EXPONENT', N.m('MULTIPLY', N.m('MULTIPLY', d, d), -1.0 / (raggio * raggio))), giri * 2 * math.pi)
+    r = N.n('ShaderNodeVectorRotate', rotation_type='AXIS_ANGLE')
+    N._in(r.inputs['Vector'], p)
+    r.inputs['Center'].default_value = (0, 0, 0)
+    r.inputs['Axis'].default_value = centro
+    N._in(r.inputs['Angle'], ang)
+    return r.outputs['Vector']
+
+
+def su_sfera(lat, lon):
+    lat, lon = math.radians(lat), math.radians(lon)
+    return (math.cos(lat) * math.cos(lon), math.cos(lat) * math.sin(lon), math.sin(lat))
+
+
+# Rame: gigante a fasce rame, ruggine e crema con un grande vortice a spirale e qualche vortice piccolo (resta GAS con gli anelli)
+def rame():
+    ob, N = nuovo('rame')
+    p = N.p
+    q = gira_intorno(N, p, su_sfera(-18, 30), 0.30, 0.9)
+    for i, (la, lo, rg, gi) in enumerate([(24, -60, 0.10, -0.55), (-40, 150, 0.09, 0.6), (33, 110, 0.07, -0.5), (-6, -140, 0.08, 0.55)]):
+        q = gira_intorno(N, q, su_sfera(la, lo), rg, gi)
+    x, y, z = N.xyz(q)
+    t1 = N.rumore(q, 2.6, dett=7, rug=0.6, dist=0.9).outputs['Fac']
+    t2 = N.rumore(N.v('MULTIPLY', q, (3.0, 3.0, 10.0)), 1.6, dett=7, rug=0.6, dist=1.3).outputs['Fac']
+    st = N.rumore(N.v('MULTIPLY', q, (2.6, 2.6, 22.0)), 1.0, dett=6, rug=0.6).outputs['Fac']
+    c = N.m('ADD', z, N.m('MULTIPLY', N.m('SUBTRACT', t1, 0.5), 0.16))
+    c = N.m('ADD', c, N.m('MULTIPLY', N.m('SUBTRACT', t2, 0.5), 0.1))
+    c = N.m('ADD', c, N.m('MULTIPLY', N.m('SUBTRACT', st, 0.5), 0.05))
+    fac = N.mappa(c, -1.0, 1.0)
+    col = N.rampa(fac, [
+        (0.00, '#2E1C17'), (0.07, '#4B2A1E'), (0.13, '#8A4A2B'), (0.19, '#C98A5A'), (0.24, '#7A3B22'),
+        (0.29, '#E9C9A2'), (0.35, '#B4673B'), (0.40, '#6B3220'), (0.44, '#D9A273'), (0.49, '#F4E2C6'),
+        (0.53, '#C7804E'), (0.57, '#7E3D24'), (0.61, '#B87048'), (0.66, '#EBCFAD'), (0.72, '#A65A34'),
+        (0.79, '#D3A27C'), (0.86, '#6E3A28'), (0.93, '#45261C'), (1.00, '#2A1914')])
+    fine = N.rumore(N.v('MULTIPLY', q, (6.0, 6.0, 80.0)), 1.0, dett=3).outputs['Fac']
+    g = N.m('ADD', 0.86, N.m('MULTIPLY', fine, 0.28))
+    col = N.mix(1.0, col, N.vettore(g, g, g), 'MULTIPLY')
+    # occhio del vortice grande: più scuro al centro, crema intorno
+    d = N.v('LENGTH', N.v('SUBTRACT', p, su_sfera(-18, 30)))
+    col = N.mix(N.m('MULTIPLY', N.m('SUBTRACT', 1.0, N.smooth(0.0, 0.05, d)), 0.8), col, hex_lin('#3A1A12'))
+    col = N.mix(N.m('MULTIPLY', N.m('MULTIPLY', N.smooth(0.03, 0.06, d), N.m('SUBTRACT', 1.0, N.smooth(0.06, 0.1, d))), 0.35), col, hex_lin('#F3DFC2'))
+    px = cuoci(ob, N, 'EMIT', W, H, N.emissione(col))
+    salva_png(px, os.path.join(OUT, 'rame-colore.png'), srgb=True)
+
+
 # ───────────────────────── anelli del Portfolio: profilo radiale (colore e densità) ─────────────────────────
 def anelli():
     rng = np.random.default_rng(7)
@@ -587,7 +636,7 @@ def anelli():
     print('salvato anelli.png')
 
 
-FUNZ = {'nemesi': nemesi, 'gigante': gigante, 'luna': luna, 'ossidiana': ossidiana, 'ghiaccio': ghiaccio, 'lava': lava, 'bio': bio, 'nuvole': nuvole, 'cielo': cielo, 'anelli': anelli}
+FUNZ = {'nemesi': nemesi, 'gigante': gigante, 'luna': luna, 'ossidiana': ossidiana, 'ghiaccio': ghiaccio, 'lava': lava, 'bio': bio, 'nuvole': nuvole, 'cielo': cielo, 'anelli': anelli, 'rame': rame}
 import time
 for q in QUALI:
     t0 = time.time()

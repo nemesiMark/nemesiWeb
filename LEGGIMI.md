@@ -612,3 +612,16 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 - **Nomi accesi del colore del loro pianeta**: col mouse sopra un mondo (o sul suo nome) la scritta in marmo non si accende più di rosso ma del colore del suo pianeta, lo stesso della luce che arriva dalla linea: Portfolio oro chiaro, Studio blu, Tool grigio acciaio, Contatti azzurro ghiaccio, Area riservata arancio lava, Bio viola. Le voci della barra restano rosse.
 - In `mondi.js` i colori stanno in `COL_MONDI` (usati sia per la luce della linea sia per i nomi); nello shader dei nomi la tinta della facciata si ricava dal colore. `mondi.js?v=14`.
 - Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa; schermate a 1440×900 con il mouse su Studio, Area e Bio; nessun errore in console.
+
+### 3.71 — 26/11/2026
+- **Tre alternative per il pianeta Portfolio**, fatte in Blender, da provare con `?portfolio=1`, `2` o `3` (senza resta il gigante color sabbia):
+  1. **Rame**: gigante a fasce rame, ruggine e crema con un grande vortice a spirale e quattro vortici piccoli; anelli tinti di rame.
+  2. **Mosaico d'oro**: tessere d'oro e d'ottone (qualcuna di rame, poche brunite) con le fughe scure; ogni tessera è appena inclinata e lampeggia quando incontra il sole, riflette il cielo e il verde di Nemesi; poche tessere accese da dentro, più visibili sul lato in ombra. Senza anelli.
+  3. **Opale**: bianco latte con veli azzurri e rosati e il «fuoco» dell'opale a chiazze, che cambia colore con lo sguardo e mentre il pianeta gira; anelli appena più freddi.
+- Il nome si accende del colore della variante (rame, oro, azzurro perla).
+- Blender: `rame()`, `mosaico()`, `opale()` in `mondi/blender/pianeti.py` (`quali=rame,mosaico,opale`); texture in `mondi/tex/m/` (`rame-colore`, `mosaico-colore|normale|luce`, `opale-colore|fase`). Nello shader dei pianeti nuovi modi `METALLO` e `OPALE`; gli anelli hanno una tinta (`uTinta`). `mondi.js?v=15`.
+- Quando Mark sceglie: la variante scelta diventa quella fissa e si tolgono le altre (e le loro texture).
+- Verifiche: copy-gate pulito, `genera_contenuti.py --check` passa; schermate a 1440×900 delle tre varianti dal centro e dentro Portfolio; nessun errore in console.
+
+### 3.72 — 26/11/2026
+- **Portfolio diventa il pianeta di rame** (scelto da Mark fra le tre alternative della 3.71): gigante a fasce rame, ruggine e crema con il grande vortice a spirale e quattro vortici piccoli, anelli tinti di rame, nome acceso di rame. Tolte le prove `?portfolio=` e le alternative mosaico d'oro e opale (modi `METALLO` e `OPALE` dello shader e funzioni di Blender: restano nella storia git). La funzione `gigante()` resta in `pianeti.py` ma non si usa più. `mondi.js?v=16`.
