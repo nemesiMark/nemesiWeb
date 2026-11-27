@@ -628,3 +628,6 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 
 ### 3.73 — 27/11/2026
 - Anteprima dei testi nell'area riservata uguale al sito: nella pagina ferma (senza WebGL e dentro il riquadro dell'anteprima) ogni pannello ha la stessa larghezza che ha sopra il suo mondo (Studio 540 px, Portfolio 820 px…), invece di allargarsi fino a 900 px. Così i titoli vanno a capo negli stessi punti (es. «Lo studio è / a Bologna, i / progetti ovunque.»).
+
+### 3.74 — 27/11/2026
+- Titolo di Studio su due righe come lo voleva Mark: «Lo studio è a Bologna,» sulla prima e la parte verde «i progetti ovunque.» tutta sulla seconda, sul computer e sul telefono (anche nell'anteprima dell'area riservata). Pannello di Studio da 540 a 580 px, perché la prima riga ci stia intera anche sugli schermi grandi.
