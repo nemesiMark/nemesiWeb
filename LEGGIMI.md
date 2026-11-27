@@ -631,3 +631,6 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 
 ### 3.74 — 27/11/2026
 - Titolo di Studio su due righe come lo voleva Mark: «Lo studio è a Bologna,» sulla prima e la parte verde «i progetti ovunque.» tutta sulla seconda, sul computer e sul telefono (anche nell'anteprima dell'area riservata). Pannello di Studio da 540 a 580 px, perché la prima riga ci stia intera anche sugli schermi grandi.
+
+### 3.75 — 27/11/2026
+- Area riservata: le anteprime («Come si vedrà sul sito» e le misure delle foto) aprono sempre la pagina online di adesso, con un numero nuovo nell'indirizzo a ogni apertura dell'area. Prima il browser poteva mostrare per una decina di minuti la versione vecchia tenuta in memoria (così Studio si vedeva ancora su tre righe dopo la 3.74).

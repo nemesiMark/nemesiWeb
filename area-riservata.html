@@ -1341,6 +1341,10 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
   var MAX_MB = 30, LATO_MIN = 500;
   // si accettano JPG e PNG; prima dell'invio diventano JPG
   var FORMATI = 'JPG/JPEG o PNG';
+  // le pagine nascoste delle anteprime si aprono sempre nella versione online di adesso, mai da quella
+  // tenuta in memoria dal browser (GitHub Pages la tiene 10 minuti): un numero diverso a ogni apertura dell'area
+  var FRESCA = Date.now().toString(36);
+  function fresca(pagina) { var u = new URL(pagina, location.href); u.searchParams.set('ar', FRESCA); return u.href; }
   // r = larghezza / altezza come si vede sul computer; nota = cosa cambia sul telefono
   var FORME = {
     larga: { r: 16 / 9, nome: 'orizzontale 16:9', w: 1600, h: 900, nota: 'Nel sito la foto si vede intera sulla faccia della lastra 3D: tieni tutto quello che conta dentro il riquadro.' },
@@ -1430,7 +1434,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
           } catch (e) { fine([]); }
         }, 400);
       };
-      f.src = new URL(pagina === MENU ? 'index.html' : pagina, location.href).href;
+      f.src = fresca(pagina === MENU ? 'index.html' : pagina);
       document.body.appendChild(f);
     });
   }
@@ -2048,7 +2052,7 @@ input[type=text],input[type=password]{border-radius:3px;background:#fff;border-c
         } catch (er) { fine(null); }
       };
     });
-    f.src = new URL(pagina, location.href).href;
+    f.src = fresca(pagina);
     vtFin[k].appendChild(f);
     return c.pronta;
   }
