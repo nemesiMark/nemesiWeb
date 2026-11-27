@@ -625,3 +625,6 @@ Copiata da quella di Olimp con la skill `area-ris` (stesso impianto, aspetto e f
 
 ### 3.72 — 26/11/2026
 - **Portfolio diventa il pianeta di rame** (scelto da Mark fra le tre alternative della 3.71): gigante a fasce rame, ruggine e crema con il grande vortice a spirale e quattro vortici piccoli, anelli tinti di rame, nome acceso di rame. Tolte le prove `?portfolio=` e le alternative mosaico d'oro e opale (modi `METALLO` e `OPALE` dello shader e funzioni di Blender: restano nella storia git). La funzione `gigante()` resta in `pianeti.py` ma non si usa più. `mondi.js?v=16`.
+
+### 3.73 — 27/11/2026
+- Anteprima dei testi nell'area riservata uguale al sito: nella pagina ferma (senza WebGL e dentro il riquadro dell'anteprima) ogni pannello ha la stessa larghezza che ha sopra il suo mondo (Studio 540 px, Portfolio 820 px…), invece di allargarsi fino a 900 px. Così i titoli vanno a capo negli stessi punti (es. «Lo studio è / a Bologna, i / progetti ovunque.»).

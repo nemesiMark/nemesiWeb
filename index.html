@@ -335,7 +335,7 @@ button{ font:inherit; color:inherit; }
 .senza-gl .et{ position:static; opacity:1; transform:none !important; align-items:flex-start; text-align:left; border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.03); }
 .senza-gl main{ order:2; padding:70px var(--m) 60px; display:flex; flex-direction:column; gap:90px; }
 .senza-gl .angoli{ order:3; position:static; padding:0 var(--m) 40px; }
-.senza-gl .pannello{ position:static; visibility:visible; pointer-events:auto; width:auto; max-width:900px; max-height:none; overflow:visible; scroll-margin-top:96px; }
+.senza-gl .pannello{ position:static; visibility:visible; pointer-events:auto; width:min(var(--larg, 600px), 100%); max-width:none; max-height:none; overflow:visible; scroll-margin-top:96px; }
 .senza-gl .pannello > *{ opacity:1; }
 @media (prefers-reduced-motion: reduce){
   .pannello.on > *{ animation-duration:.01s; }
